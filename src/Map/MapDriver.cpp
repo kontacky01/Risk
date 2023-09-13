@@ -1,0 +1,1 @@
+// testLoadMaps() is a free function
