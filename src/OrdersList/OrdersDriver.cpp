@@ -2,8 +2,7 @@
 #include<iostream>
 using namespace std;
 
-#include "OrdersList.h"
-#include "Order.h"
+#include "Orders.h"
 
 void testOrderList() {
     cout << "Hello from OrdersList.cpp\n";
