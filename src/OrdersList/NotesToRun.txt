@@ -1,0 +1,5 @@
+## Run Code
+Code runner app > extension settings
+modify following line
+"cpp": "cd $dir && g++ -std=c++17 $fileName $dirOrdersList/*.cpp -o $fileNameWithoutExt && $dir$fileNameWithoutExt"
+click run from MainDriver.cpp
