@@ -1,15 +1,15 @@
-#include <iostream>
 #include "Player.h"
+#include <iostream>
 
 using namespace std;
 
-void testp(){
-  PlayerDriver::testPlayers();
-
-}
 
 int main()
 {
-  testp();
+  // PlayerDriver *p = new PlayerDriver();
+  // p->testPlayers();
+  PlayerDriver *p = new PlayerDriver();
+  p->testPlayers();
   cout << "Hello this is our first file";
+  return 0;
 }

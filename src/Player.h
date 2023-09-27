@@ -15,26 +15,25 @@ class Order
 
 class Player
 {
+    // private data members
+    private:
+    vector<Territory *> territories;
+    Hand *hand;
+    vector<Order *> orderList;
+
+    public:
     // constructor
     Player(vector<Territory *>, Hand *, vector<Order *>);
+    Player();
 
     // copy constructor
     Player(const Player &);
-
-    // private data members
-private:
-    vector<Territory *> territories;
-    Hand *hand;
-    vector<Order *> orderlist;
 
     /**
      * getHand
      * Q: ask if i need this method as was not part of the specs
      */
-    Hand *getHand()
-    {
-        return hand;
-    }
+    Hand *getHand();
 
     /**
      * toDefend
@@ -57,5 +56,5 @@ private:
 class PlayerDriver
 {
 public:
-  static void testPlayers();
+  void testPlayers();
 };
