@@ -1,74 +1,99 @@
 #include "Player.h"
-#include <iostream>
-#include <string>
 
+/************************************************************ TODO: TEMP ************************************************************/
+Territory::Territory(string n) {
+  name = n;
+}
 
-// constructor
-Player::Player(vector<Territory *> t, Hand * h, vector<Order *> o){
-    territories = t;
-    hand = h;
-    orderList = o;
+Order::Order(string o) {
+  orderID = o;
+}
+
+Hand::Hand(){
+  cards.push_back("card1");
+  cards.push_back("card2");
+}
+
+void Hand::getHand() {
+    cout << "The hand has been init with the following cards: " << cards.at(0) << " and " << cards.at(1) << "\n";
+  }
+/************************************************************ Player ************************************************************/
+/// <summary>
+/// Constructor with with an argument list
+/// </summary>
+Player::Player(vector < Territory * > t, Hand * h, vector < Order * > o) {
+  territories = t;
+  hand = h;
+  orderList = o;
+  h->getHand();
 };
 
-// copy constructor
-Player::Player(const Player &){};
-Player::Player(){};
+/// <summary>
+/// Copy Constructor
+/// </summary>
+Player::Player(const Player & ) {};
 
-Hand* Player::getHand() {
-  return hand;
-};
+/// <summary>
+/// Default Constructor
+/// </summary>
+Player::Player() {};
 
-/**
-  * toDefend
-  * Returns a random list of territories that are assigned to the user which he would like to defend
-  */
-vector<Territory *> Player::toDefend()
-{
-      vector<Territory *> defended;
-
-  if(territories.size() == 0){
+/// <summary>
+/// toDefend
+/// Returns a random list of territories that are assigned to the user which they would like to defend
+/// </summary>
+vector < Territory * > Player::toDefend() {
+  vector < Territory * > defended;
+  // if no territories were init
+  if (territories.size() == 0) {
     cout << "There are no territories to defend\n";
     return defended;
   }
-    int index = rand() % territories.size() + 1;
-    for (int i = 0; i < index; i++)
-    {
-        defended.push_back(territories.at(i));
-    }
-    // todo, territories class should have a toString that returns a comma separated list of defended territories. 
-    cout << "Territories to defend:" << defended.size();
-    return defended;
+  // TODO: could this be outside of the file
+  srand((unsigned int) time(NULL));
+  int index = rand() % territories.size() + 1;
+  for (int i = 0; i < index; i++) {
+    defended.push_back(territories.at(i));
+  }
+  // TODO: override the operator to handle this, perhaps in the territory class
+  cout << "Territories to defend:\n";
+  for (int i = 0; i < defended.size(); i++) {
+    cout << defended.at(i) -> name << "\n";
+  }
+  cout << "------------------------------\n";
+  return defended;
 }
 
-/**
-  * toAttack
-  * Returns a random list of territories that are assigned to the user which he would like to defend
-  */
-vector<Territory *> Player::toAttack()
-{
-    vector<Territory *> attacked;
-     if(territories.size() == 0){
+/// <summary>
+/// toAttack
+/// Returns a random list of territories that the user would like to attack
+/// </summary>
+vector < Territory * > Player::toAttack() {
+  vector < Territory * > attacked;
+  if (territories.size() == 0) {
     cout << "There are no territories to attack\n";
     return attacked;
   }
-    int index = rand() % territories.size() + 1;
-    for (int i = 0; i < index; i++)
-    {
-        attacked.push_back(territories.at(i));
-    }
-    // todo, territories class should have a toString that returns a comma separated list of attacked territories. 
-    cout << "Territories to attack:" << attacked.size();
-    return attacked;
+  int index = rand() % territories.size() + 1;
+  for (int i = 0; i < index; i++) {
+    attacked.push_back(territories.at(i));
+  }
+  // TODO: override the operator to handle this, perhaps in the territory class
+  cout << "Territories to attack:\n";
+  for (int i = 0; i < attacked.size(); i++) {
+    cout << attacked.at(i) -> name << "\n";
+  }
+  cout << "------------------------------\n";
+  return attacked;
 }
-/**
-  * issueOrder
-  * Take in an order and add it into the OrderList
-  */
- 
-vector<Order *> Player::issueOrder()
-{
-    Order *o = new Order();
-    orderList.push_back(o);
-    cout << "pushed a new order to orderlist";
-    return orderList;
+
+/// <summary>
+/// issueOrder
+/// Take in an order and add it into the OrderList
+/// </summary>
+vector < Order * > Player::issueOrder() {
+  Order * o = new Order("1");
+  orderList.push_back(o);
+  cout << "pushed a new order to orderList with orderID:" << o -> orderID;
+  return orderList;
 }

@@ -1,60 +1,79 @@
 #pragma once
+#include <string>
 #include <vector>
+#include <time.h>
+#include <iostream>
+#include <string>
+
 using namespace std;
 
-// temp
-class Territory
-{
-};
-class Hand
-{
-}; // contains cards inside
-class Order
-{
+/************************************************************ TEMP ************************************************************/
+class Territory {
+  public: string name;
+  // constructor
+  Territory(string);
+
 };
 
-class Player
-{
-    // private data members
-    private:
-    vector<Territory *> territories;
-    Hand *hand;
-    vector<Order *> orderList;
-
-    public:
-    // constructor
-    Player(vector<Territory *>, Hand *, vector<Order *>);
-    Player();
-
-    // copy constructor
-    Player(const Player &);
-
-    /**
-     * getHand
-     * Q: ask if i need this method as was not part of the specs
-     */
-    Hand *getHand();
-
-    /**
-     * toDefend
-     * Returns a random list of territories that are assigned to the user which he would like to defend
-     */
-    vector<Territory *> toDefend();
-
-    /**
-     * toAttack
-     * Returns a random list of territories that are assigned to the user which he would like to defend
-     */
-    vector<Territory *> toAttack();
-    /**
-     * issueOrder
-     * Take in an order and add it into the OrderList
-     */
-    vector<Order *> issueOrder();
+class Order {
+  public: string orderID;
+  // constrcutor
+  Order(string);
 };
 
-class PlayerDriver
-{
-public:
-  void testPlayers();
+
+class Hand {
+  public: vector<string> cards;
+  // constrcutor
+  Hand();
+  //getHand
+  void getHand();
+};
+
+/************************************************************ Player ************************************************************/
+
+class Player {
+  private: 
+  vector < Territory * > territories;
+  Hand * hand;
+  vector < Order * > orderList;
+
+  public:
+  /// <summary>
+  /// Constructor with with an argument list
+  /// </summary>    
+  Player(vector<Territory *>, Hand *, vector<Order *>);
+
+  /// <summary>
+  /// Default Constructor
+  /// </summary>
+  Player();
+
+  /// <summary>
+  /// Copy Constructor
+  /// </summary>
+  Player(const Player & );
+
+  /// <summary>
+  /// toDefend
+  /// Returns a random list of territories that are assigned to the user which they would like to defend
+  /// </summary>
+  vector < Territory * > toDefend();
+
+  /// <summary>
+  /// toAttack
+  /// Returns a random list of territories that the user would like to attack
+  /// </summary>
+  vector < Territory * > toAttack();
+
+  /// <summary>
+  /// issueOrder
+  /// Take in an order and add it into the OrderList
+  /// </summary>
+  vector < Order * > issueOrder();
+};
+
+/************************************************************ PlayerDriver ************************************************************/
+class PlayerDriver {
+  public: void testPlayers();
 };
