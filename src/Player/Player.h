@@ -1,5 +1,0 @@
-// toDefend
-
-// toAttack()
-
-// issueOrder()
