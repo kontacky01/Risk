@@ -16,7 +16,7 @@ Hand::Hand(){
 
 void Hand::getHand() {
     cout << "The hand has been init with the following cards: " << cards.at(0) << " and " << cards.at(1) << "\n";
-  }
+}
 /************************************************************ Player ************************************************************/
 /// <summary>
 /// Constructor with with an argument list
@@ -26,6 +26,8 @@ Player::Player(vector < Territory * > t, Hand * h, vector < Order * > o) {
   hand = h;
   orderList = o;
   h->getHand();
+  // init the seed for random generation
+  srand((unsigned)time(NULL));
 };
 
 /// <summary>
@@ -49,8 +51,6 @@ vector < Territory * > Player::toDefend() {
     cout << "There are no territories to defend\n";
     return defended;
   }
-  // TODO: could this be outside of the file
-  srand((unsigned int) time(NULL));
   int index = rand() % territories.size() + 1;
   for (int i = 0; i < index; i++) {
     defended.push_back(territories.at(i));
@@ -91,8 +91,7 @@ vector < Territory * > Player::toAttack() {
 /// issueOrder
 /// Take in an order and add it into the OrderList
 /// </summary>
-vector < Order * > Player::issueOrder() {
-  Order * o = new Order("1");
+vector < Order * > Player::issueOrder(Order* o) {
   orderList.push_back(o);
   cout << "pushed a new order to orderList with orderID:" << o -> orderID;
   return orderList;

@@ -20,10 +20,9 @@ void PlayerDriver::testPlayers() {
   t.push_back(t1);
   t.push_back(t2);
   t.push_back(t3);
-  t.push_back(t3);
-  t.push_back(t3);
-  t.push_back(t3);
-  t.push_back(t3);
+  t.push_back(t4);
+  t.push_back(t5);
+  t.push_back(t6);
 
   /// <summary>
   /// Init a player
@@ -43,7 +42,8 @@ void PlayerDriver::testPlayers() {
   /// <summary>
   /// Show that Player contains method issueOrder()
   /// </summary>  
-  p -> issueOrder();
+  Order * newOrder = new Order("1");
+  p -> issueOrder(newOrder);
 
   /// <summary>
   /// Dereference my pointers

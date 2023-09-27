@@ -70,7 +70,7 @@ class Player {
   /// issueOrder
   /// Take in an order and add it into the OrderList
   /// </summary>
-  vector < Order * > issueOrder();
+  vector < Order * > issueOrder(Order* o);
 };
 
 /************************************************************ PlayerDriver ************************************************************/
