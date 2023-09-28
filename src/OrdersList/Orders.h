@@ -10,7 +10,7 @@ class Order
 public:
     Order();                //default contrustor
     bool validate();        //Invalid orders can be in OL, will check if valid for execution
-    bool execute();         //prints the order after execution
+    void execute();         //prints the order after execution
     int incrementCount();   //countOrderID + 1
     int getOrderID();
     virtual void addDescription();

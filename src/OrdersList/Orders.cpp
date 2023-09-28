@@ -14,18 +14,17 @@ Order::Order() {
 };
 
 bool Order::validate() { //Invalid orders can be in OL, will check if valid for execution
-    if (pFlag) cout << "validate() from inside Order" << endl;
     return this->valid;
 };
 
-bool Order::execute() {
-    if (pFlag) cout << "execut() from inside Order" << endl;
-    return true;
+void Order::execute() {
+    if(validate()==1) {
+        cout << "Executing order #" << getOrderID() <<" ..." << endl;
+    }
 };
 
 int Order::incrementCount() {
     return ++countOrderID;
-    if (pFlag) cout << "incremenet() from inside Order" <<endl;
 };
 
 int Order::getOrderID() {

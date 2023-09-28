@@ -20,4 +20,10 @@ void testOrderList() {
     d1->setValid(true);
     cout << OL;
 
+    cout << "Exectuing orders: " << endl;
+    o1->execute();
+    d1->execute();
+
+
+
 }
