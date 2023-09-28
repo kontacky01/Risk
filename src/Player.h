@@ -3,45 +3,48 @@
 #include <vector>
 #include <time.h>
 #include <iostream>
-#include <string>
 
 using namespace std;
 
 /************************************************************ TEMP ************************************************************/
-class Territory {
-  public: string name;
+class Territory
+{
+public:
+  string name;
   // constructor
   Territory(string);
-
 };
 
-class Order {
-  public: string orderID;
+class Order
+{
+public:
+  string orderID;
   // constrcutor
   Order(string);
 };
 
-
-class Hand {
-  public: vector<string> cards;
-  // constrcutor
-  Hand();
-  //getHand
-  void getHand();
+class Hand
+{
 };
 
 /************************************************************ Player ************************************************************/
 
-class Player {
-  private: 
-  vector < Territory * > territories;
-  Hand * hand;
-  vector < Order * > orderList;
+class Player
+{
+private:
+  vector<Territory *> territories;
+  Hand *hand;
+  vector<Order *> orderList;
 
-  public:
+  /// <summary>
+  /// Helper method to list attack/defended territories
+  /// </summary>
+  void printTerritories(vector<Territory *> territories);
+
+public:
   /// <summary>
   /// Constructor with with an argument list
-  /// </summary>    
+  /// </summary>
   Player(vector<Territory *>, Hand *, vector<Order *>);
 
   /// <summary>
@@ -52,28 +55,29 @@ class Player {
   /// <summary>
   /// Copy Constructor
   /// </summary>
-  Player(const Player & );
+  Player(const Player &);
 
   /// <summary>
   /// toDefend
   /// Returns a random list of territories that are assigned to the user which they would like to defend
   /// </summary>
-  vector < Territory * > toDefend();
+  vector<Territory *> toDefend();
 
   /// <summary>
   /// toAttack
   /// Returns a random list of territories that the user would like to attack
   /// </summary>
-  vector < Territory * > toAttack();
+  vector<Territory *> toAttack();
 
   /// <summary>
   /// issueOrder
   /// Take in an order and add it into the OrderList
   /// </summary>
-  vector < Order * > issueOrder(Order* o);
+  vector<Order *> issueOrder(Order *o);
 };
 
 /************************************************************ PlayerDriver ************************************************************/
-class PlayerDriver {
-  public: void testPlayers();
+namespace PlayerDriver
+{
+  void testPlayers();
 };
