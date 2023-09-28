@@ -1,7 +1,7 @@
 #ifndef ORDERS_H
 #define ORDERS_H
 
-#include <map>
+#include <list>
 #include <iostream>
 using namespace std;
 
@@ -9,35 +9,42 @@ class Order
 {
 public:
     Order();                //default contrustor
-    /* Invalid orders can be created and put in the list,
-     * but their execution will not result in any action.
-     * Returns true if valid */
-    bool validate();
-    bool execute();         //returns true if action implemented
+    bool validate();        //Invalid orders can be in OL, will check if valid for execution
+    bool execute();         //prints the order after execution
     int incrementCount();   //countOrderID + 1
-    void toString();
+    int getOrderID();
+    virtual void addDescription();
+    virtual string getDescription();
+protected:
+    string description;
 private:
     static int countOrderID;
     int orderID;
+    friend ostream& operator << (ostream& out, Order* o); //overide Stream insertion operator
+
 };
 
 class Deploy : public Order
 {
 public:
     Deploy();
+    virtual void addDescription();
+    virtual string getDescription();
+private:
 };
 
 class OrdersList
 {
 public:
     OrdersList();                       //default constructor
+    virtual void addOrder(Order *o);
     bool move(int index, int orderID);  //Modify sequence of orders
     bool remove(int orderID);           //removes order from ordersList
+    list<Order*> getOL();
 private:
-    map<int, Order*> first;             //Create a map(key,value) list of orders
+    list<Order*> OL;  
+    friend ostream& operator << (ostream& out, OrdersList& ol); //overide Stream insertion operator         
 };
-
-
 
 // end marker for the above's #ifndef
 #endif

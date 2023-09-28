@@ -7,8 +7,8 @@ using namespace std;
 
 int main()
 {
-  cout << "Hello this is our first file\n";
-
+  cout << "Hello this is our first file" << endl;
+  
   testOrderList();
 
-}
+} 

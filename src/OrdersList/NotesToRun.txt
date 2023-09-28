@@ -1,5 +1,14 @@
 ## Run Code
+
+CODE RUNNER 
 Code runner app > extension settings
-modify following line
+# modify the following line
 "cpp": "cd $dir && g++ -std=c++17 $fileName $dirOrdersList/*.cpp -o $fileNameWithoutExt && $dir$fileNameWithoutExt"
-click run from MainDriver.cpp
+# right click MainDriver.cpp > click run 
+
+# Can also use this
+"cpp": "cd $dir && g++ -std=c++14 $fileName `find . \\( -iname '*.cpp' -not -name '$fileName' \\)` -o $fileNameWithoutExt && $dir$fileNameWithoutExt",
+
+TERMINAL 
+# plug in code above directly to terminal
+
