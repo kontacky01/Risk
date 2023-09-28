@@ -108,6 +108,6 @@ vector<Territory *> Player::toAttack()
 vector<Order *> Player::issueOrder(Order *o)
 {
   orderList.push_back(o);
-  cout << "pushed a new order to orderList with orderID:" << o->orderID;
+  cout << "pushed a new order to orderList with orderID:" << o->orderID << "\n";
   return orderList;
 }
