@@ -21,6 +21,8 @@ void Order::execute() {
     if(validate()==1) {
         cout << "Executing order #" << getOrderID() <<" ..." << endl;
     }
+    else 
+        cout << "Can NOT execute order #" << getOrderID() << " ..." << endl;
 };
 
 int Order::incrementCount() {
@@ -32,7 +34,7 @@ int Order::getOrderID() {
 }
 
 void Order::addDescription() {
-    this->description = "I am the Order Class";
+    this->description = "(Order Class)";
 }
 
 string Order::getDescription(){
@@ -62,11 +64,24 @@ Deploy::Deploy() {
 }
 
 void Deploy::addDescription() {
-    this->description = "Move a certain number of army units from the current "
+    this->description = "(Deploy) Move a certain number of army units from the current "
         "player's reinforcement pool to one of the current player's territories.";
 }
 
 string Deploy::getDescription() {
+    return this->description;
+}
+
+Advance::Advance() {
+    this->addDescription();
+}
+
+void Advance::addDescription() {
+    this->description = "(Advance) Move a certain number of army units from one territory" 
+                    "(source territory) to another territory (target territory).";
+}
+
+string Advance::getDescription() {
     return this->description;
 }
 

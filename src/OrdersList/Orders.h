@@ -18,10 +18,10 @@ public:
     void setValid(bool v);
 protected:
     string description;
-    bool valid;
 private:
     static int countOrderID;
     int orderID;
+    bool valid;
     friend ostream& operator << (ostream& out, Order* o); //overide Stream insertion operator
 
 };
@@ -30,10 +30,20 @@ class Deploy : public Order
 {
 public:
     Deploy();
-    virtual void addDescription();
-    virtual string getDescription();
+    void addDescription();
+    string getDescription();
 private:
 };
+
+class Advance : public Order
+{
+public:
+    Advance();
+    void addDescription();
+    string getDescription();
+private:
+};
+
 
 class OrdersList
 {
