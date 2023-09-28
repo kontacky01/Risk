@@ -15,8 +15,10 @@ public:
     int getOrderID();
     virtual void addDescription();
     virtual string getDescription();
+    void setValid(bool v);
 protected:
     string description;
+    bool valid;
 private:
     static int countOrderID;
     int orderID;

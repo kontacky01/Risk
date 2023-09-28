@@ -4,27 +4,28 @@ using namespace std;
 
 #include "Orders.h"
 
-bool pFlag = true;                  //Flag for print statements
+bool pFlag = false;                  //Flag for print statements
 int Order::countOrderID = 0;        //start counter for orders at 0
 
 Order::Order() {
     orderID = incrementCount();
     addDescription();
+    setValid(false);
 };
 
 bool Order::validate() { //Invalid orders can be in OL, will check if valid for execution
-    if (pFlag) cout << "validate() from inside Order\n";
-    return true;
+    if (pFlag) cout << "validate() from inside Order" << endl;
+    return this->valid;
 };
 
 bool Order::execute() {
-    if (pFlag) cout << "validate() from inside Order\n";
+    if (pFlag) cout << "execut() from inside Order" << endl;
     return true;
 };
 
 int Order::incrementCount() {
     return ++countOrderID;
-    if (pFlag) cout << "incremenet() from inside Order\n";
+    if (pFlag) cout << "incremenet() from inside Order" <<endl;
 };
 
 int Order::getOrderID() {
@@ -39,13 +40,21 @@ string Order::getDescription(){
     return this->description;
 }
 
+void Order::setValid(bool v){
+    this->valid = v;
+}
+
 //Stream insertion operator
 //will ouptut to console everytime "cout <<" is used on Order Object
 //like toString but directly from cout<<
 ostream& operator << (ostream& out, Order* o)
 {
+    //If true return "true", b/c c++ will return 1
+    auto printBoolValue = [](bool b) { if (b) return "true"; else return "false"; };
+
     out << "OrderID: " << o->getOrderID() << endl
-        << "Descrption: " << o->getDescription() << endl;
+        << "Descrption: " << o->getDescription() << endl
+        << "Is valid: " << printBoolValue(o->validate()) <<endl;
     return out;
 }
 
@@ -77,6 +86,7 @@ list <Order*> OrdersList::getOL(){
 ostream& operator << (ostream& out, OrdersList& ol){
     list<Order*>::iterator it;
     list<Order*>OL = ol.getOL();
+    cout << "--OrdersList-- " << endl;
     for (it = OL.begin(); it != OL.end(); it++)
     {
         out << *it;
