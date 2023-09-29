@@ -61,6 +61,38 @@ public:
 private:
 };
 
+class Blockade : public Order
+{
+public:
+    Blockade();
+    Blockade(Blockade* a);
+    void execute();
+    void addDescription();
+    string getDescription();
+private:
+};
+
+class Airlift : public Order
+{
+public:
+    Airlift();
+    Airlift(Airlift* a);
+    void execute();
+    void addDescription();
+    string getDescription();
+private:
+};
+
+class Negotiate : public Order
+{
+public:
+    Negotiate();
+    Negotiate(Negotiate* a);
+    void execute();
+    void addDescription();
+    string getDescription();
+private:
+};
 
 class OrdersList
 {

@@ -138,6 +138,78 @@ string Bomb::getDescription() {
     return this->description;
 }
 
+/******************************* Blockade *********************************************/
+Blockade::Blockade() {
+    this->addDescription();
+}
+
+Blockade::Blockade(Blockade* a) {
+    setOrderID(a->getOrderID());
+    this->addDescription();
+}
+
+void Blockade::execute() {
+    if (validate() == 1) cout << "Executing (Blockade) order #" << getOrderID() << " ..." << endl;
+    else cout << "Can NOT execute (Blockade) order #" << getOrderID() << " ..." << endl;
+};
+
+void Blockade::addDescription() {
+    this->description = "(Blockade) Triple the number of army units on a target territory and make it a neutral territory. "
+                        "This order can only be issued if a player has the blockade card in their hand.";
+}
+
+string Blockade::getDescription() {
+    return this->description;
+}
+
+/******************************* Airlift *********************************************/
+Airlift::Airlift() {
+    this->addDescription();
+}
+
+Airlift::Airlift(Airlift* a) {
+    setOrderID(a->getOrderID());
+    this->addDescription();
+}
+
+void Airlift::execute() {
+    if (validate() == 1) cout << "Executing (Airlift) order #" << getOrderID() << " ..." << endl;
+    else cout << "Can NOT execute (Airlift) order #" << getOrderID() << " ..." << endl;
+};
+
+void Airlift::addDescription() {
+    this->description = "(Airlift) Advance a certain number of army units from one from one territory (source territory) "
+                        "to another territory (target territory). This order can only be issued if a player has the airlift card in their hand.";
+}
+
+string Airlift::getDescription() {
+    return this->description;
+}
+
+/******************************* Negotiate *********************************************/
+Negotiate::Negotiate() {
+    this->addDescription();
+}
+
+Negotiate::Negotiate(Negotiate* a) {
+    setOrderID(a->getOrderID());
+    this->addDescription();
+}
+
+void Negotiate::execute() {
+    if (validate() == 1) cout << "Executing (Negotiate) order #" << getOrderID() << " ..." << endl;
+    else cout << "Can NOT execute (Negotiate) order #" << getOrderID() << " ..." << endl;
+};
+
+void Negotiate::addDescription() {
+    this->description = "(Negotiate) prevent attacks between the current player and another target "
+                        "player until the end of the turn. This order can only be issued if a player has the diplomacy card in their hand.";
+}
+
+string Negotiate::getDescription() {
+    return this->description;
+}
+
 /******************************* OrdersList *********************************************/
 OrdersList::OrdersList(){
    std::list<Order*> OL;
