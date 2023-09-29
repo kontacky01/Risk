@@ -99,8 +99,8 @@ class OrdersList
 public:
     OrdersList();                       //default constructor
     virtual void addOrder(Order *o);
-    bool move(int index, int orderID);  //Modify sequence of orders
-    bool remove(int orderID);           //removes order from ordersList
+    bool move(int pos, int id);  //Modify sequence of orders
+    bool remove(int id);                //remove order by id
     list<Order*> getOL();
 private:
     list<Order*> OL;  

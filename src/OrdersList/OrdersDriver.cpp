@@ -60,4 +60,24 @@ void testOrderList() {
     blk1->execute();
     air1->execute();
     n1->execute();
+
+    cout << endl << "Removing orders 5, 6and 7 from Orderslist " << endl;
+    if (OL.remove(5)) cout << "Removed order #5 " << endl; else cout << "Did NOT remove order #5" << endl;
+    if (OL.remove(6)) cout << "Removed order #6 " << endl; else cout << "Did NOT remove order #6" << endl;
+    if (OL.remove(7)) cout << "Removed order #7 " << endl; else cout << "Did NOT remove order #7" << endl;    
+    if (OL.remove(9)) cout << "Removed order #9 " << endl; else cout << "Did NOT remove order #9" << endl;
+    cout << OL;
+
+    cout <<endl << "Testing Move() that are out of bounds or don't exist" <<endl;
+    if (OL.move(0, 4)) cout << "Moving order #4 to position 0" << endl; else cout << "Can NOT move order #4 to position 0" << endl;
+    if (OL.move(-2, 4)) cout << "Moving order #4 to position -2" << endl; else cout << "Can NOT move order #4 to position -2" << endl;
+    if (OL.move(10, 4)) cout << "Moving order #4 to position 10" << endl; else cout << "Can NOT move order #4 to position 10" << endl;
+
+    cout << endl << "Moving orders" << endl;
+    if (OL.move(1, 4)) cout << "Moving order #4 to position 1" << endl; else cout << "Can NOT move order #4 to position 1" << endl;
+    cout << OL << endl;
+    if (OL.move(4, 1)) cout << "Moving order #1 to position 4" << endl; else cout << "Can NOT move order #4 to position 3" << endl;
+    cout << OL << endl;
+    if (OL.move(2, 3)) cout << "Moving order #2 to position 3" << endl; else cout << "Can NOT move order #4 to position 3" << endl;
+    cout << OL;
 }

@@ -219,6 +219,61 @@ void OrdersList::addOrder(Order *o){
     OL.push_back(o);
 }
 
+//input:
+//pos is position wish to place, list starts at position 1 (1st, 2nd, etc...)
+//id of order wish to move
+bool OrdersList::move(int pos, int id){
+    //post out of bounds
+    int size = OL.size();
+    if (pos == 0 || pos < 0 || pos > size) {
+        cout << "From move(): position " << pos << " does not exist" <<endl;
+        return false;
+    }
+    //pos = 1, send to front of list
+    if (pos == 1) {
+        for (auto o : this->OL) {
+            if (o->getOrderID() == id) {
+                this->OL.remove(o); // remove Order from List
+                this->OL.push_front(o); //place in front
+                return true;
+            }
+        }
+    }
+    //pos = last
+    if (pos == size) {
+        for (auto o : this->OL) {
+            if (o->getOrderID() == id) {
+                this->OL.remove(o); // remove Order from List
+                this->OL.push_back(o); //place in front
+                return true;
+            }
+        }
+    }
+    //first position is >=2
+    list<Order*>::iterator it = this->OL.begin();
+    for (int i = 0; i < pos - 1; i++) { ++it; } //incrmenet iterator to pos (can not add with integer)
+    for (auto o : this->OL) {
+        if (o->getOrderID() == id) {
+            this->OL.remove(o); // remove Order from List
+            this->OL.insert(it,o); // use insert from list std
+            return true;
+        }
+    }
+    return false;
+}
+
+bool OrdersList::remove(int id) { //remove order by orderID
+    for (auto o : this->OL) {
+        if (o->getOrderID() == id) {
+            this->OL.remove(o);
+            delete o;
+            return true;
+        }
+    }
+    cout<< "From remove(): Order#" << id << " does not exist" <<endl;
+    return false;
+}
+
 list <Order*> OrdersList::getOL(){
     return this->OL;
 }
@@ -231,8 +286,6 @@ ostream& operator << (ostream& out, OrdersList& ol){
     {
         out << *it;
     }
-    // for (auto o : OL) // another way to loop through
-    //     out << o;
     return out;
 }
 
