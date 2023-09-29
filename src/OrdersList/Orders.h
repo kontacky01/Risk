@@ -9,9 +9,11 @@ class Order
 {
 public:
     Order();                //default contrustor
+    Order(Order *o);        //Deep Copy
     bool validate();        //Invalid orders can be in OL, will check if valid for execution
-    void execute();         //prints the order after execution
+    virtual void execute();         //prints the order after execution
     int incrementCount();   //countOrderID + 1
+    void setOrderID(int id);
     int getOrderID();
     virtual void addDescription();
     virtual string getDescription();
@@ -21,7 +23,7 @@ protected:
 private:
     static int countOrderID;
     int orderID;
-    bool valid;
+    bool valid;     //default false
     friend ostream& operator << (ostream& out, Order* o); //overide Stream insertion operator
 
 };
@@ -30,6 +32,8 @@ class Deploy : public Order
 {
 public:
     Deploy();
+    Deploy(Deploy *d);      //Deep Copy
+    void execute();
     void addDescription();
     string getDescription();
 private:
@@ -39,6 +43,19 @@ class Advance : public Order
 {
 public:
     Advance();
+    Advance(Advance *a);
+    void execute();
+    void addDescription();
+    string getDescription();
+private:
+};
+
+class Bomb : public Order
+{
+public:
+    Bomb();
+    Bomb(Bomb* a);
+    void execute();
     void addDescription();
     string getDescription();
 private:

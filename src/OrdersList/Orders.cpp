@@ -13,21 +13,28 @@ Order::Order() {
     setValid(false);
 };
 
+Order::Order( Order *o) {
+    orderID = o->getOrderID();
+    addDescription();
+    setValid(false);
+};
+
 bool Order::validate() { //Invalid orders can be in OL, will check if valid for execution
     return this->valid;
 };
 
 void Order::execute() {
-    if(validate()==1) {
-        cout << "Executing order #" << getOrderID() <<" ..." << endl;
-    }
-    else 
-        cout << "Can NOT execute order #" << getOrderID() << " ..." << endl;
+    if(validate()==1) cout << "Executing order #" << getOrderID() <<" ..." << endl;
+    else cout << "Can NOT execute order #" << getOrderID() << " ..." << endl;
 };
 
 int Order::incrementCount() {
     return ++countOrderID;
 };
+
+void Order::setOrderID(int id){
+    orderID = id;
+}
 
 int Order::getOrderID() {
     return orderID;
@@ -50,7 +57,7 @@ void Order::setValid(bool v){
 //like toString but directly from cout<<
 ostream& operator << (ostream& out, Order* o)
 {
-    //If true return "true", b/c c++ will return 1
+    //Lambda: If true return "true", b/c c++ will return 1
     auto printBoolValue = [](bool b) { if (b) return "true"; else return "false"; };
 
     out << "OrderID: " << o->getOrderID() << endl
@@ -59,9 +66,20 @@ ostream& operator << (ostream& out, Order* o)
     return out;
 }
 
+/******************************* DEPLOY *********************************************/
 Deploy::Deploy() {
     this->addDescription();
 }
+
+Deploy::Deploy(Deploy *d) {
+    setOrderID(d->getOrderID());
+    this->addDescription();
+}
+
+void Deploy::execute() {
+    if (validate() == 1) cout << "Executing (Deploy) order #" << getOrderID() << " ..." << endl;
+    else cout << "Can NOT execute (Deploy) order #" << getOrderID() << " ..." << endl;
+};
 
 void Deploy::addDescription() {
     this->description = "(Deploy) Move a certain number of army units from the current "
@@ -72,9 +90,20 @@ string Deploy::getDescription() {
     return this->description;
 }
 
+/******************************* Advance *********************************************/
 Advance::Advance() {
     this->addDescription();
 }
+
+Advance::Advance(Advance *a) {
+    setOrderID(a->getOrderID());
+    this->addDescription();
+}
+
+void Advance::execute() {
+    if (validate() == 1) cout << "Executing (Advance) order #" << getOrderID() << " ..." << endl;
+    else cout << "Can NOT execute (Advance) order #" << getOrderID() << " ..." << endl;
+};
 
 void Advance::addDescription() {
     this->description = "(Advance) Move a certain number of army units from one territory" 
@@ -85,6 +114,31 @@ string Advance::getDescription() {
     return this->description;
 }
 
+/******************************* Bomb *********************************************/
+Bomb::Bomb() {
+    this->addDescription();
+}
+
+Bomb::Bomb(Bomb* a) {
+    setOrderID(a->getOrderID());
+    this->addDescription();
+}
+
+void Bomb::execute() {
+    if (validate() == 1) cout << "Executing (Bomb) order #" << getOrderID() << " ..." << endl;
+    else cout << "Can NOT execute (Bomb) order #" << getOrderID() << " ..." << endl;
+};
+
+void Bomb::addDescription() {
+    this->description = "(Bomb) Destroy half of the army units located on a target territory." 
+                        "This order can only be issued if a player has the bomb card in their hand.";
+}
+
+string Bomb::getDescription() {
+    return this->description;
+}
+
+/******************************* OrdersList *********************************************/
 OrdersList::OrdersList(){
    std::list<Order*> OL;
 }
