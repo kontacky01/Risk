@@ -9,7 +9,11 @@ Oleksiy Kasyanenko
 Liora Mezirovsky 
 Natasha Uwase
 
-How to run the project (Player edition)
-```g++ Player.h Player.cpp PlayerDriver.cpp MainDriver.cpp``
-then
-`./a.out`
+#How to Run
+- Place Maindriver.cpp in src next to all files
+- make sure all files do not have a " " at the beginning
+- Adjust the paths in #include in MainDriver.cpp
+- run command below in terminal/command line 
+- commaind says "change directory to src > g++ min version c++14 > compule Maindriver.cpp > compile all files with .cpp in all folders >> create o files > open MainDriver exe"
+
+cd "/Users/eyalazimov/Desktop/Risk-Swift-Sloths/src/" && g++ -std=c++14 MainDriver.cpp `find . \( -iname '*.cpp' -not -name 'MainDriver.cpp' \)` -o MainDriver && "/Users/eyalazimov/Desktop/Risk-Swift-Sloths/src/"MainDriver

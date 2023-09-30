@@ -30,7 +30,9 @@
 *.exe
 *.out
 *.app
+MainDriver
 
 # config
 settings.json
 tasks.json
+.DS_Store
