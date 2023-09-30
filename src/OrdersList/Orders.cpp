@@ -1,10 +1,9 @@
-#include <map>
 #include <iostream>
-using namespace std;
 
 #include "Orders.h"
 
-bool pFlag = false;                  //Flag for print statements
+using namespace std;
+
 int Order::countOrderID = 0;        //start counter for orders at 0
 
 Order::Order() {
@@ -167,7 +166,7 @@ Airlift::Airlift() {
     this->addDescription();
 }
 
-Airlift::Airlift(Airlift* a) {
+Airlift::Airlift(Airlift *a) {
     setOrderID(a->getOrderID());
     this->addDescription();
 }
@@ -212,7 +211,7 @@ string Negotiate::getDescription() {
 
 /******************************* OrdersList *********************************************/
 OrdersList::OrdersList(){
-   std::list<Order*> OL;
+    list<Order*> OL;
 }
 
 void OrdersList::addOrder(Order *o){
@@ -276,6 +275,14 @@ bool OrdersList::remove(int id) { //remove order by orderID
 
 list <Order*> OrdersList::getOL(){
     return this->OL;
+}
+
+void OrdersList::deleteOrdersList(){
+    //Delete pointers and free memory
+    for (auto o : this->getOL()) {
+        delete o;   // deallocate  memory
+        o = NULL;   // prevent dangling pointer error
+    }
 }
 
 ostream& operator << (ostream& out, OrdersList& ol){

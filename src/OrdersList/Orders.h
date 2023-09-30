@@ -3,6 +3,7 @@
 
 #include <list>
 #include <iostream>
+
 using namespace std;
 
 class Order
@@ -76,7 +77,7 @@ class Airlift : public Order
 {
 public:
     Airlift();
-    Airlift(Airlift* a);
+    Airlift(Airlift *a);
     void execute();
     void addDescription();
     string getDescription();
@@ -102,6 +103,7 @@ public:
     bool move(int pos, int id);  //Modify sequence of orders
     bool remove(int id);                //remove order by id
     list<Order*> getOL();
+    void deleteOrdersList();
 private:
     list<Order*> OL;  
     friend ostream& operator << (ostream& out, OrdersList& ol); //overide Stream insertion operator         

@@ -1,8 +1,8 @@
-//Orders Driver for MainDriver.cpp
 #include<iostream>
-using namespace std;
 
 #include "Orders.h"
+
+using namespace std;
 
 void testOrderList() {
     cout << "Hello from testOrderlist()" << endl <<endl;
@@ -80,4 +80,7 @@ void testOrderList() {
     cout << OL << endl;
     if (OL.move(2, 3)) cout << "Moving order #2 to position 3" << endl; else cout << "Can NOT move order #4 to position 3" << endl;
     cout << OL;
+    
+    OL.deleteOrdersList();
+    OLCopy.deleteOrdersList();
 }
