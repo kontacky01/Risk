@@ -2,6 +2,6 @@
 
 int main()
 {
-  testPlayers();
+  PlayerDriver::testPlayers();
   return 0;
 }
