@@ -1,9 +1,7 @@
-// test*()
-
-#include <iostream>
-using namespace std;
+#include "Player/Player.h"
 
 int main()
 {
-  cout << "Hello this is our first file";
+  PlayerDriver::testPlayers();
+  return 0;
 }
