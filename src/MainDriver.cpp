@@ -1,9 +1,11 @@
-// test*()
-
-#include <iostream>
-using namespace std;
+#include "OrdersList/OrdersDriver.h"
+#include "Player/Player.h"
+#include "CardsDeck/Cards.h"
 
 int main()
 {
-  cout << "Hello this is our first file";
+    testOrderList();
+    PlayerDriver::testPlayers();
+    CardsDriver::testCards();
+    return 0;
 }
