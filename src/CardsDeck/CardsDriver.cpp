@@ -8,7 +8,7 @@ void CardsDriver::testCards() {
 
     // some variables for later
     string cardToPlay = "Bomb";
-    string CheckCardType;
+    string checkCardType;
 
     cout << "---------> Testing Phase 1 <---------" << endl << endl;
 
@@ -31,11 +31,11 @@ void CardsDriver::testCards() {
     cout << "Card5 is now a \"" << card1.getType() << "\" card." << endl << endl; // testing getter
 
     cout << "...Validating Card2 type..." << endl;
-    CheckCardType = card2.getType(); // validate a card type using isValidCardType function
-    if (Card::isValidCardType(CheckCardType)) {
-        cout << "Card type " << "\"" << CheckCardType << "\" is valid." << endl << endl;
+    checkCardType = card2.getType(); // validate a card type using isValidCardType function
+    if (Card::isValidCardType(checkCardType)) {
+        cout << "Card type " << "\"" << checkCardType << "\" is valid." << endl << endl;
     } else {
-        cout << "Card type " << "\"" << CheckCardType << "\" is not valid." << endl << endl;
+        cout << "Card type " << "\"" << checkCardType << "\" is not valid." << endl << endl;
     }
 
     cout << "---------> Testing Phase 2 <---------" << endl << endl;
@@ -50,54 +50,54 @@ void CardsDriver::testCards() {
     cout << "Card4 copy is now: \"" << copiedCard.getType() << "\"" << endl << "Deep copy is a success!" << endl << endl;
 
     cout << "...Creating a new deck of cards..." << endl << endl;
-    Deck NewDeck;
-    NewDeck.fillDeck();
-    NewDeck.printDeck();
-    NewDeck.getSize();
+    Deck newDeck;
+    newDeck.fillDeck();
+    newDeck.printDeck();
+    newDeck.getSize();
     cout << endl;
     cout << "...Creating a deep copy of The Deck..." << endl << endl;
-    Deck NewDeckCopy (NewDeck);
+    Deck newDeckCopy (newDeck);
     cout << "...Shuffling original Deck..." << endl << endl;
-    cout << "(Shuffled Original) \n"; NewDeck.shuffleDeck();
-    NewDeck.printDeck();
+    cout << "(Shuffled Original) \n"; newDeck.shuffleDeck();
+    newDeck.printDeck();
     cout << endl << "...Printing deep copy of The Deck..." << endl << endl;
-    cout << "(Copy) "; NewDeckCopy.printDeck();
+    cout << "(Copy) "; newDeckCopy.printDeck();
     cout << endl << "Deep copy is a success!" << endl;
 
     cout << endl << "---------> Testing Phase 3 <---------" << endl << endl;
 
     cout << "...Creating a player's hand of cards..." << endl << endl;
-    Hand Hand;
-    Hand.fillHand(NewDeck);
-    Hand.printHand();
-    Hand.getSize();
+    Hand hand;
+    hand.fillHand(newDeck);
+    hand.printHand();
+    hand.getSize();
     cout << endl << "...Checking The Deck for remaining cards..." << endl << endl;
-    NewDeck.printDeck();
-    NewDeck.getSize();
+    newDeck.printDeck();
+    newDeck.getSize();
 
     // testing play function
     cout << endl << "...Player is choosing a card to play..." << endl << endl;
     cout << "...Checking Orders List for created order..." << endl << endl;
-    Hand.play(cardToPlay, &NewDeck);
+    hand.play(cardToPlay, &newDeck);
     cout << endl;
     cout << "...Checking Your Hand for remaining cards..." << endl << endl;
-    Hand.printHand();
-    Hand.getSize();
+    hand.printHand();
+    hand.getSize();
 
     cout << endl << "...Checking The Deck to see if played card has returned..." << endl << endl;
-    NewDeck.printDeck();
-    NewDeck.getSize();
+    newDeck.printDeck();
+    newDeck.getSize();
 
     cout << endl << "...You drew a card from The Deck..." << endl << endl;
-    Card* drawnCard = NewDeck.draw();
-    Hand.addCard(drawnCard);
+    Card* drawnCard = newDeck.draw();
+    hand.addCard(drawnCard);
     cout << "You drew a \"" << drawnCard->getType() << "\" card." << endl;
     cout << endl << "...Checking remaining cards in The Deck..." << endl << endl;
-    NewDeck.printDeck();
-    NewDeck.getSize();
+    newDeck.printDeck();
+    newDeck.getSize();
 
     cout << endl << "...Checking the cards in Your Hand..." << endl << endl;
-    Hand.printHand();
-    Hand.getSize();
+    hand.printHand();
+    hand.getSize();
     cout << endl;
 }

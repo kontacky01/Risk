@@ -2,7 +2,7 @@
 
 #include <string>
 #include <vector>
-#include "Orders.h"
+#include "../OrdersList/Orders.h"
 
 using namespace std;
 
@@ -60,7 +60,7 @@ protected:
 };
 
 /************************************************************ Hand ************************************************************/
-class Hand : public Deck {
+class Hand {
 public:
     Hand(); // parametrized constructor
 
@@ -74,9 +74,9 @@ public:
 
     void printHand(); // prints contents of hand
 
-    void getSize() override; // prints size of hand
+    void getSize(); // prints size of hand
 
-    void addCard(Card *newCard) override; // adds a new card to hand
+    void addCard(Card *newCard); // adds a new card to hand
 
     void play(string &playedCardType,
               Deck *returningDeck); // removes card from hand, pushes orders, and returns card to original deck

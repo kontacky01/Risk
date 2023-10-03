@@ -15,15 +15,15 @@ public:
     Territory(string);
 };
 
-class temp_Order
+class Order_Temp
 {
 public:
-    string orderID;
-    // constrcutor
-    temp_Order(string);
+  string orderID;
+  // constrcutor
+  Order_Temp(string);
 };
 
-class temp_Hand
+class Hand_Temp
 {
 };
 
@@ -33,8 +33,8 @@ class Player
 {
 private:
     vector<Territory *> territories;
-    temp_Hand *hand;
-    vector<temp_Order *> orderList;
+    Hand_Temp *hand;
+    vector<Order_Temp*> orderList;
 
     /// <summary>
     /// Helper method to list attack/defended territories
@@ -45,7 +45,7 @@ public:
     /// <summary>
     /// Constructor with with an argument list
     /// </summary>
-    Player(vector<Territory *>, temp_Hand *, vector<temp_Order *>);
+    Player(vector<Territory *>, Hand_Temp *, vector<Order_Temp*>);
 
     /// <summary>
     /// Default Constructor
@@ -73,11 +73,11 @@ public:
     /// issueOrder
     /// Take in an order and add it into the OrderList
     /// </summary>
-    vector<temp_Order *> issueOrder(temp_Order *o);
+    vector<Order_Temp*> issueOrder(Order_Temp*o);
 };
 
 /************************************************************ PlayerDriver ************************************************************/
 namespace PlayerDriver
 {
     void testPlayers();
-}
+};

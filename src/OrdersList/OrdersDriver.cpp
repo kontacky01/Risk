@@ -35,7 +35,6 @@ void testOrderList() {
     OL.addOrder(air1);
     OL.addOrder(n1);
     cout << OL;
-
     cout << endl << "Printing Copies of Order And Deploy in a new OrdersList: " << endl;
     OLCopy.addOrder(o1Copy);
     OLCopy.addOrder(d1Copy);

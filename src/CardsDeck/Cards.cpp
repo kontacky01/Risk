@@ -2,7 +2,6 @@
 #include <iostream>
 #include <random>
 #include "Cards.h"
-#include "Orders.h"
 
 /************************************************************ Card ************************************************************/
 const vector<string> Card::cardTypes = {"Bomb", "Reinforcement", "Blockade", "Airlift", "Diplomacy"}; // vector holding all card types

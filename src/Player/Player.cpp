@@ -6,16 +6,16 @@ Territory::Territory(string n)
     name = n;
 }
 
-temp_Order::temp_Order(string o)
+Order_Temp::Order_Temp(string o)
 {
-    orderID = o;
+  orderID = o;
 }
 
 /************************************************************ Player ************************************************************/
 /// <summary>
 /// Constructor with with an argument list
 /// </summary>
-Player::Player(vector<Territory *> t, temp_Hand *h, vector<temp_Order *> o)
+Player::Player(vector<Territory *> t, Hand_Temp *h, vector<Order_Temp *> o)
 {
     territories = t;
     hand = h;
@@ -23,7 +23,7 @@ Player::Player(vector<Territory *> t, temp_Hand *h, vector<temp_Order *> o)
 
     // If seed is set to 1, the generator is reinitialized to its initial value and produces the same values as before any call to rand or srand
     srand((unsigned)time(NULL));
-};
+}
 
 /// <summary>
 /// Helper method to list attack/defended territories
@@ -84,30 +84,30 @@ vector<Territory *> Player::toDefend()
 /// </summary>
 vector<Territory *> Player::toAttack()
 {
-    vector<Territory *> attacked;
-    if (territories.size() == 0)
-    {
-        cout << "There are no territories to attack\n";
-        return attacked;
-    }
-    int index = rand() % territories.size() + 1;
-    for (int i = 0; i < index; i++)
-    {
-        attacked.push_back(territories.at(i));
-    }
-    cout << "Territories to attack:\n";
-    printTerritories(attacked);
-
+  vector<Territory *> attacked;
+  if (territories.size() == 0)
+  {
+    cout << "There are no territories to attack\n";
     return attacked;
+  }
+  int index = rand() % territories.size() + 1;
+  for (int i = 0; i < index; i++)
+  {
+    attacked.push_back(territories.at(i));
+  }
+  cout << "Territories to attack:\n";
+  printTerritories(attacked);
+
+  return attacked;
 }
 
 /// <summary>
 /// issueOrder
 /// Take in an order and add it into the OrderList
 /// </summary>
-vector<temp_Order *> Player::issueOrder(temp_Order *o)
+vector<Order_Temp *> Player::issueOrder(Order_Temp*o)
 {
-    orderList.push_back(o);
-    cout << "pushed a new order to orderList with orderID:" << o->orderID << "\n";
-    return orderList;
+  orderList.push_back(o);
+  cout << "pushed a new order to orderList with orderID:" << o->orderID << "\n";
+  return orderList;
 }
