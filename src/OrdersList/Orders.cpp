@@ -82,7 +82,7 @@ void Deploy::execute() {
 
 void Deploy::addDescription() {
     this->description = "(Deploy) Move a certain number of army units from the current "
-        "player's reinforcement pool to one of the current player's territories.";
+                        "player's reinforcement pool to one of the current player's territories.";
 }
 
 string Deploy::getDescription() {
@@ -105,8 +105,8 @@ void Advance::execute() {
 };
 
 void Advance::addDescription() {
-    this->description = "(Advance) Move a certain number of army units from one territory" 
-                    "(source territory) to another territory (target territory).";
+    this->description = "(Advance) Move a certain number of army units from one territory"
+                        "(source territory) to another territory (target territory).";
 }
 
 string Advance::getDescription() {
@@ -129,7 +129,7 @@ void Bomb::execute() {
 };
 
 void Bomb::addDescription() {
-    this->description = "(Bomb) Destroy half of the army units located on a target territory." 
+    this->description = "(Bomb) Destroy half of the army units located on a target territory."
                         "This order can only be issued if a player has the bomb card in their hand.";
 }
 
@@ -295,7 +295,6 @@ ostream& operator << (ostream& out, OrdersList& ol){
     }
     return out;
 }
-
 
 
 

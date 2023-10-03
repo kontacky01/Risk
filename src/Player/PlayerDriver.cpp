@@ -3,8 +3,8 @@
 void PlayerDriver::testPlayers()
 {
   vector<Territory *> t;
-  Hand *h = new Hand();
-  vector<Order *> o;
+  Hand_Temp *h = new Hand_Temp();
+  vector<Order_Temp *> o;
 
   // Create 6 territories and push them to the territories vector
   Territory *t1 = new Territory("UK");
@@ -32,7 +32,7 @@ void PlayerDriver::testPlayers()
   p->toAttack();
 
   // Show that Player contains method issueOrder()
-  Order *newOrder = new Order("1");
+  Order_Temp *newOrder = new Order_Temp("1");
   p->issueOrder(newOrder);
 
   // Show that Player contains method toDefend()
@@ -42,7 +42,7 @@ void PlayerDriver::testPlayers()
   pCopy->toAttack();
 
   // Show that Player contains method issueOrder()
-  Order *newOrderCopy = new Order("2");
+  Order_Temp *newOrderCopy = new Order_Temp("2");
   pCopy->issueOrder(newOrderCopy);
 
   // Delete hand pointer

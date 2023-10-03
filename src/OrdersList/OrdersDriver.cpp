@@ -35,7 +35,6 @@ void testOrderList() {
     OL.addOrder(air1);
     OL.addOrder(n1);
     cout << OL;
-    
     cout << endl << "Printing Copies of Order And Deploy in a new OrdersList: " << endl;
     OLCopy.addOrder(o1Copy);
     OLCopy.addOrder(d1Copy);
@@ -64,7 +63,7 @@ void testOrderList() {
     cout << endl << "Removing orders 5, 6and 7 from Orderslist " << endl;
     if (OL.remove(5)) cout << "Removed order #5 " << endl; else cout << "Did NOT remove order #5" << endl;
     if (OL.remove(6)) cout << "Removed order #6 " << endl; else cout << "Did NOT remove order #6" << endl;
-    if (OL.remove(7)) cout << "Removed order #7 " << endl; else cout << "Did NOT remove order #7" << endl;    
+    if (OL.remove(7)) cout << "Removed order #7 " << endl; else cout << "Did NOT remove order #7" << endl;
     if (OL.remove(9)) cout << "Removed order #9 " << endl; else cout << "Did NOT remove order #9" << endl;
     cout << OL;
 
@@ -80,7 +79,7 @@ void testOrderList() {
     cout << OL << endl;
     if (OL.move(2, 3)) cout << "Moving order #2 to position 3" << endl; else cout << "Can NOT move order #4 to position 3" << endl;
     cout << OL;
-    
+
     OL.deleteOrdersList();
     OLCopy.deleteOrdersList();
 }

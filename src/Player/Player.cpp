@@ -3,10 +3,10 @@
 /************************************************************ TODO: TEMP ************************************************************/
 Territory::Territory(string n)
 {
-  name = n;
+    name = n;
 }
 
-Order::Order(string o)
+Order_Temp::Order_Temp(string o)
 {
   orderID = o;
 }
@@ -15,26 +15,26 @@ Order::Order(string o)
 /// <summary>
 /// Constructor with with an argument list
 /// </summary>
-Player::Player(vector<Territory *> t, Hand *h, vector<Order *> o)
+Player::Player(vector<Territory *> t, Hand_Temp *h, vector<Order_Temp *> o)
 {
-  territories = t;
-  hand = h;
-  orderList = o;
+    territories = t;
+    hand = h;
+    orderList = o;
 
-  // If seed is set to 1, the generator is reinitialized to its initial value and produces the same values as before any call to rand or srand
-  srand((unsigned)time(NULL));
-};
+    // If seed is set to 1, the generator is reinitialized to its initial value and produces the same values as before any call to rand or srand
+    srand((unsigned)time(NULL));
+}
 
 /// <summary>
 /// Helper method to list attack/defended territories
 /// </summary>
 void Player::printTerritories(vector<Territory *> territories)
 {
-  for (int i = 0; i < territories.size(); i++)
-  {
-    cout << i << ")" << territories.at(i)->name << "\n";
-  }
-  cout << "------------------------------\n";
+    for (int i = 0; i < territories.size(); i++)
+    {
+        cout << i << ")" << territories.at(i)->name << "\n";
+    }
+    cout << "------------------------------\n";
 }
 
 /// <summary>
@@ -43,10 +43,10 @@ void Player::printTerritories(vector<Territory *> territories)
 // TODO: does need to be a shallow or deep copy
 Player::Player(const Player &p)
 {
-  cout << "Copy constructor was called\n";
-  territories = p.territories;
-  hand = p.hand;
-  orderList = p.orderList;
+    cout << "Copy constructor was called\n";
+    territories = p.territories;
+    hand = p.hand;
+    orderList = p.orderList;
 };
 
 /// <summary>
@@ -61,21 +61,21 @@ Player::Player(){};
 /// </summary>
 vector<Territory *> Player::toDefend()
 {
-  vector<Territory *> defended;
-  // if no territories were init
-  if (territories.size() == 0)
-  {
-    cout << "There are no territories to defend\n";
+    vector<Territory *> defended;
+    // if no territories were init
+    if (territories.size() == 0)
+    {
+        cout << "There are no territories to defend\n";
+        return defended;
+    }
+    int index = rand() % territories.size() + 1;
+    for (int i = 0; i < index; i++)
+    {
+        defended.push_back(territories.at(i));
+    }
+    cout << "Territories to defend:\n";
+    printTerritories(defended);
     return defended;
-  }
-  int index = rand() % territories.size() + 1;
-  for (int i = 0; i < index; i++)
-  {
-    defended.push_back(territories.at(i));
-  }
-  cout << "Territories to defend:\n";
-  printTerritories(defended);
-  return defended;
 }
 
 /// <summary>
@@ -105,7 +105,7 @@ vector<Territory *> Player::toAttack()
 /// issueOrder
 /// Take in an order and add it into the OrderList
 /// </summary>
-vector<Order *> Player::issueOrder(Order *o)
+vector<Order_Temp *> Player::issueOrder(Order_Temp*o)
 {
   orderList.push_back(o);
   cout << "pushed a new order to orderList with orderID:" << o->orderID << "\n";

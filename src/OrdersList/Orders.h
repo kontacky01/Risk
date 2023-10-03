@@ -105,8 +105,8 @@ public:
     list<Order*> getOL();
     void deleteOrdersList();
 private:
-    list<Order*> OL;  
-    friend ostream& operator << (ostream& out, OrdersList& ol); //overide Stream insertion operator         
+    list<Order*> OL;
+    friend ostream& operator << (ostream& out, OrdersList& ol); //overide Stream insertion operator
 };
 
 // end marker for the above's #ifndef
