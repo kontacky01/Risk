@@ -1,7 +1,7 @@
 #include <iostream>
 #include "Cards.h"
 
-void CardsDriver::testCards() {
+void testCards() {
     cout << endl << "*************************************" << endl
          << "Hello, World! Let's test some Cards. \n"
          << "*************************************" << endl << endl;

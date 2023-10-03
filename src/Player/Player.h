@@ -77,7 +77,4 @@ public:
 };
 
 /************************************************************ PlayerDriver ************************************************************/
-namespace PlayerDriver
-{
-    void testPlayers();
-};
+void testPlayers();

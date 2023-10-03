@@ -1,6 +1,6 @@
 #include "Player.h"
 
-void PlayerDriver::testPlayers()
+void testPlayers()
 {
   vector<Territory *> t;
   Hand_Temp *h = new Hand_Temp();
