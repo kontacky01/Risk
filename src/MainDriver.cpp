@@ -1,10 +1,10 @@
-#include "OrdersList/OrdersDriver.h"
+#include "OrdersList/Orders.h"
 #include "Player/Player.h"
 #include "CardsDeck/Cards.h"
 
 int main()
 {
-    testOrderList();
+    testOrdersLists();
     testPlayers();
     testCards();
     return 0;

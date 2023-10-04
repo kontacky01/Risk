@@ -106,3 +106,7 @@ private:
     list<Order*> OL;
     friend ostream& operator << (ostream& out, OrdersList& ol); //overide Stream insertion operator
 };
+
+// test driver method
+void testOrdersLists();
+
