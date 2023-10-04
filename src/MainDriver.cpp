@@ -5,7 +5,7 @@
 int main()
 {
     testOrdersLists();
-    //PlayerDriver::testPlayers();
-    //CardsDriver::testCards();
+    testPlayers();
+    testCards();
     return 0;
 }

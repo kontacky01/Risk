@@ -87,6 +87,4 @@ protected:
 };
 
 /************************************************************ Cards Driver ************************************************************/
-namespace CardsDriver {
-    void testCards(); // testing function
-}
+void testCards(); // testing function
