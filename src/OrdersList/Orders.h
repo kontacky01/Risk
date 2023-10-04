@@ -1,6 +1,4 @@
-#ifndef ORDERS_H
-#define ORDERS_H
-
+#pragma once
 #include <list>
 #include <iostream>
 
@@ -10,7 +8,7 @@ class Order
 {
 public:
     Order();                //default contrustor
-    Order(Order *o);        //Deep Copy
+    Order(Order* o);        //Deep Copy
     bool validate();        //Invalid orders can be in OL, will check if valid for execution
     virtual void execute();         //prints the order after execution
     int incrementCount();   //countOrderID + 1
@@ -33,7 +31,7 @@ class Deploy : public Order
 {
 public:
     Deploy();
-    Deploy(Deploy *d);      //Deep Copy
+    Deploy(Deploy* d);      //Deep Copy
     void execute();
     void addDescription();
     string getDescription();
@@ -44,7 +42,7 @@ class Advance : public Order
 {
 public:
     Advance();
-    Advance(Advance *a);
+    Advance(Advance* a);
     void execute();
     void addDescription();
     string getDescription();
@@ -77,7 +75,7 @@ class Airlift : public Order
 {
 public:
     Airlift();
-    Airlift(Airlift *a);
+    Airlift(Airlift* a);
     void execute();
     void addDescription();
     string getDescription();
@@ -99,7 +97,7 @@ class OrdersList
 {
 public:
     OrdersList();                       //default constructor
-    virtual void addOrder(Order *o);
+    virtual void addOrder(Order* o);
     bool move(int pos, int id);  //Modify sequence of orders
     bool remove(int id);                //remove order by id
     list<Order*> getOL();
@@ -108,6 +106,3 @@ private:
     list<Order*> OL;
     friend ostream& operator << (ostream& out, OrdersList& ol); //overide Stream insertion operator
 };
-
-// end marker for the above's #ifndef
-#endif

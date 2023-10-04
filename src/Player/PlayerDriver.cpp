@@ -1,18 +1,21 @@
 #include "Player.h"
 
-void PlayerDriver::testPlayers()
+void testPlayers()
 {
-  vector<Territory *> t;
-  Hand_Temp *h = new Hand_Temp();
-  vector<Order_Temp *> o;
+  cout << endl << "*************************************" << "\n"
+    << "Test Player\n"
+    << "*************************************" << "\n" << "\n";
+  vector<Territory*> t;
+  Hand* h = new Hand();
+  vector<Order*> o;
 
   // Create 6 territories and push them to the territories vector
-  Territory *t1 = new Territory("UK");
-  Territory *t2 = new Territory("USA");
-  Territory *t3 = new Territory("Russia");
-  Territory *t4 = new Territory("Israel");
-  Territory *t5 = new Territory("Italy");
-  Territory *t6 = new Territory("Bulgaria");
+  Territory* t1 = new Territory("UK");
+  Territory* t2 = new Territory("USA");
+  Territory* t3 = new Territory("Russia");
+  Territory* t4 = new Territory("Israel");
+  Territory* t5 = new Territory("Italy");
+  Territory* t6 = new Territory("Bulgaria");
   t.push_back(t1);
   t.push_back(t2);
   t.push_back(t3);
@@ -21,10 +24,9 @@ void PlayerDriver::testPlayers()
   t.push_back(t6);
 
   // Init a player
-  Player *p = new Player(t, h, o);
-  // Show that player contains a copy constructor
-  Player *pCopy = new Player(*p);
+  Player* p = new Player(t, h, o);
 
+  cout << "---------> Test 1: Testing player methods (attack/defend/issueOrder) <---------" << "\n" << "\n";
   // Show that Player contains method toDefend()
   p->toDefend();
 
@@ -32,8 +34,12 @@ void PlayerDriver::testPlayers()
   p->toAttack();
 
   // Show that Player contains method issueOrder()
-  Order_Temp *newOrder = new Order_Temp("1");
+  Order* newOrder = new Order();
   p->issueOrder(newOrder);
+
+  cout << "---------> Test 2: Testing coppied player methods (attack/defend/issueOrder) <---------" << "\n" << "\n";
+  // Show that player contains a copy constructor
+  Player* pCopy = new Player(*p);
 
   // Show that Player contains method toDefend()
   pCopy->toDefend();
@@ -42,7 +48,7 @@ void PlayerDriver::testPlayers()
   pCopy->toAttack();
 
   // Show that Player contains method issueOrder()
-  Order_Temp *newOrderCopy = new Order_Temp("2");
+  Order* newOrderCopy = new Order();
   pCopy->issueOrder(newOrderCopy);
 
   // Delete hand pointer
