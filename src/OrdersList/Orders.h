@@ -1,6 +1,4 @@
-#ifndef ORDERS_H
-#define ORDERS_H
-
+#pragma once
 #include <list>
 #include <iostream>
 
@@ -109,5 +107,7 @@ private:
     friend ostream& operator << (ostream& out, OrdersList& ol); //overide Stream insertion operator
 };
 
-// end marker for the above's #ifndef
-#endif
+
+// test driver method
+void testOrdersLists();
+

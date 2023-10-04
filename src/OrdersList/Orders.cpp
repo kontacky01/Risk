@@ -59,9 +59,9 @@ ostream& operator << (ostream& out, Order* o)
     //Lambda: If true return "true", b/c c++ will return 1
     auto printBoolValue = [](bool b) { if (b) return "true"; else return "false"; };
 
-    out << "OrderID: " << o->getOrderID() << endl
-        << "Descrption: " << o->getDescription() << endl
-        << "Is valid: " << printBoolValue(o->validate()) <<endl;
+    out << "OrderID: " << o->getOrderID() << "\n"
+        << "Descrption: " << o->getDescription() << "\n"
+        << "Is valid: " << printBoolValue(o->validate()) << "\n" << "\n";
     return out;
 }
 
@@ -81,8 +81,8 @@ void Deploy::execute() {
 };
 
 void Deploy::addDescription() {
-    this->description = "(Deploy) Move a certain number of army units from the current "
-                        "player's reinforcement pool to one of the current player's territories.";
+    this->description = "(Deploy) Move a certain number of army units from the current player's \n"
+        "            reinforcement pool to one of the current player's territories.";
 }
 
 string Deploy::getDescription() {
@@ -105,8 +105,8 @@ void Advance::execute() {
 };
 
 void Advance::addDescription() {
-    this->description = "(Advance) Move a certain number of army units from one territory"
-                        "(source territory) to another territory (target territory).";
+    this->description = "(Advance) Move a certain number of army units from one territory \n"
+            "            (source territory) to another territory (target territory).";
 }
 
 string Advance::getDescription() {
@@ -129,8 +129,8 @@ void Bomb::execute() {
 };
 
 void Bomb::addDescription() {
-    this->description = "(Bomb) Destroy half of the army units located on a target territory."
-                        "This order can only be issued if a player has the bomb card in their hand.";
+    this->description = "(Bomb) Destroy half of the army units located on a target territory. \n"
+        "            This order can only be issued if a player has the bomb card in their hand.";
 }
 
 string Bomb::getDescription() {
@@ -153,8 +153,8 @@ void Blockade::execute() {
 };
 
 void Blockade::addDescription() {
-    this->description = "(Blockade) Triple the number of army units on a target territory and make it a neutral territory. "
-                        "This order can only be issued if a player has the blockade card in their hand.";
+    this->description = "(Blockade) Triple the number of army units on a target territory and make it a neutral territory. \n"
+        "            This order can only be issued if a player has the blockade card in their hand.";
 }
 
 string Blockade::getDescription() {
@@ -177,8 +177,8 @@ void Airlift::execute() {
 };
 
 void Airlift::addDescription() {
-    this->description = "(Airlift) Advance a certain number of army units from one from one territory (source territory) "
-                        "to another territory (target territory). This order can only be issued if a player has the airlift card in their hand.";
+    this->description = "(Airlift) Advance a certain number of army units from one from one territory (source territory) to another territory \n"
+        "            (target territory). This order can only be issued if a player has the airlift card in their hand.";
 }
 
 string Airlift::getDescription() {
@@ -201,8 +201,8 @@ void Negotiate::execute() {
 };
 
 void Negotiate::addDescription() {
-    this->description = "(Negotiate) prevent attacks between the current player and another target "
-                        "player until the end of the turn. This order can only be issued if a player has the diplomacy card in their hand.";
+    this->description = "(Negotiate) prevent attacks between the current player and another target player until the end of \n"
+        "            the turn. This order can only be issued if a player has the diplomacy card in their hand.";
 }
 
 string Negotiate::getDescription() {
@@ -288,7 +288,8 @@ void OrdersList::deleteOrdersList(){
 ostream& operator << (ostream& out, OrdersList& ol){
     list<Order*>::iterator it;
     list<Order*>OL = ol.getOL();
-    cout << "--OrdersList-- " << endl;
+    cout << "The OrdersList contains " << "\n"
+         << "------------------------" << "\n";
     for (it = OL.begin(); it != OL.end(); it++)
     {
         out << *it;
