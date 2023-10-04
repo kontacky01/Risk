@@ -14,7 +14,7 @@ public:
 
     virtual ~Card(); // destructor, virtual to prevent deletion
 
-    Card(const string &cardType); // initializes card types
+    explicit Card(const string &cardType); // initializes card types
 
     Card(const Card &other); // copy constructor
 
@@ -37,7 +37,7 @@ class Deck : public Card { // inherits Card class
 public:
     Deck(); // default constructor
 
-    ~Deck(); // destructor
+    ~Deck() override; // destructor
 
     Deck(const Deck &other); // deep copy constructor
 
@@ -51,35 +51,35 @@ public:
 
     void shuffleDeck(); // randomizes the deck
 
-    Card *draw(); // draws and removes a card from the deck
+    Card *draw(Deck &transfer); // draws and removes a card from the deck
 
-    virtual void addCard(Card *oldCard); // adds card back to deck
+    virtual void addCard(Card *transferCard); // adds card back to deck
+
+    void returnCard(Card *returningCard); // return card back to deck
 
 protected:
     vector<Card *> deck; // stores collection of cards created by fillDeck
+    vector<Card *> transfer; // placeholder vector used to transfer cards from deck to hand
 };
 
 /************************************************************ Hand ************************************************************/
-class Hand {
+class Hand : public Deck {
 public:
     Hand(); // parametrized constructor
 
-    ~Hand(); // destructor
+    ~Hand() override; // destructor
 
     Hand(const Hand &other); // copy constructor
 
     Hand &operator=(const Hand &other); // assignment operator definition
 
-    void fillHand(Deck &deck); // creates a player's finite collection of playable cards
-
     void printHand(); // prints contents of hand
 
-    void getSize(); // prints size of hand
+    void getSize() override; // prints size of hand
 
-    void addCard(Card *newCard); // adds a new card to hand
+    void addCard(Card *newHandCard) override; // adds a new card to hand
 
-    void play(string &playedCardType,
-              Deck *returningDeck); // removes card from hand, pushes orders, and returns card to original deck
+    void play(string &playedCardType, Deck *returningDeck); // removes card from hand, pushes orders, and returns card to original deck
 
 protected:
     vector<Card *> hand; // stores collection of cards created by fillHand
