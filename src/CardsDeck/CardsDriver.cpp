@@ -3,8 +3,8 @@
 
 void testCards() {
     cout << endl << "*************************************" << endl
-         << "Hello, World! Let's test some Cards. \n"
-         << "*************************************" << endl << endl;
+        << "Test Cards\n"
+        << "*************************************" << endl << endl;
 
     // some variables for later
     string cardToPlay = "Bomb";
@@ -34,7 +34,8 @@ void testCards() {
     checkCardType = card2.getType(); // validate a card type using isValidCardType function
     if (Card::isValidCardType(checkCardType)) {
         cout << "Card type " << "\"" << checkCardType << "\" is valid." << endl << endl;
-    } else {
+    }
+    else {
         cout << "Card type " << "\"" << checkCardType << "\" is not valid." << endl << endl;
     }
 
@@ -56,7 +57,7 @@ void testCards() {
     newDeck.getSize();
     cout << endl;
     cout << "...Creating a deep copy of The Deck..." << endl << endl;
-    Deck newDeckCopy (newDeck);
+    Deck newDeckCopy(newDeck);
     cout << "...Shuffling original Deck..." << endl << endl;
     cout << "(Shuffled Original) \n"; newDeck.shuffleDeck();
     newDeck.printDeck();
