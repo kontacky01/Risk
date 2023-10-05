@@ -36,13 +36,12 @@ private:
 class Transition{
 public:	
 	Transition();           // Default Constructor
-	Transition( State* initial, string requiredcommand, State*  final);         // Parameterized Constructor
+	Transition(string requiredcommand, State*  final);         // Parameterized Constructor
 	Transition& operator=(const Transition& other);                           // Assignment Operator
     Transition(const Transition& other);                                    // Copy constructor
     string getCommand();
     State * getNextState();
 private:
-    State* currentState;         // current state
     string command;            // required command to perform transition
     State* nextState;           // next state
 };

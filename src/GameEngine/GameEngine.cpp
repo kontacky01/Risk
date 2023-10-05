@@ -31,15 +31,13 @@ string State::getState(){
 Transition::Transition(){}
 	
 // Parameterized Constructor
-Transition::Transition(State* initial, string requiredcommand, State* final){
-    this->currentState = initial;
+Transition::Transition(string requiredcommand, State* final){
     this->command = requiredcommand;
     this->nextState =final;
 }
 
 //Assignment Operator
 Transition& Transition::operator=(const Transition& other){
-    this->currentState = other.currentState;
     this->command = other.command;
     this->nextState = other.nextState;
     return *this;
@@ -47,7 +45,6 @@ Transition& Transition::operator=(const Transition& other){
 
 // Copy Constructor
 Transition::Transition(const Transition& other){
-    this->currentState = other.currentState;
     this->command = other.command;
     this->nextState = other.nextState;
 }
