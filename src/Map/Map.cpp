@@ -287,8 +287,8 @@ void MapLoader::loadMap(string filename) {
                 // cout << "       -            " << territory.second.size() << "    -   " << i  << "\n\n";
                 string key = territory.second.at(i);
                 territory.first->addAdjacentTerritory(territoryMap.at(key));
-                 // create linckage 
-                cout << "------adjecent------" << territoryMap.at(key)->getId() << "   " << territoryMap.at(key)->getName()<< "\n";
+                // create linckage 
+                cout << "------adjecent------" << territoryMap.at(key)->getId() << "   " << territoryMap.at(key)->getName() << "\n";
 
             }
         }
