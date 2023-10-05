@@ -12,7 +12,7 @@ using namespace std;
 /************************************************************ Continent ************************************************************/
 
 class Continent {
-private: 
+private:
     int id;
     string name;
 
@@ -37,19 +37,15 @@ public:
     int getId() const;
 };
 
-/************************************************************ MapDriver ************************************************************/
-
-void testLoadMaps();
-
 /************************************************************ Territory ************************************************************/
 
 
 class Territory {
-private: 
+private:
     int id;
     int continentId;
     string name;
-    vector<string*> adjacency_list;
+    vector<Territory*> adjacency_list;
 public:
     /// <summary>
     /// Helper method to list attack/defended territories
@@ -67,13 +63,29 @@ public:
     // Getter for value
     int getId() const;
 
-    // // Destructor to clean up dynamically allocated memory
-    // ~Territory() {
-    //     for (string* adj : adjacency_list) {
-    //         delete adj;
-    //     }
-    // }
+    void addAdjacentTerritory(Territory*);
 };
+/************************************************************ Map ************************************************************/
+
+class Map {
+private:
+    map<int, Territory*> territories;
+    map<int, Continent*> continents;
+
+public:
+    Map();
+    ~Map();
+
+    void addContinent(Continent*);
+    void addTerritory(Territory*);
+};
+
+
+
+/************************************************************ MapDriver ************************************************************/
+
+void testLoadMaps();
+
 /************************************************************ MapLoader ************************************************************/
 
 
