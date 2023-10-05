@@ -5,6 +5,8 @@
 // Default constructor
 State::State(){}
 
+State::~State(){}
+
 // Parameterized constructor
 State::State(string name){
     stateName = name;
@@ -29,6 +31,8 @@ string State::getState(){
 
 // Default Constructor
 Transition::Transition(){}
+
+Transition::~Transition() {}
 	
 // Parameterized Constructor
 Transition::Transition(string requiredcommand, State* final){
@@ -55,4 +59,9 @@ string Transition::getCommand(){
 
 State * Transition::getNextState(){
     return nextState;
+}
+
+void Transition::deletePointerNextState(){
+    delete this->nextState;
+    this->nextState = NULL;
 }

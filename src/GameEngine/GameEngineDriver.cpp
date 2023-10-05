@@ -1,11 +1,11 @@
-// free func testGameStates()
 #include "GameEngine.h"
-
 
 void testGameStates(){
 
-    //-------------------------------------initializing states----------------------------------------
-    
+    cout << "\n" << "************************************" << "\n"
+        << "Testing Game Driver!!! \n"
+        << "************************************" << "\n" << "\n";
+
     cout << "\n\n---------> Test 1: intializing states <---------" << "\n\n\n";
     //startup
     State* startState = new State("start");
@@ -19,10 +19,10 @@ void testGameStates(){
     State* winState = new State("win");
     //end
     State* endState = new State("end");
+
     cout <<"..Getting start state...";
     cout << startState->getState() <<"\n";
-    cout <<"state state has been printed\n\n.";
-
+    cout <<"state state has been printed.\n\n";
 
     cout << "\n\n---------> Test 2: string command comparsion <---------" << "\n\n\n";
     
@@ -44,7 +44,7 @@ void testGameStates(){
     }
         
 
-    cout << "\n\n---------> Test 3: assign currentState to newState <---------" << "\n\n\n";
+    cout << "\n\n---------> Test 3: Assign CurrentState to newState <---------" << "\n\n\n";
 
     cout << "...Creating currentState as start ...\n";
     State* currentState = new State("start");
@@ -67,7 +67,7 @@ void testGameStates(){
 
     
 
-    cout << "\n\n---------> Test 3: testing user Input <---------" << "\n\n\n";
+    cout << "\n\n---------> Test 3: Testing User Input <---------" << "\n\n\n";
 
     
     cout <<"..Creating all transitions for GameEngine...\n ";
@@ -113,7 +113,7 @@ void testGameStates(){
     "endissueorders\n execorder\n endexecorders\n win\n play\n end - to exit!\n"
     "----------------\n";
     cin >> userCommand;
-    cout <<"\n\n";
+    cout <<"\n";
     transComplete = false;
         for (int i = 0; i < gameTransitions.size(); i++) {
             if (userCommand.compare(gameTransitions[i]->getCommand())==0) { // string command
@@ -126,12 +126,30 @@ void testGameStates(){
 
         if(transComplete){
             cout << "Current state is : " << cState->getState() << "\n\n";
-        }else if(userCommand.compare("end")==0){
-            cout <<"...Exiting testGameStates()...";
+            if (userCommand.compare("end") == 0)
+                cout <<"...Exiting testGameStates()...\n\n";
         }else{
             cout << "The command entered: " <<userCommand << " is invalid. Try Again.\n\n";
         }
     }
-    
+
+    cout <<"...Deleting State pointers and setting to null...\n";
+    delete startState; startState = NULL;
+    delete maploadedState; maploadedState = NULL;
+    delete mapvalidatedState; mapvalidatedState = NULL;
+    delete playersaddedState; playersaddedState = NULL;
+    delete assignreinforcementState; assignreinforcementState = NULL;
+    delete issueordersState; issueordersState = NULL;
+    delete executeordersState; executeordersState = NULL;
+    delete winState; winState = NULL;
+    delete endState; winState = NULL;
+    cout <<"Deleted State pointers and set to null\n\n";
+
+    cout << "...Deleting Transition Pointers...\n";
+    for (int i = 0; i < gameTransitions.size(); i++) {
+        delete gameTransitions[i];
+        gameTransitions[i] = NULL;
+    }
+    cout <<"Deleted Transition pointers and set to null\n\n";
 
 }

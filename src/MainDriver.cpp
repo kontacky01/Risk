@@ -5,12 +5,9 @@
 
 int main()
 {
-    /*
-     testOrdersLists();
+    testOrdersLists();
     testPlayers();
     testCards();
-    */
-
     testGameStates();
     return 0;
 }
