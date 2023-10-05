@@ -1,8 +1,6 @@
 #pragma once
 #include <iostream>
 #include <fstream>
-#include <sstream>
-#include <filesystem>
 #include <vector>
 #include <string>
 #include <map>
@@ -22,6 +20,7 @@ public:
     /// Default Constructor
     /// </summary>
     Continent();
+
     /// <summary>
     /// Param Constructor
     /// </summary>
@@ -30,10 +29,8 @@ public:
     // Destructor
     ~Continent();
 
-    // Getter for name
     string getName() const;
 
-    // Getter for value
     int getId() const;
 };
 
@@ -45,7 +42,7 @@ private:
     int id;
     int continentId;
     string name;
-    vector<Territory*> adjacency_list;
+    vector<Territory*> adjacencyList;
 public:
     /// <summary>
     /// Helper method to list attack/defended territories
@@ -62,7 +59,14 @@ public:
 
     // Getter for value
     int getId() const;
-
+    
+    /// <summary>
+    /// imagine we have A,B,C which are all objects of territory
+    /// if we call A.addAdjacentTerritory(B) then:
+    /// 1. We will keep track of B from A
+    /// 2. Keep track of A from B
+    /// hence we keep track of adjecent territories
+    /// </summary>
     void addAdjacentTerritory(Territory*);
 };
 /************************************************************ Map ************************************************************/
@@ -73,10 +77,18 @@ private:
     map<int, Continent*> continents;
 
 public:
+    /// <summary>
+    /// Default Constructor
+    /// </summary>
     Map();
+
+    /// <summary>
+    /// Decconstructor
+    /// </summary>
     ~Map();
 
     void addContinent(Continent*);
+
     void addTerritory(Territory*);
 };
 
@@ -92,5 +104,10 @@ void testLoadMaps();
 class MapLoader {
 public:
     void loadMap(string);
+    /// <summary>
+    /// Parse the .map file the map is in, by seperating each line with a delimiter 
+    /// The method will return a vector of words
+    /// For ex: 123,232,353 will be [123,232,353] so we can manupulate each item in the vector as such v.at(i)
+    /// </summary>
     vector<string> split(string s, string delim);
 };
