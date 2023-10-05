@@ -104,33 +104,34 @@ void testGameStates(){
     cout << "start state created\n";
     cout << "...Taking user input...\n";
     
+    bool transComplete;
     string userCommand = "";
-
     while (userCommand.compare("end")!=0) {
-    cout << "Enter one of the follwing commands:"
-    "----------------------------"
-    "\n loadmap\n validatemap\n addplayer\n assigncountries\n issueorder\n endissueorders\n execorder\n endexecorders\n"
-    "----------\n";
+    cout << "Enter one of the follwing commands:\n"
+    "----------------------------\n"
+    " loadmap\n validate\n addplayer\n assigncountries\n issueorder\n "
+    "endissueorders\n execorder\n endexecorders\n win\n play\n end - to exit!\n"
+    "----------------\n";
     cin >> userCommand;
+    cout <<"\n\n";
+    transComplete = false;
         for (int i = 0; i < gameTransitions.size(); i++) {
-            if (userCommand.compare(gameTransitions[i]->getCommand())) { // string command
+            if (userCommand.compare(gameTransitions[i]->getCommand())==0) { // string command
                 cState = gameTransitions[i]->getNextState(); // assign oldstate to newState
-             
+                userCommand = gameTransitions[i]->getCommand();
+                transComplete = true;
+                break;
             }
-            /*
-             else {
-                cout << "The command entered is invalid. Try Again.\n";
-                cout << "...Enter another command..\n\n";
-            }
-            */
-           
         }
 
-        cout << "Current state is : " << cState->getState() << "\n";
-        cout << "...Enter another command..\n\n";
+        if(transComplete){
+            cout << "Current state is : " << cState->getState() << "\n\n";
+        }else if(userCommand.compare("end")==0){
+            cout <<"...Exiting testGameStates()...";
+        }else{
+            cout << "The command entered: " <<userCommand << " is invalid. Try Again.\n\n";
+        }
     }
     
-  
-
 
 }
