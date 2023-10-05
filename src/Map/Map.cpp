@@ -125,7 +125,7 @@ void MapLoader::loadMap(string filename) {
         else if (line.find("[Territories]") == 0) {
             int territoryId = 0;
             // while we havent not reached the end of the file
-            while (getline(inputFile, line) && !inputFile.eof()) {
+            while (getline(inputFile, line)/*&& !inputFile.eof()*/) {
                 // if there is a space between the territories, skip that line and go to the next one
                 if (line.length() == 0) {
                     continue;
