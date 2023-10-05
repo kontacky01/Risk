@@ -90,6 +90,11 @@ public:
     void addContinent(Continent*);
 
     void addTerritory(Territory*);
+
+    /// <summary>
+    /// print the summary of map
+    /// </summary>
+    void printMapSummary();
 };
 
 
@@ -103,7 +108,7 @@ void testLoadMaps();
 
 class MapLoader {
 public:
-    void loadMap(string);
+    Map* loadMap(string);
     /// <summary>
     /// Parse the .map file the map is in, by seperating each line with a delimiter 
     /// The method will return a vector of words

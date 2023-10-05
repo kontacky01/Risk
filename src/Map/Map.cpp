@@ -19,6 +19,18 @@ void Map::addTerritory(Territory* territory) {
     territories[territory->getId()] = territory;
 }
 
+/// <summary>
+/// print the summary of map
+/// </summary>
+void Map::printMapSummary() {
+    cout << "\n" << "Continents of the loaded map: " << "\n" << "-------------------" << "\n"; 
+    for (auto const& continent : continents) { 
+        cout << "ID: " << continent.second->getId() << "  | Name:" << continent.second->getName() << "\n"; } 
+        cout << "\n" << "Territories of the loaded map: " << "\n" << "-------------------" << "\n"; 
+        for (auto const& territory : territories) { cout << "ID: " << territory.second->getId() << " | Name:" << territory.second->getName() << "\n"; 
+        }
+}
+
 /************************************************************ Continent ************************************************************/
   /// <summary>
   /// Default Constructor
@@ -78,7 +90,7 @@ void Territory::addAdjacentTerritory(Territory* destination) {
 /************************************************************ MapLoader ************************************************************/
 
 
-void MapLoader::loadMap(string filename) {
+Map* MapLoader::loadMap(string filename) {
     cout << "...Loading the map..." << endl;
     // Define the needed params
     vector<Continent*> continents;
@@ -93,7 +105,7 @@ void MapLoader::loadMap(string filename) {
     // Check if the file was successfully opened
     if (!inputFile.is_open()) {
         cout << "...Error: Failed to open the file..." << endl;
-        return; // Exit the program
+        return NULL; // Exit the program
     }
 
     // Go line by line and create territories
@@ -111,7 +123,7 @@ void MapLoader::loadMap(string filename) {
                 // the line should contain the name and number of territories that belong to the continent (hence 2 words)
                 if (words.size() != 2) {
                     cout << "...Error: Invalid continent information..." << endl;
-                    return;
+                    return NULL;
                 }
                 string continentName = words[0];
                 // create a new contintent with an auto incrementing id
@@ -125,7 +137,7 @@ void MapLoader::loadMap(string filename) {
         else if (line.find("[Territories]") == 0) {
             int territoryId = 0;
             // while we havent not reached the end of the file
-            while (getline(inputFile, line) && !inputFile.eof()) {
+            while (getline(inputFile, line)) {
                 // if there is a space between the territories, skip that line and go to the next one
                 if (line.length() == 0) {
                     continue;
@@ -135,7 +147,8 @@ void MapLoader::loadMap(string filename) {
                 // there is a minimum requirement of name, x-coord, y-coord, and continent (hence 4 words)
                 if (words.size() < 4) {
                     cout << "...Error: Invalid territory information..." << endl;
-                    return;
+                    return NULL;
+                    ;
                 }
                 string territoryName = words[0];
                 string territoryContinentName = words[3]; // the continent that the territory belongs to
@@ -164,7 +177,6 @@ void MapLoader::loadMap(string filename) {
                     territoryMap[territory->getName()] = territory;
 
                 }
-                cout << "\n";
             }
         }
 
@@ -177,16 +189,11 @@ void MapLoader::loadMap(string filename) {
              * Terr2 --> [Terr1]
              * */
         {
-            // TODO: fix the bug where the map is out of bounds 
-            // the territory
-            cout << territory.first->getId() << "  -->  " << territory.first->getName() << "\n";
             // loop through all the adjecent territories
             for (int i = 0; i < territory.second.size(); i++) {
-                // cout << "       -            " << territory.second.size() << "    -   " << i  << "\n\n";
                 string key = territory.second.at(i);
                 // create linckage 
                 territory.first->addAdjacentTerritory(territoryMap.at(key));
-                cout << "------adjecent------" << territoryMap.at(key)->getId() << "   " << territoryMap.at(key)->getName() << "\n";
 
             }
         }
@@ -195,15 +202,7 @@ void MapLoader::loadMap(string filename) {
     // Close the file
     inputFile.close();
     cout << "...Successfully loaded the Map..." << "\n";
-
-    /// <summary>
-    /// Print out the map
-    /// </summary>
-
-
-     /// <summary>
-    /// Validate the map
-    /// </summary>
+    return loadedMap;
 }
 
 /// <summary>

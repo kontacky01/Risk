@@ -9,15 +9,19 @@ void testLoadMaps() {
     MapLoader* loader = new MapLoader();
 
     cout << "---------> Test 1: Load a valid map <---------" << "\n" << "\n";
-    loader->loadMap("Map/MapFolder/cliff.map");
+    loader->loadMap("Map/MapFolder/cliff.map")->printMapSummary();
 
 
-    cout << "---------> Test 2: Load an invalid map <---------" << "\n" << "\n";
+    cout << "\n\n---------> Test 2: Load a valid map <---------\n\n";
+    loader->loadMap("Map/MapFolder/solarSystem.map")->printMapSummary();;
+
+
+    cout << "\n\n---------> Test 3: Load an invalid map <---------\n\n";
     cout << "todo";
 
-    cout << "---------> Test 3: Load a file that doesnt exist <---------" << "\n" << "\n";
+    cout << "\n\n---------> Test 4: Load a file that doesnt exist <---------\n\n";
     loader->loadMap("Map/MapFolder/idontexist.map");
 
-    cout << "---------> Test 4: Validate map <---------" << "\n" << "\n";
+    cout << "\n\n---------> Test 5: Validate map <---------\n\n";
     cout << "todo";
 };
