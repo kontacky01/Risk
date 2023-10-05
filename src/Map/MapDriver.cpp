@@ -18,7 +18,7 @@ void testLoadMaps() {
 
 
     cout << "\n\n---------> Test 3: Load an invalid map <---------\n\n";
-    //loader->loadMap("Map/MapFolder/cliffInvalid.map")->printMapSummary();
+    loader->loadMap("Map/MapFolder/cliffInvalid.map");
 
 
     cout << "\n\n---------> Test 4: Load a file that doesnt exist <---------\n\n";

@@ -151,7 +151,11 @@ Map* MapLoader::loadMap(string filename) {
             // Keep track of the # of continents we created to use it as their ID
             int continentId = 0;
             // While we havent not reached a space (to the next section)
-            while (getline(inputFile, line) && line.length() != 0) {
+            while (getline(inputFile, line) && line.find("[Territories]") != 0) {
+                // if thewre is a space between the continents we can continue to search for them all the way until we reach territories
+                if(line.length() == 0) {
+                    continue;
+                }
                 // Create a vector of words that were split by a equals (look the map file for details)
                 vector<string> words = MapLoader::split(line, "=");
 
@@ -169,8 +173,9 @@ Map* MapLoader::loadMap(string filename) {
                 continents.push_back(continent);
             }
         }
+        
         // Go over the territories (if we found the word "Territories" the start index of the line should be 0)
-        else if (line.find("[Territories]") == 0) {
+        if (line.find("[Territories]") == 0 && !inputFile.eof()) {
             int territoryId = 0;
             // While we havent not reached the end of the file
             while (getline(inputFile, line)) {
@@ -190,11 +195,17 @@ Map* MapLoader::loadMap(string filename) {
                 string territoryContinentName = words[3]; // the continent that the territory belongs to
                 // We have access to the continent name by reading the file, but not the id
                 // hence we need to loop through our priviously created list of continents and find the id of the continent by the given name
-                int continentId;
+                int continentId = -1;
                 for (int i = 0; i < continents.size(); i++) {
                     if (continents.at(i)->getName() == territoryContinentName) {
                         continentId = continents.at(i)->getId();
                     }
+                }
+
+                // If continent isn't found, then there is an error in parsing the continents
+                if(continentId == -1) {
+                    cout << "...Error: Invalid continent/territory information..." << endl;
+                    return NULL;
                 }
                 // Create a new territory
                 Territory* territory = new Territory(territoryName, ++territoryId, continentId);
