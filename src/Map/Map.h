@@ -1,6 +1,4 @@
-#ifndef MAP_H
-#define MAP_H
-
+#pragma once
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -9,39 +7,78 @@
 #include <string>
 #include <map>
 
-class Continents {
+using namespace std;
+
+/************************************************************ Continent ************************************************************/
+
+class Continent {
+private: 
+    int id;
+    string name;
+
 public:
-    // Constructor
-    Continents(const string& continentName, int continentValue);
+
+    /// <summary>
+    /// Default Constructor
+    /// </summary>
+    Continent();
+    /// <summary>
+    /// Param Constructor
+    /// </summary>
+    Continent(string, int);
 
     // Destructor
-    ~Continents();
+    ~Continent();
 
     // Getter for name
     string getName() const;
 
     // Getter for value
-    int getValue() const;
-
-private:
-    string name;
-    int value;
+    int getId() const;
 };
 
-/*class Territory {
-public:
-    Territory(); // Constructor
-    ~Territory(); // Destructor
-
-    // Data members
-    string name;
-    string continent;
-    vector<string*> adjacency_list;
-};*/
+/************************************************************ MapDriver ************************************************************/
 
 void testLoadMaps();
 
+/************************************************************ Territory ************************************************************/
 
 
+class Territory {
+private: 
+    int id;
+    int continentId;
+    string name;
+    vector<string*> adjacency_list;
+public:
+    /// <summary>
+    /// Helper method to list attack/defended territories
+    /// </summary>
+    Territory();
 
-#endif
+    /// <summary>
+    /// Helper method to list attack/defended territories
+    /// </summary>
+    Territory(string name, int id, int continentId);
+
+    // Getter for name
+    string getName() const;
+
+    // Getter for value
+    int getId() const;
+
+    // // Destructor to clean up dynamically allocated memory
+    // ~Territory() {
+    //     for (string* adj : adjacency_list) {
+    //         delete adj;
+    //     }
+    // }
+};
+/************************************************************ MapLoader ************************************************************/
+
+
+class MapLoader {
+public:
+    void loadMap(string);
+    vector<string> split(string s, string delim);
+};

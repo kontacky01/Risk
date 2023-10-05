@@ -5,17 +5,9 @@
 #include <iostream>
 #include "../CardsDeck/Cards.h"
 #include "../OrdersList/Orders.h"
+#include "../Map/Map.h"
 
 using namespace std;
-
-/************************************************************ TEMP ************************************************************/
-class Territory
-{
-public:
-  string name;
-  // constructor
-  Territory(string);
-};
 
 /************************************************************ Player ************************************************************/
 

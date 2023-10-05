@@ -1,9 +1,12 @@
 #include <iostream>
 #include "Map.h"
+
 using namespace std;
 
 void testLoadMaps() {
-    cout << "Hello/n";
+    MapLoader* loader = new MapLoader();
+    loader->loadMap("Map/MapFolder/cliff.map");
+
 
     /*string input = "Mozambique,482,496,Southern Africa,Tanzania,Malawi,Madagascar,Zambia,Zimbabwe,South Africa";
 

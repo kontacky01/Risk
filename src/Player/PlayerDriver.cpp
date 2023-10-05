@@ -10,12 +10,12 @@ void testPlayers()
   vector<Order*> o;
 
   // Create 6 territories and push them to the territories vector
-  Territory* t1 = new Territory("UK");
-  Territory* t2 = new Territory("USA");
-  Territory* t3 = new Territory("Russia");
-  Territory* t4 = new Territory("Israel");
-  Territory* t5 = new Territory("Italy");
-  Territory* t6 = new Territory("Bulgaria");
+  Territory* t1 = new Territory("UK", 1, 2);
+  Territory* t2 = new Territory("USA", 2, 3);
+  Territory* t3 = new Territory("Russia", 3, 3);
+  Territory* t4 = new Territory("Israel", 4, 2);
+  Territory* t5 = new Territory("Italy", 5, 3);
+  Territory* t6 = new Territory("Bulgaria", 6, 3);
   t.push_back(t1);
   t.push_back(t2);
   t.push_back(t3);
