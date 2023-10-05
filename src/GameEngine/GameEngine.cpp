@@ -8,11 +8,11 @@ State::State(){}
 State::~State(){}
 
 // Parameterized constructor
-State::State(string name){
+State::State(string name){ 
     stateName = name;
 }
 
-//Assignment Operator
+// Assignment Operator
 State& State::operator=(const State& other){
     this->stateName = other.stateName;
     return *this;
@@ -35,9 +35,9 @@ Transition::Transition(){}
 Transition::~Transition() {}
 	
 // Parameterized Constructor
-Transition::Transition(string requiredcommand, State* final){
-    this->command = requiredcommand;
-    this->nextState =final;
+Transition::Transition(string requiredCommand, State* finalState){
+    this->command = requiredCommand;
+    this->nextState = finalState;
 }
 
 //Assignment Operator

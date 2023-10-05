@@ -1,5 +1,284 @@
-// Map functions
+#include "Map.h"
 
-// Territory class here
+using namespace std;
 
-// validate()
+/************************************************************ Map ************************************************************/
+/// <summary>
+/// Default constructor
+/// </summary>
+Map::Map() {};
+
+/// <summary>
+/// Copy constructor
+/// </summary>
+Map::Map(const Map& m) {
+    cout << "...Testing the copy constructor..." << "\n";
+    territories = m.territories;
+    continents = m.continents;
+};
+
+/// <summary>
+/// Param constructor
+/// </summary>
+Map::Map(map<int, Continent*> c, map<int, Territory*> t) {
+    continents = c;
+    territories = t;
+};
+
+/// <summary>
+/// Will be stored in a key value pair ex: (1, Contient)
+/// </summary>
+void Map::addContinent(Continent* continent) {
+    continents[continent->getId()] = continent;
+}
+
+/// <summary>
+/// Will be stored in a key value pair ex: (1, Territory)
+/// </summary>
+void Map::addTerritory(Territory* territory) {
+    territories[territory->getId()] = territory;
+}
+
+/// <summary>
+/// Print the summary of map
+/// </summary>
+void Map::printMapSummary() {
+    cout << "\n" << "Continents of the loaded map: " << "\n" << "-------------------" << "\n";
+    for (auto const& continent : continents) {
+        cout << "ID: " << continent.second->getId() << "   |  Name:" << continent.second->getName() << "\n";
+        cout << "---------------------------\n";
+
+    }
+    cout << "\n" << "Territories of the loaded map: " << "\n" << "-------------------" << "\n";
+    for (auto const& territory : territories) {
+        cout << "ID: " << territory.second->getId() << "  |  Name: " << territory.second->getName() << "\n";
+        cout << "---------------------------\n";
+    }
+}
+
+/************************************************************ Continent ************************************************************/
+/// <summary>
+/// Default Constructor
+/// </summary>
+Continent::Continent() {}
+
+/// <summary>
+/// Param constructor
+/// </summary>
+Continent::Continent(string n, int i) {
+    name = n;
+    id = i;
+}
+
+string Continent::getName() const {
+    return name;
+}
+
+int Continent::getId() const {
+    return id;
+}
+/************************************************************ Territory ************************************************************/
+/// <summary>
+/// Default Constructor
+/// </summary>
+Territory::Territory() {}
+
+/// <summary>
+/// Param constructor
+/// </summary>
+Territory::Territory(string n, int i, int ci) {
+    name = n;
+    id = i;
+    continentId = ci;
+}
+
+string Territory::getName() const {
+    return name;
+}
+
+int Territory::getId() const {
+    return id;
+}
+
+/// <summary>
+/// Imagine we have A,B,C which are all objects of territory
+/// if we call A.addAdjacentTerritory(B) then:
+/// 1. We will keep track of B from A
+/// 2. Keep track of A from B
+/// hence we keep track of adjecent territories
+/// </summary>
+void Territory::addAdjacentTerritory(Territory* destination) {
+    // current object's adjeceny list
+    this->adjacencyList.push_back(destination);
+    // the destination object's adjecey list
+    destination->adjacencyList.push_back(this);
+}
+/************************************************************ MapLoader ************************************************************/
+
+/// <summary>
+/// Will read the map file (will handle errors if file doesnt exist or can't open)
+/// Will parse line by line
+/// The file is devided in to two important sections: Continents & Territories
+/// Continents look like so: 
+/// continentName=howManyTerritoriesItHas
+/// Territories look like so: 
+/// territoryName, coord-x, coord-y, continent, listOfAdjecentTerritories seperated by commas
+/// </summary>
+Map* MapLoader::loadMap(string filename) {
+    cout << "...Loading the map..." << endl;
+    // Define the needed params
+    vector<Continent*> continents;
+    Map* loadedMap = new Map();
+    map<Territory*, vector<string>> territoryAdjacencyMap;
+    map<string, Territory*> territoryMap;
+
+    // Start reading the file by opening it
+    ifstream inputFile;
+    inputFile.open(filename);
+
+    // Check if the file was successfully opened
+    if (!inputFile.is_open()) {
+        cout << "...Error: Failed to open the file..." << endl;
+        return NULL; // Exit the program
+    }
+
+    // Go line by line and create territories
+    string line;
+    // While there exists lines in the file
+    while (getline(inputFile, line) && !inputFile.eof()) {
+        // Go over the contintents (if we found the word "Continents" the start index of the line should be 0)
+        if (line.find("[Continents]") == 0) {
+            // Keep track of the # of continents we created to use it as their ID
+            int continentId = 0;
+            // While we havent not reached a space (to the next section)
+            while (getline(inputFile, line) && line.find("[Territories]") != 0) {
+                // if thewre is a space between the continents we can continue to search for them all the way until we reach territories
+                if(line.length() == 0) {
+                    continue;
+                }
+                // Create a vector of words that were split by a equals (look the map file for details)
+                vector<string> words = MapLoader::split(line, "=");
+
+                // The line should contain the name and number of territories that belong to the continent (hence 2 words)
+                if (words.size() != 2) {
+                    cout << "...Error: Invalid continent information..." << endl;
+                    return NULL;
+                }
+
+                string continentName = words[0];
+                // Create a new contintent with an auto incrementing id
+                Continent* continent = new Continent(continentName, ++continentId);
+                loadedMap->addContinent(continent);
+                // Keep track of the list of continents we created thus far
+                continents.push_back(continent);
+            }
+        }
+        
+        // Go over the territories (if we found the word "Territories" the start index of the line should be 0)
+        if (line.find("[Territories]") == 0 && !inputFile.eof()) {
+            int territoryId = 0;
+            // While we havent not reached the end of the file
+            while (getline(inputFile, line)) {
+                // If there is a space between the territories, skip that line and go to the next one
+                if (line.length() == 0) {
+                    continue;
+                }
+                // Create a vector of words that were split by a comma
+                vector<string> words = MapLoader::split(line, ",");
+                // There is a minimum requirement of name, x-coord, y-coord, and continent (hence 4 words)
+                if (words.size() < 4) {
+                    cout << "...Error: Invalid territory information..." << endl;
+                    return NULL;
+                    ;
+                }
+                string territoryName = words[0];
+                string territoryContinentName = words[3]; // the continent that the territory belongs to
+                // We have access to the continent name by reading the file, but not the id
+                // hence we need to loop through our priviously created list of continents and find the id of the continent by the given name
+                int continentId = -1;
+                for (int i = 0; i < continents.size(); i++) {
+                    if (continents.at(i)->getName() == territoryContinentName) {
+                        continentId = continents.at(i)->getId();
+                    }
+                }
+
+                // If continent isn't found, then there is an error in parsing the continents
+                if(continentId == -1) {
+                    cout << "...Error: Invalid continent/territory information..." << endl;
+                    return NULL;
+                }
+                // Create a new territory
+                Territory* territory = new Territory(territoryName, ++territoryId, continentId);
+                loadedMap->addTerritory(territory);
+                // Anything past index 3 is what is connected to our territory
+                for (int i = 4; i < words.size(); i++) {
+                    // Create an adjeceny map list
+                    /**
+                    * territoryAdjacencyMap structure:
+                    * (id, name) --> vector of adjecent territories (id, name)
+                    * Terr1 --> [Terr2,Terr3]
+                    * Terr2 --> [Terr1]
+                    */
+                    territoryAdjacencyMap[territory].push_back(words[i]);
+                    // Keep track of all the territories like so: (name, Territory), will be used in the adjecency proccess
+                    territoryMap[territory->getName()] = territory;
+
+                }
+            }
+        }
+
+        // Going over the adjacency list to add the territories the adjacencyList of the territory
+        for (auto const& territory : territoryAdjacencyMap)
+            /**
+             * territoryAdjacencyMap structure:
+             * (id, name) --> vector of adjecent territories (id, name)
+             * Terr1 --> [Terr2,Terr3]
+             * Terr2 --> [Terr1]
+             * */
+        {
+            // Loop through all the adjecent territories
+            for (int i = 0; i < territory.second.size(); i++) {
+                string key = territory.second.at(i);
+                // create linckage 
+                territory.first->addAdjacentTerritory(territoryMap.at(key));
+
+            }
+        }
+    }
+
+    // Close the file
+    inputFile.close();
+    cout << "...Successfully loaded the Map..." << "\n";
+    return loadedMap;
+}
+
+/// <summary>
+/// Must split each line of the map as each line has the following stuctor ex:
+/// Sun1,83,81,SUN,Sun2,Sun3,Sun4,Sun5,Mercury1
+/// we want to create a vector of those words ["Sun1", "83"...]
+/// </summary>
+vector<string> MapLoader::split(string line, string delim) {
+
+    vector<string> words;
+    int start = 0;
+    string word;
+
+    // Continue while a delimiter is found
+    while ((start = line.find(delim)) != string::npos) {
+        // Remove the delimiter
+        word = line.substr(0, start);
+        // If word exists, add it to the array of words to return
+        if (word != "") {
+            words.push_back(word);
+        }
+        // Remove the stuff I have already found
+        line.erase(0, start + delim.length());
+    }
+
+    // For the last word (ex: 1̶,̶2̶,̶3) where "1,2," were already covered
+    if (!line.empty()) {
+        words.push_back(line);
+    }
+
+    return words;
+}

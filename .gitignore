@@ -36,3 +36,4 @@ MainDriver
 settings.json
 tasks.json
 .DS_Store
+./vscode

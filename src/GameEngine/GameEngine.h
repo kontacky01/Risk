@@ -27,7 +27,7 @@ class Transition{
 public:	
 	Transition();           // Default Constructor
     ~Transition();          // Destructor
-	Transition(string requiredcommand, State*  final);         // Parameterized Constructor
+	Transition(string requiredCommand, State*  finalState);         // Parameterized Constructor
 	Transition& operator=(const Transition& other);                           // Assignment Operator
     Transition(const Transition& other);                                    // Copy constructor
     string getCommand();
@@ -37,5 +37,7 @@ private:
     string command;            // required command to perform transition
     State* nextState;           // next state
 };
+
+//-------------------------------------------Class GameEngineDriver----------------------------------------------------------
 
 void testGameStates();
