@@ -59,7 +59,7 @@ public:
 
     // Getter for value
     int getId() const;
-    
+
     /// <summary>
     /// imagine we have A,B,C which are all objects of territory
     /// if we call A.addAdjacentTerritory(B) then:
@@ -81,6 +81,12 @@ public:
     /// Default Constructor
     /// </summary>
     Map();
+
+    /// <summary>
+    /// Copy constructor
+    /// </summary>
+    Map(const Map&);
+
 
     /// <summary>
     /// Decconstructor
