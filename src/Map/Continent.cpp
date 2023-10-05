@@ -18,7 +18,7 @@ public:
     ~Continents() {}
 };
 
-int main() {
+/*int main() {
     string input = "Northern Africa=4";
     vector<string> parts;
 
@@ -45,3 +45,4 @@ int main() {
 
     return 0;
 }
+*/

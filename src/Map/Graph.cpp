@@ -9,19 +9,17 @@ private:
     map<string, vector<string>> adjacencyList;
 
 public:
-    // add bidirectional edge between two vertices
-    void addEdge(const string& vertex1, const string& vertex2) {
-        string* v1 = new string(vertex1);
-        string* v2 = new string(vertex2);
-        adjacencyList[*v1].push_back(*v2);
-        adjacencyList[*v2].push_back(*v1);
+    // add 'bidirectional' edge between two vertices
+    void addEdge(const string vertex1, const string vertex2) {
+        adjacencyList[vertex1].push_back(vertex2);
+        adjacencyList[vertex2].push_back(vertex1);
     }
 
     // print the graph
     void printGraph() {
-        for (const auto& pair : adjacencyList) {
+        for (const auto pair : adjacencyList) {
             cout << pair.first << " -> ";
-            for (const string& neighbor : pair.second) {
+            for (const string neighbor : pair.second) {
                 cout << neighbor << " ";
             }
             cout << endl;
@@ -39,7 +37,7 @@ public:
     }
 };
 
-int main() {
+/*int main() {
     Graph g;
 
     // add vertices and edges to create a connected graph
@@ -58,3 +56,4 @@ int main() {
 
     return 0;
 }
+*/

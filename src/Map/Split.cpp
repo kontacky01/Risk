@@ -16,11 +16,11 @@ vector<string> split (const string &s, char delim) {
     return result;
 }
 
-int main() {
+/*int main() {
     string str = "Northern Africa=4";
     vector<string> v = split (str, '=');
 
     for (auto i : v) cout << i << endl;
 
     return 0;
-}
+}*/

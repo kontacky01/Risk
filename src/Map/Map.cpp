@@ -9,11 +9,9 @@ private:
 
 public:
     // add 'bidirectional' edge between two vertices
-    void addEdge(const string& vertex1, const string& vertex2) {
-        string* v1 = new string(vertex1);
-        string* v2 = new string(vertex2);
-        adjacencyList[*v1].push_back(*v2);
-        adjacencyList[*v2].push_back(*v1);
+    void addEdge(const string vertex1, const string vertex2) {
+        adjacencyList[vertex1].push_back(vertex2);
+        adjacencyList[vertex2].push_back(vertex1);
     }
 
     // print adjacency list
@@ -112,8 +110,37 @@ public:
 
 };
 
+/*class Territory {
+public:
+    string name;
+    string continent;
+    vector<string*> adjacency_list;
 
-int main() {
+    // Constructor
+    Territory() {}
+
+    // Destructor to clean up dynamically allocated memory
+    ~Territory() {
+        for (string* adj : adjacency_list) {
+            delete adj;
+        }
+    }
+};*/
+
+class Continents {
+public:
+    string name;
+    int value;
+
+    // constructor
+    Continents(const string& continentName, int continentValue)
+        : name(continentName), value(continentValue) {}
+
+    // destructor
+    ~Continents() {}
+};
+
+int MapDriver() {
     // display directory contents
     /*string path = "../maps";
     for (const auto & entry : fs::directory_iterator(path)) {

@@ -28,7 +28,7 @@ private:
     int value;
 };
 
-class Territory {
+/*class Territory {
 public:
     Territory(); // Constructor
     ~Territory(); // Destructor
@@ -37,9 +37,9 @@ public:
     string name;
     string continent;
     vector<string*> adjacency_list;
-};
+};*/
 
-
+void testLoadMaps();
 
 
 

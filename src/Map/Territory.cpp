@@ -22,7 +22,7 @@ public:
     }
 };
 
-int main() {
+/*int main() {
     string input = "Mozambique,482,496,Southern Africa,Tanzania,Malawi,Madagascar,Zambia,Zimbabwe,South Africa";
 
     vector<Territory*> territories; // Vector of pointers to Territory objects
@@ -66,3 +66,4 @@ int main() {
 
     return 0;
 }
+*/
