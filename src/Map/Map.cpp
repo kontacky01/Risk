@@ -16,6 +16,15 @@ Map::Map(const Map& m) {
     territories = m.territories;
     continents = m.continents;
 };
+
+/// <summary>
+/// Param constructor
+/// </summary>
+Map::Map(map<int, Continent*> c, map<int, Territory*> t) {
+    continents = c;
+    territories = t;
+};
+
 /// <summary>
 /// Will be stored in a key value pair ex: (1, Contient)
 /// </summary>
@@ -36,19 +45,23 @@ void Map::addTerritory(Territory* territory) {
 void Map::printMapSummary() {
     cout << "\n" << "Continents of the loaded map: " << "\n" << "-------------------" << "\n";
     for (auto const& continent : continents) {
-        cout << "ID: " << continent.second->getId() << "  | Name:" << continent.second->getName() << "\n";
+        cout << "ID: " << continent.second->getId() << "   |  Name:" << continent.second->getName() << "\n";
+        cout << "---------------------------\n";
+
     }
     cout << "\n" << "Territories of the loaded map: " << "\n" << "-------------------" << "\n";
     for (auto const& territory : territories) {
-        cout << "ID: " << territory.second->getId() << " | Name:" << territory.second->getName() << "\n";
+        cout << "ID: " << territory.second->getId() << "  |  Name: " << territory.second->getName() << "\n";
+        cout << "---------------------------\n";
     }
 }
 
 /************************************************************ Continent ************************************************************/
-  /// <summary>
-  /// Default Constructor
-  /// </summary>
+/// <summary>
+/// Default Constructor
+/// </summary>
 Continent::Continent() {}
+
 /// <summary>
 /// Param constructor
 /// </summary>
@@ -65,9 +78,9 @@ int Continent::getId() const {
     return id;
 }
 /************************************************************ Territory ************************************************************/
-  /// <summary>
-  /// Default Constructor
-  /// </summary>
+/// <summary>
+/// Default Constructor
+/// </summary>
 Territory::Territory() {}
 
 /// <summary>
@@ -102,7 +115,15 @@ void Territory::addAdjacentTerritory(Territory* destination) {
 }
 /************************************************************ MapLoader ************************************************************/
 
-
+/// <summary>
+/// Will read the map file (will handle errors if file doesnt exist or can't open)
+/// Will parse line by line
+/// The file is devided in to two important sections: Continents & Territories
+/// Continents look like so: 
+/// continentName=howManyTerritoriesItHas
+/// Territories look like so: 
+/// territoryName, coord-x, coord-y, continent, listOfAdjecentTerritories seperated by commas
+/// </summary>
 Map* MapLoader::loadMap(string filename) {
     cout << "...Loading the map..." << endl;
     // Define the needed params

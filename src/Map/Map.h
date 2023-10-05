@@ -87,6 +87,11 @@ public:
     /// </summary>
     Map(const Map&);
 
+    /// <summary>
+    /// Param constructor
+    /// </summary>
+    Map(map<int, Continent*> continents, map<int, Territory*> territories);
+
 
     /// <summary>
     /// Decconstructor
