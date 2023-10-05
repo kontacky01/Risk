@@ -111,7 +111,7 @@ Map* MapLoader::loadMap(string filename) {
     // Go line by line and create territories
     string line;
     // While there exists lines in the file
-    while (getline(inputFile, line)) {
+    while (getline(inputFile, line) && !inputFile.eof()) {
         // Go over the contintents (if we found the word "Continents" the start index of the line should be 0)
         if (line.find("[Continents]") == 0) {
             // keep track of the # of continents we created to use it as their ID
