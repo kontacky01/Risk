@@ -1,11 +1,5 @@
 #include "Player.h"
 
-/************************************************************ TODO: TEMP ************************************************************/
-Territory::Territory(string n)
-{
-  name = n;
-}
-
 /************************************************************ Player ************************************************************/
 /// <summary>
 /// Constructor with with an argument list
@@ -27,7 +21,7 @@ void Player::printTerritories(vector<Territory*> territories)
 {
   for (int i = 0; i < territories.size(); i++)
   {
-    cout << i << ")" << territories.at(i)->name << endl << endl;
+    cout << i << ")" << territories.at(i)->getName() << endl << endl;
   }
 }
 

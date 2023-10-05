@@ -1,0 +1,55 @@
+[Map]
+author=Sean O'Connor
+warn=yes
+image=UK and Ireland.bmp
+wrap=no
+scroll=Vertical
+
+[Continents]
+England=8
+Scotland=5
+Ireland=6
+Northern Ireland=2
+Wales=3
+
+[Territories]
+Hebrides,75,48,Scotland,Highland
+Highland,107,75,SCotland,Hebrides,Grampian,Tayside,Strathclyde
+Grampian,147,73,Scotland,Highland,Tayside
+Tayside,138,93,Scotland,Highland,Grampian,Lothian,Strathclyde
+Strathclyde,116,113,Scotland,Moyle,Highland,Tayside,Lothian,Borders,Dumfries
+Dumfries,127,137,Scotland,Belfast,Strathclyde,Borders,Cumbria
+Lothian,128,107,Scotland,Tayside,Strathclyde,Borders
+Borders,145,123,Scotland,Lothian,Strathclyde,Dumfries,Cumbria,Northumberland
+
+Cumbria,148,151,England,Dumfries,Borders,Northumberland,North Yorkshire,Cheshire
+Northumberland,165,138,England,Borders,Cumbria,North Yorkshire
+North Yorkshire,178,168,England,Cumbria,Northumberland,Cheshire,South Yorkshire
+South Yorkshire,194,190,England,North Yorkshire,Cheshire,Midlands,East Anglia
+Cheshire,160,192,England,Cumbria,North Yorkshire,South Yorkshire,Midlands,West Country,North Wales,Powys
+Midlands,187,211,England,South Yorkshire,Cheshire,East Anglia,London,West Country
+East Anglia,217,213,England,South Yorkshire,Midlands,London
+London,201,234,England,East Anglia,Midlands,West Country,South East
+West Country,170,233,England,South Wales,Powys,Cheshire,Midlands,London,South East,South West
+South East,198,251,England,London,West Country,South West
+South West,132,259,England,South Wales,West Country,South East
+
+North Wales,132,195,Wales,Cheshire,Powys,Dublin
+South Wales,139,233,Wales,South West,Dyfed,Powys,West Country
+Powys,138,213,Wales,North Wales,South Wales,Dyfed,Cheshire,West Country
+Dyfed,120,225,Wales,Powys,South Wales
+
+Belfast,84,158,Northern Ireland,Dumfries,Moyle,Meath
+Fermanagh,61,153,Northern Ireland,Donegal,Moyle,Roscommon,Meath
+Moyle,76,141,Northern Ireland,Belfast,Fermanagh,Strathclyde,Donegal
+
+Cork,28,223,Ireland,Limerick,Wexford
+Wexford,63,212,Ireland,Cork,Limerick,Dublin,Meath
+Limerick,46,206,Ireland,Cork,Galway,Meath,Wexford
+Mayo,28,172,Ireland,Galway,Roscommon
+Galway,37,193,Ireland,Mayo,Roscommon,Meath,Limerick
+Dublin,79,196,Ireland,Meath,Wexford,North Wales
+Meath,67,184,Ireland,Dublin,Wexford,Limerick,Galway,Roscommon,Belfast,Fermanagh
+Donegal,49,143,Ireland,Roscommon,Moyle,Fermanagh
+Roscommon,51,169,Ireland,Donegal,Mayo,Galway,Meath,Fermanagh
+
