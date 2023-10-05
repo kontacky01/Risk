@@ -99,7 +99,7 @@ void MapLoader::loadMap(string filename) {
     // Go line by line and create territories
     string line;
     // While there exists lines in the file
-    while (getline(inputFile, line)) {
+    while (getline(inputFile, line) && !inputFile.eof()) {
         // Go over the contintents (if we found the word "Continents" the start index of the line should be 0)
         if (line.find("[Continents]") == 0) {
             // keep track of the # of continents we created to use it as their ID
@@ -124,8 +124,8 @@ void MapLoader::loadMap(string filename) {
         // Go over the territories (if we found the word "Territories" the start index of the line should be 0)
         else if (line.find("[Territories]") == 0) {
             int territoryId = 0;
-            // while we havent not reached the end of the file
-            while (getline(inputFile, line)/*&& !inputFile.eof()*/) {
+            // continue reading the input file
+            while (getline(inputFile, line)) {
                 // if there is a space between the territories, skip that line and go to the next one
                 if (line.length() == 0) {
                     continue;
