@@ -63,14 +63,17 @@ void Map::addTerritory(Territory* territory) {
 void Map::printMapSummary() {
     cout << "\n" << "Continents of the loaded map: " << "\n" << "-------------------" << "\n";
     for (auto const& continent : continents) {
-        cout << "ID: " << continent.second->getId() << "   |  Name:" << continent.second->getName() << "\n";
+        cout << "ID: " << continent.second->getId() << "   |  Name:" << continent.second->getName() <<"\n";
         cout << "---------------------------\n";
 
     }
     cout << "\n" << "Territories of the loaded map: " << "\n" << "-------------------" << "\n";
     for (auto const& territory : territories) {
-        cout << "ID: " << territory.second->getId() << "  |  Name: " << territory.second->getName() << "\n";
-        cout << "---------------------------\n";
+        cout << "ID: " << territory.second->getId() << "  |  Name: " << territory.second->getName() << "Connected to: ";
+        for(Territory* connected : territory.second->getAdjacencyList()) {
+            cout << connected->getName() << " ";
+        }
+        cout << "\n---------------------------\n";
     }
 }
 
@@ -112,8 +115,8 @@ void Map::printMapSummary() {
     // loop through territories and see if they have been visited
     for(int i = 1 ; i < territories.size() + 1 ; i++){
         if(visited.count(territories.find(i)->second->getId()) == 0){
-            cout << "...Error: not ALL territories have been visited and hence the graph is NOT connected...";
-            cout << "Territory " << territories.find(i)->second->getName() << " is NOT connected\n\n\n";
+            cout << "...Error: not ALL territories have been visited and hence the graph is NOT connected...\n";
+            cout << "...Territory " << territories.find(i)->second->getName() << " is NOT connected...\n\n\n";
 
             return false;
         }
@@ -121,8 +124,8 @@ void Map::printMapSummary() {
     // loop through continents and see if they have been visited
     for(int i = 1 ; i < continents.size() + 1 ; i++){
         if(visitedContinent.count(continents.find(i)->second->getId()) == 0){
-            cout << "...Error: not ALL continents have been visited and hence the graph is NOT connected...";
-            cout << "Continent " << continents.find(i)->second->getName() << " is NOT connected\n\n\n";
+            cout << "...Error: not ALL continents have been visited and hence the graph is NOT connected...\n";
+            cout << "...Continent " << continents.find(i)->second->getName() << " is NOT connected...\n\n\n";
             return false;
         }
     }
