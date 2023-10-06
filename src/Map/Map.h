@@ -45,12 +45,12 @@ private:
     vector<Territory*> adjacencyList;
 public:
     /// <summary>
-    /// Helper method to list attack/defended territories
+    /// Default constructor
     /// </summary>
     Territory();
 
     /// <summary>
-    /// Helper method to list attack/defended territories
+    /// Param constructor
     /// </summary>
     Territory(string name, int id, int continentId);
 
@@ -59,6 +59,12 @@ public:
 
     // Getter for value
     int getId() const;
+
+    // Getter for contientId
+    int getContinentId() const;
+
+    // Getter for adjacencyList
+    vector<Territory*> getAdjacencyList();
 
     /// <summary>
     /// imagine we have A,B,C which are all objects of territory
@@ -103,9 +109,14 @@ public:
     void addTerritory(Territory*);
 
     /// <summary>
-    /// print the summary of map
+    /// Print the summary of map
     /// </summary>
     void printMapSummary();
+
+    /// <summary>
+    /// Validate the map structure
+    /// </summary>
+    bool validate();
 };
 
 
