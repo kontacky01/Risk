@@ -1,11 +1,13 @@
 #include "Orders.h"
+#include "../CardsDeck/Cards.h"
+#include "../Player/Player.h"
+#include "../Map/Map.h"
+
 
 void testOrdersLists() {
     cout << "\n" << "************************************" << "\n"
         << "Time to test Orders and OrdersList!! \n"
         << "************************************" << "\n" << "\n";
-
-   
 
     cout << "\n\n---------> Test 1: Create Orders and OrdersList <---------" << "\n\n\n";
     
@@ -86,15 +88,15 @@ void testOrdersLists() {
     cout << OL;
 
 
+
     cout << "\n\n---------> Test 4: Execute <---------" << "\n\n\n";
 
-
     cout << "...Exectuing orders:... " << '\n';
-    cout <<"Note: only valid Orders can be executed" <<"\n";
+    cout << "Note: only valid Orders can be executed" << "\n";
 
     cout << "...Executing order(parent class)..." << '\n';
     o1->execute();
-    cout <<"\n";
+    cout << "\n";
     cout << "...Executing Deploy ..." << '\n';
     d1->execute();
     cout << "\n";
@@ -115,6 +117,7 @@ void testOrdersLists() {
     cout << "\n\n";
 
 
+
     cout << "\n\n---------> Test 5: Remove Orders <---------" << "\n\n\n";
 
     cout << "Removing orders 5, 6 and 7 from Orderslist " << '\n';
@@ -125,8 +128,8 @@ void testOrdersLists() {
     cout << OL;
 
 
-    cout << "\n\n---------> Test 6: Move Orders <---------" << "\n\n\n";
 
+    cout << "\n\n---------> Test 6: Move Orders <---------" << "\n\n\n";
 
     cout <<'\n' << "Testing Move() that are out of bounds or don't exist" <<'\n';
     if (OL.move(0, 4)) cout << "Moving order #4 to position 0" << '\n'; else cout << "Can NOT move order #4 to position 0" << '\n';
@@ -140,7 +143,70 @@ void testOrdersLists() {
     cout << OL << '\n';
     if (OL.move(2, 3)) cout << "Moving order #2 to position 3" << '\n'; else cout << "Can NOT move order #4 to position 3" << '\n';
     cout << OL;
+    
+
+
+    cout << "\n\n---------> Test 7: Execute Player Orders <---------" << "\n\n\n";
+
+    vector<Territory*> tOL;
+    Hand* hOL = new Hand();
+    vector<Order*> pOL;
+
+    //Initializing Territory adjeceny list
+    Territory* t1OL = new Territory("UK", 1, 2);
+    Territory* t2OL = new Territory("USA", 2, 3);
+    tOL.push_back(t1OL);
+    tOL.push_back(t2OL);
+
+    //Create player orders
+    Order* pOr1 = new Order();
+    Deploy* pD1 = new Deploy();
+    Advance* pA1 = new Advance();
+    Bomb* pB1 = new Bomb();
+
+    //Add player order to orders list
+    pOL.push_back(pOr1);
+    pOL.push_back(pD1);
+    pOL.push_back(pA1);
+    pOL.push_back(pB1);
+
+    cout <<"...Creating player with territory adjeceny list, Hand, and order list..\n";
+    Player* p = new Player(tOL, hOL, pOL);
+    cout <<"Created player.\n\n";
+
+    cout << "...Printing Players orders..\n";
+    cout << "-------------------------------\n";
+    for (auto o : p->getOrderList()){
+        cout << o;
+    }
+    cout <<"\n";
+
+    cout << "...Setting players 2nd and 4th orders to true..\n";
+    p->getOrderList().at(1)->setValid(true);
+    p->getOrderList().at(3)->setValid(true);
+    cout << "Players 2nd and 4th orders are true.\n\n";
+
+
+    cout << "...Executing players orders...\n";
+    cout << "-------------------------------\n";
+    for (auto o : p->getOrderList()) {
+        o->execute();
+    }
+    cout << "\n";
+    
+    cout << "\n\n---------> Test 8: Deleting Pointers <---------" << "\n\n\n";
 
     OL.deleteOrdersList();
     OLCopy.deleteOrdersList();
+    delete t1OL;
+    t1OL = NULL;
+    delete t2OL;
+    t2OL = NULL;
+    delete hOL;
+    hOL = NULL;
+    for (auto o : p->getOrderList()) {
+        delete o;
+        o=NULL;
+    }
+    
 }

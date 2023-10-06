@@ -43,6 +43,11 @@ Player::Player(const Player& p)
 // Todo: Should have the default init for hand, terr and orderlist?
 Player::Player() {};
 
+// Get order list
+vector<Order*> Player::getOrderList() {
+  return this->orderList;
+}
+
 /// <summary>
 /// toDefend
 /// Returns a random list of territories that are assigned to the user which they would like to defend

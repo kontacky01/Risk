@@ -39,6 +39,9 @@ public:
   /// </summary>
   Player(const Player&);
 
+  //get orderList
+  vector<Order*> getOrderList();
+
   /// <summary>
   /// toDefend
   /// Returns a random list of territories that are assigned to the user which they would like to defend
