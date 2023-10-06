@@ -6,6 +6,7 @@
 #include "../CardsDeck/Cards.h"
 #include "../OrdersList/Orders.h"
 #include "../Map/Map.h"
+#include "../GameEngine/GameEngine.h"
 
 using namespace std;
 
@@ -17,6 +18,7 @@ private:
   vector<Territory*> territories;
   Hand* hand;
   vector<Order*> orderList;
+  State* state;
 
   /// <summary>
   /// Helper method to list attack/defended territories
@@ -28,6 +30,9 @@ public:
   /// Constructor with with an argument list
   /// </summary>
   Player(vector<Territory*>, Hand*, vector<Order*>);
+
+  /// Constructor with with an argument list
+  Player(vector<Territory*>, Hand*, vector<Order*>, State* s);
 
   /// <summary>
   /// Default Constructor
@@ -41,6 +46,9 @@ public:
 
   //get orderList
   vector<Order*> getOrderList();
+
+  //get state
+  State* getState();
 
   /// <summary>
   /// toDefend

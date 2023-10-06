@@ -170,32 +170,42 @@ void testOrdersLists() {
     pOL.push_back(pA1);
     pOL.push_back(pB1);
 
+    cout << "...Creating state executeorders...\n";
+    State* pStateOL = new State("executeorders");
+    cout << "Created execute orders.\n\n";
+
     cout <<"...Creating player with territory adjeceny list, Hand, and order list..\n";
-    Player* p = new Player(tOL, hOL, pOL);
+    Player* p = new Player(tOL, hOL, pOL, pStateOL);
     cout <<"Created player.\n\n";
 
     cout << "...Printing Players orders..\n";
     cout << "-------------------------------\n";
-    for (auto o : p->getOrderList()){
+    for (auto o : p->getOrderList()) {
         cout << o;
     }
-    cout <<"\n";
+    cout << "\n";
 
-    cout << "...Setting players 2nd and 4th orders to true..\n";
+    cout << "...Setting players 2nd and 4th orders to valid..\n";
     p->getOrderList().at(1)->setValid(true);
     p->getOrderList().at(3)->setValid(true);
-    cout << "Players 2nd and 4th orders are true.\n\n";
+    cout << "Players 2nd and 4th orders are valid.\n\n";
 
-
-    cout << "...Executing players orders...\n";
-    cout << "-------------------------------\n";
-    for (auto o : p->getOrderList()) {
-        o->execute();
+    cout << "...Checking player is inside execute order state..\n";
+    if (p->getState()->getState().compare("executeorders") == 0) {
+        cout << "Player is inside execute  orders state and will be able to execute!\n\n";
+        cout << "...Executing players orders...\n";
+        cout << "-------------------------------\n";
+        for (auto o : p->getOrderList()) {
+            o->execute();
+        }
+        cout << "\n";
     }
-    cout << "\n";
-    
-    cout << "\n\n---------> Test 8: Deleting Pointers <---------" << "\n\n\n";
 
+    
+
+    cout << "\n\n---------> Test 8: Deleting Pointers <---------" << "\n\n\n";
+    
+    cout << "...Deleting pointers..\n";
     OL.deleteOrdersList();
     OLCopy.deleteOrdersList();
     delete t1OL;
@@ -208,5 +218,7 @@ void testOrdersLists() {
         delete o;
         o=NULL;
     }
-    
+    delete pStateOL;
+    pStateOL = NULL;
+    cout << "Pointers deleted.\n\n";
 }

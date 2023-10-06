@@ -14,6 +14,18 @@ Player::Player(vector<Territory*> t, Hand* h, vector<Order*> o)
   srand((unsigned)time(NULL));
 }
 
+/// Constructor with with an argument list
+Player::Player(vector<Territory*> t, Hand* h, vector<Order*> o, State* s)
+{
+  territories = t;
+  hand = h;
+  orderList = o;
+  state = s;
+
+  // If seed is set to 1, the generator is reinitialized to its initial value and produces the same values as before any call to rand or srand
+  srand((unsigned)time(NULL));
+}
+
 /// <summary>
 /// Helper method to list attack/defended territories
 /// </summary>
@@ -46,6 +58,11 @@ Player::Player() {};
 // Get order list
 vector<Order*> Player::getOrderList() {
   return this->orderList;
+}
+
+//get state
+State* Player::getState(){
+  return this->state;
 }
 
 /// <summary>
