@@ -69,7 +69,7 @@ void Map::printMapSummary() {
     }
     cout << "\n" << "Territories of the loaded map: " << "\n" << "-------------------" << "\n";
     for (auto const& territory : territories) {
-        cout << "ID: " << territory.second->getId() << "  |  Name: " << territory.second->getName() << "Connected to: ";
+        cout << "ID: " << territory.second->getId() << "  |  Name: " << territory.second->getName() << " ---> Connected to: ";
         for(Territory* connected : territory.second->getAdjacencyList()) {
             cout << connected->getName() << " ";
         }

@@ -30,7 +30,7 @@ void testLoadMaps() {
     Map* map5 = loader->loadMap("Map/MapFolder/idontexist.map");
 
     cout << "\n\n---------> Test 6: Validate a valid map <---------\n\n";
-    Map* map6 = loader->loadMap("Map/MapFolder/cliff.map");
+    Map* map6 = loader->loadMap("Map/MapFolder/World.map");
     map6->validate();
 
     cout << "\n\n---------> Test 7: Validate map with invalid territories due to duplicates <---------\n\n";
@@ -41,7 +41,7 @@ void testLoadMaps() {
     Map* map8 = loader->loadMap("Map/MapFolder/solarSystemError.map");
     map8->validate();
 
-    cout << "\n\n---------> Test 9: Validate map with- disconected continents <---------\n\n";
+    cout << "\n\n---------> Test 9: Validate map with disconected continents <---------\n\n";
     Map* map9 = loader->loadMap("Map/MapFolder/solarSystemErrorContinent.map");
     map9->validate();
 
