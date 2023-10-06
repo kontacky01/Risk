@@ -56,6 +56,74 @@ void Map::printMapSummary() {
     }
 }
 
+    /// <summary>
+    /// Validate the map structure
+    /// 1) the map is a connected graph
+    /// 2) continents are connected subgraphs 
+    /// 3) each country belongs to one and only one continent
+    /// </summary>
+    bool Map::validate(){
+    cout << "...Validate the map...\n";
+    // 1) this confirm that the graph is NOT fully connected
+    // 2) find a continent that is not connected
+    map<int, bool> visited;  
+    map<int, bool> visitedContinent;  
+    stack<Territory*> stack;
+
+    stack.push(territories.find(1)->second);
+    while (!stack.empty()) { 
+        Territory* current = stack.top();
+        stack.pop();
+
+        // check if the key exists in visited
+        if (visited.count(current->getId()) == 0) {
+            visited[current->getId()] = true;
+            // check if adjecent territories have a key in visited and if not add them to the stack to test them next
+            for (Territory* neighbor : current->getAdjacencyList()) {
+                if (visited.count(neighbor->getId()) == 0) {
+                    stack.push(neighbor);
+                }
+            }
+        }
+        // repeat the same logic for continents
+        if (visitedContinent.count(current->getId()) == 0) {
+            visitedContinent[current->getContinentId()] = true;
+        }
+        
+    }
+    // loop through territories and see if they have been visited
+    for(int i = 1 ; i < territories.size() + 1 ; i++){
+        if(visited.count(territories.find(i)->second->getId()) == 0){
+            cout << "...Error: not ALL territories have been visited and hence the graph is NOT connected...\n\n\n";
+            return false;
+        }
+    }
+    // loop through continents and see if they have been visited
+    for(int i = 1 ; i < continents.size() + 1 ; i++){
+        if(visitedContinent.count(continents.find(i)->second->getId()) == 0){
+            cout << "...Error: not ALL continents have been visited and hence the graph is NOT connected...\n\n\n";
+            return false;
+        }
+    }
+    
+    // 3) each country belongs to only one and only continent
+    // make a copy of the adjeceny list
+    // Finding duplicates comfirms that a territory belongs to multiple continents because when creating the map, 
+    // the territory instance will only ever contain one contient
+     for(int i = 1 ; i < territories.size() + 1; i++){
+        for(int j = i + 1; j < territories.size() + 1; j++) {
+            if(territories.at(i)->getName().compare(territories.at(j)->getName()) == 0) {
+                //found duplicate (two territories have the same name)
+                cout << "...Error: non unique name for territory\n\n";
+                return false;
+            }
+        }
+     }
+    cout << "...Success! Map has been validated\n\n";
+    return true;
+    
+    }
+
 /************************************************************ Continent ************************************************************/
 /// <summary>
 /// Default Constructor
@@ -99,6 +167,15 @@ string Territory::getName() const {
 int Territory::getId() const {
     return id;
 }
+
+vector<Territory*> Territory::getAdjacencyList() {
+    return adjacencyList;
+}
+
+int Territory::getContinentId() const {
+    return continentId;
+}
+
 
 /// <summary>
 /// Imagine we have A,B,C which are all objects of territory
@@ -153,7 +230,7 @@ Map* MapLoader::loadMap(string filename) {
             // While we havent not reached a space (to the next section)
             while (getline(inputFile, line) && line.find("[Territories]") != 0) {
                 // if thewre is a space between the continents we can continue to search for them all the way until we reach territories
-                if(line.length() == 0) {
+                if (line.length() == 0) {
                     continue;
                 }
                 // Create a vector of words that were split by a equals (look the map file for details)
@@ -173,7 +250,7 @@ Map* MapLoader::loadMap(string filename) {
                 continents.push_back(continent);
             }
         }
-        
+
         // Go over the territories (if we found the word "Territories" the start index of the line should be 0)
         if (line.find("[Territories]") == 0 && !inputFile.eof()) {
             int territoryId = 0;
@@ -203,7 +280,7 @@ Map* MapLoader::loadMap(string filename) {
                 }
 
                 // If continent isn't found, then there is an error in parsing the continents
-                if(continentId == -1) {
+                if (continentId == -1) {
                     cout << "...Error: Invalid continent/territory information..." << endl;
                     return NULL;
                 }
