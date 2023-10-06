@@ -28,7 +28,7 @@ Map::Map(map<int, Continent*> c, map<int, Territory*> t) {
 /// <summary>
 /// Decconstructor
 /// </summary>
-Map::~Map(){
+Map::~Map() {
     // delete all territories
     for (pair<int, Territory*> territory : territories){
         delete territory.second;
@@ -74,13 +74,13 @@ void Map::printMapSummary() {
     }
 }
 
-    /// <summary>
-    /// Validate the map structure
-    /// 1) the map is a connected graph
-    /// 2) continents are connected subgraphs 
-    /// 3) each country belongs to one and only one continent
-    /// </summary>
-    bool Map::validate(){
+/// <summary>
+/// Validate the map structure
+/// 1) the map is a connected graph
+/// 2) continents are connected subgraphs 
+/// 3) each country belongs to one and only one continent
+/// </summary>
+bool Map::validate() {
     cout << "...Validate the map...\n";
     // 1) this confirm that the graph is NOT fully connected
     // 2) find a continent that is not connected
@@ -128,7 +128,7 @@ void Map::printMapSummary() {
     }
     
     // 3) each country belongs to only one and only continent
-    // make a copy of the adjeceny list
+    // make a copy of the adjacency list
     // Finding duplicates comfirms that a territory belongs to multiple continents because when creating the map, 
     // the territory instance will only ever contain one contient
      for(int i = 1 ; i < territories.size() + 1; i++){
@@ -143,7 +143,7 @@ void Map::printMapSummary() {
     cout << "...Success! Map has been validated\n\n";
     return true;
     
-    }
+}
 
 /************************************************************ Continent ************************************************************/
 /// <summary>
@@ -207,7 +207,7 @@ int Territory::getContinentId() const {
 /// hence we keep track of adjecent territories
 /// </summary>
 void Territory::addAdjacentTerritory(Territory* destination) {
-    // current object's adjeceny list
+    // current object's adjacency list
     this->adjacencyList.push_back(destination);
     // the destination object's adjecey list
     destination->adjacencyList.push_back(this);
@@ -319,13 +319,7 @@ Map* MapLoader::loadMap(string filename) {
                 loadedMap->addTerritory(territory);
                 // Anything past index 3 is what is connected to our territory
                 for (int i = 4; i < words.size(); i++) {
-                    // Create an adjeceny map list
-                    /**
-                    * territoryAdjacencyMap structure:
-                    * (id, name) --> vector of adjecent territories (id, name)
-                    * Terr1 --> [Terr2,Terr3]
-                    * Terr2 --> [Terr1]
-                    */
+                    // Create an adjacency map list
                     territoryAdjacencyMap[territory].push_back(words[i]);
                     // Keep track of all the territories like so: (name, Territory), will be used in the adjecency proccess
                     territoryMap[territory->getName()] = territory;
@@ -335,14 +329,7 @@ Map* MapLoader::loadMap(string filename) {
         }
 
         // Going over the adjacency list to add the territories the adjacencyList of the territory
-        for (auto const& territory : territoryAdjacencyMap)
-            /**
-             * territoryAdjacencyMap structure:
-             * (id, name) --> vector of adjecent territories (id, name)
-             * Terr1 --> [Terr2,Terr3]
-             * Terr2 --> [Terr1]
-             * */
-        {
+        for (auto const& territory : territoryAdjacencyMap) {
             // Loop through all the adjecent territories
             for (int i = 0; i < territory.second.size(); i++) {
                 string key = territory.second.at(i);
