@@ -68,20 +68,20 @@ void Map::printMapSummary() {
     // 2) find a continent that is not connected
     map<int, bool> visited;  
     map<int, bool> visitedContinent;  
-    stack<Territory*> stack;
+    stack<Territory*> territoryStack;
 
-    stack.push(territories.find(1)->second);
-    while (!stack.empty()) { 
-        Territory* current = stack.top();
-        stack.pop();
+    territoryStack.push(territories.find(1)->second);
+    while (!territoryStack.empty()) { 
+        Territory* current = territoryStack.top();
+        territoryStack.pop();
 
         // check if the key exists in visited
         if (visited.count(current->getId()) == 0) {
             visited[current->getId()] = true;
-            // check if adjecent territories have a key in visited and if not add them to the stack to test them next
+            // check if adjecent territories have a key in visited and if not add them to the territoryStack to test them next
             for (Territory* neighbor : current->getAdjacencyList()) {
                 if (visited.count(neighbor->getId()) == 0) {
-                    stack.push(neighbor);
+                    territoryStack.push(neighbor);
                 }
             }
         }
