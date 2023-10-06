@@ -251,7 +251,11 @@ Map* MapLoader::loadMap(string filename) {
             int continentId = 0;
             // While we havent not reached a space (to the next section)
             while (getline(inputFile, line) && line.find("[Territories]") != 0) {
-                // if thewre is a space between the continents we can continue to search for them all the way until we reach territories
+                // if there is return carriage character at the end of a line, erase it, to facilitate Conquest Map processing
+                if (line.find("\r") == line.length() - 1) {
+                    line = line.substr(0, line.length() - 1);
+                }
+                // if there is a space between the continents we can continue to search for them all the way until we reach territories
                 if (line.length() == 0) {
                     continue;
                 }
@@ -278,6 +282,10 @@ Map* MapLoader::loadMap(string filename) {
             int territoryId = 0;
             // While we havent not reached the end of the file
             while (getline(inputFile, line)) {
+                // if there is return carriage character at the end of a line, erase it, to facilitate Conquest Map processing
+                if (line.find("\r") == line.length() - 1) {
+                    line = line.substr(0, line.length() - 1);
+                }
                 // If there is a space between the territories, skip that line and go to the next one
                 if (line.length() == 0) {
                     continue;
