@@ -14,6 +14,7 @@ using namespace std;
 class Player
 {
 private:
+  int id;
   vector<Territory*> territories;
   Hand* hand;
   vector<Order*> orderList;
@@ -27,7 +28,7 @@ public:
   /// <summary>
   /// Constructor with with an argument list
   /// </summary>
-  Player(vector<Territory*>, Hand*, vector<Order*>);
+  Player(vector<Territory*>, Hand*, vector<Order*>, int);
 
   /// <summary>
   /// Default Constructor

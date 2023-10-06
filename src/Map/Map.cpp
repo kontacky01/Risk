@@ -26,6 +26,24 @@ Map::Map(map<int, Continent*> c, map<int, Territory*> t) {
 };
 
 /// <summary>
+/// Decconstructor
+/// </summary>
+Map::~Map(){
+    // delete all territories
+    for (pair<int, Territory*> territory : territories){
+        delete territory.second;
+        territory.second = NULL;
+    };
+
+
+    // delete all continents
+     for (pair<int, Continent*> contient : continents){
+        delete contient.second;
+        contient.second = NULL;
+    };
+};
+
+/// <summary>
 /// Will be stored in a key value pair ex: (1, Contient)
 /// </summary>
 void Map::addContinent(Continent* continent) {
@@ -94,14 +112,17 @@ void Map::printMapSummary() {
     // loop through territories and see if they have been visited
     for(int i = 1 ; i < territories.size() + 1 ; i++){
         if(visited.count(territories.find(i)->second->getId()) == 0){
-            cout << "...Error: not ALL territories have been visited and hence the graph is NOT connected...\n\n\n";
+            cout << "...Error: not ALL territories have been visited and hence the graph is NOT connected...";
+            cout << "Territory " << territories.find(i)->second->getName() << " is NOT connected\n\n\n";
+
             return false;
         }
     }
     // loop through continents and see if they have been visited
     for(int i = 1 ; i < continents.size() + 1 ; i++){
         if(visitedContinent.count(continents.find(i)->second->getId()) == 0){
-            cout << "...Error: not ALL continents have been visited and hence the graph is NOT connected...\n\n\n";
+            cout << "...Error: not ALL continents have been visited and hence the graph is NOT connected...";
+            cout << "Continent " << continents.find(i)->second->getName() << " is NOT connected\n\n\n";
             return false;
         }
     }
@@ -154,10 +175,11 @@ Territory::Territory() {}
 /// <summary>
 /// Param constructor
 /// </summary>
-Territory::Territory(string n, int i, int ci) {
+Territory::Territory(string n, int i, int ci, int a) {
     name = n;
     id = i;
     continentId = ci;
+    armyCount = a;
 }
 
 string Territory::getName() const {
@@ -216,7 +238,7 @@ Map* MapLoader::loadMap(string filename) {
     // Check if the file was successfully opened
     if (!inputFile.is_open()) {
         cout << "...Error: Failed to open the file..." << endl;
-        return NULL; // Exit the program
+        return loadedMap; // Exit the program
     }
 
     // Go line by line and create territories
@@ -239,7 +261,7 @@ Map* MapLoader::loadMap(string filename) {
                 // The line should contain the name and number of territories that belong to the continent (hence 2 words)
                 if (words.size() != 2) {
                     cout << "...Error: Invalid continent information..." << endl;
-                    return NULL;
+                    return loadedMap;
                 }
 
                 string continentName = words[0];
@@ -265,7 +287,7 @@ Map* MapLoader::loadMap(string filename) {
                 // There is a minimum requirement of name, x-coord, y-coord, and continent (hence 4 words)
                 if (words.size() < 4) {
                     cout << "...Error: Invalid territory information..." << endl;
-                    return NULL;
+                    return loadedMap;
                     ;
                 }
                 string territoryName = words[0];
@@ -282,10 +304,10 @@ Map* MapLoader::loadMap(string filename) {
                 // If continent isn't found, then there is an error in parsing the continents
                 if (continentId == -1) {
                     cout << "...Error: Invalid continent/territory information..." << endl;
-                    return NULL;
+                    return loadedMap;
                 }
                 // Create a new territory
-                Territory* territory = new Territory(territoryName, ++territoryId, continentId);
+                Territory* territory = new Territory(territoryName, ++territoryId, continentId, 0);
                 loadedMap->addTerritory(territory);
                 // Anything past index 3 is what is connected to our territory
                 for (int i = 4; i < words.size(); i++) {

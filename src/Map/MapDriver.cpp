@@ -9,36 +9,64 @@ void testLoadMaps() {
     MapLoader* loader = new MapLoader();
 
     cout << "---------> Test 1: Load a valid map <---------\n\n";
-   loader->loadMap("Map/MapFolder/cliff.map")->printMapSummary();
+    Map* map1 = loader->loadMap("Map/MapFolder/cliff.map");
+    map1->printMapSummary();
+    map1->validate();
 
 
     cout << "\n\n---------> Test 2: Load a valid map <---------\n\n";
-    Map*  m = new Map(*loader->loadMap("Map/MapFolder/solarSystem.map"));
-    m->printMapSummary();
-    m->validate();
+    Map* map2 = new Map(*loader->loadMap("Map/MapFolder/solarSystem.map"));
+    map2->printMapSummary();
+    map2->validate();
 
 
     cout << "\n\n---------> Test 3: Load an invalid map <---------\n\n";
-    loader->loadMap("Map/MapFolder/cliffInvalid.map");
+    Map* map3 = loader->loadMap("Map/MapFolder/cliffInvalid.map");
 
 
     cout << "\n\n---------> Test 4: Load a file that doesnt exist <---------\n\n";
-    loader->loadMap("Map/MapFolder/idontexist.map");
+    Map* map4 = loader->loadMap("Map/MapFolder/idontexist.map");
 
     cout << "\n\n---------> Test 5: Valid map <---------\n\n";
-    loader->loadMap("Map/MapFolder/cliff.map")->validate();
+    Map* map5 = loader->loadMap("Map/MapFolder/cliff.map");
+    map5->validate();
+
 
     cout << "\n\n---------> Test 6: Validate map (invalid territories due to duplicates) <---------\n\n";
-    loader->loadMap("Map/MapFolder/cliffError.map")->validate();
-    
+    Map* map6 = loader->loadMap("Map/MapFolder/cliffError.map");
+    map6->validate();
+
     cout << "\n\n---------> Test 7: Validate map - disconected territories <---------\n\n";
-    loader->loadMap("Map/MapFolder/solarSystemError.map")->validate();
+    Map* map7 = loader->loadMap("Map/MapFolder/solarSystemError.map");
+    map7->validate();
 
     cout << "\n\n---------> Test 8: Validate map - disconected continents <---------\n\n";
-    loader->loadMap("Map/MapFolder/solarSystemErrorContinent.map")->validate();
+    Map* map8 = loader->loadMap("Map/MapFolder/solarSystemErrorContinent.map");
+    map8->validate();
 
-    // todo
-    // pointer to remove
-    // add player for map
 
+    // delete all references to map
+    delete map1;
+    map1 = NULL;
+
+    delete map2;
+    map2 = NULL;
+
+    delete map3;
+    map3 = NULL;
+
+    delete map4;
+    map4 = NULL;
+
+    delete map5;
+    map5 = NULL;
+
+    delete map6;
+    map6 = NULL;
+
+    delete map7;
+    map7 = NULL;
+
+    delete map8;
+    map8 = NULL;
 };

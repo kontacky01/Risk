@@ -4,11 +4,12 @@
 /// <summary>
 /// Constructor with with an argument list
 /// </summary>
-Player::Player(vector<Territory*> t, Hand* h, vector<Order*> o)
+Player::Player(vector<Territory*> t, Hand* h, vector<Order*> o, int i)
 {
   territories = t;
   hand = h;
   orderList = o;
+  id = i;
 
   // If seed is set to 1, the generator is reinitialized to its initial value and produces the same values as before any call to rand or srand
   srand((unsigned)time(NULL));
@@ -35,6 +36,7 @@ Player::Player(const Player& p)
   territories = p.territories;
   hand = p.hand;
   orderList = p.orderList;
+  id = p.id + 1;
 };
 
 /// <summary>

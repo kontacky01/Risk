@@ -26,9 +26,6 @@ public:
     /// </summary>
     Continent(string, int);
 
-    // Destructor
-    ~Continent();
-
     string getName() const;
 
     int getId() const;
@@ -39,6 +36,8 @@ public:
 
 class Territory {
 private:
+    int ownerId;
+    int armyCount;
     int id;
     int continentId;
     string name;
@@ -52,7 +51,7 @@ public:
     /// <summary>
     /// Param constructor
     /// </summary>
-    Territory(string name, int id, int continentId);
+    Territory(string name, int id, int continentId, int armyCount);
 
     // Getter for name
     string getName() const;

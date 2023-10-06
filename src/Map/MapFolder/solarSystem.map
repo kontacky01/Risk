@@ -6,7 +6,9 @@ warn=no
 author=_MIKE CRUSH_
 
 [Continents]
+
 SUN=2
+
 MERCURY=1
 VENUS=1
 EARTH=1
@@ -18,6 +20,7 @@ NEPTUNE=1
 PLUTO=0
 
 [Territories]
+
 Sun1,83,81,SUN,Sun2,Sun3,Sun4,Sun5,Mercury1
 Sun2,85,196,SUN,Sun1,Sun3,Sun4,Sun5,Mercury2,Venus1
 Sun3,79,293,SUN,Sun1,Sun2,Sun4,Sun5
