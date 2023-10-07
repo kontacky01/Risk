@@ -27,6 +27,24 @@ Map::Map(map<int, Continent*> c, map<int, Territory*> t) {
 };
 
 /// <summary>
+/// Decconstructor
+/// </summary>
+Map::~Map() {
+    // delete all territories
+    for (pair<int, Territory*> territory : territories){
+        delete territory.second;
+        territory.second = NULL;
+    };
+
+
+    // delete all continents
+     for (pair<int, Continent*> contient : continents){
+        delete contient.second;
+        contient.second = NULL;
+    };
+};
+
+/// <summary>
 /// Will be stored in a key value pair ex: (1, Contient)
 /// </summary>
 void Map::addContinent(Continent* continent) {
@@ -46,24 +64,27 @@ void Map::addTerritory(Territory* territory) {
 void Map::printMapSummary() {
     cout << "\n" << "Continents of the loaded map: " << "\n" << "-------------------" << "\n";
     for (auto const& continent : continents) {
-        cout << "ID: " << continent.second->getId() << "   |  Name:" << continent.second->getName() << "\n";
+        cout << "ID: " << continent.second->getId() << "   |  Name:" << continent.second->getName() <<"\n";
         cout << "---------------------------\n";
 
     }
     cout << "\n" << "Territories of the loaded map: " << "\n" << "-------------------" << "\n";
     for (auto const& territory : territories) {
-        cout << "ID: " << territory.second->getId() << "  |  Name: " << territory.second->getName() << "\n";
-        cout << "---------------------------\n";
+        cout << "ID: " << territory.second->getId() << "  |  Name: " << territory.second->getName() << " ---> Connected to: ";
+        for(Territory* connected : territory.second->getAdjacencyList()) {
+            cout << connected->getName() << " ";
+        }
+        cout << "\n---------------------------\n";
     }
 }
 
-    /// <summary>
-    /// Validate the map structure
-    /// 1) the map is a connected graph
-    /// 2) continents are connected subgraphs 
-    /// 3) each country belongs to one and only one continent
-    /// </summary>
-    bool Map::validate(){
+/// <summary>
+/// Validate the map structure
+/// 1) the map is a connected graph
+/// 2) continents are connected subgraphs 
+/// 3) each country belongs to one and only one continent
+/// </summary>
+bool Map::validate() {
     cout << "...Validate the map...\n";
     // 1) this confirm that the graph is NOT fully connected
     // 2) find a continent that is not connected
@@ -95,20 +116,23 @@ void Map::printMapSummary() {
     // loop through territories and see if they have been visited
     for(int i = 1 ; i < territories.size() + 1 ; i++){
         if(visited.count(territories.find(i)->second->getId()) == 0){
-            cout << "...Error: not ALL territories have been visited and hence the graph is NOT connected...\n\n\n";
+            cout << "...Error: not ALL territories have been visited and hence the graph is NOT connected...\n";
+            cout << "...Territory " << territories.find(i)->second->getName() << " is NOT connected...\n\n\n";
+
             return false;
         }
     }
     // loop through continents and see if they have been visited
     for(int i = 1 ; i < continents.size() + 1 ; i++){
         if(visitedContinent.count(continents.find(i)->second->getId()) == 0){
-            cout << "...Error: not ALL continents have been visited and hence the graph is NOT connected...\n\n\n";
+            cout << "...Error: not ALL continents have been visited and hence the graph is NOT connected...\n";
+            cout << "...Continent " << continents.find(i)->second->getName() << " is NOT connected...\n\n\n";
             return false;
         }
     }
     
     // 3) each country belongs to only one and only continent
-    // make a copy of the adjeceny list
+    // make a copy of the adjacency list
     // Finding duplicates comfirms that a territory belongs to multiple continents because when creating the map, 
     // the territory instance will only ever contain one contient
      for(int i = 1 ; i < territories.size() + 1; i++){
@@ -123,7 +147,7 @@ void Map::printMapSummary() {
     cout << "...Success! Map has been validated\n\n";
     return true;
     
-    }
+}
 
 /************************************************************ Continent ************************************************************/
 /// <summary>
@@ -155,10 +179,11 @@ Territory::Territory() {}
 /// <summary>
 /// Param constructor
 /// </summary>
-Territory::Territory(string n, int i, int ci) {
+Territory::Territory(string n, int i, int ci, int a) {
     name = n;
     id = i;
     continentId = ci;
+    armyCount = a;
 }
 
 string Territory::getName() const {
@@ -186,7 +211,7 @@ int Territory::getContinentId() const {
 /// hence we keep track of adjecent territories
 /// </summary>
 void Territory::addAdjacentTerritory(Territory* destination) {
-    // current object's adjeceny list
+    // current object's adjacency list
     this->adjacencyList.push_back(destination);
     // the destination object's adjecey list
     destination->adjacencyList.push_back(this);
@@ -217,7 +242,7 @@ Map* MapLoader::loadMap(string filename) {
     // Check if the file was successfully opened
     if (!inputFile.is_open()) {
         cout << "...Error: Failed to open the file..." << endl;
-        return NULL; // Exit the program
+        return loadedMap; // Exit the program
     }
 
     // Go line by line and create territories
@@ -230,7 +255,11 @@ Map* MapLoader::loadMap(string filename) {
             int continentId = 0;
             // While we havent not reached a space (to the next section)
             while (getline(inputFile, line) && line.find("[Territories]") != 0) {
-                // if thewre is a space between the continents we can continue to search for them all the way until we reach territories
+                // if there is return carriage character at the end of a line, erase it, to facilitate Conquest Map processing
+                if (line.find("\r") == line.length() - 1) {
+                    line = line.substr(0, line.length() - 1);
+                }
+                // if there is a space between the continents we can continue to search for them all the way until we reach territories
                 if (line.length() == 0) {
                     continue;
                 }
@@ -240,7 +269,7 @@ Map* MapLoader::loadMap(string filename) {
                 // The line should contain the name and number of territories that belong to the continent (hence 2 words)
                 if (words.size() != 2) {
                     cout << "...Error: Invalid continent information..." << endl;
-                    return NULL;
+                    return loadedMap;
                 }
 
                 string continentName = words[0];
@@ -257,6 +286,10 @@ Map* MapLoader::loadMap(string filename) {
             int territoryId = 0;
             // While we havent not reached the end of the file
             while (getline(inputFile, line)) {
+                // if there is return carriage character at the end of a line, erase it, to facilitate Conquest Map processing
+                if (line.find("\r") == line.length() - 1) {
+                    line = line.substr(0, line.length() - 1);
+                }
                 // If there is a space between the territories, skip that line and go to the next one
                 if (line.length() == 0) {
                     continue;
@@ -266,7 +299,7 @@ Map* MapLoader::loadMap(string filename) {
                 // There is a minimum requirement of name, x-coord, y-coord, and continent (hence 4 words)
                 if (words.size() < 4) {
                     cout << "...Error: Invalid territory information..." << endl;
-                    return NULL;
+                    return loadedMap;
                     ;
                 }
                 string territoryName = words[0];
@@ -283,20 +316,14 @@ Map* MapLoader::loadMap(string filename) {
                 // If continent isn't found, then there is an error in parsing the continents
                 if (continentId == -1) {
                     cout << "...Error: Invalid continent/territory information..." << endl;
-                    return NULL;
+                    return loadedMap;
                 }
                 // Create a new territory
-                Territory* territory = new Territory(territoryName, ++territoryId, continentId);
+                Territory* territory = new Territory(territoryName, ++territoryId, continentId, 0);
                 loadedMap->addTerritory(territory);
                 // Anything past index 3 is what is connected to our territory
                 for (int i = 4; i < words.size(); i++) {
-                    // Create an adjeceny map list
-                    /**
-                    * territoryAdjacencyMap structure:
-                    * (id, name) --> vector of adjecent territories (id, name)
-                    * Terr1 --> [Terr2,Terr3]
-                    * Terr2 --> [Terr1]
-                    */
+                    // Create an adjacency map list
                     territoryAdjacencyMap[territory].push_back(words[i]);
                     // Keep track of all the territories like so: (name, Territory), will be used in the adjecency proccess
                     territoryMap[territory->getName()] = territory;
@@ -306,14 +333,7 @@ Map* MapLoader::loadMap(string filename) {
         }
 
         // Going over the adjacency list to add the territories the adjacencyList of the territory
-        for (auto const& territory : territoryAdjacencyMap)
-            /**
-             * territoryAdjacencyMap structure:
-             * (id, name) --> vector of adjecent territories (id, name)
-             * Terr1 --> [Terr2,Terr3]
-             * Terr2 --> [Terr1]
-             * */
-        {
+        for (auto const& territory : territoryAdjacencyMap) {
             // Loop through all the adjecent territories
             for (int i = 0; i < territory.second.size(); i++) {
                 string key = territory.second.at(i);

@@ -10,12 +10,12 @@ void testPlayers()
   vector<Order*> o;
 
   // Create 6 territories and push them to the territories vector
-  Territory* t1 = new Territory("UK", 1, 2);
-  Territory* t2 = new Territory("USA", 2, 3);
-  Territory* t3 = new Territory("Russia", 3, 3);
-  Territory* t4 = new Territory("Israel", 4, 2);
-  Territory* t5 = new Territory("Italy", 5, 3);
-  Territory* t6 = new Territory("Bulgaria", 6, 3);
+  Territory* t1 = new Territory("UK", 1, 2, 0);
+  Territory* t2 = new Territory("USA", 2, 3, 0);
+  Territory* t3 = new Territory("Russia", 3, 3, 0);
+  Territory* t4 = new Territory("Israel", 4, 2, 0);
+  Territory* t5 = new Territory("Italy", 5, 3, 0);
+  Territory* t6 = new Territory("Bulgaria", 6, 3, 0);
   t.push_back(t1);
   t.push_back(t2);
   t.push_back(t3);
@@ -24,7 +24,7 @@ void testPlayers()
   t.push_back(t6);
 
   // Init a player
-  Player* p = new Player(t, h, o);
+  Player* p = new Player(t, h, o, 1);
 
   cout << "---------> Test 1: Testing player methods (attack/defend/issueOrder) <---------" << "\n" << "\n";
   // Show that Player contains method toDefend()
