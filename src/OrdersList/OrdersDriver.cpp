@@ -10,21 +10,21 @@ void testOrdersLists() {
         << "************************************" << "\n" << "\n";
 
     cout << "\n\n---------> Test 1: Create Orders and OrdersList <---------" << "\n\n\n";
-    
+
     cout << "...Creating orders of every type... " << '\n';
-    Order *o1 = new Order();
-    Deploy *d1 = new Deploy();
-    Advance *a1 = new Advance();
-    Bomb *b1 = new Bomb();
-    Blockade *blk1 = new Blockade();
-    Airlift *air1 = new Airlift();
-    Negotiate *n1 = new Negotiate();
+    Order* o1 = new Order();
+    Deploy* d1 = new Deploy();
+    Advance* a1 = new Advance();
+    Bomb* b1 = new Bomb();
+    Blockade* blk1 = new Blockade();
+    Airlift* air1 = new Airlift();
+    Negotiate* n1 = new Negotiate();
     cout << "Orders of type: Order, Deploy, Advance, Bomb, Blockade, Airlift and Negotiate have been created. " << "\n\n";
-   
+
     cout << "...Creating an OrdersList... " << '\n';
     OrdersList OL;
     cout << "Ordrslist has been created " << "\n\n";
-    
+
     cout << "...Adding Orders to OrdersList...." << '\n';
     OL.addOrder(o1);
     OL.addOrder(d1);
@@ -43,16 +43,16 @@ void testOrdersLists() {
     cout << "\n\n---------> Test 2: Create Copies of Each Order <---------" << "\n\n\n";
 
     cout << "...Creating copies of each Order... " << '\n';
-    Order *o1Copy = new Order(o1);
-    Deploy *d1Copy = new Deploy(d1);
-    Deploy *d1Copy2 = d1;
-    Advance *a1Copy = new Advance(a1);
-    Bomb *b1Copy = new Bomb(b1);
-    Blockade *blk1Copy = new Blockade(blk1);
-    Airlift *air1Copy = new Airlift(air1);
-    Negotiate *n1Copy = new Negotiate(n1);
+    Order* o1Copy = new Order(o1);
+    Deploy* d1Copy = new Deploy(d1);
+    Deploy* d1Copy2 = d1;
+    Advance* a1Copy = new Advance(a1);
+    Bomb* b1Copy = new Bomb(b1);
+    Blockade* blk1Copy = new Blockade(blk1);
+    Airlift* air1Copy = new Airlift(air1);
+    Negotiate* n1Copy = new Negotiate(n1);
     cout << "Copies of each Order have been created. " << "\n\n";
-   
+
     OrdersList OLCopy;
 
     cout << "...Adding copies of Orders in a new OrdersList:..." << '\n';
@@ -65,14 +65,14 @@ void testOrdersLists() {
     OLCopy.addOrder(n1Copy);
     cout << "Copies of Orders added." << "\n\n";
 
-    cout << "...Printing Copy OrdersList..." << '\n'; 
+    cout << "...Printing Copy OrdersList..." << '\n';
     cout << OLCopy;
 
 
 
     cout << "\n\n---------> Test 3: Validate <---------" << "\n\n\n";
 
-    cout <<"...Setting order (parent class) to valid ..." << '\n';
+    cout << "...Setting order (parent class) to valid ..." << '\n';
     o1->setValid(true);
     cout << "Order is now valid" << "\n\n";
 
@@ -81,7 +81,7 @@ void testOrdersLists() {
     cout << "Deploy is now valid" << "\n\n";
 
     cout << "...Setting blockade to valid ..." << '\n';
-    blk1->setValid (true);
+    blk1->setValid(true);
     cout << "blockade is now valid" << "\n\n";
 
     cout << "...Printing OrdersList with new valid Orders ..." << "\n\n";
@@ -92,7 +92,7 @@ void testOrdersLists() {
 
     cout << "...Exectuing orders:... " << '\n';
     cout << "Note: only valid Orders can be executed" << "\n";
-    State *sTest = new State("executeorders");
+    State* sTest = new State("executeorders");
 
     cout << "...Executing order(parent class)..." << '\n';
     o1->execute(sTest);
@@ -130,7 +130,7 @@ void testOrdersLists() {
 
     cout << "\n\n---------> Test 6: Move Orders <---------" << "\n\n\n";
 
-    cout <<'\n' << "Testing Move() that are out of bounds or don't exist" <<'\n';
+    cout << '\n' << "Testing Move() that are out of bounds or don't exist" << '\n';
     if (OL.move(0, 4)) cout << "Moving order #4 to position 0" << '\n'; else cout << "Can NOT move order #4 to position 0" << '\n';
     if (OL.move(-2, 4)) cout << "Moving order #4 to position -2" << '\n'; else cout << "Can NOT move order #4 to position -2" << '\n';
     if (OL.move(10, 4)) cout << "Moving order #4 to position 10" << '\n'; else cout << "Can NOT move order #4 to position 10" << '\n';
@@ -142,7 +142,7 @@ void testOrdersLists() {
     cout << OL << '\n';
     if (OL.move(2, 3)) cout << "Moving order #2 to position 3" << '\n'; else cout << "Can NOT move order #4 to position 3" << '\n';
     cout << OL;
-    
+
 
 
     cout << "\n\n---------> Test 7: Execute Player Orders <---------" << "\n\n\n";
@@ -152,8 +152,8 @@ void testOrdersLists() {
     vector<Order*> pOL;
 
     //Initializing Territory adjeceny list
-    Territory* t1OL = new Territory("UK", 1, 2);
-    Territory* t2OL = new Territory("USA", 2, 3);
+    Territory* t1OL = new Territory("UK", 1, 2, 0);
+    Territory* t2OL = new Territory("USA", 2, 3, 0);
     tOL.push_back(t1OL);
     tOL.push_back(t2OL);
 
@@ -173,9 +173,9 @@ void testOrdersLists() {
     State* pStateOL = new State("executeorders");
     cout << "Created execute orders.\n\n";
 
-    cout <<"...Creating player with territory adjeceny list, Hand, and order list..\n";
+    cout << "...Creating player with territory adjeceny list, Hand, and order list..\n";
     Player* p = new Player(tOL, hOL, pOL, pStateOL);
-    cout <<"Created player.\n\n";
+    cout << "Created player.\n\n";
 
     cout << "...Printing Players orders..\n";
     cout << "-------------------------------\n";
@@ -189,7 +189,7 @@ void testOrdersLists() {
     p->getOrderList().at(3)->setValid(true);
     cout << "Players 2nd and 4th orders are valid.\n\n";
 
-    
+
     cout << "If Player is inside execute  rders state and will be able to execute!\n\n";
     cout << "...Executing players orders...\n";
     cout << "-------------------------------\n";
@@ -201,7 +201,7 @@ void testOrdersLists() {
 
 
     cout << "\n\n---------> Test 8: Deleting Pointers <---------" << "\n\n\n";
-    
+
     cout << "...Deleting pointers..\n";
     OL.deleteOrdersList();
     OLCopy.deleteOrdersList();
@@ -213,11 +213,11 @@ void testOrdersLists() {
     hOL = NULL;
     for (auto o : p->getOrderList()) {
         delete o;
-        o=NULL;
+        o = NULL;
     }
     delete pStateOL;
     pStateOL = NULL;
     delete sTest;
-    sTest=NULL;
+    sTest = NULL;
     cout << "Pointers deleted.\n\n";
 }

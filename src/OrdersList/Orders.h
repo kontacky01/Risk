@@ -97,16 +97,16 @@ private:
 class OrdersList
 {
 public:
-    OrdersList();                       //default constructor
+    OrdersList();                       // default constructor
     virtual void addOrder(Order* o);
-    bool move(int pos, int id);  //Modify sequence of orders
-    bool remove(int id);                //remove order by id
+    bool move(int pos, int id);  // Modify sequence of orders
+    bool remove(int id);                // remove order by id
     list<Order*> getOL();
     void deleteOrdersList();
     // TODO: add executeAll();
 private:
     list<Order*> OL;
-    friend ostream& operator << (ostream& out, OrdersList& ol); //overide Stream insertion operator
+    friend ostream& operator << (ostream& out, OrdersList& ol); // overide Stream insertion operator
 };
 
 // test driver method
