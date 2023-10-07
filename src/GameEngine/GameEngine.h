@@ -15,8 +15,8 @@ public:
     State(string name);                            // Parameterized constructor
     State& operator=(const State& other);         // Assignment Operator
     State(const State& other);                  // Copy constructor
-    string getState();
-   
+    string getStateName();
+    // TODO: initilaize all states
 private:
     string stateName;                                  // State's name
 };
@@ -33,6 +33,7 @@ public:
     string getCommand();
     State * getNextState();
     void deletePointerNextState();
+    // TODO: initilaize all transitions
 private:
     string command;            // required command to perform transition
     State* nextState;           // next state

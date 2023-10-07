@@ -1,3 +1,4 @@
+#include <stack>
 #include "Map.h"
 
 using namespace std;
