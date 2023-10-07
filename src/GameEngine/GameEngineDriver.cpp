@@ -21,7 +21,7 @@ void testGameStates(){
     State* endState = new State("end");
 
     cout <<"..Getting start state...";
-    cout << startState->getState() <<"\n";
+    cout << startState->getStateName() <<"\n";
     cout <<"state state has been printed.\n\n";
 
     cout << "\n\n---------> Test 2: string command comparsion <---------" << "\n\n\n";
@@ -51,11 +51,11 @@ void testGameStates(){
     cout <<"currentState created.\n\n";
 
     cout << "...Printing Contents of current State...\n";
-    cout <<"Current state is : " << currentState->getState() <<"\n\n";
+    cout <<"Current state is : " << currentState->getStateName() <<"\n\n";
 
     cout << "...assigning currentState using t1 nextState :maploaded ...\n";
     currentState = t1->getNextState();
-    cout << "Current state is : " << currentState->getState() << "\n\n";
+    cout << "Current state is : " << currentState->getStateName() << "\n\n";
     
     cout << "...Creating transition t4 for addplayer ...\n";
     Transition* t4 = new Transition("addplayer", playersaddedState);
@@ -63,7 +63,7 @@ void testGameStates(){
 
     cout << "...assigning currentState using t4 nextState :playersadded ...\n";
     currentState = t4->getNextState();
-    cout << "Current state is : " << currentState->getState() << "\n\n";
+    cout << "Current state is : " << currentState->getStateName() << "\n\n";
 
     
 
@@ -125,7 +125,7 @@ void testGameStates(){
         }
 
         if(transComplete){
-            cout << "Current state is : " << cState->getState() << "\n\n";
+            cout << "Current state is : " << cState->getStateName() << "\n\n";
             if (userCommand.compare("end") == 0)
                 cout <<"...Exiting testGameStates()...\n\n";
         }else{

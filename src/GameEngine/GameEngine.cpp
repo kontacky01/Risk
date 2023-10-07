@@ -23,7 +23,7 @@ State::State(const State& other) {
     this->stateName = other.stateName;
 }
 
-string State::getState(){
+string State::getStateName(){
     return stateName;
 }
 

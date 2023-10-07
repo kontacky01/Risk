@@ -88,34 +88,33 @@ void testOrdersLists() {
     cout << OL;
 
 
-
     cout << "\n\n---------> Test 4: Execute <---------" << "\n\n\n";
 
     cout << "...Exectuing orders:... " << '\n';
     cout << "Note: only valid Orders can be executed" << "\n";
+    State *sTest = new State("executeorders");
 
     cout << "...Executing order(parent class)..." << '\n';
-    o1->execute();
+    o1->execute(sTest);
     cout << "\n";
     cout << "...Executing Deploy ..." << '\n';
-    d1->execute();
+    d1->execute(sTest);
     cout << "\n";
     cout << "...Execting Advance ..." << '\n';
-    a1->execute();
+    a1->execute(sTest);
     cout << "\n";
     cout << "...Executing Bomb ..." << '\n';
-    b1->execute();
+    b1->execute(sTest);
     cout << "\n";
     cout << "...Executing Blockaid ..." << '\n';
-    blk1->execute();
+    blk1->execute(sTest);
     cout << "\n";
     cout << "...Executing Airlift ..." << '\n';
-    air1->execute();
+    air1->execute(sTest);
     cout << "\n";
     cout << "..Executing Negotiate ..." << '\n';
-    n1->execute();
+    n1->execute(sTest);
     cout << "\n\n";
-
 
 
     cout << "\n\n---------> Test 5: Remove Orders <---------" << "\n\n\n";
@@ -190,18 +189,16 @@ void testOrdersLists() {
     p->getOrderList().at(3)->setValid(true);
     cout << "Players 2nd and 4th orders are valid.\n\n";
 
-    cout << "...Checking player is inside execute order state..\n";
-    if (p->getState()->getState().compare("executeorders") == 0) {
-        cout << "Player is inside execute  orders state and will be able to execute!\n\n";
-        cout << "...Executing players orders...\n";
-        cout << "-------------------------------\n";
-        for (auto o : p->getOrderList()) {
-            o->execute();
-        }
-        cout << "\n";
-    }
-
     
+    cout << "If Player is inside execute  rders state and will be able to execute!\n\n";
+    cout << "...Executing players orders...\n";
+    cout << "-------------------------------\n";
+    for (auto o : p->getOrderList()) {
+        o->execute(p->getState());
+    }
+    cout << "\n";
+
+
 
     cout << "\n\n---------> Test 8: Deleting Pointers <---------" << "\n\n\n";
     
@@ -220,5 +217,7 @@ void testOrdersLists() {
     }
     delete pStateOL;
     pStateOL = NULL;
+    delete sTest;
+    sTest=NULL;
     cout << "Pointers deleted.\n\n";
 }

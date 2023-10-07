@@ -22,9 +22,10 @@ bool Order::validate() { //Invalid orders can be in OL, will check if valid for 
     return this->valid;
 };
 
-void Order::execute() {
-    if(validate()==1) cout << "Executing order #" << getOrderID() <<" ..." << endl;
-    else cout << "Can NOT execute order #" << getOrderID() << " ..." << endl;
+void Order::execute(State* current) {
+    if (current->getStateName().compare("executeorders")==0 && validate() == 1) {
+        cout << "Executing order #" << getOrderID() << " ..." << endl;
+    }else cout << "Can NOT execute order #" << getOrderID() << " ..." << endl;
 };
 
 int Order::incrementCount() {
@@ -75,9 +76,10 @@ Deploy::Deploy(Deploy *d) {
     this->addDescription();
 }
 
-void Deploy::execute() {
-    if (validate() == 1) cout << "Executing (Deploy) order #" << getOrderID() << " ..." << endl;
-    else cout << "Can NOT execute (Deploy) order #" << getOrderID() << " ..." << endl;
+void Deploy::execute(State* current) {
+    if (current->getStateName().compare("executeorders")==0 && validate() == 1){
+        cout << "Executing (Deploy) order #" << getOrderID() << " ..." << endl;
+    } else cout << "Can NOT execute (Deploy) order #" << getOrderID() << " ..." << endl;
 };
 
 void Deploy::addDescription() {
@@ -99,9 +101,10 @@ Advance::Advance(Advance *a) {
     this->addDescription();
 }
 
-void Advance::execute() {
-    if (validate() == 1) cout << "Executing (Advance) order #" << getOrderID() << " ..." << endl;
-    else cout << "Can NOT execute (Advance) order #" << getOrderID() << " ..." << endl;
+void Advance::execute(State* current) {
+    if (current->getStateName().compare("executeorders")==0 && validate() == 1){
+        cout << "Executing (Advance) order #" << getOrderID() << " ..." << endl;
+    } else cout << "Can NOT execute (Advance) order #" << getOrderID() << " ..." << endl;
 };
 
 void Advance::addDescription() {
@@ -123,9 +126,10 @@ Bomb::Bomb(Bomb* a) {
     this->addDescription();
 }
 
-void Bomb::execute() {
-    if (validate() == 1) cout << "Executing (Bomb) order #" << getOrderID() << " ..." << endl;
-    else cout << "Can NOT execute (Bomb) order #" << getOrderID() << " ..." << endl;
+void Bomb::execute(State* current) {
+    if (current->getStateName().compare("executeorders")==0 && validate() == 1){
+        cout << "Executing (Bomb) order #" << getOrderID() << " ..." << endl;
+    } else cout << "Can NOT execute (Bomb) order #" << getOrderID() << " ..." << endl;
 };
 
 void Bomb::addDescription() {
@@ -147,9 +151,10 @@ Blockade::Blockade(Blockade* a) {
     this->addDescription();
 }
 
-void Blockade::execute() {
-    if (validate() == 1) cout << "Executing (Blockade) order #" << getOrderID() << " ..." << endl;
-    else cout << "Can NOT execute (Blockade) order #" << getOrderID() << " ..." << endl;
+void Blockade::execute(State* current) {
+    if (current->getStateName().compare("executeorders")==0 && validate() == 1){
+        cout << "Executing (Blockade) order #" << getOrderID() << " ..." << endl;
+    } else cout << "Can NOT execute (Blockade) order #" << getOrderID() << " ..." << endl;
 };
 
 void Blockade::addDescription() {
@@ -171,9 +176,10 @@ Airlift::Airlift(Airlift *a) {
     this->addDescription();
 }
 
-void Airlift::execute() {
-    if (validate() == 1) cout << "Executing (Airlift) order #" << getOrderID() << " ..." << endl;
-    else cout << "Can NOT execute (Airlift) order #" << getOrderID() << " ..." << endl;
+void Airlift::execute(State* current) {
+    if (current->getStateName().compare("executeorders")==0 && validate() == 1){
+        cout << "Executing (Airlift) order #" << getOrderID() << " ..." << endl;
+    } else cout << "Can NOT execute (Airlift) order #" << getOrderID() << " ..." << endl;
 };
 
 void Airlift::addDescription() {
@@ -195,9 +201,10 @@ Negotiate::Negotiate(Negotiate* a) {
     this->addDescription();
 }
 
-void Negotiate::execute() {
-    if (validate() == 1) cout << "Executing (Negotiate) order #" << getOrderID() << " ..." << endl;
-    else cout << "Can NOT execute (Negotiate) order #" << getOrderID() << " ..." << endl;
+void Negotiate::execute(State* current) {
+    if (current->getStateName().compare("executeorders")==0 && validate() == 1){
+        cout << "Executing (Negotiate) order #" << getOrderID() << " ..." << endl;
+    } else cout << "Can NOT execute (Negotiate) order #" << getOrderID() << " ..." << endl;
 };
 
 void Negotiate::addDescription() {
