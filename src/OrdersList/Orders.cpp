@@ -21,8 +21,9 @@ Order::Order( Order *o) {
 /**
 * Checks if valid for execution, invalid orders can exist
 */
-bool Order::validate() { 
-};
+bool Order::validate() {
+    return this->valid;
+ };
 
 /**
 * Checks player state and executes order
@@ -70,7 +71,7 @@ ostream& operator << (ostream& out, Order* o)
     */
     auto printBoolValue = [](bool b) { if (b) return "true"; else return "false"; };
 
-    out << "OrderID: " << o->getOrderID() << "\n"
+    out << "OrderID: #" << o->getOrderID() << "\n"
         << "Descrption: " << o->getDescription() << "\n"
         << "Is valid: " << printBoolValue(o->validate()) << "\n" << "\n";
     return out;
@@ -251,7 +252,7 @@ string Negotiate::getDescription() {
 
 /******************************* OrdersList *********************************************/
 OrdersList::OrdersList(){
-    list<Order*> OL;
+    vector<Order*> OL;
 }
 
 void OrdersList::addOrder(Order *o){
@@ -264,6 +265,7 @@ void OrdersList::addOrder(Order *o){
 * @param id order ID of order to be moved
 */
 bool OrdersList::move(int pos, int id){
+    int index;
     //post out of bounds
     int size = OL.size();
     if (pos == 0 || pos < 0 || pos > size) {
@@ -272,10 +274,13 @@ bool OrdersList::move(int pos, int id){
     }
     //pos = 1, send to front of list
     if (pos == 1) {
+        // 0 1 2 3 4 5
+        // x y z a b c
         for (auto o : this->OL) {
             if (o->getOrderID() == id) {
-                this->OL.remove(o); // remove Order from List
-                this->OL.push_front(o); //place in front
+                index = getIndex(OL,o);
+                this->OL.erase(OL.begin()+index); // remove Order from List
+                this->OL.insert(OL.begin(),o); //place in front
                 return true;
             }
         }
@@ -284,29 +289,31 @@ bool OrdersList::move(int pos, int id){
     if (pos == size) {
         for (auto o : this->OL) {
             if (o->getOrderID() == id) {
-                this->OL.remove(o); // remove Order from List
-                this->OL.push_back(o); //place in front
+                index = getIndex(OL, o);
+                this->OL.erase(OL.begin() + index); // remove Order from List
+                this->OL.push_back(o); //place in back
                 return true;
             }
         }
     }
     //first position is >=2
-    list<Order*>::iterator it = this->OL.begin();
-    for (int i = 0; i < pos - 1; i++) { ++it; } //incrmenet iterator to pos (can not add with integer)
     for (auto o : this->OL) {
         if (o->getOrderID() == id) {
-            this->OL.remove(o); // remove Order from List
-            this->OL.insert(it,o); // use insert from list std
+            index = getIndex(OL, o);
+            this->OL.erase(OL.begin() + index); // remove Order from List
+            this->OL.insert(OL.begin()+(pos-1),o); // use insert from list std
             return true;
         }
     }
     return false;
 }
 
-bool OrdersList::remove(int id) { //remove order by orderID
+bool OrdersList::remove(int id) { 
+    int index;
     for (auto o : this->OL) {
         if (o->getOrderID() == id) {
-            this->OL.remove(o);
+            index = getIndex(OL,o);
+            this->OL.erase(OL.begin()+index); //TODO: check this 
             delete o;
             return true;
         }
@@ -315,8 +322,24 @@ bool OrdersList::remove(int id) { //remove order by orderID
     return false;
 }
 
-list <Order*> OrdersList::getOL(){
+vector <Order*> OrdersList::getOL(){
     return this->OL;
+}
+
+int OrdersList::getIndex(vector<Order*> ol, Order *o)
+{
+    auto it = find(ol.begin(), ol.end(), o);
+
+    // If element was found 
+    if (it != ol.end())
+    {
+        int index = it - ol.begin();
+        return index;
+    }
+    else {
+        cout << "-1" << endl;
+        return -1;
+    }
 }
 
 void OrdersList::deleteOrdersList(){
@@ -328,12 +351,14 @@ void OrdersList::deleteOrdersList(){
 }
 
 ostream& operator << (ostream& out, OrdersList& ol){
-    list<Order*>::iterator it;
-    list<Order*>OL = ol.getOL();
+    vector<Order*>::iterator it;
+    vector<Order*>OL = ol.getOL();
     cout << "The OrdersList contains " << "\n"
          << "------------------------" << "\n";
+    int pos = 0;
     for (it = OL.begin(); it != OL.end(); it++)
     {
+        cout << "pos: " <<++pos << "\n";
         out << *it;
     }
     return out;

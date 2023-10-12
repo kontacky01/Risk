@@ -1,5 +1,5 @@
 #pragma once
-#include <list>
+#include <vector>
 #include <iostream>
 #include "../GameEngine/GameEngine.h"
 
@@ -154,13 +154,15 @@ public:
     
     bool remove(int id);
     
-    list<Order*> getOL();
+    vector <Order*> getOL();
+
+    int getIndex(vector<Order*> ol, Order *o);
     
     void deleteOrdersList();
     
     // TODO: add executeAll();
 private:
-    list<Order*> OL;
+    vector<Order*> OL;
     friend ostream& operator << (ostream& out, OrdersList& ol); // overide Stream insertion operator
 };
 

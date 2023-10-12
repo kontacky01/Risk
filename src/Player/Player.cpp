@@ -4,7 +4,7 @@
 /// <summary>
 /// Constructor with with an argument list
 /// </summary>
-Player::Player(vector<Territory*> t, Hand* h, vector<Order*> o, int i)
+Player::Player(vector<Territory*> t, Hand* h, OrdersList o, int i)
 {
   territories = t;
   hand = h;
@@ -16,7 +16,7 @@ Player::Player(vector<Territory*> t, Hand* h, vector<Order*> o, int i)
 }
 
 /// Constructor with with an argument list
-Player::Player(vector<Territory*> t, Hand* h, vector<Order*> o, State* s)
+Player::Player(vector<Territory*> t, Hand* h, OrdersList o, State* s)
 {
   territories = t;
   hand = h;
@@ -58,7 +58,7 @@ Player::Player(const Player& p)
 Player::Player() {};
 
 // Get order list
-vector<Order*> Player::getOrderList() {
+OrdersList Player::getOrdersList() {
   return this->orderList;
 }
 
@@ -117,9 +117,9 @@ vector<Territory*> Player::toAttack()
 /// issueOrder
 /// Take in an order and add it into the OrderList
 /// </summary>
-vector<Order*> Player::issueOrder(Order* o)
+OrdersList Player::issueOrder(Order* o)
 {
-  orderList.push_back(o);
+  getOrdersList().addOrder(o);
   cout << "...Pushed a new order to orderList..." << "\n";
   cout << "New order id: " << o->getOrderID() << "\n" << "\n";
   return orderList;
