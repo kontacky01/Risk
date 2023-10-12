@@ -313,7 +313,7 @@ bool OrdersList::remove(int id) {
     for (auto o : this->OL) {
         if (o->getOrderID() == id) {
             index = getIndex(OL,o);
-            this->OL.erase(OL.begin()+index); //TODO: check this 
+            this->OL.erase(OL.begin()+index); 
             delete o;
             return true;
         }
