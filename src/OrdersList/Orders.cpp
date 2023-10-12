@@ -18,12 +18,18 @@ Order::Order( Order *o) {
     setValid(false);
 };
 
-bool Order::validate() { //Invalid orders can be in OL, will check if valid for execution
-    return this->valid;
+/**
+* Checks if valid for execution, invalid orders can exist
+*/
+bool Order::validate() { 
 };
 
-void Order::execute(State* current) {
-    if (current->getStateName().compare("executeorders")==0 && validate() == 1) {
+/**
+* Checks player state and executes order
+* @param currentState player's current state
+*/
+void Order::execute(State* currentState) {
+    if (currentState->getStateName().compare("executeorders") == 0 && validate() == 1) {
         cout << "Executing order #" << getOrderID() << " ..." << endl;
     }else cout << "Can NOT execute order #" << getOrderID() << " ..." << endl;
 };
@@ -52,12 +58,16 @@ void Order::setValid(bool v){
     this->valid = v;
 }
 
-//Stream insertion operator
-//will ouptut to console everytime "cout <<" is used on Order Object
-//like toString but directly from cout<<
+/**
+* @brief Stream insertion operator
+* Will ouptut to console everytime "cout <<" is used on Order Object
+* like toString but directly from cout<<
+*/
 ostream& operator << (ostream& out, Order* o)
 {
-    //Lambda: If true return "true", b/c c++ will return 1
+    /*
+    * Lambda expresion: If true return "true", b/c c++ will return 1
+    */
     auto printBoolValue = [](bool b) { if (b) return "true"; else return "false"; };
 
     out << "OrderID: " << o->getOrderID() << "\n"
@@ -76,6 +86,10 @@ Deploy::Deploy(Deploy *d) {
     this->addDescription();
 }
 
+/**
+* Checks player state and executes order
+* @param currentState player's current state
+*/
 void Deploy::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
         cout << "Executing (Deploy) order #" << getOrderID() << " ..." << endl;
@@ -101,6 +115,10 @@ Advance::Advance(Advance *a) {
     this->addDescription();
 }
 
+/**
+* Checks player state and executes order
+* @param currentState player's current state
+*/
 void Advance::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
         cout << "Executing (Advance) order #" << getOrderID() << " ..." << endl;
@@ -126,6 +144,10 @@ Bomb::Bomb(Bomb* a) {
     this->addDescription();
 }
 
+/**
+* Checks player state and executes order
+* @param currentState player's current state
+*/
 void Bomb::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
         cout << "Executing (Bomb) order #" << getOrderID() << " ..." << endl;
@@ -150,7 +172,10 @@ Blockade::Blockade(Blockade* a) {
     setOrderID(a->getOrderID());
     this->addDescription();
 }
-
+/**
+* Checks player state and executes order
+* @param currentState player's current state
+*/
 void Blockade::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
         cout << "Executing (Blockade) order #" << getOrderID() << " ..." << endl;
@@ -176,6 +201,10 @@ Airlift::Airlift(Airlift *a) {
     this->addDescription();
 }
 
+/**
+* Checks player state and executes order
+* @param currentState player's current state
+*/
 void Airlift::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
         cout << "Executing (Airlift) order #" << getOrderID() << " ..." << endl;
@@ -201,6 +230,10 @@ Negotiate::Negotiate(Negotiate* a) {
     this->addDescription();
 }
 
+/**
+* Checks player state and executes order
+* @param currentState player's current state
+*/
 void Negotiate::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
         cout << "Executing (Negotiate) order #" << getOrderID() << " ..." << endl;
@@ -225,9 +258,11 @@ void OrdersList::addOrder(Order *o){
     OL.push_back(o);
 }
 
-//input:
-//pos is position wish to place, list starts at position 1 (1st, 2nd, etc...)
-//id of order wish to move
+/**
+* Moves order to new location in OL
+* @param pos new position
+* @param id order ID of order to be moved
+*/
 bool OrdersList::move(int pos, int id){
     //post out of bounds
     int size = OL.size();
