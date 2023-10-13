@@ -68,6 +68,11 @@ public:
   /// Take in an order and add it into the OrderList
   /// </summary>
   OrdersList* issueOrder(Order* o);
+  /**
+   * @brief Set the Orders List Null to remove dangling pointer
+   * 
+   */
+  void setOrdersListNull();
 };
 
 /************************************************************ PlayerDriver ************************************************************/

@@ -124,3 +124,7 @@ OrdersList* Player::issueOrder(Order* o)
   cout << "New order id: " << o->getOrderID() << "\n" << "\n";
   return orderList;
 }
+
+void Player::setOrdersListNull(){
+  this->orderList = NULL;
+}

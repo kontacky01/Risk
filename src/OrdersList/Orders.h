@@ -157,10 +157,11 @@ public:
     vector <Order*> * getOL();
 
     int getIndex(vector<Order*> ol, Order *o);
+
+    void executeAll(State *s);
     
     void deleteOrdersList();
-    
-    // TODO: add executeAll();
+  
 private:
     vector<Order*> *OL;
 

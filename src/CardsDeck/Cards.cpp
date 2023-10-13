@@ -274,7 +274,7 @@ void Hand::addCard(Card *newHandCard) {
 /// play function: takes card type and original deck as arguments
 /// </summary>
 void Hand::play(string &playedCardType, Deck *returningDeck) {
-    OrdersList *OL; /// <summary> declare a list of orders
+    OrdersList *OL = new OrdersList(); /// <summary> declare a list of orders
     auto it = find_if(hand.begin(), hand.end(), [&playedCardType](const Card *card) {
         return card->getType() == playedCardType;
     });

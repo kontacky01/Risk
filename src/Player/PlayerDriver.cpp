@@ -67,6 +67,8 @@ void testPlayers()
     delete o->getOL()->at(i);
     o->getOL()->at(i) = NULL;
   }
+  o->deleteOrdersList();
+  
 
   // Delete player pointer
   delete p;

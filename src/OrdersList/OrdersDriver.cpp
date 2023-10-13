@@ -189,17 +189,18 @@ void testOrdersLists() {
     cout << "If Player is inside execute  rders state and will be able to execute!\n\n";
     cout << "...Executing players orders...\n";
     cout << "-------------------------------\n";
-    for (auto o : *p->getOrdersList()->getOL()) {
-        o->execute(p->getState());
-    }
-    cout << "\n";
+    p->getOrdersList()->executeAll(p->getState());
 
 
     cout << "\n\n---------> Test 8: Deleting Pointers <---------" << "\n\n\n";
 
     cout << "...Deleting pointers..\n";
     OL->deleteOrdersList();
+    delete OL;
+    OL = NULL;
     OLCopy->deleteOrdersList();
+    delete OLCopy;
+    OLCopy = NULL;
     delete t1OL;
     t1OL = NULL;
     delete t2OL;
@@ -207,6 +208,8 @@ void testOrdersLists() {
     delete hOL;
     hOL = NULL;
     p->getOrdersList()->deleteOrdersList();
+    delete p->getOrdersList();
+    p->setOrdersListNull();
     delete pStateOL;
     pStateOL = NULL;
     delete sTest;

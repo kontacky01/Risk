@@ -342,6 +342,13 @@ int OrdersList::getIndex(vector<Order*> ol, Order *o)
     }
 }
 
+void OrdersList::executeAll(State* s) {
+    for (auto o : *getOL()) {
+        o->execute(s);
+    }
+    cout << "\n";
+}
+
 void OrdersList::deleteOrdersList(){
     //Delete pointers and free memory
     for (auto o : *getOL()) {
