@@ -21,17 +21,17 @@ void testOrdersLists() {
     cout << "Orders of type: Order, Deploy, Advance, Bomb, Blockade, Airlift and Negotiate have been created. " << "\n\n";
 
     cout << "...Creating an OrdersList... " << '\n';
-    OrdersList OL;
+    OrdersList *OL = new OrdersList();
     cout << "Ordrslist has been created " << "\n\n";
 
     cout << "...Adding Orders to OrdersList...." << '\n';
-    OL.addOrder(o1);
-    OL.addOrder(d1);
-    OL.addOrder(a1);
-    OL.addOrder(b1);
-    OL.addOrder(blk1);
-    OL.addOrder(air1);
-    OL.addOrder(n1);
+    OL->addOrder(o1);
+    OL->addOrder(d1);
+    OL->addOrder(a1);
+    OL->addOrder(b1);
+    OL->addOrder(blk1);
+    OL->addOrder(air1);
+    OL->addOrder(n1);
     cout << "Orders have been added to OrdersList " << "\n\n";
 
     cout << "...Printing Orders List with ostream:...." << "\n\n";
@@ -52,16 +52,16 @@ void testOrdersLists() {
     Negotiate* n1Copy = new Negotiate(n1);
     cout << "Copies of each Order have been created. " << "\n\n";
 
-    OrdersList OLCopy;
+    OrdersList *OLCopy = new OrdersList();
 
     cout << "...Adding copies of Orders in a new OrdersList:..." << '\n';
-    OLCopy.addOrder(o1Copy);
-    OLCopy.addOrder(d1Copy);
-    OLCopy.addOrder(a1Copy);
-    OLCopy.addOrder(b1Copy);
-    OLCopy.addOrder(blk1Copy);
-    OLCopy.addOrder(air1Copy);
-    OLCopy.addOrder(n1Copy);
+    OLCopy->addOrder(o1Copy);
+    OLCopy->addOrder(d1Copy);
+    OLCopy->addOrder(a1Copy);
+    OLCopy->addOrder(b1Copy);
+    OLCopy->addOrder(blk1Copy);
+    OLCopy->addOrder(air1Copy);
+    OLCopy->addOrder(n1Copy);
     cout << "Copies of Orders added." << "\n\n";
 
     cout << "...Printing Copy OrdersList..." << '\n';
@@ -121,10 +121,10 @@ void testOrdersLists() {
     cout << "\n\n---------> Test 5: Remove Orders <---------" << "\n\n\n";
 
     cout << "Removing orders 5, 6 and 7 from Orderslist " << '\n';
-    if (OL.remove(5)) cout << "Removed order #5 " << '\n'; else cout << "Did NOT remove order #5" << '\n';
-    if (OL.remove(6)) cout << "Removed order #6 " << '\n'; else cout << "Did NOT remove order #6" << '\n';
-    if (OL.remove(7)) cout << "Removed order #7 " << '\n'; else cout << "Did NOT remove order #7" << '\n';
-    if (OL.remove(9)) cout << "Removed order #9 " << '\n'; else cout << "Did NOT remove order #9" << '\n';
+    if (OL->remove(5)) cout << "Removed order #5 " << '\n'; else cout << "Did NOT remove order #5" << '\n';
+    if (OL->remove(6)) cout << "Removed order #6 " << '\n'; else cout << "Did NOT remove order #6" << '\n';
+    if (OL->remove(7)) cout << "Removed order #7 " << '\n'; else cout << "Did NOT remove order #7" << '\n';
+    if (OL->remove(9)) cout << "Removed order #9 " << '\n'; else cout << "Did NOT remove order #9" << '\n';
     cout << OL;
 
 
@@ -132,16 +132,16 @@ void testOrdersLists() {
     cout << "\n\n---------> Test 6: Move Orders <---------" << "\n\n\n";
 
     cout << '\n' << "Testing Move() that are out of bounds or don't exist" << '\n';
-    if (OL.move(0, 4)) cout << "Moving order #4 to position 0" << '\n'; else cout << "Can NOT move order #4 to position 0" << '\n';
-    if (OL.move(-2, 4)) cout << "Moving order #4 to position -2" << '\n'; else cout << "Can NOT move order #4 to position -2" << '\n';
-    if (OL.move(10, 4)) cout << "Moving order #4 to position 10" << '\n'; else cout << "Can NOT move order #4 to position 10" << '\n';
+    if (OL->move(0, 4)) cout << "Moving order #4 to position 0" << '\n'; else cout << "Can NOT move order #4 to position 0" << '\n';
+    if (OL->move(-2, 4)) cout << "Moving order #4 to position -2" << '\n'; else cout << "Can NOT move order #4 to position -2" << '\n';
+    if (OL->move(10, 4)) cout << "Moving order #4 to position 10" << '\n'; else cout << "Can NOT move order #4 to position 10" << '\n';
 
     cout << '\n' << "Moving orders" << '\n';
-    if (OL.move(1, 4)) cout << "Moving order #4 to position 1" << '\n'; else cout << "Can NOT move order #4 to position 1" << '\n';
+    if (OL->move(1, 4)) cout << "Moving order #4 to position 1" << '\n'; else cout << "Can NOT move order #4 to position 1" << '\n';
     cout << OL << '\n';
-    if (OL.move(4, 1)) cout << "Moving order #1 to position 4" << '\n'; else cout << "Can NOT move order #4 to position 3" << '\n';
+    if (OL->move(4, 1)) cout << "Moving order #1 to position 4" << '\n'; else cout << "Can NOT move order #4 to position 3" << '\n';
     cout << OL << '\n';
-    if (OL.move(2, 3)) cout << "Moving order #2 to position 3" << '\n'; else cout << "Can NOT move order #4 to position 3" << '\n';
+    if (OL->move(2, 3)) cout << "Moving order #2 to position 3" << '\n'; else cout << "Can NOT move order #4 to position 3" << '\n';
     cout << OL;
    
     cout << "\n\n---------> Test 7: Execute Player Orders <---------" << "\n\n\n";
@@ -181,15 +181,15 @@ void testOrdersLists() {
     cout << p->getOrdersList();
 
     cout << "...Setting players 2nd and 4th orders to valid..\n";
-    p->getOrdersList()->getOL().at(1)->setValid(true);
-    p->getOrdersList()->getOL().at(3)->setValid(true);
+    p->getOrdersList()->getOL()->at(1)->setValid(true);
+    p->getOrdersList()->getOL()->at(3)->setValid(true);
     cout << "Players 2nd and 4th orders are valid.\n\n";
 
 
     cout << "If Player is inside execute  rders state and will be able to execute!\n\n";
     cout << "...Executing players orders...\n";
     cout << "-------------------------------\n";
-    for (auto o : p->getOrdersList()->getOL()) {
+    for (auto o : *p->getOrdersList()->getOL()) {
         o->execute(p->getState());
     }
     cout << "\n";
@@ -198,8 +198,8 @@ void testOrdersLists() {
     cout << "\n\n---------> Test 8: Deleting Pointers <---------" << "\n\n\n";
 
     cout << "...Deleting pointers..\n";
-    OL.deleteOrdersList();
-    OLCopy.deleteOrdersList();
+    OL->deleteOrdersList();
+    OLCopy->deleteOrdersList();
     delete t1OL;
     t1OL = NULL;
     delete t2OL;

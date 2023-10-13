@@ -252,11 +252,11 @@ string Negotiate::getDescription() {
 
 /******************************* OrdersList *********************************************/
 OrdersList::OrdersList(){
-    vector<Order*> OL;
+    OL = new vector<Order*>;
 }
 
 void OrdersList::addOrder(Order *o){
-    this->OL.push_back(o);
+    OL->push_back(o);
 }
 
 /**
@@ -267,7 +267,7 @@ void OrdersList::addOrder(Order *o){
 bool OrdersList::move(int pos, int id){
     int index;
     //post out of bounds
-    int size = OL.size();
+    int size = OL->size();
     if (pos == 0 || pos < 0 || pos > size) {
         cout << "From move(): position " << pos << " does not exist" <<endl;
         return false;
@@ -276,32 +276,32 @@ bool OrdersList::move(int pos, int id){
     if (pos == 1) {
         // 0 1 2 3 4 5
         // x y z a b c
-        for (auto o : this->OL) {
+        for (auto o : *OL) {
             if (o->getOrderID() == id) {
-                index = getIndex(OL,o);
-                this->OL.erase(OL.begin()+index); // remove Order from List
-                this->OL.insert(OL.begin(),o); //place in front
+                index = getIndex(*OL,o);
+                OL->erase(OL->begin()+index); // remove Order from List
+                OL->insert(OL->begin(),o); //place in front
                 return true;
             }
         }
     }
     //pos = last
     if (pos == size) {
-        for (auto o : this->OL) {
+        for (auto o : *OL) {
             if (o->getOrderID() == id) {
-                index = getIndex(OL, o);
-                this->OL.erase(OL.begin() + index); // remove Order from List
-                this->OL.push_back(o); //place in back
+                index = getIndex(*OL, o);
+                OL->erase(OL->begin() + index); // remove Order from List
+                OL->push_back(o); //place in back
                 return true;
             }
         }
     }
     //first position is >=2
-    for (auto o : this->OL) {
+    for (auto o : *OL) {
         if (o->getOrderID() == id) {
-            index = getIndex(OL, o);
-            this->OL.erase(OL.begin() + index); // remove Order from List
-            this->OL.insert(OL.begin()+(pos-1),o); // use insert from list std
+            index = getIndex(*OL, o);
+            OL->erase(OL->begin() + index); // remove Order from List
+            OL->insert(OL->begin()+(pos-1),o); // use insert from list std
             return true;
         }
     }
@@ -310,10 +310,10 @@ bool OrdersList::move(int pos, int id){
 
 bool OrdersList::remove(int id) { 
     int index;
-    for (auto o : this->OL) {
+    for (auto o : *OL) {
         if (o->getOrderID() == id) {
-            index = getIndex(OL,o);
-            this->OL.erase(OL.begin()+index); 
+            index = getIndex(*OL,o);
+            OL->erase(OL->begin()+index); 
             delete o;
             return true;
         }
@@ -322,8 +322,8 @@ bool OrdersList::remove(int id) {
     return false;
 }
 
-vector <Order*> OrdersList::getOL(){
-    return this->OL;
+vector <Order*> * OrdersList::getOL(){
+    return OL;
 }
 
 int OrdersList::getIndex(vector<Order*> ol, Order *o)
@@ -344,29 +344,15 @@ int OrdersList::getIndex(vector<Order*> ol, Order *o)
 
 void OrdersList::deleteOrdersList(){
     //Delete pointers and free memory
-    for (auto o : this->getOL()) {
+    for (auto o : *getOL()) {
         delete o;   // deallocate  memory
         o = NULL;   // prevent dangling pointer error
     }
 }
 
-ostream& operator << (ostream& out, OrdersList& ol){
-    vector<Order*>::iterator it;
-    vector<Order*>OL = ol.getOL();
-    cout << "The OrdersList contains " << "\n"
-         << "------------------------" << "\n";
-    int pos = 0;
-    for (it = OL.begin(); it != OL.end(); it++)
-    {
-        cout << "pos: " <<++pos << "\n";
-        out << *it;
-    }
-    return out;
-}
-
 ostream& operator << (ostream& out, OrdersList* ol) {
     vector<Order*>::iterator it;
-    vector<Order*>OL = ol->getOL();
+    vector<Order*> OL = *ol->getOL();
     cout << "The OrdersList contains " << "\n"
         << "------------------------" << "\n";
     int pos = 0;

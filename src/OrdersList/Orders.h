@@ -154,7 +154,7 @@ public:
     
     bool remove(int id);
     
-    vector <Order*> getOL();
+    vector <Order*> * getOL();
 
     int getIndex(vector<Order*> ol, Order *o);
     
@@ -163,9 +163,8 @@ public:
     // TODO: add executeAll();
 private:
     //TODO: make OL a pointer?
-    vector<Order*> OL;
+    vector<Order*> *OL;
 
-    friend ostream& operator << (ostream& out, OrdersList& ol); // overide Stream insertion operator
     friend ostream& operator << (ostream& out, OrdersList* ol); // overide Stream insertion operator
 
 };

@@ -62,10 +62,10 @@ void testPlayers()
     t.at(i) = NULL;
   }
   // Delete orderlist pointer
-  for (int i = 0; i < o->getOL().size(); i++)
+  for (int i = 0; i < o->getOL()->size(); i++)
   {
-    delete o->getOL().at(i);
-    o->getOL().at(i) = NULL;
+    delete o->getOL()->at(i);
+    o->getOL()->at(i) = NULL;
   }
 
   // Delete player pointer
