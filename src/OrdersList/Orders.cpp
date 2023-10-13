@@ -256,7 +256,7 @@ OrdersList::OrdersList(){
 }
 
 void OrdersList::addOrder(Order *o){
-    OL.push_back(o);
+    this->OL.push_back(o);
 }
 
 /**
@@ -359,6 +359,20 @@ ostream& operator << (ostream& out, OrdersList& ol){
     for (it = OL.begin(); it != OL.end(); it++)
     {
         cout << "pos: " <<++pos << "\n";
+        out << *it;
+    }
+    return out;
+}
+
+ostream& operator << (ostream& out, OrdersList* ol) {
+    vector<Order*>::iterator it;
+    vector<Order*>OL = ol->getOL();
+    cout << "The OrdersList contains " << "\n"
+        << "------------------------" << "\n";
+    int pos = 0;
+    for (it = OL.begin(); it != OL.end(); it++)
+    {
+        cout << "pos: " << ++pos << "\n";
         out << *it;
     }
     return out;

@@ -3,7 +3,6 @@
 #include "../Player/Player.h"
 #include "../Map/Map.h"
 
-
 void testOrdersLists() {
     cout << "\n" << "************************************" << "\n"
         << "Time to test Orders and OrdersList!! \n"
@@ -144,15 +143,13 @@ void testOrdersLists() {
     cout << OL << '\n';
     if (OL.move(2, 3)) cout << "Moving order #2 to position 3" << '\n'; else cout << "Can NOT move order #4 to position 3" << '\n';
     cout << OL;
-
-
-    
+   
     cout << "\n\n---------> Test 7: Execute Player Orders <---------" << "\n\n\n";
-
+   
     vector<Territory*> tOL;
     Hand* hOL = new Hand();
-    OrdersList pOL;
-
+    OrdersList *pOL = new OrdersList();
+    
     //Initializing Territory adjeceny list
     Territory* t1OL = new Territory("UK", 1, 2, 0);
     Territory* t2OL = new Territory("USA", 2, 3, 0);
@@ -166,10 +163,10 @@ void testOrdersLists() {
     Bomb* pB1 = new Bomb();
 
     //Add player order to orders list
-    pOL.addOrder(pOr1);
-    pOL.addOrder(pD1);
-    pOL.addOrder(pA1);
-    pOL.addOrder(pB1);
+    pOL->addOrder(pOr1);
+    pOL->addOrder(pD1);
+    pOL->addOrder(pA1);
+    pOL->addOrder(pB1);
 
     cout << "...Creating state executeorders...\n";
     State* pStateOL = new State("executeorders");
@@ -181,27 +178,21 @@ void testOrdersLists() {
 
     cout << "...Printing Players orders..\n";
     cout << "-------------------------------\n";
-    for (auto o : p->getOrdersList().getOL()) {
-        cout << o;
-    }
-    cout << "\n";
-    // TODO: fix ostream for Player's Orderslist
-    //cout << p->getOrdersList();
+    cout << p->getOrdersList();
 
     cout << "...Setting players 2nd and 4th orders to valid..\n";
-    p->getOrdersList().getOL().at(1)->setValid(true);
-    p->getOrdersList().getOL().at(3)->setValid(true);
+    p->getOrdersList()->getOL().at(1)->setValid(true);
+    p->getOrdersList()->getOL().at(3)->setValid(true);
     cout << "Players 2nd and 4th orders are valid.\n\n";
 
 
     cout << "If Player is inside execute  rders state and will be able to execute!\n\n";
     cout << "...Executing players orders...\n";
     cout << "-------------------------------\n";
-    for (auto o : p->getOrdersList().getOL()) {
+    for (auto o : p->getOrdersList()->getOL()) {
         o->execute(p->getState());
     }
     cout << "\n";
-
 
 
     cout << "\n\n---------> Test 8: Deleting Pointers <---------" << "\n\n\n";
@@ -215,7 +206,7 @@ void testOrdersLists() {
     t2OL = NULL;
     delete hOL;
     hOL = NULL;
-    p->getOrdersList().deleteOrdersList();
+    p->getOrdersList()->deleteOrdersList();
     delete pStateOL;
     pStateOL = NULL;
     delete sTest;

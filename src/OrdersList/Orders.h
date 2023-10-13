@@ -24,7 +24,7 @@ public:
     virtual void execute(State *currentState);
 
     /**
-    * increment countOrderID by 1
+    * Increment countOrderID by 1
     */
     int incrementCount(); 
 
@@ -37,7 +37,7 @@ public:
     virtual string getDescription();
 
     /**
-    * increment countOrderID by 1
+    * Increment countOrderID by 1
     */
     void setValid(bool v);
 protected:
@@ -46,7 +46,7 @@ private:
     static int countOrderID;
     int orderID;
     bool valid;
-    friend ostream& operator << (ostream& out, Order* o); //overide Stream insertion operator
+    friend ostream& operator << (ostream& out, Order* o); // overide Stream insertion operator
 };
 
 class Deploy : public Order
@@ -162,11 +162,15 @@ public:
     
     // TODO: add executeAll();
 private:
+    //TODO: make OL a pointer?
     vector<Order*> OL;
+
     friend ostream& operator << (ostream& out, OrdersList& ol); // overide Stream insertion operator
+    friend ostream& operator << (ostream& out, OrdersList* ol); // overide Stream insertion operator
+
 };
 
-/**
+/** 
 * test driver A1
 */
 void testOrdersLists();

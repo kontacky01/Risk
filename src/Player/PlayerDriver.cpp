@@ -7,7 +7,7 @@ void testPlayers()
     << "*************************************" << "\n" << "\n";
   vector<Territory*> t;
   Hand* h = new Hand();
-  OrdersList o;
+  OrdersList *o = new OrdersList;
 
   // Create 6 territories and push them to the territories vector
   Territory* t1 = new Territory("UK", 1, 2, 0);
@@ -62,10 +62,10 @@ void testPlayers()
     t.at(i) = NULL;
   }
   // Delete orderlist pointer
-  for (int i = 0; i < o.getOL().size(); i++)
+  for (int i = 0; i < o->getOL().size(); i++)
   {
-    delete o.getOL().at(i);
-    o.getOL().at(i) = NULL;
+    delete o->getOL().at(i);
+    o->getOL().at(i) = NULL;
   }
 
   // Delete player pointer
