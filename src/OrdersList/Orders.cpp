@@ -272,13 +272,13 @@ void OrdersList::addOrder(Order *o){
 */
 bool OrdersList::move(int pos, int id){
     int index;
-    //post out of bounds
+    // post out of bounds
     int size = OL->size();
     if (pos == 0 || pos < 0 || pos > size) {
         cout << "From move(): position " << pos << " does not exist" <<endl;
         return false;
     }
-    //pos = 1, send to front of list
+    // pos = 1, send to front of list
     if (pos == 1) {
         // 0 1 2 3 4 5
         // x y z a b c
@@ -286,23 +286,23 @@ bool OrdersList::move(int pos, int id){
             if (o->getOrderID() == id) {
                 index = getIndex(*OL,o);
                 OL->erase(OL->begin()+index); // remove Order from List
-                OL->insert(OL->begin(),o); //place in front
+                OL->insert(OL->begin(),o); // place in front
                 return true;
             }
         }
     }
-    //pos = last
+    // pos = last
     if (pos == size) {
         for (auto o : *OL) {
             if (o->getOrderID() == id) {
                 index = getIndex(*OL, o);
                 OL->erase(OL->begin() + index); // remove Order from List
-                OL->push_back(o); //place in back
+                OL->push_back(o); // place in back
                 return true;
             }
         }
     }
-    //first position is >=2
+    // first position is >=2
     for (auto o : *OL) {
         if (o->getOrderID() == id) {
             index = getIndex(*OL, o);
@@ -336,8 +336,7 @@ int OrdersList::getIndex(vector<Order*> ol, Order *o)
 {
     auto it = find(ol.begin(), ol.end(), o);
 
-    // If element was found 
-    if (it != ol.end())
+    if (it != ol.end()) // if element is found 
     {
         int index = it - ol.begin();
         return index;
@@ -356,9 +355,8 @@ void OrdersList::executeAll(State* s) {
 }
 
 void OrdersList::deleteOrdersList(){
-    //Delete pointers and free memory
     for (auto o : *getOL()) {
-        delete o;   // deallocate  memory
+        delete o;   // deallocate memory
         o = NULL;   // prevent dangling pointer error
     }
 }
