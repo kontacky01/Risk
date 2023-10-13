@@ -41,11 +41,11 @@ public:
     */
     void setValid(bool v);
 protected:
-    string description;
+    string *description;
 private:
-    static int countOrderID;
-    int orderID;
-    bool valid;
+    static int *countOrderID;
+    int *orderID;
+    bool *valid;
     friend ostream& operator << (ostream& out, Order* o); // overide Stream insertion operator
 };
 
