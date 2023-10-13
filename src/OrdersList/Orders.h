@@ -162,7 +162,6 @@ public:
     
     // TODO: add executeAll();
 private:
-    //TODO: make OL a pointer?
     vector<Order*> *OL;
 
     friend ostream& operator << (ostream& out, OrdersList* ol); // overide Stream insertion operator
