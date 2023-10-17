@@ -1,79 +1,72 @@
 #pragma once
-#include <string>
-#include <vector>
 #include <time.h>
 #include <iostream>
+#include <string>
+#include <vector>
 #include "../CardsDeck/Cards.h"
-#include "../OrdersList/Orders.h"
-#include "../Map/Map.h"
 #include "../GameEngine/GameEngine.h"
+#include "../Map/Map.h"
+#include "../OrdersList/Orders.h"
 
 using namespace std;
 
-/************************************************************ Player ************************************************************/
+/************************************************************ Player *************************************************************/
 
-class Player
-{
-private:
+class Player {
+ private:
   int id;
   vector<Territory*> territories;
   Hand* hand;
-  OrdersList *orderList;
+  OrdersList* orderList;
   State* state;
 
-  /// <summary>
-  /// Helper method to list attack/defended territories
-  /// </summary>
+  /**
+   * Helper method to print the list of territories to attack/defended
+   */
+  friend ostream& operator << (ostream& out, Player* o); // overide Stream insertion operator
   void printTerritories(vector<Territory*> territories);
 
-public:
-  /// <summary>
-  /// Constructor with with an argument list
-  /// </summary>
-  Player(vector<Territory*>, Hand*, OrdersList*, int);
+ public:
+  /**
+   * Constructor with with an argument list
+   */
+  Player(vector<Territory*>, Hand*, OrdersList*, int, State*);
 
-  /// Constructor with with an argument list
-  Player(vector<Territory*>, Hand*, OrdersList*, State* s);
-
-  /// <summary>
-  /// Default Constructor
-  /// </summary>
+  /**
+   * Default Constructor
+   */
   Player();
 
-  /// <summary>
-  /// Copy Constructor
-  /// </summary>
+  /**
+   * Copy Constructor
+   */
   Player(const Player&);
 
-  //get orderList
+  /**
+   * Destructor
+   */
+  ~Player();
+
   OrdersList* getOrdersList();
 
-  //get state
   State* getState();
 
-  /// <summary>
-  /// toDefend
-  /// Returns a random list of territories that are assigned to the user which they would like to defend
-  /// </summary>
+  /**
+   * Returns a random list of territories that are assigned to the user which
+   * they would like to defend
+   */
   vector<Territory*> toDefend();
 
-  /// <summary>
-  /// toAttack
-  /// Returns a random list of territories that the user would like to attack
-  /// </summary>
+  /**
+   * Returns a random list of territories that the user would like to attack
+   */
   vector<Territory*> toAttack();
 
-  /// <summary>
-  /// issueOrder
-  /// Take in an order and add it into the OrderList
-  /// </summary>
-  OrdersList* issueOrder(Order* o);
   /**
-   * @brief Set the Orders List Null to remove dangling pointer
-   * 
+   * Take in an order and add it into the OrderList
    */
-  void setOrdersListNull();
+  OrdersList* issueOrder(Order* o);
 };
 
-/************************************************************ PlayerDriver ************************************************************/
+/************************************************************ PlayerDriver *************************************************************/
 void testPlayers();

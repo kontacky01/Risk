@@ -15,7 +15,7 @@ Order::Order() {
     setValid(false);
 };
 
-Order::Order( Order *o) {
+Order::Order(Order *o) {
     orderID = new int();
     *orderID = o->getOrderID();
     description = new string();
@@ -257,9 +257,22 @@ string Negotiate::getDescription() {
 }
 
 /******************************* OrdersList *********************************************/
+/**
+ * Default Constructor 
+ */
 OrdersList::OrdersList(){
     OL = new vector<Order*>;
 }
+
+/**
+ * Copy Constructor 
+ */
+OrdersList::OrdersList(const OrdersList &originalOrderList){
+    OL = new vector<Order*>;
+    for(int i = 0 ;  i < originalOrderList.OL->size(); i++){
+         OL->push_back(originalOrderList.OL->at(i));
+    }
+};
 
 void OrdersList::addOrder(Order *o){
     OL->push_back(o);
@@ -317,7 +330,7 @@ bool OrdersList::move(int pos, int id){
 bool OrdersList::remove(int id) { 
     int index;
     for (auto o : *OL) {
-        if (o->getOrderID() == id) {
+    if (o->getOrderID() == id) {
             index = getIndex(*OL,o);
             OL->erase(OL->begin()+index); 
             delete o;
@@ -364,8 +377,7 @@ void OrdersList::deleteOrdersList(){
 ostream& operator << (ostream& out, OrdersList* ol) {
     vector<Order*>::iterator it;
     vector<Order*> OL = *ol->getOL();
-    cout << "The OrdersList contains " << "\n"
-        << "------------------------" << "\n";
+    cout << "The OrdersList contains \n------------------------\n";
     int pos = 0;
     for (it = OL.begin(); it != OL.end(); it++)
     {

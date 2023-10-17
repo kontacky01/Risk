@@ -63,6 +63,8 @@ public:
     // Getter for contientId
     int getContinentId() const;
 
+    int getArmyCount() const;
+
     // Getter for adjacencyList
     vector<Territory*> getAdjacencyList();
 
