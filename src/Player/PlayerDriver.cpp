@@ -1,11 +1,11 @@
 #include "Player.h"
 
-void testPlayers()
-{
-  cout << "\n*************************************\nTest Player\n*************************************\n\n";
+void testPlayers() {
+  cout << "\n*************************************\nTest "
+          "Player\n*************************************\n\n";
   vector<Territory*> t;
   Hand* h = new Hand();
-  OrdersList *o = new OrdersList;
+  OrdersList* o = new OrdersList;
 
   // create 6 territories and push them to the territories vector
   Territory* t1 = new Territory("UK", 1, 2, 0);
@@ -24,7 +24,7 @@ void testPlayers()
   // init a player
   Player* p = new Player(t, h, o, 1, NULL);
 
-  cout << "---------> Test 1: Testing player methods (attack/defend/issueOrder) <---------" << "\n" << "\n";
+  cout << "---------> Test 1: Testing player methods (attack/defend/issueOrder) <---------\n\n";
   // show that Player contains method toDefend()
   p->toDefend();
 
@@ -35,7 +35,7 @@ void testPlayers()
   Order* newOrder = new Order();
   p->issueOrder(newOrder);
 
-  cout << "---------> Test 2: Testing coppied player methods (attack/defend/issueOrder) <---------" << "\n" << "\n";
+  cout << "---------> Test 2: Testing coppied player methods (attack/defend/issueOrder) <---------\n\n";
   // show that player contains a copy constructor
   Player* pCopy = new Player(*p);
 
@@ -57,21 +57,18 @@ void testPlayers()
 
   cout << "...Deleting territories from PlayerDriver...\n";
   // delete territories pointer
-  for (int i = 0; i < t.size(); i++)
-  {
+  for (int i = 0; i < t.size(); i++) {
     delete t.at(i);
     t.at(i) = NULL;
   }
   cout << "...Deleting orderslist from PlayerDriver...\n";
   // delete orderlist pointer
-  for (int i = 0; i < o->getOL()->size(); i++)
-  {
+  for (int i = 0; i < o->getOL()->size(); i++) {
     delete o->getOL()->at(i);
     o->getOL()->at(i) = NULL;
   }
   // orderlist is already being freed in player destructor
   o = NULL;
-  
 
   // delete player pointer
   delete p;

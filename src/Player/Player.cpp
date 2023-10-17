@@ -1,6 +1,6 @@
 #include "Player.h"
 
-/************************************************************ Player *************************************************************/
+/************************************************************ Player **************************************************************/
 /**
  * Constructor with with an argument list
  */
@@ -31,7 +31,7 @@ void Player::printTerritories(vector<Territory*> territories) {
 Player::Player(const Player& p) {
   cout << "...Player Copy constructor was called...\n";
   // its a vector, hence we don't create a new pointer to the territories
-    for(int i = 0 ; i < p.territories.size(); i++){
+  for (int i = 0; i < p.territories.size(); i++) {
     Territory* currentT = p.territories.at(i);
     territories.push_back(currentT);
   }
@@ -43,7 +43,7 @@ Player::Player(const Player& p) {
   orderList = new OrdersList(*p.orderList);
 
   // create a new state
-  if(p.state == NULL) {
+  if (p.state == NULL) {
     state = NULL;
   } else {
     state = new State(*p.state);
@@ -56,21 +56,21 @@ Player::Player(const Player& p) {
 /**
  * Destructor
  */
-  Player::~Player() {
+Player::~Player() {
   cout << "...Player destructor was called...\n";
-    for(int i = 0 ; i < territories.size() ; i++){
-      territories.at(i) = NULL;
-    };
+  for (int i = 0; i < territories.size(); i++) {
+    territories.at(i) = NULL;
+  };
 
-    delete hand;
-    hand = NULL;
+  delete hand;
+  hand = NULL;
 
-    delete orderList;
-    orderList = NULL;
+  delete orderList;
+  orderList = NULL;
 
-    delete state;
-    state = NULL;
-  }
+  delete state;
+  state = NULL;
+}
 
 /**
  * Default Constructor
@@ -96,7 +96,7 @@ vector<Territory*> Player::toDefend() {
   for (int i = 0; i < index; i++) {
     defended.push_back(territories.at(i));
   }
-  cout <<  "\nTerritories to defend:\n -------------------\n";
+  cout << "\nTerritories to defend:\n -------------------\n";
   printTerritories(defended);
   return defended;
 }
@@ -133,12 +133,14 @@ OrdersList* Player::issueOrder(Order* o) {
 /**
  * Override the stream operator for Player
  */
-ostream& operator << (ostream& out, Player* p) {
-  out << "... Printing info about player with ID: " << p->id << "\n Info about territories: \n ------------------------\n";
+ostream& operator<<(ostream& out, Player* p) {
+  out << "... Printing info about player with ID: " << p->id
+      << "\n Info about territories: \n ------------------------\n";
   p->printTerritories(p->territories);
   out << p->orderList;
   out << p->hand;
-  out << "\nCurrent player's state: " << (p->state == NULL ? "no state yet" : p->state->getStateName()) << "\n\n";
+  out << "\nCurrent player's state: "
+      << (p->state == NULL ? "no state yet" : p->state->getStateName())
+      << "\n\n";
   return out;
 }
-

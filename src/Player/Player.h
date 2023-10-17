@@ -1,8 +1,10 @@
 #pragma once
 #include <time.h>
+
 #include <iostream>
 #include <string>
 #include <vector>
+
 #include "../CardsDeck/Cards.h"
 #include "../GameEngine/GameEngine.h"
 #include "../Map/Map.h"
@@ -10,7 +12,7 @@
 
 using namespace std;
 
-/************************************************************ Player *************************************************************/
+/************************************************************ Player **************************************************************/
 
 class Player {
  private:
@@ -23,7 +25,8 @@ class Player {
   /**
    * Helper method to print the list of territories to attack/defended
    */
-  friend ostream& operator << (ostream& out, Player* o); // overide Stream insertion operator
+  friend ostream& operator<<(ostream& out,
+                             Player* o);  // overide Stream insertion operator
   void printTerritories(vector<Territory*> territories);
 
  public:
@@ -68,5 +71,5 @@ class Player {
   OrdersList* issueOrder(Order* o);
 };
 
-/************************************************************ PlayerDriver *************************************************************/
+/************************************************************ PlayerDriver **************************************************************/
 void testPlayers();
