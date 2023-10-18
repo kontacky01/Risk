@@ -4,29 +4,29 @@
 #include "Cards.h"
 
 /************************************************************ Card ************************************************************/
-/// <summary>
-/// vector holding all card types
-/// </summary>
+/**
+* 'cardTypes' vector holds all possible card types
+*/
 const vector<string> Card::cardTypes = {"Bomb", "Reinforcement", "Blockade", "Airlift", "Diplomacy"};
 
-/// <summary>
-/// default constructor
-/// </summary>
+/**
+* Default constructor
+*/
 Card::Card() {
     type = nullptr;
 }
 
-/// <summary>
-/// destructor
-/// </summary>
+/**
+* Destructor
+*/
 Card::~Card() {
     delete type;
     type = nullptr;
 }
 
-/// <summary>
-/// parametrized constructor
-/// </summary>
+/**
+* Parameterized constructor
+*/
 Card::Card(const string &cardType) {
     type = nullptr;
     if (isValidCardType(cardType)) {
@@ -36,9 +36,9 @@ Card::Card(const string &cardType) {
     }
 }
 
-/// <summary>
-/// deep copy constructor
-/// </summary>
+/**
+* Deep copy constructor
+*/
 Card::Card(const Card &other) {
     type = nullptr;
     if (other.type != nullptr) {
@@ -46,9 +46,9 @@ Card::Card(const Card &other) {
     }
 }
 
-/// <summary>
-/// assignment operator
-/// </summary>
+/**
+* Assignment operator
+*/
 Card &Card::operator=(const Card &other) {
     if (this != &other) {
         delete type;
@@ -60,9 +60,9 @@ Card &Card::operator=(const Card &other) {
     return *this;
 }
 
-/// <summary>
-/// returns true if card is valid type
-/// </summary>
+/**
+* Method returns true if card type is valid and false if type is not present in cardTypes vector
+*/
 bool Card::isValidCardType(const string &value) {
     for (size_t i = 0; i < cardTypes.size(); i++) {
         if (value == cardTypes[i]) {
@@ -72,9 +72,9 @@ bool Card::isValidCardType(const string &value) {
     return false;
 }
 
-/// <summary>
-/// prints card type
-/// </summary>
+/**
+* Method outputs card type
+*/
 string Card::getType() const {
     if (type != nullptr) {
         return *type;
@@ -83,9 +83,9 @@ string Card::getType() const {
     }
 }
 
-/// <summary>
-/// sets new type for card
-/// </summary>
+/**
+* Method sets new card type
+*/
 void Card::setType(const string &newType) {
     if (isValidCardType(newType)) {
         if (type == nullptr) {
@@ -99,32 +99,32 @@ void Card::setType(const string &newType) {
 }
 
 /************************************************************ Deck ************************************************************/
-/// <summary>
-/// default constructor
-/// </summary>
+/**
+* Default constructor
+*/
 Deck::Deck() {
 
 }
 
-/// <summary>
-/// destructor
-/// </summary>
+/**
+* Destructor
+*/
 Deck::~Deck() {
 
 }
 
-/// <summary>
-/// deep copy constructor
-/// </summary>
+/**
+* Deep copy constructor
+*/
 Deck::Deck(const Deck &other) {
     for (size_t i = 0; i < other.deck.size(); ++i) {
         deck.push_back(new Card(*(other.deck[i])));
     }
 }
 
-/// <summary>
-/// assignment operator
-/// </summary>
+/**
+* Assignment operator
+*/
 Deck &Deck::operator=(const Deck &other) {
     if (this != &other) {
         for (size_t i = 0; i < other.deck.size(); ++i) {
@@ -134,9 +134,9 @@ Deck &Deck::operator=(const Deck &other) {
     return *this;
 }
 
-/// <summary>
-/// fills deck with 3 cards of each type
-/// </summary>
+/**
+* Method fills a deck with three cards of each type
+*/
 void Deck::fillDeck() {
     for (int i = 0; i < 3; i++) {
         for (size_t j = 0; j < cardTypes.size(); j++) {
@@ -146,9 +146,10 @@ void Deck::fillDeck() {
     }
 }
 
-/// <summary>
-/// prints card number and type
-/// </summary>
+/**
+* Method outputs a list of deck cards with their respective number and type
+ *
+*/
 void Deck::printDeck() {
     cout << "The Deck contains: " << "\n" << "-------------------" << "\n";
     for (size_t i = 0; i < deck.size(); i++) {
@@ -157,25 +158,26 @@ void Deck::printDeck() {
     }
 }
 
-/// <summary>
-/// prints size of deck
-/// </summary>
-void Deck::getSize() {
+/**
+* Method outputs size of deck
+*/
+void Deck::getDeckSize() {
     cout << "The Deck contains " << deck.size() << " cards." << "\n";
 }
 
-/// <summary>
-/// randomize cards in the deck
-/// </summary>
+/**
+* Method randomizes card order in deck
+*/
 void Deck::shuffleDeck() {
     random_device random;
     default_random_engine seed(random());
     shuffle(deck.begin(), deck.end(), seed);
 }
 
-/// <summary>
-/// draw function: randomizes deck, draws a card, adds it to hand through an temporary vector, and removes it from deck
-/// </summary>
+/**
+* Method randomizes deck, draws a card from it, adds said card to hand through a temporary vector,
+ * and removes card from deck of origin
+*/
 Card *Deck::draw(Deck &transfer) {
     shuffleDeck();
 
@@ -193,49 +195,49 @@ Card *Deck::draw(Deck &transfer) {
     return drawnCard;
 }
 
-/// <summary>
-/// adds card to temporary vector
-/// </summary>
+/**
+* Method adds card from deck to temporary vector
+*/
 void Deck::addCard(Card *transferCard) {
 
     transfer.push_back(transferCard);
 }
 
-/// <summary>
-/// returns card back to deck
-/// </summary>
+/**
+* Method returns a card to the deck of origin
+*/
 void Deck::returnCard(Card *returningCard) {
 
     deck.push_back(returningCard);
 }
 
 /************************************************************ Hand ************************************************************/
-/// <summary>
-/// default constructor
-/// </summary>
+/**
+* Default constructor
+*/
 Hand::Hand() {
 
 }
 
-/// <summary>
-/// destructor
-/// </summary>
+/**
+* Destructor
+*/
 Hand::~Hand() {
 
 }
 
-/// <summary>
-/// deep copy constructor
-/// </summary>
+/**
+* Deep copy constructor
+*/
 Hand::Hand(const Hand &other) {
     for (size_t i = 0; i < other.hand.size(); ++i) {
         hand.push_back(new Card(*(other.hand[i])));
     }
 }
 
-/// <summary>
-/// assignment operator
-/// </summary>
+/**
+* Assignment operator
+*/
 Hand &Hand::operator=(const Hand &other) {
     if (this != &other) {
         for (size_t i = 0; i < other.hand.size(); ++i) {
@@ -245,9 +247,9 @@ Hand &Hand::operator=(const Hand &other) {
     return *this;
 }
 
-/// <summary>
-/// prints types of hand cards
-/// </summary>
+/**
+* Method outputs a list of cards in a player's hand
+*/
 void Hand::printHand() {
     cout << "Your Hand contains: " << "\n" << "-------------------" << "\n";
     for (size_t i = 0; i < hand.size(); i++) {
@@ -256,25 +258,28 @@ void Hand::printHand() {
     }
 }
 
-/// <summary>
-/// prints amount of hand cards
-/// </summary>
-void Hand::getSize() {
+/**
+* Method outputs size of player's hand
+*/
+void Hand::getHandSize() {
     cout << "Your Hand contains " << hand.size() << " cards." << "\n";
 }
 
-/// <summary>
-/// adds a new card to hand
-/// </summary>
+/**
+* Method adds a card to player's hand
+*/
 void Hand::addCard(Card *newHandCard) {
     hand.push_back(newHandCard);
 }
 
-/// <summary>
-/// play function: takes card type and original deck as arguments
-/// </summary>
+/**
+* Play method takes card type and deck of origin as arguments
+ * Declares a list of orders
+ * Valid orders include: deploy, advance, bomb, blockade, airlift, and negotiate
+ * Once a card is player, we create the order, remove the card from hand and return it back to the deck
+*/
 void Hand::play(string &playedCardType, Deck *returningDeck) {
-    OrdersList OL; /// <summary> declare a list of orders
+    OL;
     auto it = find_if(hand.begin(), hand.end(), [&playedCardType](const Card *card) {
         return card->getType() == playedCardType;
     });
@@ -282,7 +287,6 @@ void Hand::play(string &playedCardType, Deck *returningDeck) {
     cout << "You played the " << "\"" << playedCardType << "\" card." << "\n";
 
     if (it != hand.end()) {
-        /// <summary> orders: deploy, advance, bomb, blockade, airlift, and negotiate
         if (playedCardType == "Bomb") {
             auto *order = new Bomb();
             OL.addOrder(order);
