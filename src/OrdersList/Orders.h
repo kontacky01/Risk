@@ -5,13 +5,18 @@
 
 using namespace std;
 
-class Order
+// circular dependency
+class Subject;
+class ILoggable;
+
+class Order : public Subject, public ILoggable 
 {
 public:
     Order();                //default contrustor
     Order(Order* o);        //Deep Copy
     bool validate();        //Invalid orders can be in OL, will check if valid for execution
     virtual void execute(State *currentState);         //prints the order after execution
+    virtual string stringToLog();
     int incrementCount();   //countOrderID + 1
     void setOrderID(int id);
     int getOrderID();

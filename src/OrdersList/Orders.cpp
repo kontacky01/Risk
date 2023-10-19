@@ -25,7 +25,13 @@ bool Order::validate() { //Invalid orders can be in OL, will check if valid for 
 void Order::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1) {
         cout << "Executing order #" << getOrderID() << " ..." << endl;
+        // notify observer
+        notify(this);
     }else cout << "Can NOT execute order #" << getOrderID() << " ..." << endl;
+};
+
+string Order::stringToLog() {
+   return "Order: the following order has been executed" + to_string(orderID);
 };
 
 int Order::incrementCount() {
