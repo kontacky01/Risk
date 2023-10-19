@@ -37,8 +37,8 @@ bool Order::validate() {
 */
 void Order::execute(State* currentState) {
     if (currentState->getStateName().compare("executeorders") == 0 && validate() == 1) {
-        cout << "Executing order #" << getOrderID() << " ..." << endl;
-    }else cout << "Can NOT execute order #" << getOrderID() << " ..." << endl;
+        cout << "Executing order #" << getOrderID() << " ...\n";
+    }else cout << "Can NOT execute order #" << getOrderID() << " ...\n";
 };
 
 int Order::incrementCount() {
@@ -79,11 +79,11 @@ ostream& operator << (ostream& out, Order* o)
 
     out << "OrderID: #" << o->getOrderID() << "\n"
         << "Descrption: " << o->getDescription() << "\n"
-        << "Is valid: " << printBoolValue(o->validate()) << "\n" << "\n";
+        << "Is valid: " << printBoolValue(o->validate()) << "\n\n";
     return out;
 }
 
-/******************************* DEPLOY *********************************************/
+/************************************************************ Deploy **************************************************************/
 Deploy::Deploy() {
     this->addDescription();
 }
@@ -99,8 +99,8 @@ Deploy::Deploy(Deploy *d) {
 */
 void Deploy::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
-        cout << "Executing (Deploy) order #" << getOrderID() << " ..." << endl;
-    } else cout << "Can NOT execute (Deploy) order #" << getOrderID() << " ..." << endl;
+        cout << "Executing (Deploy) order #" << getOrderID() << " ...\n";
+    } else cout << "Can NOT execute (Deploy) order #" << getOrderID() << " ...\n";
 };
 
 void Deploy::addDescription() {
@@ -112,7 +112,7 @@ string Deploy::getDescription() {
     return *description;
 }
 
-/******************************* Advance *********************************************/
+/************************************************************ Advance **************************************************************/
 Advance::Advance() {
     this->addDescription();
 }
@@ -128,8 +128,8 @@ Advance::Advance(Advance *a) {
 */
 void Advance::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
-        cout << "Executing (Advance) order #" << getOrderID() << " ..." << endl;
-    } else cout << "Can NOT execute (Advance) order #" << getOrderID() << " ..." << endl;
+        cout << "Executing (Advance) order #" << getOrderID() << " ...\n";
+    } else cout << "Can NOT execute (Advance) order #" << getOrderID() << " ...\n";
 };
 
 void Advance::addDescription() {
@@ -141,7 +141,7 @@ string Advance::getDescription() {
     return *description;
 }
 
-/******************************* Bomb *********************************************/
+/************************************************************ Bomb **************************************************************/
 Bomb::Bomb() {
     this->addDescription();
 }
@@ -157,8 +157,8 @@ Bomb::Bomb(Bomb* a) {
 */
 void Bomb::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
-        cout << "Executing (Bomb) order #" << getOrderID() << " ..." << endl;
-    } else cout << "Can NOT execute (Bomb) order #" << getOrderID() << " ..." << endl;
+        cout << "Executing (Bomb) order #" << getOrderID() << " ...\n";
+    } else cout << "Can NOT execute (Bomb) order #" << getOrderID() << " ...\n";
 };
 
 void Bomb::addDescription() {
@@ -170,8 +170,7 @@ string Bomb::getDescription() {
     return *description;
 }
 
-/******************************* Blockade *********************************************/
-Blockade::Blockade() {
+/************************************************************ Blockade **************************************************************/Blockade::Blockade() {
     this->addDescription();
 }
 
@@ -185,8 +184,8 @@ Blockade::Blockade(Blockade* a) {
 */
 void Blockade::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
-        cout << "Executing (Blockade) order #" << getOrderID() << " ..." << endl;
-    } else cout << "Can NOT execute (Blockade) order #" << getOrderID() << " ..." << endl;
+        cout << "Executing (Blockade) order #" << getOrderID() << " ...\n";
+    } else cout << "Can NOT execute (Blockade) order #" << getOrderID() << " ...\n";
 };
 
 void Blockade::addDescription() {
@@ -198,7 +197,7 @@ string Blockade::getDescription() {
     return *description;
 }
 
-/******************************* Airlift *********************************************/
+/************************************************************ Airlift **************************************************************/
 Airlift::Airlift() {
     this->addDescription();
 }
@@ -214,8 +213,8 @@ Airlift::Airlift(Airlift *a) {
 */
 void Airlift::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
-        cout << "Executing (Airlift) order #" << getOrderID() << " ..." << endl;
-    } else cout << "Can NOT execute (Airlift) order #" << getOrderID() << " ..." << endl;
+        cout << "Executing (Airlift) order #" << getOrderID() << " ...\n";
+    } else cout << "Can NOT execute (Airlift) order #" << getOrderID() << " ...\n";
 };
 
 void Airlift::addDescription() {
@@ -227,7 +226,7 @@ string Airlift::getDescription() {
     return *description;
 }
 
-/******************************* Negotiate *********************************************/
+/************************************************************ Negotiate **************************************************************/
 Negotiate::Negotiate() {
     this->addDescription();
 }
@@ -243,8 +242,8 @@ Negotiate::Negotiate(Negotiate* a) {
 */
 void Negotiate::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
-        cout << "Executing (Negotiate) order #" << getOrderID() << " ..." << endl;
-    } else cout << "Can NOT execute (Negotiate) order #" << getOrderID() << " ..." << endl;
+        cout << "Executing (Negotiate) order #" << getOrderID() << " ...\n";
+    } else cout << "Can NOT execute (Negotiate) order #" << getOrderID() << " ...\n";
 };
 
 void Negotiate::addDescription() {
@@ -256,7 +255,7 @@ string Negotiate::getDescription() {
     return *description;
 }
 
-/******************************* OrdersList *********************************************/
+/************************************************************ OrdersList **************************************************************/
 OrdersList::OrdersList(){
     OL = new vector<Order*>;
 }
@@ -275,7 +274,7 @@ bool OrdersList::move(int pos, int id){
     // post out of bounds
     int size = OL->size();
     if (pos == 0 || pos < 0 || pos > size) {
-        cout << "From move(): position " << pos << " does not exist" <<endl;
+        cout << "From move(): position " << pos << " does not exist\n";
         return false;
     }
     // pos = 1, send to front of list
@@ -324,7 +323,7 @@ bool OrdersList::remove(int id) {
             return true;
         }
     }
-    cout<< "From remove(): Order#" << id << " does not exist" <<endl;
+    cout<< "From remove(): Order#" << id << " does not exist\n";
     return false;
 }
 
@@ -342,7 +341,7 @@ int OrdersList::getIndex(vector<Order*> ol, Order *o)
         return index;
     }
     else {
-        cout << "-1" << endl;
+        cout << "-1\n";
         return -1;
     }
 }
