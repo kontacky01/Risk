@@ -52,11 +52,7 @@ public:
 
 protected:
     string *type;
-
-    /**
-    * The 'cardTypes' vector stores all possible card types
-    */
-    static const vector<string> cardTypes;
+    static const vector<string> cardTypes; // The 'cardTypes' vector stores all possible card types
 };
 
 /************************************************************ Deck ************************************************************/
@@ -173,14 +169,9 @@ public:
               Deck *returningDeck);
 
 protected:
-    /**
-    * 'hand' vector stores the collection of cards created by the fillHand method
-    */
-    vector<Card *> hand;
-    /**
-    * 'OL' stores orders created by played cards
-    */
-    OrdersList OL;
+    friend ostream& operator << (ostream& out, Hand* o); // overide Stream insertion operator
+    vector<Card *> hand; // stores collection of cards created by fillHand
+    OrdersList OL; // TODO: make it a pointer @paulo
 };
 
 /************************************************************ Cards Driver ************************************************************/
