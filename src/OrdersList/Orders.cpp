@@ -4,23 +4,17 @@
 
 using namespace std;
 
-int* Order::countOrderID = new int(0);        //start counter for orders at 0
+int Order::countOrderID = 0;        //start counter for orders at 0
 
 Order::Order() {
-    orderID = new int();
-    *orderID = incrementCount();
-    description = new string();
+    orderID = incrementCount();
     addDescription();
-    valid = new bool();
     setValid(false);
 };
 
-Order::Order( Order *o) {
-    orderID = new int();
-    *orderID = o->getOrderID();
-    description = new string();
+Order::Order(Order* o) {
+    orderID = o->getOrderID();
     addDescription();
-    valid = new bool();
     setValid(false);
 };
 
@@ -28,8 +22,8 @@ Order::Order( Order *o) {
 * Checks if valid for execution, invalid orders can exist
 */
 bool Order::validate() {
-    return *valid;
- };
+    return this->valid;
+};
 
 /**
 * Checks player state and executes order
@@ -42,27 +36,27 @@ void Order::execute(State* currentState) {
 };
 
 int Order::incrementCount() {
-    return ++*countOrderID;
+    return ++countOrderID;
 };
 
-void Order::setOrderID(int id){
-    *orderID = id;
+void Order::setOrderID(int id) {
+    orderID = id;
 }
 
 int Order::getOrderID() {
-    return *orderID;
+    return orderID;
 }
 
 void Order::addDescription() {
-    *description = "(Order Class)";
+    this->description = "(Order Class)";
 }
 
-string Order::getDescription(){
-    return *description;
+string Order::getDescription() {
+    return this->description;
 }
 
-void Order::setValid(bool v){
-    *valid = v;
+void Order::setValid(bool v) {
+    this->valid = v;
 }
 
 /**
@@ -104,12 +98,12 @@ void Deploy::execute(State* current) {
 };
 
 void Deploy::addDescription() {
-    *description = "(Deploy) Move a certain number of army units from the current player's \n"
+    this->description = "(Deploy) Move a certain number of army units from the current player's \n"
         "            reinforcement pool to one of the current player's territories.";
 }
 
 string Deploy::getDescription() {
-    return *description;
+    return this->description;
 }
 
 /************************************************************ Advance **************************************************************/
@@ -133,12 +127,12 @@ void Advance::execute(State* current) {
 };
 
 void Advance::addDescription() {
-    *description = "(Advance) Move a certain number of army units from one territory \n"
+    this->description = "(Advance) Move a certain number of army units from one territory \n"
             "            (source territory) to another territory (target territory).";
 }
 
 string Advance::getDescription() {
-    return *description;
+    return this->description;
 }
 
 /************************************************************ Bomb **************************************************************/
@@ -162,12 +156,12 @@ void Bomb::execute(State* current) {
 };
 
 void Bomb::addDescription() {
-    *description = "(Bomb) Destroy half of the army units located on a target territory. \n"
+    this->description = "(Bomb) Destroy half of the army units located on a target territory. \n"
         "            This order can only be issued if a player has the bomb card in their hand.";
 }
 
 string Bomb::getDescription() {
-    return *description;
+    return this->description;
 }
 
 /************************************************************ Blockade **************************************************************/Blockade::Blockade() {
@@ -189,12 +183,12 @@ void Blockade::execute(State* current) {
 };
 
 void Blockade::addDescription() {
-    *description = "(Blockade) Triple the number of army units on a target territory and make it a neutral territory. \n"
+    this->description = "(Blockade) Triple the number of army units on a target territory and make it a neutral territory. \n"
         "            This order can only be issued if a player has the blockade card in their hand.";
 }
 
 string Blockade::getDescription() {
-    return *description;
+    return this->description;
 }
 
 /************************************************************ Airlift **************************************************************/
@@ -218,12 +212,12 @@ void Airlift::execute(State* current) {
 };
 
 void Airlift::addDescription() {
-    *description = "(Airlift) Advance a certain number of army units from one from one territory (source territory) to another territory \n"
+    this->description = "(Airlift) Advance a certain number of army units from one from one territory (source territory) to another territory \n"
         "            (target territory). This order can only be issued if a player has the airlift card in their hand.";
 }
 
 string Airlift::getDescription() {
-    return *description;
+    return this->description;
 }
 
 /************************************************************ Negotiate **************************************************************/
@@ -247,12 +241,12 @@ void Negotiate::execute(State* current) {
 };
 
 void Negotiate::addDescription() {
-    *description = "(Negotiate) prevent attacks between the current player and another target player until the end of \n"
+    this->description = "(Negotiate) prevent attacks between the current player and another target player until the end of \n"
         "            the turn. This order can only be issued if a player has the diplomacy card in their hand.";
 }
 
 string Negotiate::getDescription() {
-    return *description;
+    return this->description;
 }
 
 /************************************************************ OrdersList **************************************************************/
