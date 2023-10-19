@@ -6,39 +6,83 @@
 
 using namespace std;
 
-//-------------------------------------------Class State---------------------------------------------------------------
-// A State object holds a string such as start, maploaded, playersadded etc...
+/************************************************************ State **************************************************************/
 class State{
-public:	
-    State();                                         // Default constructor
-    ~State();                                       // Destructor
-    State(string name);                            // Parameterized constructor
-    State& operator=(const State& other);         // Assignment Operator
-    State(const State& other);                  // Copy constructor
+public:
+/**
+ * Default Constructor
+ */
+    State();
+/**
+ * Destructor
+ */
+    ~State();
+/**
+ * Constructor with an argument(s)
+ */
+    State(string name);
+/**
+ * Assignment Operator
+ */
+    State& operator=(const State& other);
+/**
+ * Copy Constructor
+ */
+    State(const State& other);
+/**
+ * overide Stream insertion operator
+ */
+    friend ostream& operator<<(ostream& out, State* s);
+
     string getStateName();
-    // TODO: initilaize all states
+
 private:
-    string stateName;                                  // State's name
+    string stateName;
 };
 
-//-------------------------------------------Class Transition----------------------------------------------------------
-// A Transition object contains pointers from one state to another as well as its required command
+/************************************************************ Transition **************************************************************/
 class Transition{
-public:	
-	Transition();           // Default Constructor
-    ~Transition();          // Destructor
-	Transition(string requiredCommand, State*  finalState);         // Parameterized Constructor
-	Transition& operator=(const Transition& other);                           // Assignment Operator
-    Transition(const Transition& other);                                    // Copy constructor
+public:
+/**
+ * Default Constructor
+ */
+	Transition();
+/**S
+ * Destructor
+ */
+    ~Transition();
+/**
+ * Constructor with with an argument(s)
+ */
+	Transition(string requiredCommand, State*  finalState);
+/**
+ * Assignment Operator
+ */
+	Transition& operator=(const Transition& other);
+/**
+ * Copy Constructor
+ */
+    Transition(const Transition& other);
+/**
+ * overide Stream insertion operator
+ */
+    friend ostream& operator<<(ostream& out, Transition* t);
+
     string getCommand();
+
     State * getNextState();
-    void deletePointerNextState();
-    // TODO: initilaize all transitions
+
 private:
-    string command;            // required command to perform transition
-    State* nextState;           // next state
+    string command;
+    State* nextState;
 };
-
-//-------------------------------------------Class GameEngineDriver----------------------------------------------------------
-
+/**
+ * This method initializes the game states and then stores them in a Vector
+ */
+    vector<State*> initializeGameStates();
+/**
+ * This method initializes the game transitions and then stores them in a Vector
+ */
+    vector<Transition*> initializeGameTransitions();
+/************************************************************ GameEngineDriver **************************************************************/
 void testGameStates();
