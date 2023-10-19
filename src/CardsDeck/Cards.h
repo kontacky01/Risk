@@ -10,81 +10,172 @@ using namespace std;
 class Card {
 public:
 
-    Card(); // default constructor
+    /**
+    * Default constructor
+    */
+    Card();
 
-    virtual ~Card(); // destructor, virtual to prevent deletion
+    /**
+    * Destructor
+    */
+    virtual ~Card();
 
-    explicit Card(const string &cardType); // initializes card types
+    /**
+    * Parameterized constructor to initialize the card types
+    */
+    explicit Card(const string &cardType);
 
-    Card(const Card &other); // copy constructor
+    /**
+    * Copy constructor
+    */
+    Card(const Card &other);
 
-    Card &operator=(const Card &other); // assignment operator definition
+    /**
+    * Assignment operator
+    */
+    Card &operator=(const Card &other);
 
-    string getType() const; // prints card type
+    /**
+    * The getType method outputs a card's type
+    */
+    string getType() const;
 
-    void setType(const string &newType); // sets new card type
+    /**
+    * The setType method sets a new type for a given card
+    */
+    void setType(const string &newType);
 
-    static bool isValidCardType(const string &value); // validates authenticity of card type
+    /**
+    * The isValidCardType method validates the authenticity of card type
+    */
+    static bool isValidCardType(const string &value);
 
 protected:
     string *type;
-    static const vector<string> cardTypes; // stores valid card types
+    static const vector<string> cardTypes; // The 'cardTypes' vector stores all possible card types
 };
 
 /************************************************************ Deck ************************************************************/
 class Deck : public Card { // inherits Card class
 public:
-    Deck(); // default constructor
+    /**
+    * Default constructor
+    */
+    Deck();
 
-    ~Deck() override; // destructor
+    /**
+    * Destructor
+    */
+    ~Deck() override;
 
-    Deck(const Deck &other); // deep copy constructor
+    /**
+    * Deep copy constructor
+    */
+    Deck(const Deck &other);
 
-    Deck &operator=(const Deck &other); // assignment operator definition
+    /**
+    * Assignment operator
+    */
+    Deck &operator=(const Deck &other);
 
+    /**
+    * The fillDeck method creates a finite collection of cards
+    */
     void fillDeck(); // creates finite collection of cards
 
-    void printDeck(); // prints contents of deck
+    /**
+    * The printDeck prints out the contents of the deck
+    */
+    void printDeck();
 
-    virtual void getSize(); //prints size of deck
+    /**
+    * The getDeckSize method retrieves and outputs the size of the deck
+    */
+    void getDeckSize();
 
-    void shuffleDeck(); // randomizes the deck
+    /**
+    * The shuffleDeck method randomizes the order of the cards in a deck
+    */
+    void shuffleDeck();
 
-    Card *draw(Deck &transfer); // draws and removes a card from the deck
+    /**
+    * The draw method draws a card and removes it from a deck
+    */
+    Card *draw(Deck &transfer);
 
-    virtual void addCard(Card *transferCard); // adds card back to deck
+    /**
+    * The addCard method adds card to a temporary vector
+    */
+    virtual void addCard(Card *transferCard);
 
-    void returnCard(Card *returningCard); // return card back to deck
+    /**
+    * The returnCard method returns a card back to its deck of origin
+    */
+    void returnCard(Card *returningCard);
 
 protected:
-    vector<Card *> deck; // stores collection of cards created by fillDeck
-    vector<Card *> transfer; // placeholder vector used to transfer cards from deck to hand
+    /**
+    * 'deck' vector stores the collection of cards created by the fillDeck method
+    */
+    vector<Card *> deck;
+    /**
+    * 'transfer' is a temporary vector used to transfer cards from deck to hand and back
+    */
+    vector<Card *> transfer;
 };
 
 /************************************************************ Hand ************************************************************/
 class Hand : public Deck {
 public:
-    Hand(); // parametrized constructor
+    /**
+    * Default constructor
+    */
+    Hand();
 
-    ~Hand() override; // destructor
+    /**
+    * Destructor
+    */
+    ~Hand() override;
 
-    Hand(const Hand &other); // copy constructor
+    /**
+    * Copy constructor
+    */
+    Hand(const Hand &other);
 
-    Hand &operator=(const Hand &other); // assignment operator definition
+    /**
+    * Assignment operator
+    */
+    Hand &operator=(const Hand &other);
 
-    void printHand(); // prints contents of hand
+    /**
+    * The printHand method outputs contents of a player's hand
+    */
+    void printHand();
 
-    void getSize() override; // prints size of hand
+    /**
+    * The getHandSize method outputs the size of a player's hand
+    */
+    void getHandSize();
 
-    void addCard(Card *newHandCard) override; // adds a new card to hand
+    /**
+    * The addCard method adds a new card from the deck to the player's hand
+    */
+    void addCard(Card *newHandCard) override;
 
-    void play(string &playedCardType, Deck *returningDeck); // removes card from hand, pushes orders, and returns card to original deck
+    /**
+    * The play method removes a card from hand, creates a new order, and returns card to deck of origin
+    */
+    void play(string &playedCardType,
+              Deck *returningDeck);
 
 protected:
     friend ostream& operator << (ostream& out, Hand* o); // overide Stream insertion operator
     vector<Card *> hand; // stores collection of cards created by fillHand
-    OrdersList OL;
+    OrdersList OL; // TODO: make it a pointer @paulo
 };
 
 /************************************************************ Cards Driver ************************************************************/
-void testCards(); // testing function
+/**
+    * testCards is a testing function
+    */
+void testCards();
