@@ -1,5 +1,5 @@
 #pragma once
-#include <list>
+#include <vector>
 #include <iostream>
 #include "../GameEngine/GameEngine.h"
 
@@ -8,44 +8,72 @@ using namespace std;
 class Order
 {
 public:
-    Order();                //default contrustor
-    Order(Order* o);        //Deep Copy
-    bool validate();        //Invalid orders can be in OL, will check if valid for execution
-    virtual void execute(State *currentState);         //prints the order after execution
-    int incrementCount();   //countOrderID + 1
+
+    Order();
+
+    Order(Order* o);
+
+    /**
+    * Checks if valid for execution, invalid orders can exist
+    */
+    bool validate();
+    
+    /**
+    * Checks player state and executes order
+    */
+    virtual void execute(State *currentState);
+
+    /**
+    * Increment countOrderID by 1
+    */
+    int incrementCount(); 
+
     void setOrderID(int id);
+
     int getOrderID();
+
     virtual void addDescription();
+
     virtual string getDescription();
+
+    /**
+    * Increment countOrderID by 1
+    */
     void setValid(bool v);
 protected:
     string description;
 private:
     static int countOrderID;
     int orderID;
-    bool valid;     //default false
-    friend ostream& operator << (ostream& out, Order* o); //overide Stream insertion operator
-
+    bool valid;
+    friend ostream& operator << (ostream& out, Order* o); // overide Stream insertion operator
 };
 
 class Deploy : public Order
 {
 public:
     Deploy();
-    Deploy(Deploy* d);      //Deep Copy
+
+    Deploy(Deploy* d);
+
     void execute(State *currentState);
+
     void addDescription();
+
     string getDescription();
-private:
 };
 
 class Advance : public Order
 {
 public:
     Advance();
+
     Advance(Advance* a);
+
     void execute(State *currentState);
+
     void addDescription();
+
     string getDescription();
 private:
 };
@@ -54,9 +82,13 @@ class Bomb : public Order
 {
 public:
     Bomb();
+
     Bomb(Bomb* a);
+
     void execute(State *currentState);
+    
     void addDescription();
+    
     string getDescription();
 private:
 };
@@ -65,9 +97,13 @@ class Blockade : public Order
 {
 public:
     Blockade();
+   
     Blockade(Blockade* a);
+    
     void execute(State *currentState);
+    
     void addDescription();
+    
     string getDescription();
 private:
 };
@@ -76,9 +112,13 @@ class Airlift : public Order
 {
 public:
     Airlift();
+    
     Airlift(Airlift* a);
+    
     void execute(State *currentState);
+    
     void addDescription();
+    
     string getDescription();
 private:
 };
@@ -87,9 +127,13 @@ class Negotiate : public Order
 {
 public:
     Negotiate();
+    
     Negotiate(Negotiate* a);
+    
     void execute(State *currentState);
+    
     void addDescription();
+    
     string getDescription();
 private:
 };
@@ -97,18 +141,38 @@ private:
 class OrdersList
 {
 public:
-    OrdersList();                       // default constructor
+    OrdersList();
+    
+    //TODO: copy constructor
+
     virtual void addOrder(Order* o);
-    bool move(int pos, int id);  // Modify sequence of orders
-    bool remove(int id);                // remove order by id
-    list<Order*> getOL();
+
+    /**
+    * Moves order to new location in OL
+    * @param pos new position 
+    * @param id order ID of order to be moved
+    */
+    bool move(int pos, int id);
+    
+    bool remove(int id);
+    
+    vector <Order*> * getOL();
+
+    int getIndex(vector<Order*> ol, Order *o);
+
+    void executeAll(State *s);
+    
     void deleteOrdersList();
-    // TODO: add executeAll();
+  
 private:
-    list<Order*> OL;
-    friend ostream& operator << (ostream& out, OrdersList& ol); // overide Stream insertion operator
+    vector<Order*> *OL;
+
+    friend ostream& operator << (ostream& out, OrdersList* ol); // overide Stream insertion operator
+
 };
 
-// test driver method
+/** 
+* test driver A1
+*/
 void testOrdersLists();
 

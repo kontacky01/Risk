@@ -18,7 +18,7 @@ private:
   int id;
   vector<Territory*> territories;
   Hand* hand;
-  vector<Order*> orderList;
+  OrdersList *orderList;
   State* state;
 
   /// <summary>
@@ -30,10 +30,10 @@ public:
   /// <summary>
   /// Constructor with with an argument list
   /// </summary>
-  Player(vector<Territory*>, Hand*, vector<Order*>, int);
+  Player(vector<Territory*>, Hand*, OrdersList*, int);
 
   /// Constructor with with an argument list
-  Player(vector<Territory*>, Hand*, vector<Order*>, State* s);
+  Player(vector<Territory*>, Hand*, OrdersList*, State* s);
 
   /// <summary>
   /// Default Constructor
@@ -46,7 +46,7 @@ public:
   Player(const Player&);
 
   //get orderList
-  vector<Order*> getOrderList();
+  OrdersList* getOrdersList();
 
   //get state
   State* getState();
@@ -67,7 +67,12 @@ public:
   /// issueOrder
   /// Take in an order and add it into the OrderList
   /// </summary>
-  vector<Order*> issueOrder(Order* o);
+  OrdersList* issueOrder(Order* o);
+  /**
+   * @brief Set the Orders List Null to remove dangling pointer
+   * 
+   */
+  void setOrdersListNull();
 };
 
 /************************************************************ PlayerDriver ************************************************************/
