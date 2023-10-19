@@ -173,7 +173,7 @@ void testOrdersLists() {
     cout << "Created execute orders.\n\n";
 
     cout << "...Creating player with territory adjeceny list, Hand, and order list..\n";
-    Player* p = new Player(tOL, hOL, pOL, pStateOL);
+    Player* p = new Player(tOL, hOL, pOL, 1, pStateOL);
     cout << "Created player.\n\n";
 
     cout << "...Printing Players orders..\n";
@@ -205,15 +205,12 @@ void testOrdersLists() {
     t1OL = NULL;
     delete t2OL;
     t2OL = NULL;
-    delete hOL;
+    // delete hOL --> hand deletion is managed by the player as it belongs to it;
     hOL = NULL;
-    p->getOrdersList()->deleteOrdersList();
-    delete p->getOrdersList();
-    p->setOrdersListNull();
-    delete pStateOL;
+    delete p;
+    // delete pStateOL --> state will be also deleted by the player;
     pStateOL = NULL;
     delete sTest;
     sTest = NULL;
     cout << "Pointers deleted.\n\n";
-    
-}
+};

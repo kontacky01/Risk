@@ -163,6 +163,12 @@ public:
     void executeAll(State *s);
     
     void deleteOrdersList();
+
+
+    /**
+     * Copy Constructor 
+     */
+    OrdersList(const OrdersList &originalOrderList);
   
 private:
     vector<Order*> *OL;

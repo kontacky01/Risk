@@ -221,7 +221,7 @@ Hand::Hand() {
 /// destructor
 /// </summary>
 Hand::~Hand() {
-
+    cout << "...Hand destructor was called..." << endl;
 }
 
 /// <summary>
@@ -312,3 +312,22 @@ void Hand::play(string &playedCardType, Deck *returningDeck) {
         cout << "Error: Card of type " << "\"" << playedCardType << "\"" << " not found in hand!" << "\n";
     }
 }
+
+/**
+ * Override the stream operator for Card
+ */
+ostream& operator << (ostream& out, Hand* h) {
+    out << "The Hand contains \n------------------------\n";
+    int handSize = h->hand.size();
+    if(handSize == 0 ) {
+        out << "Hand is empty\n";
+    }
+    else {
+        for(int i = 0 ; i < h->hand.size(); i++){
+            out << "Card type:" << h->hand.at(i)->getType() << "\n";
+        }
+    }
+
+    return out;
+}
+

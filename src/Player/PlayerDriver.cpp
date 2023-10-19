@@ -1,15 +1,13 @@
 #include "Player.h"
 
-void testPlayers()
-{
-  cout << endl << "*************************************" << "\n"
-    << "Test Player\n"
-    << "*************************************" << "\n" << "\n";
+void testPlayers() {
+  cout << "\n*************************************\nTest "
+          "Player\n*************************************\n\n";
   vector<Territory*> t;
   Hand* h = new Hand();
-  OrdersList *o = new OrdersList;
+  OrdersList* o = new OrdersList;
 
-  // Create 6 territories and push them to the territories vector
+  // create 6 territories and push them to the territories vector
   Territory* t1 = new Territory("UK", 1, 2, 0);
   Territory* t2 = new Territory("USA", 2, 3, 0);
   Territory* t3 = new Territory("Russia", 3, 3, 0);
@@ -23,58 +21,60 @@ void testPlayers()
   t.push_back(t5);
   t.push_back(t6);
 
-  // Init a player
-  Player* p = new Player(t, h, o, 1);
+  // init a player
+  Player* p = new Player(t, h, o, 1, NULL);
 
-  cout << "---------> Test 1: Testing player methods (attack/defend/issueOrder) <---------" << "\n" << "\n";
-  // Show that Player contains method toDefend()
+  cout << "---------> Test 1: Testing player methods (attack/defend/issueOrder) <---------\n\n";
+  // show that Player contains method toDefend()
   p->toDefend();
 
-  // Show that Player contains method toAttack()
+  // show that Player contains method toAttack()
   p->toAttack();
 
-  // Show that Player contains method issueOrder()
+  // show that Player contains method issueOrder()
   Order* newOrder = new Order();
   p->issueOrder(newOrder);
 
-  cout << "---------> Test 2: Testing coppied player methods (attack/defend/issueOrder) <---------" << "\n" << "\n";
-  // Show that player contains a copy constructor
+  cout << "---------> Test 2: Testing coppied player methods (attack/defend/issueOrder) <---------\n\n";
+  // show that player contains a copy constructor
   Player* pCopy = new Player(*p);
 
-  // Show that Player contains method toDefend()
+  // show that Player contains method toDefend()
   pCopy->toDefend();
 
-  // Show that Player contains method toAttack()
+  // show that Player contains method toAttack()
   pCopy->toAttack();
 
-  // Show that Player contains method issueOrder()
+  // show that Player contains method issueOrder()
   Order* newOrderCopy = new Order();
   pCopy->issueOrder(newOrderCopy);
 
-  // Delete hand pointer
-  delete h;
+  // print player details
+  cout << p;
+
+  // player has a destructor that frees the pointer to hand
   h = NULL;
 
-  // Delete territories pointer
-  for (int i = 0; i < t.size(); i++)
-  {
+  cout << "...Deleting territories from PlayerDriver...\n";
+  // delete territories pointer
+  for (int i = 0; i < t.size(); i++) {
     delete t.at(i);
     t.at(i) = NULL;
   }
-  // Delete orderlist pointer
-  for (int i = 0; i < o->getOL()->size(); i++)
-  {
+  cout << "...Deleting orderslist from PlayerDriver...\n";
+  // delete orderlist pointer
+  for (int i = 0; i < o->getOL()->size(); i++) {
     delete o->getOL()->at(i);
     o->getOL()->at(i) = NULL;
   }
-  o->deleteOrdersList();
-  
+  // orderlist is already being freed in player destructor
+  o = NULL;
 
-  // Delete player pointer
+  // delete player pointer
   delete p;
   p = NULL;
 
-  // Delete playerCopy pointer
+  // delete playerCopy pointer
   delete pCopy;
   pCopy = NULL;
 };

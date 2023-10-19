@@ -28,7 +28,6 @@ public:
 
 protected:
     string *type;
-
     static const vector<string> cardTypes; // stores valid card types
 };
 
@@ -82,6 +81,7 @@ public:
     void play(string &playedCardType, Deck *returningDeck); // removes card from hand, pushes orders, and returns card to original deck
 
 protected:
+    friend ostream& operator << (ostream& out, Hand* o); // overide Stream insertion operator
     vector<Card *> hand; // stores collection of cards created by fillHand
     OrdersList OL;
 };
