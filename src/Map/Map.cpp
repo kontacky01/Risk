@@ -13,7 +13,7 @@ Map::Map() {};
 * Copy constructor
 */
 Map::Map(const Map& m) {
-    cout << "...Testing the copy constructor..." << "\n";
+    cout << "...Testing the copy constructor...\n";
     territories = m.territories;
     continents = m.continents;
 };
@@ -62,13 +62,13 @@ void Map::addTerritory(Territory* territory) {
 * Print the summary of map
 */
 void Map::printMapSummary() {
-    cout << "\n" << "Continents of the loaded map: " << "\n" << "-------------------" << "\n";
+    cout << "\n" << "Continents of the loaded map: \n" << "-------------------\n";
     for (auto const& continent : continents) {
         cout << "ID: " << continent.second->getId() << "   |  Name:" << continent.second->getName() <<"\n";
         cout << "---------------------------\n";
 
     }
-    cout << "\n" << "Territories of the loaded map: " << "\n" << "-------------------" << "\n";
+    cout << "\n" << "Territories of the loaded map: \n" << "-------------------\n";
     for (auto const& territory : territories) {
         cout << "ID: " << territory.second->getId() << "  |  Name: " << territory.second->getName() << " ---> Connected to: ";
         for(Territory* connected : territory.second->getAdjacencyList()) {
@@ -228,7 +228,7 @@ void Territory::addAdjacentTerritory(Territory* destination) {
 * territoryName, coord-x, coord-y, continent, listOfAdjecentTerritories seperated by commas
 */
 Map* MapLoader::loadMap(string filename) {
-    cout << "...Loading the map..." << endl;
+    cout << "...Loading the map...\n";
     // Define the needed params
     vector<Continent*> continents;
     Map* loadedMap = new Map();
@@ -241,7 +241,7 @@ Map* MapLoader::loadMap(string filename) {
 
     // Check if the file was successfully opened
     if (!inputFile.is_open()) {
-        cout << "...Error: Failed to open the file..." << endl;
+        cout << "...Error: Failed to open the file...\n";
         return loadedMap; // Exit the program
     }
 
@@ -268,7 +268,7 @@ Map* MapLoader::loadMap(string filename) {
 
                 // The line should contain the name and number of territories that belong to the continent (hence 2 words)
                 if (words.size() != 2) {
-                    cout << "...Error: Invalid continent information..." << endl;
+                    cout << "...Error: Invalid continent information...\n";
                     return loadedMap;
                 }
 
@@ -298,7 +298,7 @@ Map* MapLoader::loadMap(string filename) {
                 vector<string> words = MapLoader::split(line, ",");
                 // There is a minimum requirement of name, x-coord, y-coord, and continent (hence 4 words)
                 if (words.size() < 4) {
-                    cout << "...Error: Invalid territory information..." << endl;
+                    cout << "...Error: Invalid territory information...\n";
                     return loadedMap;
                     ;
                 }
@@ -315,7 +315,7 @@ Map* MapLoader::loadMap(string filename) {
 
                 // If continent isn't found, then there is an error in parsing the continents
                 if (continentId == -1) {
-                    cout << "...Error: Invalid continent/territory information..." << endl;
+                    cout << "...Error: Invalid continent/territory information...\n";
                     return loadedMap;
                 }
                 // Create a new territory
@@ -346,7 +346,7 @@ Map* MapLoader::loadMap(string filename) {
 
     // Close the file
     inputFile.close();
-    cout << "...Successfully loaded the Map..." << "\n";
+    cout << "...Successfully loaded the Map...\n";
     return loadedMap;
 }
 
