@@ -4,31 +4,31 @@
 using namespace std;
 
 /************************************************************ Map ************************************************************/
-/// <summary>
-/// Default constructor
-/// </summary>
+/**
+* Default constructor
+*/
 Map::Map() {};
 
-/// <summary>
-/// Copy constructor
-/// </summary>
+/**
+* Copy constructor
+*/
 Map::Map(const Map& m) {
-    cout << "...Testing the copy constructor..." << "\n";
+    cout << "...Testing the copy constructor...\n";
     territories = m.territories;
     continents = m.continents;
 };
 
-/// <summary>
-/// Param constructor
-/// </summary>
+/**
+* Param constructor
+*/
 Map::Map(map<int, Continent*> c, map<int, Territory*> t) {
     continents = c;
     territories = t;
 };
 
-/// <summary>
-/// Decconstructor
-/// </summary>
+/**
+* Deconstructor
+*/
 Map::~Map() {
     // delete all territories
     for (pair<int, Territory*> territory : territories){
@@ -44,31 +44,31 @@ Map::~Map() {
     };
 };
 
-/// <summary>
-/// Will be stored in a key value pair ex: (1, Contient)
-/// </summary>
+/**
+* Will be stored in a key value pair ex: (1, Contient)
+*/
 void Map::addContinent(Continent* continent) {
     continents[continent->getId()] = continent;
 }
 
-/// <summary>
-/// Will be stored in a key value pair ex: (1, Territory)
-/// </summary>
+/**
+* Will be stored in a key value pair ex: (1, Territory)
+*/
 void Map::addTerritory(Territory* territory) {
     territories[territory->getId()] = territory;
 }
 
-/// <summary>
-/// Print the summary of map
-/// </summary>
+/**
+* Print the summary of map
+*/
 void Map::printMapSummary() {
-    cout << "\n" << "Continents of the loaded map: " << "\n" << "-------------------" << "\n";
+    cout << "\n" << "Continents of the loaded map: \n" << "-------------------\n";
     for (auto const& continent : continents) {
         cout << "ID: " << continent.second->getId() << "   |  Name:" << continent.second->getName() <<"\n";
         cout << "---------------------------\n";
 
     }
-    cout << "\n" << "Territories of the loaded map: " << "\n" << "-------------------" << "\n";
+    cout << "\n" << "Territories of the loaded map: \n" << "-------------------\n";
     for (auto const& territory : territories) {
         cout << "ID: " << territory.second->getId() << "  |  Name: " << territory.second->getName() << " ---> Connected to: ";
         for(Territory* connected : territory.second->getAdjacencyList()) {
@@ -78,15 +78,15 @@ void Map::printMapSummary() {
     }
 }
 
-/// <summary>
-/// Validate the map structure
-/// 1) the map is a connected graph
-/// 2) continents are connected subgraphs 
-/// 3) each country belongs to one and only one continent
-/// </summary>
+/**
+* Validate the map structure
+* 1) the map is a connected graph
+* 2) continents are connected subgraphs 
+* 3) each country belongs to one and only one continent
+*/
 bool Map::validate() {
     cout << "...Validate the map...\n";
-    // 1) this confirm that the graph is NOT fully connected
+    // 1) confirm that the graph is NOT fully connected
     // 2) find a continent that is not connected
     map<int, bool> visited;  
     map<int, bool> visitedContinent;  
@@ -131,7 +131,7 @@ bool Map::validate() {
         }
     }
     
-    // 3) each country belongs to only one and only continent
+    // 3) ensure country belongs to only one and only continent
     // make a copy of the adjacency list
     // Finding duplicates comfirms that a territory belongs to multiple continents because when creating the map, 
     // the territory instance will only ever contain one contient
@@ -150,14 +150,14 @@ bool Map::validate() {
 }
 
 /************************************************************ Continent ************************************************************/
-/// <summary>
-/// Default Constructor
-/// </summary>
+/**
+* Default Constructor
+*/
 Continent::Continent() {}
 
-/// <summary>
-/// Param constructor
-/// </summary>
+/**
+* Param constructor
+*/
 Continent::Continent(string n, int i) {
     name = n;
     id = i;
@@ -171,14 +171,14 @@ int Continent::getId() const {
     return id;
 }
 /************************************************************ Territory ************************************************************/
-/// <summary>
-/// Default Constructor
-/// </summary>
+/**
+* Default Constructor
+*/
 Territory::Territory() {}
 
-/// <summary>
-/// Param constructor
-/// </summary>
+/**
+* Param constructor
+*/
 Territory::Territory(string n, int i, int ci, int a) {
     name = n;
     id = i;
@@ -207,13 +207,13 @@ int Territory::getContinentId() const {
 }
 
 
-/// <summary>
-/// Imagine we have A,B,C which are all objects of territory
-/// if we call A.addAdjacentTerritory(B) then:
-/// 1. We will keep track of B from A
-/// 2. Keep track of A from B
-/// hence we keep track of adjecent territories
-/// </summary>
+/**
+* Per example we have A,B,C which are all objects of territory
+* If we call A.addAdjacentTerritory(B) then:
+* 1. We will keep track of B from A
+* 2. Keep track of A from B
+* Hence we keep track of adjecent territories
+*/
 void Territory::addAdjacentTerritory(Territory* destination) {
     // current object's adjacency list
     this->adjacencyList.push_back(destination);
@@ -222,17 +222,17 @@ void Territory::addAdjacentTerritory(Territory* destination) {
 }
 /************************************************************ MapLoader ************************************************************/
 
-/// <summary>
-/// Will read the map file (will handle errors if file doesnt exist or can't open)
-/// Will parse line by line
-/// The file is devided in to two important sections: Continents & Territories
-/// Continents look like so: 
-/// continentName=howManyTerritoriesItHas
-/// Territories look like so: 
-/// territoryName, coord-x, coord-y, continent, listOfAdjecentTerritories seperated by commas
-/// </summary>
+/**
+* Will read the map file (will handle errors if file doesnt exist or can't open)
+* Will parse line by line
+* The file is devided in to two important sections: Continents & Territories
+* Continents look like so: 
+* continentName=howManyTerritoriesItHas
+* Territories look like so: 
+* territoryName, coord-x, coord-y, continent, listOfAdjecentTerritories seperated by commas
+*/
 Map* MapLoader::loadMap(string filename) {
-    cout << "...Loading the map..." << endl;
+    cout << "...Loading the map...\n";
     // Define the needed params
     vector<Continent*> continents;
     Map* loadedMap = new Map();
@@ -245,7 +245,7 @@ Map* MapLoader::loadMap(string filename) {
 
     // Check if the file was successfully opened
     if (!inputFile.is_open()) {
-        cout << "...Error: Failed to open the file..." << endl;
+        cout << "...Error: Failed to open the file...\n";
         return loadedMap; // Exit the program
     }
 
@@ -272,7 +272,7 @@ Map* MapLoader::loadMap(string filename) {
 
                 // The line should contain the name and number of territories that belong to the continent (hence 2 words)
                 if (words.size() != 2) {
-                    cout << "...Error: Invalid continent information..." << endl;
+                    cout << "...Error: Invalid continent information...\n";
                     return loadedMap;
                 }
 
@@ -302,7 +302,7 @@ Map* MapLoader::loadMap(string filename) {
                 vector<string> words = MapLoader::split(line, ",");
                 // There is a minimum requirement of name, x-coord, y-coord, and continent (hence 4 words)
                 if (words.size() < 4) {
-                    cout << "...Error: Invalid territory information..." << endl;
+                    cout << "...Error: Invalid territory information...\n";
                     return loadedMap;
                     ;
                 }
@@ -319,7 +319,7 @@ Map* MapLoader::loadMap(string filename) {
 
                 // If continent isn't found, then there is an error in parsing the continents
                 if (continentId == -1) {
-                    cout << "...Error: Invalid continent/territory information..." << endl;
+                    cout << "...Error: Invalid continent/territory information...\n";
                     return loadedMap;
                 }
                 // Create a new territory
@@ -350,15 +350,15 @@ Map* MapLoader::loadMap(string filename) {
 
     // Close the file
     inputFile.close();
-    cout << "...Successfully loaded the Map..." << "\n";
+    cout << "...Successfully loaded the Map...\n";
     return loadedMap;
 }
 
-/// <summary>
-/// Must split each line of the map as each line has the following stuctor ex:
-/// Sun1,83,81,SUN,Sun2,Sun3,Sun4,Sun5,Mercury1
-/// we want to create a vector of those words ["Sun1", "83"...]
-/// </summary>
+/**
+* Must split each line of the map as each line has the following stuctor ex:
+* Sun1,83,81,SUN,Sun2,Sun3,Sun4,Sun5,Mercury1
+* we want to create a vector of those words ["Sun1", "83"...]
+*/
 vector<string> MapLoader::split(string line, string delim) {
 
     vector<string> words;
