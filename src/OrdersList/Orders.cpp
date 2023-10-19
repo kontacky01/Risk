@@ -4,23 +4,17 @@
 
 using namespace std;
 
-int* Order::countOrderID = new int(0);        //start counter for orders at 0
+int Order::countOrderID = 0;        //start counter for orders at 0
 
 Order::Order() {
-    orderID = new int();
-    *orderID = incrementCount();
-    description = new string();
+    orderID = incrementCount();
     addDescription();
-    valid = new bool();
     setValid(false);
 };
 
-Order::Order(Order *o) {
-    orderID = new int();
-    *orderID = o->getOrderID();
-    description = new string();
+Order::Order(Order* o) {
+    orderID = o->getOrderID();
     addDescription();
-    valid = new bool();
     setValid(false);
 };
 
@@ -28,8 +22,8 @@ Order::Order(Order *o) {
 * Checks if valid for execution, invalid orders can exist
 */
 bool Order::validate() {
-    return *valid;
- };
+    return this->valid;
+};
 
 /**
 * Checks player state and executes order
@@ -37,32 +31,32 @@ bool Order::validate() {
 */
 void Order::execute(State* currentState) {
     if (currentState->getStateName().compare("executeorders") == 0 && validate() == 1) {
-        cout << "Executing order #" << getOrderID() << " ..." << endl;
-    }else cout << "Can NOT execute order #" << getOrderID() << " ..." << endl;
+        cout << "Executing order #" << getOrderID() << " ...\n";
+    }else cout << "Can NOT execute order #" << getOrderID() << " ...\n";
 };
 
 int Order::incrementCount() {
-    return ++*countOrderID;
+    return ++countOrderID;
 };
 
-void Order::setOrderID(int id){
-    *orderID = id;
+void Order::setOrderID(int id) {
+    orderID = id;
 }
 
 int Order::getOrderID() {
-    return *orderID;
+    return orderID;
 }
 
 void Order::addDescription() {
-    *description = "(Order Class)";
+    this->description = "(Order Class)";
 }
 
-string Order::getDescription(){
-    return *description;
+string Order::getDescription() {
+    return this->description;
 }
 
-void Order::setValid(bool v){
-    *valid = v;
+void Order::setValid(bool v) {
+    this->valid = v;
 }
 
 /**
@@ -79,11 +73,11 @@ ostream& operator << (ostream& out, Order* o)
 
     out << "OrderID: #" << o->getOrderID() << "\n"
         << "Descrption: " << o->getDescription() << "\n"
-        << "Is valid: " << printBoolValue(o->validate()) << "\n" << "\n";
+        << "Is valid: " << printBoolValue(o->validate()) << "\n\n";
     return out;
 }
 
-/******************************* DEPLOY *********************************************/
+/************************************************************ Deploy **************************************************************/
 Deploy::Deploy() {
     this->addDescription();
 }
@@ -99,20 +93,20 @@ Deploy::Deploy(Deploy *d) {
 */
 void Deploy::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
-        cout << "Executing (Deploy) order #" << getOrderID() << " ..." << endl;
-    } else cout << "Can NOT execute (Deploy) order #" << getOrderID() << " ..." << endl;
+        cout << "Executing (Deploy) order #" << getOrderID() << " ...\n";
+    } else cout << "Can NOT execute (Deploy) order #" << getOrderID() << " ...\n";
 };
 
 void Deploy::addDescription() {
-    *description = "(Deploy) Move a certain number of army units from the current player's \n"
+    this->description = "(Deploy) Move a certain number of army units from the current player's \n"
         "            reinforcement pool to one of the current player's territories.";
 }
 
 string Deploy::getDescription() {
-    return *description;
+    return this->description;
 }
 
-/******************************* Advance *********************************************/
+/************************************************************ Advance **************************************************************/
 Advance::Advance() {
     this->addDescription();
 }
@@ -128,20 +122,20 @@ Advance::Advance(Advance *a) {
 */
 void Advance::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
-        cout << "Executing (Advance) order #" << getOrderID() << " ..." << endl;
-    } else cout << "Can NOT execute (Advance) order #" << getOrderID() << " ..." << endl;
+        cout << "Executing (Advance) order #" << getOrderID() << " ...\n";
+    } else cout << "Can NOT execute (Advance) order #" << getOrderID() << " ...\n";
 };
 
 void Advance::addDescription() {
-    *description = "(Advance) Move a certain number of army units from one territory \n"
+    this->description = "(Advance) Move a certain number of army units from one territory \n"
             "            (source territory) to another territory (target territory).";
 }
 
 string Advance::getDescription() {
-    return *description;
+    return this->description;
 }
 
-/******************************* Bomb *********************************************/
+/************************************************************ Bomb **************************************************************/
 Bomb::Bomb() {
     this->addDescription();
 }
@@ -157,21 +151,20 @@ Bomb::Bomb(Bomb* a) {
 */
 void Bomb::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
-        cout << "Executing (Bomb) order #" << getOrderID() << " ..." << endl;
-    } else cout << "Can NOT execute (Bomb) order #" << getOrderID() << " ..." << endl;
+        cout << "Executing (Bomb) order #" << getOrderID() << " ...\n";
+    } else cout << "Can NOT execute (Bomb) order #" << getOrderID() << " ...\n";
 };
 
 void Bomb::addDescription() {
-    *description = "(Bomb) Destroy half of the army units located on a target territory. \n"
+    this->description = "(Bomb) Destroy half of the army units located on a target territory. \n"
         "            This order can only be issued if a player has the bomb card in their hand.";
 }
 
 string Bomb::getDescription() {
-    return *description;
+    return this->description;
 }
 
-/******************************* Blockade *********************************************/
-Blockade::Blockade() {
+/************************************************************ Blockade **************************************************************/Blockade::Blockade() {
     this->addDescription();
 }
 
@@ -185,20 +178,20 @@ Blockade::Blockade(Blockade* a) {
 */
 void Blockade::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
-        cout << "Executing (Blockade) order #" << getOrderID() << " ..." << endl;
-    } else cout << "Can NOT execute (Blockade) order #" << getOrderID() << " ..." << endl;
+        cout << "Executing (Blockade) order #" << getOrderID() << " ...\n";
+    } else cout << "Can NOT execute (Blockade) order #" << getOrderID() << " ...\n";
 };
 
 void Blockade::addDescription() {
-    *description = "(Blockade) Triple the number of army units on a target territory and make it a neutral territory. \n"
+    this->description = "(Blockade) Triple the number of army units on a target territory and make it a neutral territory. \n"
         "            This order can only be issued if a player has the blockade card in their hand.";
 }
 
 string Blockade::getDescription() {
-    return *description;
+    return this->description;
 }
 
-/******************************* Airlift *********************************************/
+/************************************************************ Airlift **************************************************************/
 Airlift::Airlift() {
     this->addDescription();
 }
@@ -214,20 +207,20 @@ Airlift::Airlift(Airlift *a) {
 */
 void Airlift::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
-        cout << "Executing (Airlift) order #" << getOrderID() << " ..." << endl;
-    } else cout << "Can NOT execute (Airlift) order #" << getOrderID() << " ..." << endl;
+        cout << "Executing (Airlift) order #" << getOrderID() << " ...\n";
+    } else cout << "Can NOT execute (Airlift) order #" << getOrderID() << " ...\n";
 };
 
 void Airlift::addDescription() {
-    *description = "(Airlift) Advance a certain number of army units from one from one territory (source territory) to another territory \n"
+    this->description = "(Airlift) Advance a certain number of army units from one from one territory (source territory) to another territory \n"
         "            (target territory). This order can only be issued if a player has the airlift card in their hand.";
 }
 
 string Airlift::getDescription() {
-    return *description;
+    return this->description;
 }
 
-/******************************* Negotiate *********************************************/
+/************************************************************ Negotiate **************************************************************/
 Negotiate::Negotiate() {
     this->addDescription();
 }
@@ -243,23 +236,20 @@ Negotiate::Negotiate(Negotiate* a) {
 */
 void Negotiate::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
-        cout << "Executing (Negotiate) order #" << getOrderID() << " ..." << endl;
-    } else cout << "Can NOT execute (Negotiate) order #" << getOrderID() << " ..." << endl;
+        cout << "Executing (Negotiate) order #" << getOrderID() << " ...\n";
+    } else cout << "Can NOT execute (Negotiate) order #" << getOrderID() << " ...\n";
 };
 
 void Negotiate::addDescription() {
-    *description = "(Negotiate) prevent attacks between the current player and another target player until the end of \n"
+    this->description = "(Negotiate) prevent attacks between the current player and another target player until the end of \n"
         "            the turn. This order can only be issued if a player has the diplomacy card in their hand.";
 }
 
 string Negotiate::getDescription() {
-    return *description;
+    return this->description;
 }
 
-/******************************* OrdersList *********************************************/
-/**
- * Default Constructor 
- */
+/************************************************************ OrdersList **************************************************************/
 OrdersList::OrdersList(){
     OL = new vector<Order*>;
 }
@@ -288,7 +278,7 @@ bool OrdersList::move(int pos, int id){
     // post out of bounds
     int size = OL->size();
     if (pos == 0 || pos < 0 || pos > size) {
-        cout << "From move(): position " << pos << " does not exist" <<endl;
+        cout << "From move(): position " << pos << " does not exist\n";
         return false;
     }
     // pos = 1, send to front of list
@@ -337,7 +327,7 @@ bool OrdersList::remove(int id) {
             return true;
         }
     }
-    cout<< "From remove(): Order#" << id << " does not exist" <<endl;
+    cout<< "From remove(): Order#" << id << " does not exist\n";
     return false;
 }
 
@@ -355,7 +345,7 @@ int OrdersList::getIndex(vector<Order*> ol, Order *o)
         return index;
     }
     else {
-        cout << "-1" << endl;
+        cout << "-1\n";
         return -1;
     }
 }
