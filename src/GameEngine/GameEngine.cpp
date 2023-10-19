@@ -36,9 +36,6 @@
         return out;
 
     }
-/**
- * This method returns a state's name
- */
     string State::getStateName(){
         return stateName;
     }
@@ -82,15 +79,9 @@ Transition::Transition(string requiredCommand, State* finalState){
         return out;
 
     }
-/**
- * This method returns a command's name
- */ 
     string Transition::getCommand(){
         return command;
     }
-/**
- * This method returns the next state once the associated command has been called
- */ 
     State * Transition::getNextState(){
         return nextState;
     }
@@ -110,9 +101,15 @@ Transition::Transition(string requiredCommand, State* finalState){
         State* winState = new State("win");
         State* endState = new State("end");
 
-        gameStates.push_back(startState);gameStates.push_back(maploadedState);gameStates.push_back(mapvalidatedState);
-        gameStates.push_back(playersaddedState);gameStates.push_back(assignreinforcementState);gameStates.push_back(issueordersState);
-        gameStates.push_back(executeordersState);gameStates.push_back(winState);gameStates.push_back(endState);
+        gameStates.push_back(startState);
+        gameStates.push_back(maploadedState);
+        gameStates.push_back(mapvalidatedState);
+        gameStates.push_back(playersaddedState);
+        gameStates.push_back(assignreinforcementState);
+        gameStates.push_back(issueordersState);
+        gameStates.push_back(executeordersState);
+        gameStates.push_back(winState);
+        gameStates.push_back(endState);
 
         return gameStates;
     }
@@ -138,11 +135,20 @@ Transition::Transition(string requiredCommand, State* finalState){
         Transition* t13 = new Transition("play", states[0]);
         Transition* t14 = new Transition( "end", states[8]);
 
-        gameTransitions.push_back(t1);gameTransitions.push_back(t2);gameTransitions.push_back(t3);
-        gameTransitions.push_back(t4);gameTransitions.push_back(t5);gameTransitions.push_back(t6);
-        gameTransitions.push_back(t7);gameTransitions.push_back(t8);gameTransitions.push_back(t9);
-        gameTransitions.push_back(t10);gameTransitions.push_back(t11);gameTransitions.push_back(t12);
-        gameTransitions.push_back(t13);gameTransitions.push_back(t14);
+        gameTransitions.push_back(t1);
+        gameTransitions.push_back(t2);
+        gameTransitions.push_back(t3);
+        gameTransitions.push_back(t4);
+        gameTransitions.push_back(t5);
+        gameTransitions.push_back(t6);
+        gameTransitions.push_back(t7);
+        gameTransitions.push_back(t8);
+        gameTransitions.push_back(t9);
+        gameTransitions.push_back(t10);
+        gameTransitions.push_back(t11);
+        gameTransitions.push_back(t12);
+        gameTransitions.push_back(t13);
+        gameTransitions.push_back(t14);
 
         return gameTransitions;
     }
