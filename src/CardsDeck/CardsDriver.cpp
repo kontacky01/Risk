@@ -2,9 +2,9 @@
 #include "Cards.h"
 
 void testCards() {
-    cout << "\n" << "*************************************" << "\n"
+    cout << "\n*************************************\n"
          << "Hello, World! Let's test some Cards. \n"
-         << "*************************************" << "\n" << "\n";
+         << "*************************************\n\n";
 
     /**
     * Declare some variables for later use
@@ -13,7 +13,7 @@ void testCards() {
     string checkCardType;
     Card* drawnCard;
 
-    cout << "---------> Testing Phase 1: Creating/Setting/Validating Cards <---------" << "\n" << "\n";
+    cout << "---------> Testing Phase 1: Creating/Setting/Validating Cards <---------\n\n";
 
     /**
     * Create some cards for testing
@@ -26,7 +26,7 @@ void testCards() {
     Card card2("Reinforcement");
     Card card3("Blockade");
     Card card4("Airlift");
-    cout << "...Setting Card5 to \"Breakfast\"..." << "\n";
+    cout << "...Setting Card5 to \"Breakfast\"...\n";
     Card card5("Breakfast");
     cout << "\n";
 
@@ -34,20 +34,20 @@ void testCards() {
     cout << "Card 2 type: " << card2.getType() << "\n";
     cout << "Card 3 type: " << card3.getType() << "\n";
     cout << "Card 4 type: " << card4.getType() << "\n";
-    cout << "Card 5 type: " << card5.getType() << "\n" << "\n";
-    cout << "...Setting Card5 to a valid type..." << "\n";
+    cout << "Card 5 type: " << card5.getType() << "\n\n";
+    cout << "...Setting Card5 to a valid type...\n";
     card5.setType("Diplomacy");
-    cout << "Card5 is now a \"" << card5.getType() << "\" card." << "\n" << "\n";
+    cout << "Card5 is now a \"" << card5.getType() << "\" card.\n\n";
 
-    cout << "...Validating Card2 type..." << "\n";
+    cout << "...Validating Card2 type...\n";
     checkCardType = card2.getType();
     if (Card::isValidCardType(checkCardType)) {
-        cout << "Card type " << "\"" << checkCardType << "\" is valid." << "\n" << "\n";
+        cout << "Card type \"" << checkCardType << "\" is valid.\n\n";
     } else {
-        cout << "Card type " << "\"" << checkCardType << "\" is not valid." << "\n" << "\n";
+        cout << "Card type \"" << checkCardType << "\" is not valid.\n\n";
     }
 
-    cout << "---------> Testing Phase 2: Copy Constructors <---------" << "\n" << "\n";
+    cout << "---------> Testing Phase 2: Copy Constructors <---------\n\n";
 
     /**
     * Validating deep copy constructors by
@@ -55,30 +55,30 @@ void testCards() {
      * Setting original Card 4 to a new type and comparing the two
      * Create a deck and do the same
     */
-    cout << "...Making a deep copy of Card4..." << "\n";
+    cout << "...Making a deep copy of Card4...\n";
     Card copiedCard(card4);
-    cout << "Card4 type: " << "\"" << card4.getType() << "\"" << "\n";
-    cout << "...Setting Card4 type to \"Blockade\"..." << "\n";
+    cout << "Card4 type: \"" << card4.getType() << "\"\n";
+    cout << "...Setting Card4 type to \"Blockade\"...\n";
     card4.setType("Blockade");
-    cout << "Card4 original is now: \"" << card4.getType() << "\"" << "\n";
-    cout << "Card4 copy is now: \"" << copiedCard.getType() << "\"" << "\n" << "Deep copy is a success!" << "\n" << "\n";
+    cout << "Card4 original is now: \"" << card4.getType() << "\"\n";
+    cout << "Card4 copy is now: \"" << copiedCard.getType() << "\"\n" << "Deep copy is a success!\n\n";
 
-    cout << "...Creating a new deck of cards..." << "\n" << "\n";
+    cout << "...Creating a new deck of cards...\n\n";
     Deck newDeck;
     newDeck.fillDeck();
     newDeck.printDeck();
     newDeck.getDeckSize();
     cout << "\n";
-    cout << "...Creating a deep copy of The Deck..." << "\n" << "\n";
+    cout << "...Creating a deep copy of The Deck...\n\n";
     Deck NewDeckCopy (newDeck);
-    cout << "...Shuffling original Deck..." << "\n" << "\n";
+    cout << "...Shuffling original Deck...\n\n";
     cout << "(Shuffled Original) \n"; newDeck.shuffleDeck();
     newDeck.printDeck();
-    cout << "\n" << "...Printing deep copy of The Deck..." << "\n" << "\n";
+    cout << "\n...Printing deep copy of The Deck...\n\n";
     cout << "(Copy) "; NewDeckCopy.printDeck();
-    cout << "\n" << "Deep copy is a success!" << "\n";
+    cout << "\nDeep copy is a success!\n";
 
-    cout << "\n" << "---------> Testing Phase 3: Draw/Play Cards <---------" << "\n" << "\n";
+    cout << "\n---------> Testing Phase 3: Draw/Play Cards <---------\n\n";
 
     /**
     * Creates a hand for our player and fills it with cards
@@ -86,39 +86,39 @@ void testCards() {
      * Validates ability to draw and play a card
      * Validates ability to return a card back to deck
     */
-    cout << "...Creating a player's hand of cards..." << "\n" << "\n";
+    cout << "...Creating a player's hand of cards...\n\n";
     Hand hand;
     for (int i = 0; i < 5; ++i) {
         newDeck.draw(hand);
     }
     hand.printHand();
     hand.getHandSize();
-    cout << "\n" << "...Checking The Deck for remaining cards..." << "\n" << "\n";
+    cout << "\n...Checking The Deck for remaining cards...\n\n";
     newDeck.printDeck();
     newDeck.getDeckSize();
 
     // testing play function
-    cout << "\n" << "...Player is choosing a card to play..." << "\n" << "\n";
-    cout << "...Checking Orders List for created order..." << "\n" << "\n";
+    cout << "\n...Player is choosing a card to play...\n\n";
+    cout << "...Checking Orders List for created order...\n\n";
     hand.play(cardToPlay, &newDeck);
     cout << "\n";
-    cout << "...Checking Your Hand for remaining cards..." << "\n" << "\n";
+    cout << "...Checking Your Hand for remaining cards...\n\n";
     hand.printHand();
     hand.getHandSize();
 
-    cout << "\n" << "...Checking The Deck to see if played card has returned..." << "\n" << "\n";
+    cout << "\n...Checking The Deck to see if played card has returned...\n\n";
     newDeck.printDeck();
     newDeck.getDeckSize();
 
-    cout << "\n" << "...You drew a card from The Deck..." << "\n" << "\n";
+    cout << "\n...You drew a card from The Deck...\n\n";
 
     drawnCard = newDeck.draw(hand);
-    cout << "You drew a \"" << drawnCard->getType() << "\" card." << "\n";
-    cout << "\n" << "...Checking remaining cards in The Deck..." << "\n" << "\n";
+    cout << "You drew a \"" << drawnCard->getType() << "\" card.\n";
+    cout << "\n...Checking remaining cards in The Deck...\n\n";
     newDeck.printDeck();
     newDeck.getDeckSize();
 
-    cout << "\n" << "...Checking the cards in Your Hand..." << "\n" << "\n";
+    cout << "\n...Checking the cards in Your Hand...\n\n";
     hand.printHand();
     hand.getHandSize();
     cout << "\n";

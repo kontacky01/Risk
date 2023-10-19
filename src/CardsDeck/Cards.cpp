@@ -94,7 +94,7 @@ void Card::setType(const string &newType) {
             *type = newType;
         }
     } else {
-        cout << "Invalid card type!" << "\n";
+        cout << "Invalid card type!\n";
     }
 }
 
@@ -151,7 +151,7 @@ void Deck::fillDeck() {
  *
 */
 void Deck::printDeck() {
-    cout << "The Deck contains: " << "\n" << "-------------------" << "\n";
+    cout << "The Deck contains: \n-------------------\n";
     for (size_t i = 0; i < deck.size(); i++) {
         const Card *pointer = deck[i];
         cout << "Card #" << i << " : " << pointer->getType() << "\n";
@@ -162,7 +162,7 @@ void Deck::printDeck() {
 * Method outputs size of deck
 */
 void Deck::getDeckSize() {
-    cout << "The Deck contains " << deck.size() << " cards." << "\n";
+    cout << "The Deck contains " << deck.size() << " cards.\n";
 }
 
 /**
@@ -182,7 +182,7 @@ Card *Deck::draw(Deck &transfer) {
     shuffleDeck();
 
     if (deck.empty()) {
-        cout << "Cannot draw card; The Deck is empty!" << "\n";
+        cout << "Cannot draw card; The Deck is empty!\n";
         return nullptr;
     }
 
@@ -251,7 +251,7 @@ Hand &Hand::operator=(const Hand &other) {
 * Method outputs a list of cards in a player's hand
 */
 void Hand::printHand() {
-    cout << "Your Hand contains: " << "\n" << "-------------------" << "\n";
+    cout << "Your Hand contains: \n-------------------\n";
     for (size_t i = 0; i < hand.size(); i++) {
         const Card *pointer = hand[i];
         cout << "Card #" << i << " : " << pointer->getType() << "\n";
@@ -262,7 +262,7 @@ void Hand::printHand() {
 * Method outputs size of player's hand
 */
 void Hand::getHandSize() {
-    cout << "Your Hand contains " << hand.size() << " cards." << "\n";
+    cout << "Your Hand contains " << hand.size() << " cards.\n";
 }
 
 /**
@@ -279,12 +279,11 @@ void Hand::addCard(Card *newHandCard) {
  * Once a card is player, we create the order, remove the card from hand and return it back to the deck
 */
 void Hand::play(string &playedCardType, Deck *returningDeck) {
-    OL;
     auto it = find_if(hand.begin(), hand.end(), [&playedCardType](const Card *card) {
         return card->getType() == playedCardType;
     });
 
-    cout << "You played the " << "\"" << playedCardType << "\" card." << "\n";
+    cout << "You played the " << "\"" << playedCardType << "\" card.\n";
 
     if (it != hand.end()) {
         if (playedCardType == "Bomb") {
@@ -313,6 +312,6 @@ void Hand::play(string &playedCardType, Deck *returningDeck) {
         returningDeck->returnCard(*it);
         hand.erase(it);
     } else {
-        cout << "Error: Card of type " << "\"" << playedCardType << "\"" << " not found in hand!" << "\n";
+        cout << "Error: Card of type " << "\"" << playedCardType << "\"" << " not found in hand!\n";
     }
 }
