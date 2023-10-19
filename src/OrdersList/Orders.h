@@ -143,6 +143,8 @@ class OrdersList
 public:
     OrdersList();
     
+    //TODO: copy constructor
+
     virtual void addOrder(Order* o);
 
     /**
