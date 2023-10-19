@@ -221,7 +221,7 @@ Hand::Hand() {
 /// destructor
 /// </summary>
 Hand::~Hand() {
-
+    cout << "...Hand destructor was called..." << endl;
 }
 
 /// <summary>
@@ -274,7 +274,7 @@ void Hand::addCard(Card *newHandCard) {
 /// play function: takes card type and original deck as arguments
 /// </summary>
 void Hand::play(string &playedCardType, Deck *returningDeck) {
-    OrdersList OL; /// <summary> declare a list of orders
+    OrdersList *OL = new OrdersList(); /// <summary> declare a list of orders
     auto it = find_if(hand.begin(), hand.end(), [&playedCardType](const Card *card) {
         return card->getType() == playedCardType;
     });
@@ -285,23 +285,23 @@ void Hand::play(string &playedCardType, Deck *returningDeck) {
         /// <summary> orders: deploy, advance, bomb, blockade, airlift, and negotiate
         if (playedCardType == "Bomb") {
             auto *order = new Bomb();
-            OL.addOrder(order);
+            OL->addOrder(order);
             cout << "\n" << OL;
         } else if (playedCardType == "Reinforcement") {
             auto *order = new Deploy();
-            OL.addOrder(order);
+            OL->addOrder(order);
             cout << "\n" << OL;
         } else if (playedCardType == "Blockade") {
             auto *order = new Blockade();
-            OL.addOrder(order);
+            OL->addOrder(order);
             cout << "\n" << OL;
         } else if (playedCardType == "Airlift") {
             auto *order = new Airlift();
-            OL.addOrder(order);
+            OL->addOrder(order);
             cout << "\n" << OL;
         } else if (playedCardType == "Diplomacy") {
             auto *order = new Negotiate();
-            OL.addOrder(order);
+            OL->addOrder(order);
             cout << "\n" << OL;
         } else {
             cout << "Invalid card type: " << playedCardType << "\n";
@@ -312,3 +312,22 @@ void Hand::play(string &playedCardType, Deck *returningDeck) {
         cout << "Error: Card of type " << "\"" << playedCardType << "\"" << " not found in hand!" << "\n";
     }
 }
+
+/**
+ * Override the stream operator for Card
+ */
+ostream& operator << (ostream& out, Hand* h) {
+    out << "The Hand contains \n------------------------\n";
+    int handSize = h->hand.size();
+    if(handSize == 0 ) {
+        out << "Hand is empty\n";
+    }
+    else {
+        for(int i = 0 ; i < h->hand.size(); i++){
+            out << "Card type:" << h->hand.at(i)->getType() << "\n";
+        }
+    }
+
+    return out;
+}
+

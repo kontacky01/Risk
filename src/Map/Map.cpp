@@ -194,6 +194,10 @@ int Territory::getId() const {
     return id;
 }
 
+int Territory::getArmyCount() const {
+    return armyCount;
+}
+
 vector<Territory*> Territory::getAdjacencyList() {
     return adjacencyList;
 }
