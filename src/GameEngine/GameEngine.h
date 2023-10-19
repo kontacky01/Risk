@@ -33,9 +33,7 @@ public:
  * overide Stream insertion operator
  */
     friend ostream& operator<<(ostream& out, State* s);
-/**
- * This method returns a state's name
- */   
+
     string getStateName();
 
 private:
@@ -69,13 +67,9 @@ public:
  * overide Stream insertion operator
  */
     friend ostream& operator<<(ostream& out, Transition* t);
-/**
- * This method returns a command's name
- */ 
+
     string getCommand();
-/**
- * This method returns the next state once the associated command has been called
- */ 
+
     State * getNextState();
 
 private:
