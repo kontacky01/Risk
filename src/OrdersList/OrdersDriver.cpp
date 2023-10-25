@@ -194,11 +194,9 @@ void testOrdersLists() {
 
     cout << "\n\n---------> Test 8: Deleting Pointers <---------\n\n\n";
 
-    cout << "...Deleting pointers..\n";
-    OL->deleteOrdersList();
+    cout << "...Test 8: Deleting pointers..\n";
     delete OL;
     OL = NULL;
-    OLCopy->deleteOrdersList();
     delete OLCopy;
     OLCopy = NULL;
     delete t1OL;
@@ -208,9 +206,16 @@ void testOrdersLists() {
     // delete hOL --> hand deletion is managed by the player as it belongs to it;
     hOL = NULL;
     delete p;
+    p = NULL;
     // delete pStateOL --> state will be also deleted by the player;
     pStateOL = NULL;
     delete sTest;
     sTest = NULL;
     cout << "Pointers deleted.\n\n";
+
+
+    cout << "\n\n---------> Test 9: Deep Copy Constructor <---------\n\n\n";
+    
+
+
 };

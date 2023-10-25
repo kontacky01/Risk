@@ -12,11 +12,19 @@ Order::Order() {
     setValid(false);
 };
 
-Order::Order(Order* o) {
-    orderID = o->getOrderID();
+Order::Order(const Order* o) {
+    orderID = incrementCount();
     addDescription();
     setValid(false);
 };
+
+Order::~Order(){
+    cout<< "Order ID#: " << getOrderID() << " is deleted.\n\n";
+}
+
+Order* Order::clone() const {
+    return new Order(*this);
+}
 
 /**
 * Checks if valid for execution, invalid orders can exist
@@ -38,6 +46,11 @@ void Order::execute(State* currentState) {
 int Order::incrementCount() {
     return ++countOrderID;
 };
+
+int Order::getCount() {
+    return countOrderID;
+};
+
 
 void Order::setOrderID(int id) {
     orderID = id;
@@ -83,8 +96,12 @@ Deploy::Deploy() {
 }
 
 Deploy::Deploy(Deploy *d) {
-    setOrderID(d->getOrderID());
+    setOrderID(getCount());
     this->addDescription();
+}
+
+Deploy* Deploy::clone() const {
+    return new Deploy(*this);
 }
 
 /**
@@ -112,8 +129,12 @@ Advance::Advance() {
 }
 
 Advance::Advance(Advance *a) {
-    setOrderID(a->getOrderID());
+    setOrderID(getCount());
     this->addDescription();
+}
+
+Advance* Advance::clone() const {
+    return new Advance(*this);
 }
 
 /**
@@ -140,9 +161,13 @@ Bomb::Bomb() {
     this->addDescription();
 }
 
-Bomb::Bomb(Bomb* a) {
-    setOrderID(a->getOrderID());
+Bomb::Bomb(Bomb* b) {
+    setOrderID(getCount());
     this->addDescription();
+}
+
+Bomb* Bomb::clone() const{
+    return new Bomb(*this);
 }
 
 /**
@@ -153,7 +178,7 @@ void Bomb::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
         cout << "Executing (Bomb) order #" << getOrderID() << " ...\n";
     } else cout << "Can NOT execute (Bomb) order #" << getOrderID() << " ...\n";
-};
+}
 
 void Bomb::addDescription() {
     this->description = "(Bomb) Destroy half of the army units located on a target territory. \n"
@@ -164,14 +189,20 @@ string Bomb::getDescription() {
     return this->description;
 }
 
-/************************************************************ Blockade **************************************************************/Blockade::Blockade() {
+/************************************************************ Blockade **************************************************************/
+Blockade::Blockade() {
     this->addDescription();
 }
 
 Blockade::Blockade(Blockade* a) {
-    setOrderID(a->getOrderID());
+    setOrderID(getCount());
     this->addDescription();
 }
+
+Blockade* Blockade::clone() const{
+    return new Blockade(*this);
+}
+
 /**
 * Checks player state and executes order
 * @param currentState player's current state
@@ -197,8 +228,12 @@ Airlift::Airlift() {
 }
 
 Airlift::Airlift(Airlift *a) {
-    setOrderID(a->getOrderID());
+    setOrderID(getCount());
     this->addDescription();
+}
+
+Airlift* Airlift::clone() const{
+    return new Airlift(*this);
 }
 
 /**
@@ -226,8 +261,12 @@ Negotiate::Negotiate() {
 }
 
 Negotiate::Negotiate(Negotiate* a) {
-    setOrderID(a->getOrderID());
+    setOrderID(getCount());
     this->addDescription();
+}
+
+Negotiate* Negotiate::clone() const{
+    return new Negotiate(*this);
 }
 
 /**
@@ -263,6 +302,15 @@ OrdersList::OrdersList(const OrdersList &originalOrderList){
          OL->push_back(originalOrderList.OL->at(i));
     }
 };
+
+OrdersList::~OrdersList(){
+    cout <<"...Deleting Orders in OrdersList...\n\n";
+    for (auto o : *OL) {
+        delete o;   // deallocate memory
+        o = NULL;   // prevent dangling pointer error
+    }
+    cout <<"OrdersList deleted.\n\n";
+}
 
 void OrdersList::addOrder(Order *o){
     OL->push_back(o);
@@ -324,6 +372,7 @@ bool OrdersList::remove(int id) {
             index = getIndex(*OL,o);
             OL->erase(OL->begin()+index); 
             delete o;
+            o = NULL;
             return true;
         }
     }

@@ -11,7 +11,11 @@ public:
 
     Order();
 
-    Order(Order* o);
+    Order(const Order* o);
+
+    ~Order();
+
+    virtual Order* clone() const;
 
     /**
     * Checks if valid for execution, invalid orders can exist
@@ -27,6 +31,8 @@ public:
     * Increment countOrderID by 1
     */
     int incrementCount(); 
+
+    int getCount();
 
     void setOrderID(int id);
 
@@ -56,6 +62,8 @@ public:
 
     Deploy(Deploy* d);
 
+    Deploy* clone() const;
+
     void execute(State *currentState);
 
     void addDescription();
@@ -70,6 +78,8 @@ public:
 
     Advance(Advance* a);
 
+    Advance* clone() const;
+
     void execute(State *currentState);
 
     void addDescription();
@@ -83,7 +93,9 @@ class Bomb : public Order
 public:
     Bomb();
 
-    Bomb(Bomb* a);
+    Bomb(Bomb* b);
+
+    Bomb* clone() const;
 
     void execute(State *currentState);
     
@@ -99,6 +111,8 @@ public:
     Blockade();
    
     Blockade(Blockade* a);
+
+    Blockade* clone() const;
     
     void execute(State *currentState);
     
@@ -114,6 +128,8 @@ public:
     Airlift();
     
     Airlift(Airlift* a);
+
+    Airlift* clone() const;
     
     void execute(State *currentState);
     
@@ -129,6 +145,8 @@ public:
     Negotiate();
     
     Negotiate(Negotiate* a);
+
+    Negotiate* clone() const;
     
     void execute(State *currentState);
     
@@ -144,6 +162,9 @@ public:
     OrdersList();
     
     //TODO: copy constructor
+    OrdersList(const OrdersList *ol);
+
+    ~OrdersList();
 
     virtual void addOrder(Order* o);
 
