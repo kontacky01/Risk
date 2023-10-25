@@ -2,12 +2,9 @@
 #include <vector>
 #include <iostream>
 #include "../GameEngine/GameEngine.h"
+#include "../LoggingObserver/LoggingObserver.h"
 
 using namespace std;
-
-// circular dependency
-class Subject;
-class ILoggable;
 
 class Order : public Subject, public ILoggable 
 {

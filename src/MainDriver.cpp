@@ -3,7 +3,7 @@
 #include "OrdersList/Orders.h"
 #include "CardsDeck/Cards.h"
 #include "GameEngine/GameEngine.h"
-#include "LoggingObserver/LoggingObserver.h"
+// #include "LoggingObserver/LoggingObserver.h"
 
 int main()
 {

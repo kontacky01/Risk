@@ -1,9 +1,8 @@
 #pragma once
 #include <iostream>
+#include <fstream>
 #include <list>
-// avoid circular depedency
-class Order;
-class State;
+#include "../GameEngine/GameEngine.h"
 
 using namespace std;
 /************************************************************ ILoggable ************************************************************/
@@ -16,24 +15,21 @@ public:
 /************************************************************ Observer ************************************************************/
 class Observer {
 public:
-    Observer();
-    ~Observer();
     virtual void update(ILoggable* loggable) = 0;
 };
 
 /************************************************************ LogObserver ************************************************************/
 class LogObserver : public Observer {
     public: 
-    LogObserver();
-    ~LogObserver();
     void update(ILoggable* loggable);
+
+    private:
+    void printToFileHelper(string log);
 };
 
 /************************************************************ Subject ************************************************************/
 class Subject {
 public:
-    Subject();
-    ~Subject();
     /**
      * Attach to view
      */
