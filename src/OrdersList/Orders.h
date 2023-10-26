@@ -27,7 +27,7 @@ public:
     */
     virtual void execute(State *currentState);
 
-    virtual void execute()=0;
+    //virtual void execute()=0;
 
     /**
     * Increment countOrderID by 1

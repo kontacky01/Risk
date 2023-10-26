@@ -145,7 +145,7 @@ Advance::Advance(const Advance* a) {
 }
 
 Advance* Advance::clone() const {
-    return new Advance(*this);
+    return new Advance(this);
 }
 
 /**
@@ -178,7 +178,7 @@ Bomb::Bomb(const Bomb* b) {
 }
 
 Bomb* Bomb::clone() const{
-    return new Bomb(*this);
+    return new Bomb(this);
 }
 
 /**
@@ -211,7 +211,7 @@ Blockade::Blockade(const Blockade* a) {
 }
 
 Blockade* Blockade::clone() const{
-    return new Blockade(*this);
+    return new Blockade(this);
 }
 
 /**
@@ -244,7 +244,7 @@ Airlift::Airlift(const Airlift* a) {
 }
 
 Airlift* Airlift::clone() const{
-    return new Airlift(*this);
+    return new Airlift(this);
 }
 
 /**
@@ -277,7 +277,7 @@ Negotiate::Negotiate(const Negotiate* a) {
 }
 
 Negotiate* Negotiate::clone() const{
-    return new Negotiate(*this);
+    return new Negotiate(this);
 }
 
 /**
