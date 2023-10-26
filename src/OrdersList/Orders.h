@@ -27,6 +27,8 @@ public:
     */
     virtual void execute(State *currentState);
 
+    virtual void execute()=0;
+
     /**
     * Increment countOrderID by 1
     */
@@ -65,6 +67,8 @@ public:
     Deploy* clone() const;
 
     void execute(State *currentState);
+
+    void execute();
 
     void addDescription();
 

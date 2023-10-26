@@ -115,6 +115,16 @@ void Deploy::execute(State* current) {
     } else cout << "Can NOT execute (Deploy) order #" << getOrderID() << " ...\n";
 };
 
+/**
+* A deploy order tells a certain number of army units taken from the reinforcement pool to deploy to
+* a target territory owned by the player issuing this order.
+* 
+* 
+*/
+void execute(){
+
+}
+
 void Deploy::addDescription() {
     this->description = "(Deploy) Move a certain number of army units from the current player's \n"
         "            reinforcement pool to one of the current player's territories.";
