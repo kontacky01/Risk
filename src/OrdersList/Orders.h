@@ -60,7 +60,7 @@ class Deploy : public Order
 public:
     Deploy();
 
-    Deploy(Deploy* d);
+    Deploy(const Deploy* d);
 
     Deploy* clone() const;
 
@@ -76,7 +76,7 @@ class Advance : public Order
 public:
     Advance();
 
-    Advance(Advance* a);
+    Advance(const Advance* a);
 
     Advance* clone() const;
 
@@ -93,7 +93,7 @@ class Bomb : public Order
 public:
     Bomb();
 
-    Bomb(Bomb* b);
+    Bomb(const Bomb* b);
 
     Bomb* clone() const;
 
@@ -110,7 +110,7 @@ class Blockade : public Order
 public:
     Blockade();
    
-    Blockade(Blockade* a);
+    Blockade(const Blockade* a);
 
     Blockade* clone() const;
     
@@ -127,7 +127,7 @@ class Airlift : public Order
 public:
     Airlift();
     
-    Airlift(Airlift* a);
+    Airlift(const Airlift* a);
 
     Airlift* clone() const;
     
@@ -144,7 +144,7 @@ class Negotiate : public Order
 public:
     Negotiate();
     
-    Negotiate(Negotiate* a);
+    Negotiate(const Negotiate* a);
 
     Negotiate* clone() const;
     
@@ -162,7 +162,10 @@ public:
     OrdersList();
     
     //TODO: copy constructor
-    OrdersList(const OrdersList *ol);
+    /**
+     * Copy Constructor
+     */
+    OrdersList(const OrdersList *originalOrderList);
 
     ~OrdersList();
 
@@ -184,12 +187,6 @@ public:
     void executeAll(State *s);
     
     void deleteOrdersList();
-
-
-    /**
-     * Copy Constructor 
-     */
-    OrdersList(const OrdersList &originalOrderList);
   
 private:
     vector<Order*> *OL;

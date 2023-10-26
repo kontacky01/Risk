@@ -192,7 +192,50 @@ void testOrdersLists() {
     p->getOrdersList()->executeAll(p->getState());
 
 
-    cout << "\n\n---------> Test 8: Deleting Pointers <---------\n\n\n";
+    cout << "\n\n---------> Test 8: Deep Copy Constructor <---------\n\n\n";
+
+    cout << "...Creating OrdersList";
+    cout << "...Creating orders of every type... \n";
+    Order* o2 = new Order();
+    Deploy* d2 = new Deploy();
+    Advance* a2 = new Advance();
+    Bomb* b2 = new Bomb();
+    cout << "Orders of type: Order, Deploy, Advance, Bomb"; 
+    cout << "...Creating an OrdersList... \n";
+    OrdersList* OL2 = new OrdersList();
+    cout << "Ordrslist has been created \n\n";
+
+    cout << "...Adding Orders to OrdersList....\n";
+    OL2->addOrder(o2);
+    OL2->addOrder(d2);
+    OL2->addOrder(a2);
+    OL2->addOrder(b2);
+    cout << "Orders have been added to OrdersList \n\n";
+
+    cout << "...Printing Orders List with ostream:....\n\n";
+    cout << OL2;
+
+    cout <<"...Creating copy of order list...\n";
+    OrdersList* OL2Copy = new OrdersList(OL2);
+
+    cout << "...Printing COPY Orders List with ostream:....\n\n";
+    cout << OL2Copy;
+
+    cout << "...comparing order pointer addresses ...\n";
+    cout << "...address from ORIGINAl list ...\n";
+    for (auto it2 = OL2->getOL()->begin(); it2 != OL2->getOL()->end(); it2++)
+    {
+        cout << &*it2 << "\n";
+    }
+    cout << "...address from COPY list ...\n";
+    for (auto it2 = OL2Copy->getOL()->begin(); it2 != OL2Copy->getOL()->end(); it2++)
+    {
+        cout << &*it2 <<"\n";
+    }
+
+
+
+    cout << "\n\n---------> Test 9: Deleting Pointers <---------\n\n\n";
 
     cout << "...Test 8: Deleting pointers..\n";
     delete OL;
@@ -211,11 +254,15 @@ void testOrdersLists() {
     pStateOL = NULL;
     delete sTest;
     sTest = NULL;
+    delete OL2;
+    OL2 = NULL;
+    delete OL2Copy;
+    OL2Copy = NULL;
+
     cout << "Pointers deleted.\n\n";
 
 
-    cout << "\n\n---------> Test 9: Deep Copy Constructor <---------\n\n\n";
+ 
     
-
 
 };

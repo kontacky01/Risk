@@ -16,6 +16,7 @@ Order::Order(const Order* o) {
     orderID = incrementCount();
     addDescription();
     setValid(false);
+    cout <<"hi grom order copy constructor\n";
 };
 
 Order::~Order(){
@@ -23,7 +24,7 @@ Order::~Order(){
 }
 
 Order* Order::clone() const {
-    return new Order(*this);
+    return new Order(this);
 }
 
 /**
@@ -95,13 +96,13 @@ Deploy::Deploy() {
     this->addDescription();
 }
 
-Deploy::Deploy(Deploy *d) {
+Deploy::Deploy(const Deploy *d) {
     setOrderID(getCount());
     this->addDescription();
 }
 
 Deploy* Deploy::clone() const {
-    return new Deploy(*this);
+    return new Deploy(this);
 }
 
 /**
@@ -128,7 +129,7 @@ Advance::Advance() {
     this->addDescription();
 }
 
-Advance::Advance(Advance *a) {
+Advance::Advance(const Advance* a) {
     setOrderID(getCount());
     this->addDescription();
 }
@@ -161,7 +162,7 @@ Bomb::Bomb() {
     this->addDescription();
 }
 
-Bomb::Bomb(Bomb* b) {
+Bomb::Bomb(const Bomb* b) {
     setOrderID(getCount());
     this->addDescription();
 }
@@ -194,7 +195,7 @@ Blockade::Blockade() {
     this->addDescription();
 }
 
-Blockade::Blockade(Blockade* a) {
+Blockade::Blockade(const Blockade* a) {
     setOrderID(getCount());
     this->addDescription();
 }
@@ -227,7 +228,7 @@ Airlift::Airlift() {
     this->addDescription();
 }
 
-Airlift::Airlift(Airlift *a) {
+Airlift::Airlift(const Airlift* a) {
     setOrderID(getCount());
     this->addDescription();
 }
@@ -260,7 +261,7 @@ Negotiate::Negotiate() {
     this->addDescription();
 }
 
-Negotiate::Negotiate(Negotiate* a) {
+Negotiate::Negotiate(const Negotiate* a) {
     setOrderID(getCount());
     this->addDescription();
 }
@@ -296,12 +297,16 @@ OrdersList::OrdersList(){
 /**
  * Copy Constructor 
  */
-OrdersList::OrdersList(const OrdersList &originalOrderList){
+OrdersList::OrdersList(const OrdersList *originalOrderList){
     OL = new vector<Order*>;
-    for(int i = 0 ;  i < originalOrderList.OL->size(); i++){
-         OL->push_back(originalOrderList.OL->at(i));
+    for(int i = 0 ;  i < originalOrderList->OL->size(); i++){
+        OL->push_back(originalOrderList->OL->at(i)->clone());
     }
-};
+
+    // for(const auto o : originalOrderList->OL){
+    //     OL->push_back(o->clone());
+    // }
+}; 
 
 OrdersList::~OrdersList(){
     cout <<"...Deleting Orders in OrdersList...\n\n";
