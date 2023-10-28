@@ -26,8 +26,8 @@ class Player {
   /**
    * Helper method to print the list of territories to attack/defended
    */
-  friend ostream& operator<<(ostream& out,
-                             Player* o);  // overide Stream insertion operator
+  friend ostream& operator<<(ostream& out, Player* o);  // overide Stream insertion operator
+  
   void printTerritories(vector<Territory*> territories);
 
  public:
@@ -53,7 +53,11 @@ class Player {
 
   int getReinforcement();
 
-  void setReinforcement(int r);
+  void addReinforcement(int r);
+
+  vector<Territory*> getTerritories();
+
+  void addTerritory(Territory* t);
 
   OrdersList* getOrdersList();
 

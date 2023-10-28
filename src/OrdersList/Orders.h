@@ -1,21 +1,21 @@
 #pragma once
 #include <vector>
 #include <iostream>
+
 #include "../GameEngine/GameEngine.h"
+#include "../Map/Map.h"
 
 using namespace std;
 
-class Orders
+class Player;
+
+class OrderAbstract
 {
 public:
-    //TODO: Make Abstract class, get rid of instances of class
-    //need to get rid of all "new Order()"
-    //functions and attributes can stay
     virtual void execute() = 0;
-
 };
 
-class Order : public Orders
+class Order : public OrderAbstract
 {
 public:
 
@@ -31,6 +31,8 @@ public:
     * Checks if valid for execution, invalid orders can exist
     */
     bool validate();
+
+    void setValid(bool v);
     
     /**
     * Checks player state and executes order
@@ -53,11 +55,6 @@ public:
     virtual void addDescription();
 
     virtual string getDescription();
-
-    /**
-    * Increment countOrderID by 1
-    */
-    void setValid(bool v);
 protected:
     string description;
 private:
@@ -72,6 +69,10 @@ class Deploy : public Order
 public:
     Deploy();
 
+    Deploy(Territory* deployTo, int reinforcements, vector<Territory*> tOwned, bool v);
+
+    Deploy(Territory* deployTo, Player *p);
+
     Deploy(const Deploy* d);
 
     Deploy* clone() const;
@@ -83,6 +84,12 @@ public:
     void addDescription();
 
     string getDescription();
+
+private:
+    Territory* deployTo;
+    int reinforcments;
+    vector<Territory*> tOwned;
+    Player *p;
 };
 
 class Advance : public Order

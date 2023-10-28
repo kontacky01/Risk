@@ -79,8 +79,14 @@ Player::Player(){};
 
 int Player::getReinforcement(){ return this->reinforcements;}
 
-void Player::setReinforcement(int r) { this->reinforcements = r;}
+void Player::addReinforcement(int r) { this->reinforcements = this->reinforcements + r; }
 
+vector<Territory*> Player::getTerritories(){ return this->territories;}
+
+void Player::addTerritory(Territory* t){ 
+  t->setOwnerId(this->id);
+  this->territories.push_back(t);
+}
 
 OrdersList* Player::getOrdersList() { return this->orderList; }
 

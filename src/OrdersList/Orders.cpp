@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Orders.h"
+#include "../Player/Player.h"
 
 using namespace std;
 
@@ -33,6 +34,10 @@ Order* Order::clone() const {
 bool Order::validate() {
     return this->valid;
 };
+
+void Order::setValid(bool v) {
+    this->valid = v;
+}
 
 /**
 * Checks player state and executes order
@@ -71,10 +76,6 @@ string Order::getDescription() {
     return this->description;
 }
 
-void Order::setValid(bool v) {
-    this->valid = v;
-}
-
 /**
 * @brief Stream insertion operator
 * Will ouptut to console everytime "cout <<" is used on Order Object
@@ -98,6 +99,18 @@ Deploy::Deploy() {
     this->addDescription();
 }
 
+Deploy::Deploy(Territory* deployTo, int reinforcements, vector<Territory*> tOwned, bool v){
+    this->deployTo = deployTo;
+    this->reinforcments = reinforcements;
+    this->tOwned = tOwned;
+    setValid(v);
+}
+
+Deploy::Deploy(Territory* deployTo, Player *p){
+    this->deployTo = deployTo;
+    this->p = p;
+}
+
 Deploy::Deploy(const Deploy *d) {
     setOrderID(getCount());
     this->addDescription();
@@ -117,21 +130,22 @@ void Deploy::execute(State* current) {
     } else cout << "Can NOT execute (Deploy) order #" << getOrderID() << " ...\n";
 };
 
-/**
-* A deploy order tells a certain number of army units taken from the reinforcement 
-* pool to deploy to a target territory owned by the player issuing this order.
-* @param deployTo territory player is deploying
-* @param tOwned territories player has under control
-* @param numReinforcements number of available reinforcments
-* 
+/*
+* Checks if Deploy is valid and Player owns Territory to deploy,
+* then adds reinforcments.
 */
-void Deploy::execute(){
-    // Order valid, if target territory does not belond to Player
-    // if vector<Territory*> attacking != vector<Territory*> defending
-
-    // 
-
+//TODO:
+void Deploy::execute() {
+    for (auto t : this->p->getTerritories()) {
+        if (validate() && t->getName().compare(this->deployTo->getName()) == 0)
+            //can use int pointer to reinforcemnts
+            cout << "";
+    }
+    cout << "Can NOT execute Deploy to " << this->deployTo->getName()
+        << " because Player does NOT own Territory";
 }
+
+
 
 void Deploy::addDescription() {
     this->description = "(Deploy) Move a certain number of army units from the current player's \n"

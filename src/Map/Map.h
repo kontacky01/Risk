@@ -37,12 +37,14 @@ public:
 
 class Territory {
 private:
-    int ownerId;
-    int armyCount;
+    string name;
     int id;
     int continentId;
-    string name;
+    int ownerId;
+    int armyCount;
     vector<Territory*> adjacencyList;
+    friend ostream& operator << (ostream& out, Territory* o); // overide Stream insertion operator
+    
 public:
     /**
     * Default constructor
@@ -60,7 +62,15 @@ public:
 
     int getContinentId() const;
 
+    int getOwnerId() const;
+    
+    void setOwnerId(int newOwner);
+
     int getArmyCount() const;
+
+    void setArmCount(int newCount);
+
+    void addToArmyCount(int x);
 
     // Getter for adjacencyList
     vector<Territory*> getAdjacencyList();
@@ -104,6 +114,8 @@ public:
     ~Map();
 
     map<int, Territory*> getterritories();
+
+    Territory* getTerritory(string tName);
 
     void addContinent(Continent*);
 

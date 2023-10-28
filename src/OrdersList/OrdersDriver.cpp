@@ -270,58 +270,26 @@ void testOrderExecution() {
     cout <<  "\n*****************************\n"
             << "Time to test OrderExecution!! \n"
             << "*****************************\n\n";
-    /*
-    cout << "\n\n---------> Create Player with Every Order <---------\n\n\n";
-
-    vector<Territory*> t;
-    Hand* h = new Hand();
-    OrdersList* pOL = new OrdersList();
-
-    //Initializing Territory adjeceny list
-    Territory* t1 = new Territory("UK", 1, 2, 0);
-    Territory* t2 = new Territory("USA", 2, 3, 0);
-    t.push_back(t1);
-    t.push_back(t2);
-
-    cout<<"...Creating one of each order...\n";
-    Deploy* pD1 = new Deploy();
-    Advance* pA1 = new Advance();
-    Bomb* pB1 = new Bomb();
-    Blockade* pBlk1 = new Blockade();
-    Airlift* pAir1 = new Airlift();
-    Negotiate* pN1 = new Negotiate();
-    cout <<"One of each order created.\n\n";
-
-    cout << "...Adding orders to player orderslist...\n";
-    pOL->addOrder(pD1);
-    pOL->addOrder(pA1);
-    pOL->addOrder(pB1);
-    pOL->addOrder(pBlk1);
-    pOL->addOrder(pAir1);
-    pOL->addOrder(pN1);
-    cout <<"Deploy, Advance, Bomb, Blockade, Airlift, Negotiate orders added to list.\n\n";
     
-    cout << "...Creating state executeorders (must be in this state to execute orders)...\n";
-    State* pState = new State("executeorders");
-    cout << "Created state executeorders.\n\n";
+    // issueORders
+    // go to each player ask then pick to add orders in the following sequence
+    // pick 1 card > all Deploy > all Executions
 
-    cout << "...Creating player with t adjeceny list, Hand, and order list..\n";
-    Player* p = new Player(t, h, pOL, 1, pState);
-    cout << "Created player.\n\n";
+    // execute orders
+    // must be in following sequence
+    // round-robin = one player order at a time from each player, back and forth
+    // A. 1 card order of each player
+    // B. 1 deploy per person at a time
+    // C. 1 advance each player at a time 
 
-    cout << "...Printing Players orders..\n";
-    cout << "-------------------------------\n";
-    cout << p->getOrdersList();
+    // *** Test FLow *** 
+    // Phase 1: set-up
+    // 1. Load Map
+    // 2. Create two players
 
-    cout << "...Setting players Deploy order to VALID..\n";
-    p->getOrdersList()->getOL()->at(0)->setValid(true);
-    cout << "Players Deploy order is valid.\n\n";
-
-    cout << "If Player is inside execute  orders state and will be able to execute!\n\n";
-    cout << "...Executing players orders...\n";
-    cout << "-------------------------------\n";
-    p->getOrdersList()->executeAll(p->getState());
-*/
+    // Phase 2: test each order
+    // test Deploy: 
+    // show that fails if player tries to move reinforcemnts to wrong location
 
     cout << "---------> Load Map <---------\n\n";
 
@@ -340,34 +308,31 @@ void testOrderExecution() {
     cout << "---------> Test 1: Retrieve Adjency List <---------\n\n";
     cout << "...Retrieve Denmark adjencey list...\n";
 
-    for (auto const& t : map1->getterritories()) {
-        if (t.second->getName().compare("Denmark") == 0) {
-            for (Territory* adj : t.second->getAdjacencyList()) {
-                cout << adj->getName() << "\n";
-            }
-        }
+   
+
+    cout << "\n\n---------> Create Player with Every Order <---------\n\n\n";
+
+    vector<Territory*> t;
+    Hand* h = new Hand();
+    OrdersList* pOL = new OrdersList();
+
+    cout << "...Creating state executeorders (must be in this state to execute orders)...\n";
+    State* pState = new State("executeorders");
+    cout << "Created state executeorders.\n\n";
+
+    cout << "...Creating player with t adjeceny list, Hand, and order list..\n";
+    Player* p = new Player(t, h, pOL, 1, pState);
+    cout << "Created player.\n\n";
+
+    cout << "...Get Territory Denmark and add to Player territories ..\n";
+    Territory* denmark = map1->getTerritory("Denmark");
+    p->addTerritory(denmark);
+    
+    for (Territory* adj : denmark->getAdjacencyList()) {
+        cout << adj;
     }
 
-    // issueORders
-    // go to each player ask then pick to add orders in the following sequence
-    // pick 1 card > all Deploy > all Executions
     
-    // execute orders
-    // must be in following sequence
-    // round-robin = one player order at a time from each player, back and forth
-    // A. 1 card order of each player
-    // B. 1 deploy per person at a time
-    // C. 1 advance each player at a time 
-
-
-    // *** Test FLow *** 
-    // Phase 1: set-up
-    // 1. Load Map
-    // 2. Create two players
-
-    // Phase 2: test each order
-    // test Deploy: 
-    // show that fails if player tries to move reinforcemnts to wrong location
 
 
 
