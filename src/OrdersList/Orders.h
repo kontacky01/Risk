@@ -5,7 +5,17 @@
 
 using namespace std;
 
-class Order
+class Orders
+{
+public:
+    //TODO: Make Abstract class, get rid of instances of class
+    //need to get rid of all "new Order()"
+    //functions and attributes can stay
+    virtual void execute() = 0;
+
+};
+
+class Order : public Orders
 {
 public:
 
@@ -27,10 +37,7 @@ public:
     */
     virtual void execute(State *currentState);
 
-    //TODO: Make Abstract class, get rid of instances of class
-    //need to get rid of all "new Order()"
-    //functions and attributes can stay
-    virtual void execute();
+    void execute();
 
     /**
     * Increment countOrderID by 1

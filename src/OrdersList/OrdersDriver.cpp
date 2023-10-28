@@ -366,7 +366,6 @@ void testOrderExecution() {
     // 2. Create two players
 
     // Phase 2: test each order
-    
     // test Deploy: 
     // show that fails if player tries to move reinforcemnts to wrong location
 
