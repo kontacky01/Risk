@@ -77,6 +77,11 @@ Player::~Player() {
  */
 Player::Player(){};
 
+int Player::getReinforcement(){ return this->reinforcements;}
+
+void Player::setReinforcement(int r) { this->reinforcements = r;}
+
+
 OrdersList* Player::getOrdersList() { return this->orderList; }
 
 State* Player::getState() { return this->state; }

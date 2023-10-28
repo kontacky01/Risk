@@ -44,6 +44,8 @@ Map::~Map() {
     };
 };
 
+map<int, Territory*> Map::getterritories() { return this->territories;}
+
 /**
 * Will be stored in a key value pair ex: (1, Contient)
 */

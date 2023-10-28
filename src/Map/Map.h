@@ -103,6 +103,8 @@ public:
     */
     ~Map();
 
+    map<int, Territory*> getterritories();
+
     void addContinent(Continent*);
 
     void addTerritory(Territory*);

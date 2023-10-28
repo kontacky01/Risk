@@ -6,10 +6,20 @@
 
 int main()
 {
+    /* 
+    * Assignment 1
+    */
     //testLoadMaps();
-    testOrdersLists();
+    //testOrdersLists();
     //testPlayers();
     //testCards();
     //testGameStates(); 
+
+     /*
+    * Assignment 2
+    */
+    testOrderExecution();
+
+
     return 0;
 }

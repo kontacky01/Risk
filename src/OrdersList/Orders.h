@@ -27,7 +27,10 @@ public:
     */
     virtual void execute(State *currentState);
 
-    //virtual void execute()=0;
+    //TODO: Make Abstract class, get rid of instances of class
+    //need to get rid of all "new Order()"
+    //functions and attributes can stay
+    virtual void execute();
 
     /**
     * Increment countOrderID by 1
@@ -86,6 +89,8 @@ public:
 
     void execute(State *currentState);
 
+    void execute();
+
     void addDescription();
 
     string getDescription();
@@ -102,6 +107,8 @@ public:
     Bomb* clone() const;
 
     void execute(State *currentState);
+
+    void execute();
     
     void addDescription();
     
@@ -119,6 +126,8 @@ public:
     Blockade* clone() const;
     
     void execute(State *currentState);
+
+    void execute();
     
     void addDescription();
     
@@ -136,6 +145,8 @@ public:
     Airlift* clone() const;
     
     void execute(State *currentState);
+
+    void execute();
     
     void addDescription();
     
@@ -153,6 +164,8 @@ public:
     Negotiate* clone() const;
     
     void execute(State *currentState);
+
+    void execute();
     
     void addDescription();
     
@@ -204,3 +217,7 @@ private:
 */
 void testOrdersLists();
 
+/**
+* test driver A2
+*/
+void testOrderExecution();

@@ -44,6 +44,8 @@ void Order::execute(State* currentState) {
     }else cout << "Can NOT execute order #" << getOrderID() << " ...\n";
 };
 
+void Order::execute(){};
+
 int Order::incrementCount() {
     return ++countOrderID;
 };
@@ -116,12 +118,18 @@ void Deploy::execute(State* current) {
 };
 
 /**
-* A deploy order tells a certain number of army units taken from the reinforcement pool to deploy to
-* a target territory owned by the player issuing this order.
-* 
+* A deploy order tells a certain number of army units taken from the reinforcement 
+* pool to deploy to a target territory owned by the player issuing this order.
+* @param deployTo territory player is deploying
+* @param tOwned territories player has under control
+* @param numReinforcements number of available reinforcments
 * 
 */
-void execute(){
+void Deploy::execute(){
+    // Order valid, if target territory does not belond to Player
+    // if vector<Territory*> attacking != vector<Territory*> defending
+
+    // 
 
 }
 
@@ -156,7 +164,9 @@ void Advance::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
         cout << "Executing (Advance) order #" << getOrderID() << " ...\n";
     } else cout << "Can NOT execute (Advance) order #" << getOrderID() << " ...\n";
-};
+}
+
+void Advance::execute() {}
 
 void Advance::addDescription() {
     this->description = "(Advance) Move a certain number of army units from one territory \n"
@@ -191,6 +201,8 @@ void Bomb::execute(State* current) {
     } else cout << "Can NOT execute (Bomb) order #" << getOrderID() << " ...\n";
 }
 
+void Bomb::execute(){}
+
 void Bomb::addDescription() {
     this->description = "(Bomb) Destroy half of the army units located on a target territory. \n"
         "            This order can only be issued if a player has the bomb card in their hand.";
@@ -223,6 +235,8 @@ void Blockade::execute(State* current) {
         cout << "Executing (Blockade) order #" << getOrderID() << " ...\n";
     } else cout << "Can NOT execute (Blockade) order #" << getOrderID() << " ...\n";
 };
+
+void Blockade::execute() {}
 
 void Blockade::addDescription() {
     this->description = "(Blockade) Triple the number of army units on a target territory and make it a neutral territory. \n"
@@ -257,6 +271,8 @@ void Airlift::execute(State* current) {
     } else cout << "Can NOT execute (Airlift) order #" << getOrderID() << " ...\n";
 };
 
+void Airlift::execute() {}
+
 void Airlift::addDescription() {
     this->description = "(Airlift) Advance a certain number of army units from one from one territory (source territory) to another territory \n"
         "            (target territory). This order can only be issued if a player has the airlift card in their hand.";
@@ -288,7 +304,9 @@ void Negotiate::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
         cout << "Executing (Negotiate) order #" << getOrderID() << " ...\n";
     } else cout << "Can NOT execute (Negotiate) order #" << getOrderID() << " ...\n";
-};
+}
+
+void Negotiate::execute() {}
 
 void Negotiate::addDescription() {
     this->description = "(Negotiate) prevent attacks between the current player and another target player until the end of \n"

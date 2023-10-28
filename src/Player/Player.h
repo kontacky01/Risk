@@ -17,6 +17,7 @@ using namespace std;
 class Player {
  private:
   int id;
+  int reinforcements;
   vector<Territory*> territories;
   Hand* hand;
   OrdersList* orderList;
@@ -49,6 +50,10 @@ class Player {
    * Destructor
    */
   ~Player();
+
+  int getReinforcement();
+
+  void setReinforcement(int r);
 
   OrdersList* getOrdersList();
 
