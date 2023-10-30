@@ -34,7 +34,7 @@ class Player {
   /**
    * Constructor with with an argument list
    */
-  Player(vector<Territory*>, Hand*, OrdersList*, int, State*);
+  Player(vector<Territory*>, Hand*, OrdersList*, int id, State*);
 
   /**
    * Default Constructor
@@ -51,9 +51,13 @@ class Player {
    */
   ~Player();
 
+  int getID();
+
   int getReinforcement();
 
   void addReinforcement(int r);
+
+  void subtractReinforcemnts(int r);
 
   vector<Territory*> getTerritories();
 
@@ -62,6 +66,8 @@ class Player {
   OrdersList* getOrdersList();
 
   State* getState();
+
+  bool ownsTerritory(Territory *t);
 
   /**
    * Returns a random list of territories that are assigned to the user which
@@ -78,6 +84,8 @@ class Player {
    * Take in an order and add it into the OrderList
    */
   OrdersList* issueOrder(Order* o);
+
+  //void executeNextOrderAndRemove();
 };
 
 /************************************************************ PlayerDriver **************************************************************/

@@ -4,11 +4,11 @@
 /**
  * Constructor with with an argument list
  */
-Player::Player(vector<Territory*> t, Hand* h, OrdersList* o, int i, State* s) {
+Player::Player(vector<Territory*> t, Hand* h, OrdersList* o, int id, State* s) {
   territories = t;
   hand = h;
   orderList = o;
-  id = i;
+  this->id = id;
   state = s;
 
   // if seed is set to 1, the generator is reinitialized to its initial value
@@ -21,7 +21,7 @@ Player::Player(vector<Territory*> t, Hand* h, OrdersList* o, int i, State* s) {
  */
 void Player::printTerritories(vector<Territory*> territories) {
   for (int i = 0; i < territories.size(); i++) {
-    cout << i << ")" << territories.at(i)->getName() << "\n\n";
+    cout << i << ")" << territories.at(i);
   }
 }
 
@@ -77,9 +77,13 @@ Player::~Player() {
  */
 Player::Player(){};
 
+int Player::getID(){ return this->id;}
+
 int Player::getReinforcement(){ return this->reinforcements;}
 
 void Player::addReinforcement(int r) { this->reinforcements = this->reinforcements + r; }
+
+void Player::subtractReinforcemnts(int r) { this->reinforcements = this->reinforcements-r;}
 
 vector<Territory*> Player::getTerritories(){ return this->territories;}
 
@@ -91,6 +95,8 @@ void Player::addTerritory(Territory* t){
 OrdersList* Player::getOrdersList() { return this->orderList; }
 
 State* Player::getState() { return this->state; }
+
+bool Player::ownsTerritory(Territory *t){ return t->getOwnerId() == this->id;}
 
 /**
  * Returns a random list of territories that are assigned to the user which they
@@ -145,8 +151,10 @@ OrdersList* Player::issueOrder(Order* o) {
  * Override the stream operator for Player
  */
 ostream& operator<<(ostream& out, Player* p) {
-  out << "... Printing info about player with ID: " << p->id
-      << "\n Info about territories: \n ------------------------\n";
+  out << "Printing info about player ID: " << p->id
+      << "\n********************************\n\n"
+      << " Reinforcements: " << p->getReinforcement() <<"\n\n"
+      << " Info about territories: \n ------------------------\n";
   p->printTerritories(p->territories);
   out << p->orderList;
   out << p->hand;

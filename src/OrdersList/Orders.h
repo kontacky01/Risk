@@ -30,7 +30,9 @@ public:
     /**
     * Checks if valid for execution, invalid orders can exist
     */
-    bool validate();
+    virtual bool validate();
+
+    bool getValid();
 
     void setValid(bool v);
     
@@ -39,7 +41,7 @@ public:
     */
     virtual void execute(State *currentState);
 
-    void execute();
+    virtual void execute();
 
     /**
     * Increment countOrderID by 1
@@ -55,13 +57,17 @@ public:
     virtual void addDescription();
 
     virtual string getDescription();
+
+    virtual string getClassName();
+
 protected:
     string description;
 private:
     static int countOrderID;
     int orderID;
     bool valid;
-    friend ostream& operator << (ostream& out, Order* o); // overide Stream insertion operator
+    friend ostream& operator<<(ostream& out, Order* o);  // overide Stream insertion operator
+
 };
 
 class Deploy : public Order
@@ -69,9 +75,7 @@ class Deploy : public Order
 public:
     Deploy();
 
-    Deploy(Territory* deployTo, int reinforcements, vector<Territory*> tOwned, bool v);
-
-    Deploy(Territory* deployTo, Player *p);
+    Deploy(Player* p, Territory* terrToDeploy, int numReinToDeploy);
 
     Deploy(const Deploy* d);
 
@@ -79,17 +83,27 @@ public:
 
     void execute(State *currentState);
 
+    /*
+    * Checks if Deploy is valid and Player owns Territory to deploy,
+    * then adds reinforcments.
+    */
     void execute();
+
+    bool validate();
+
+    bool pHasEnoughRein();
 
     void addDescription();
 
     string getDescription();
 
+    string getClassName();
+
 private:
-    Territory* deployTo;
-    int reinforcments;
+    Territory* terrToDeploy;
+    int numReinToDeploy;
     vector<Territory*> tOwned;
-    Player *p;
+    Player *p = NULL;
 };
 
 class Advance : public Order
@@ -99,16 +113,23 @@ public:
 
     Advance(const Advance* a);
 
+    //Advance(Player* p, Territory* terrToDeploy, int numReinToDeploy);
+
     Advance* clone() const;
 
     void execute(State *currentState);
 
     void execute();
 
+    bool validate();
+
     void addDescription();
 
     string getDescription();
+
+    string getClassName();
 private:
+    
 };
 
 class Bomb : public Order
@@ -127,6 +148,8 @@ public:
     void addDescription();
     
     string getDescription();
+
+    string getClassName();
 private:
 };
 
@@ -146,6 +169,8 @@ public:
     void addDescription();
     
     string getDescription();
+
+    string getClassName();
 private:
 };
 
@@ -165,6 +190,8 @@ public:
     void addDescription();
     
     string getDescription();
+
+    string getClassName();
 private:
 };
 
@@ -184,6 +211,8 @@ public:
     void addDescription();
     
     string getDescription();
+
+    string getClassName();
 private:
 };
 
@@ -192,7 +221,6 @@ class OrdersList
 public:
     OrdersList();
     
-    //TODO: copy constructor
     /**
      * Copy Constructor
      */
@@ -215,7 +243,11 @@ public:
 
     int getIndex(vector<Order*> ol, Order *o);
 
-    void executeAll(State *s);
+    void executeAll(State *s); //A1
+
+    void executeAll(); //A2
+
+    void executeNextOrder(State *s);
     
     void deleteOrdersList();
   

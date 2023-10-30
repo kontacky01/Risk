@@ -291,7 +291,8 @@ void testOrderExecution() {
     // test Deploy: 
     // show that fails if player tries to move reinforcemnts to wrong location
 
-    cout << "---------> Load Map <---------\n\n";
+    cout << "********** Preliminary Phase *********\n\n"
+         << "---------> Load Map: Europe <---------\n\n";
 
     cout <<"...Loading Map of Europe...\n";
     MapLoader* loader = new MapLoader();
@@ -305,12 +306,8 @@ void testOrderExecution() {
     cout << "...Validating contents...\n";
     map1->validate();
 
-    cout << "---------> Test 1: Retrieve Adjency List <---------\n\n";
-    cout << "...Retrieve Denmark adjencey list...\n";
 
-   
-
-    cout << "\n\n---------> Create Player with Every Order <---------\n\n\n";
+    cout << "\n\n---------> Create Player 1 <---------\n\n\n";
 
     vector<Territory*> t;
     Hand* h = new Hand();
@@ -320,19 +317,74 @@ void testOrderExecution() {
     State* pState = new State("executeorders");
     cout << "Created state executeorders.\n\n";
 
-    cout << "...Creating player with t adjeceny list, Hand, and order list..\n";
-    Player* p = new Player(t, h, pOL, 1, pState);
+    cout << "...Creating player 1 with t adjeceny list, Hand, and order list..\n";
+    Player* p1 = new Player(t, h, pOL, 1, pState); // 1 is id
     cout << "Created player.\n\n";
 
-    cout << "...Get Territory Denmark and add to Player territories ..\n";
+
+    cout << "\n\n************** Testing Phase ************\n\n"
+             << "---------> Test 1: Deploy  <---------\n\n\n";
+
+    cout << "...Assign Denmark as starting Terrirtory to player 1...\n\n";
     Territory* denmark = map1->getTerritory("Denmark");
-    p->addTerritory(denmark);
-    
-    for (Territory* adj : denmark->getAdjacencyList()) {
-        cout << adj;
-    }
+    p1->addTerritory(denmark);
+
+    cout << "...Assigning 10 reinforecments to player 1 ...\n";
+    p1->addReinforcement(10);
+
+    cout << "...Confirm Denamrk owner ID and player ID match...\n";
+    cout << denmark;
+    cout <<"Player 1 | ID: " <<p1->getID() <<"\n\n";
+    if(denmark->getOwnerId()==p1->getID())
+        cout <<"We can see owner ID and player ID match.\n\n";
+    else 
+        cout << "We can see owner ID and player ID do NOT match.\n\n";
+
+    cout << "...Creating a GOOD Deploy Order to Denmark ...\n\n";
+    Deploy* d1 = new Deploy(p1, denmark, 5);
+
+    cout << "...Creating a BAD Deploy Order to Scotland ...\n\n";
+    Territory* scotland = map1->getTerritory("Scotland");
+    Deploy* d2 = new Deploy(p1, scotland, 5);
+
+    cout << "...Creating a BAD Deploy Order to with 0 reinforcments ...\n\n";
+    Deploy* d3 = new Deploy(p1, denmark, 0);
+
+    cout << "...Creating a Valid Deploy BUT Player does not have enough reinforcments ...\n\n";
+    Deploy* d4 = new Deploy(p1, denmark, 50);
+
+
+    cout << "...Testing if Deploys are Valid() ...\n";
+    auto printBoolValue = [](bool b) { if (b) return "VALID\n"; else return "NOT VALID\n"; };
+    cout << "Denmark Deploy is " << printBoolValue(d1->validate());
+    cout << "Scotland Deploy is " << printBoolValue(d2->validate()) << "\n";
+    cout << "Denmark Deploy with 0 reinforcnments Deploy is " << printBoolValue(d3->validate()) << "\n";
+    cout << "Denmark Deploy with 50 reinforcnments Deploy is " << printBoolValue(d3->validate()) << "\n\n";
+
+    cout << "...Issueing Deploys to Player 1 ...\n";
+    p1->issueOrder(d1);
+    p1->issueOrder(d2);
+    p1->issueOrder(d3);
+    p1->issueOrder(d4); 
+
+    cout << "...Show Player 1 has Deploys and 10 reinforcments ...\n\n";
+    cout << p1;
+
+    cout << "...Executing all order for player 1 ...\n\n";
+    p1->getOrdersList()->executeAll();
+
+    cout << "...Show Player 1 has Deploys and 5 reinforcments ...\n\n";
+    cout << p1;
+
+    cout << "...Deleting Player 1 OrdersList ...\n\n";
+    p1->getOrdersList()->deleteOrdersList();
+    cout << p1;
+
+    cout << "\n\n---------> Test 2: Advance <---------\n\n\n";
 
     
+
+
 
 
 
