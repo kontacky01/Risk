@@ -55,6 +55,8 @@ class Player {
 
   int getReinforcement();
 
+  void setReinforcement(int r);
+
   void addReinforcement(int r);
 
   void subtractReinforcemnts(int r);

@@ -322,6 +322,7 @@ void testOrderExecution() {
     cout << "Created player.\n\n";
 
 
+
     cout << "\n\n************** Testing Phase ************\n\n"
              << "---------> Test 1: Deploy  <---------\n\n\n";
 
@@ -376,11 +377,40 @@ void testOrderExecution() {
     cout << "...Show Player 1 has Deploys and 5 reinforcments ...\n\n";
     cout << p1;
 
-    cout << "...Deleting Player 1 OrdersList ...\n\n";
+    cout << "...Deleting Player 1 OrdersList...\n\n";
     p1->getOrdersList()->deleteOrdersList();
-    cout << p1;
+
+
 
     cout << "\n\n---------> Test 2: Advance <---------\n\n\n";
+
+    cout << "...Assiging Player 1 Denmark and Scotland...\n\n";
+    denmark->setOwnerId(p1->getID());
+
+    cout << "...Set Denmark 10 Army forces...\n\n";
+    denmark->setArmCount(10);
+
+    cout << "...Denmark is adjacent too the following...\n";
+    for (auto t : denmark->getAdjacencyList()) { cout << t->getName() << " | "; }
+    cout << "\n\n";
+
+    cout << "...Assign Southen Sweden to Player 1 and West Germany to aribitrary Player 2...\n\n";
+    Territory* sweden = map1->getTerritory("Southern Sweden");
+    Territory* germany = map1->getTerritory("West Germany");
+    sweden->setOwnerId(p1->getID());
+    germany->setOwnerId(2);
+
+    cout << "...Assign Sweden 5 forces and Germany 5 forces...\n\n";
+    sweden->setArmCount(5);
+    germany->setArmCount(5);
+
+    cout << "...Print Territories...\n\n";
+    cout << denmark
+         << sweden
+         << germany;
+
+    cout << "...Create Advance orders...\n";
+    Advance *a1 = new Advance(p1, denmark, germany, 5);
 
     
 

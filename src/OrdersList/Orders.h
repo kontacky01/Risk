@@ -113,7 +113,7 @@ public:
 
     Advance(const Advance* a);
 
-    //Advance(Player* p, Territory* terrToDeploy, int numReinToDeploy);
+    Advance(Player* p, Territory* terrSource, Territory* terrTarget, int numReinToAdvnce);
 
     Advance* clone() const;
 
@@ -129,7 +129,10 @@ public:
 
     string getClassName();
 private:
-    
+    Player* p;
+    Territory* terrSource;
+    Territory* terrTarget;
+    int numReinToAdvnce;
 };
 
 class Bomb : public Order

@@ -81,6 +81,8 @@ int Player::getID(){ return this->id;}
 
 int Player::getReinforcement(){ return this->reinforcements;}
 
+void Player::setReinforcement(int r) { this->reinforcements = r; }
+
 void Player::addReinforcement(int r) { this->reinforcements = this->reinforcements + r; }
 
 void Player::subtractReinforcemnts(int r) { this->reinforcements = this->reinforcements-r;}

@@ -202,7 +202,14 @@ Advance::Advance(const Advance* a) {
     this->addDescription();
 }
 
-//Advance::Advance(Player* p, Territory* terrToDeploy, int numReinToDeploy) {}
+
+Advance::Advance(Player* p, Territory* terrSource, Territory* terrTarget, int numReinToAdvnce){
+    this->p = p;
+    this->terrSource = terrSource;
+    this->terrTarget = terrTarget;
+    this->numReinToAdvnce = numReinToAdvnce;
+    setValid(validate());
+}
 
 Advance* Advance::clone() const {
     return new Advance(this);
@@ -220,7 +227,7 @@ void Advance::execute(State* current) {
 
 void Advance::execute() {}
 
-bool Advance::validate() {}
+bool Advance::validate() {return false;}
 
 void Advance::addDescription() {
     this->description = "(Advance) Move a certain number of army units from one territory \n"
@@ -521,6 +528,7 @@ void OrdersList::deleteOrdersList(){
         delete o;   // deallocate memory
         o = NULL;   // prevent dangling pointer error
     }
+    getOL()->clear();
 }
 
 ostream& operator << (ostream& out, OrdersList* ol) {
