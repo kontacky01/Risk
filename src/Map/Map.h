@@ -72,6 +72,8 @@ public:
 
     void addToArmyCount(int x);
 
+    void subFromArmy(int x);
+
     // Getter for adjacencyList
     vector<Territory*> getAdjacencyList();
 

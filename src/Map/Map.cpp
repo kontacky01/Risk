@@ -229,6 +229,10 @@ void Territory::addToArmyCount(int x) {
     this->armyCount = this->armyCount + x;
 }
 
+void Territory::subFromArmy(int x){
+    this->armyCount = this->armyCount - x;
+}
+
 vector<Territory*> Territory::getAdjacencyList() {
     return adjacencyList;
 }

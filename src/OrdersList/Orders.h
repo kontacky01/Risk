@@ -60,6 +60,10 @@ public:
 
     virtual string getClassName();
 
+    bool pOwnsTerr(Player* p, Territory* t);
+
+    bool terrIsAdjP(Territory *t1, Territory* t2);
+
 protected:
     string description;
 private:

@@ -80,6 +80,21 @@ string Order::getDescription() {
 
 string Order::getClassName(){return "Order";}
 
+bool Order::pOwnsTerr(Player* p, Territory* t){
+    return (t->getOwnerId() == p->getID());
+}
+
+bool Order::terrIsAdjP(Territory *t1, Territory *t2){
+    for (auto adj : t1->getAdjacencyList()) {
+        // true: if valid and territory name matches name in players list territories
+        if (adj->getName().compare(t2->getName()) == 0) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
 /**
 * @brief Stream insertion operator
 * Will ouptut to console everytime "cout <<" is used on Order Object
@@ -136,11 +151,6 @@ void Deploy::execute(State* current) {
 void Deploy::execute() {
 
     if(getValid()){
-        if(!pHasEnoughRein()){ //player has enough reinforcemnts
-            cout << "Can NOT execute Deploy " << this->terrToDeploy->getName()
-                 << " | Player #"<< p->getID() <<" does NOT enough have reinforcments\n";
-            return; //exit functionj
-        }
         if (!(p->getState()->getStateName().compare("executeorders") == 0)){
             cout << "Can NOT execute Deploy " << this->terrToDeploy->getName()
                 << " | Player #" << p->getID() << " is not in Execute Orders State\n";
@@ -155,10 +165,14 @@ void Deploy::execute() {
     else if(this->numReinToDeploy==0){
         cout << "Can NOT execute Deploy " << this->terrToDeploy->getName()
              << " | Deploy has 0 reinforcments\n";
-    }else{
+    }else if(!pOwnsTerr(p,terrToDeploy)){
         cout << "Can NOT execute Deploy " << this->terrToDeploy->getName()
             << " | Player #" << p->getID() << " does NOT own territory\n";
-    }   
+    }
+    else if (!pHasEnoughRein()) { //player has enough reinforcemnts
+        cout << "Can NOT execute Deploy " << this->terrToDeploy->getName()
+             << " | Player #" << p->getID() << " does NOT enough have reinforcments\n";
+    }
 }
 
 /**
@@ -170,16 +184,12 @@ bool Deploy::validate(){
     if (!pHasEnoughRein()) { //player has enough reinforcemnts
         return false;
     }
-    for (auto t : this->p->getTerritories()) {
-        // true: if valid and territory name matches name in players list territories
-        if (t->getName().compare(this->terrToDeploy->getName()) == 0) {
-            return true;
-        }
-    }
+    if(pOwnsTerr(p, terrToDeploy))
+        return true;
     return false;
 }
 
-bool Deploy::pHasEnoughRein(){ return (p->getReinforcement() - numReinToDeploy > 0);}
+bool Deploy::pHasEnoughRein(){ return (p->getReinforcement() - numReinToDeploy >= 0);}
 
 void Deploy::addDescription() {
     this->description = "(Deploy) Move a certain number of army units from the current player's \n"
@@ -225,9 +235,36 @@ void Advance::execute(State* current) {
     } else cout << "Can NOT execute (Advance) order #" << getOrderID() << " ...\n";
 }
 
-void Advance::execute() {}
+/*
+* 
+*/
+void Advance::execute() {
+    if(this->getValid()){
+        if (!(p->getState()->getStateName().compare("executeorders") == 0)) {
+            cout << "Can NOT execute Advance " << this->terrTarget->getName()
+                << " | Player #" << p->getID() << " is not in Execute Orders State\n";
+            return; //exit function
+        }
+        if(pOwnsTerr(p,this->terrTarget)){ //check player owns target
+           if(terrSource->getArmyCount() < numReinToAdvnce){ //check source has enough reinforcments to give to target
+               cout << "Can NOT execute Advance " << this->terrSource->getName()
+                    << " | The number of Army units to Advance is greater than Source Terriotory has. \n";
+                return ; //exit function
+           }
+            terrSource->subFromArmy(numReinToAdvnce);
+            terrTarget->addToArmyCount(numReinToAdvnce);
+            cout << "Advance executed (player owns both Territories) | "
+                <<terrSource->getName() << " has army of " << terrSource->getArmyCount() <<", "
+                << terrTarget->getName() <<" has army of " << this->terrTarget->getArmyCount() << "\n";
+        }
+    }
+}
 
-bool Advance::validate() {return false;}
+bool Advance::validate() {
+    if(terrIsAdjP(this->terrSource,this->terrTarget) && pOwnsTerr(p,this->terrSource))
+        return true;
+    return false;
+}
 
 void Advance::addDescription() {
     this->description = "(Advance) Move a certain number of army units from one territory \n"
