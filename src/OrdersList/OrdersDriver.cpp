@@ -323,16 +323,15 @@ void testOrderExecution() {
 
     cout << p1;
 
-  
+    auto printBoolValue = [](bool b) { if (b) return "VALID\n"; else return "NOT VALID\n"; };
 
-    
+    /*
     cout << "\n\n************** Testing Phase ************\n\n"
              << "---------> Test 1: Deploy  <---------\n\n\n";
 
     cout << "...Assign Denmark as starting Terrirtory to player 1...\n\n";
     Territory* denmark = map1->getTerritory("Denmark");
     p1->addTerritory(denmark);
-    
     
     cout << "...Assigning 10 reinforecments to player 1 ...\n";
     p1->addReinforcement(10);
@@ -360,7 +359,6 @@ void testOrderExecution() {
 
 
     cout << "...Testing if Deploys are Valid() ...\n";
-    auto printBoolValue = [](bool b) { if (b) return "VALID\n"; else return "NOT VALID\n"; };
     cout << "Denmark Deploy is " << printBoolValue(d1->validate());
     cout << "Scotland Deploy is " << printBoolValue(d2->validate());
     cout << "Denmark Deploy with 0 reinforcnments Deploy is " << printBoolValue(d3->validate());
@@ -384,50 +382,55 @@ void testOrderExecution() {
     cout << "...Deleting Player 1 OrdersList...\n\n";
     p1->getOrdersList()->deleteOrdersList();
 
-
-
+    cout << "...Deleting Player 1 Territories...\n\n";
+    p1->eraseTerritory(denmark);
+    
+    
     cout << "\n\n---------> Test 2: Advance <---------\n\n\n";
 
-    cout << "...Assiging Player 1 Denmark and Scotland...\n\n";
+    cout << "...Assiging Player 1 Denmark...\n\n";
+    Territory* t2denmark = map1->getTerritory("Denmark");
+    p1->addTerritory(t2denmark);
 
     cout << "...Set Denmark 10 Army forces...\n\n";
-    denmark->setArmCount(30);
+    t2denmark->setArmCount(30);
 
     cout << "...Denmark is adjacent too the following...\n";
-    for (auto t : denmark->getAdjacencyList()) { cout << t->getName() << " | "; }
+    for (auto t : t2denmark->getAdjacencyList()) { cout << t->getName() << " | "; }
     cout << "\n\n";
 
     cout << "...Assign Southen Sweden to Player 1 and West Germany to aribitrary Player 2...\n\n";
-    Territory* sweden = map1->getTerritory("Southern Sweden");
-    Territory* germany = map1->getTerritory("West Germany");
-    p1->addTerritory(sweden);
-    germany->setOwnerId(2);
+    Territory* t2sweden = map1->getTerritory("Southern Sweden");
+    Territory* t2germany = map1->getTerritory("West Germany");
+    p1->addTerritory(t2sweden);
+    t2germany->setOwnerId(2);
 
     cout << "...Assign Sweden 5 forces and Germany 5 forces...\n\n";
-    sweden->setArmCount(5);
-    germany->setArmCount(5);
+    t2sweden->setArmCount(5);
+    t2germany->setArmCount(5);
 
     cout << "...Print Territories...\n\n";
-    cout << denmark // p1 owns
-         << sweden // p1 owns
-         << germany; // p1 does NOT own
+    cout << t2denmark // p1 owns
+        << t2sweden // p1 owns
+        << t2germany; // p1 does NOT own
 
     cout << "...Create Advance orders ...\n";
     cout << "...Creating GOOD Advance, player will add army to owned Territory ...\n";
-    Advance* a1 = new Advance(p1, denmark, sweden, 5);
+    Advance* a1 = new Advance(p1, t2denmark, t2sweden, 5);
     cout << "...Creating GOOD Advance, player will attack Germany ...\n";
-    Advance* a2 = new Advance(p1, denmark, germany, 5);
+    Advance* a2 = new Advance(p1, t2denmark, t2germany, 5);
     cout << "...Creating BAD Adavance, player does not own Germany ...\n";
-    Advance* a3 = new Advance(p1, germany, germany, 5);
+    Advance* a3 = new Advance(p1, t2germany, t2germany, 5);
     cout << "...Creating VALID/BAD Adavance, source Territory does Not have enough army to give to owned target ...\n";
-    Advance* a4 = new Advance(p1, denmark, sweden, 50);
+    Advance* a4 = new Advance(p1, t2denmark, t2sweden, 50);
     cout << "...Creating GOOD Advance, player will lose the battle  ...\n";
-    Territory* norway = map1->getTerritory("Norway");
-    p1->addTerritory(scotland);
-    scotland->setArmCount(5);
-    norway->setArmCount(20);
-    norway->setOwnerId(2);
-    Advance* a5 = new Advance(p1, scotland, norway, 5);
+    Territory* t2norway = map1->getTerritory("Norway");
+    Territory* t2scotland = map1->getTerritory("Scotland");
+    p1->addTerritory(t2scotland);
+    t2scotland->setArmCount(5);
+    t2norway->setArmCount(20);
+    t2norway->setOwnerId(2);
+    Advance* a5 = new Advance(p1, t2scotland, t2norway, 5);
 
     cout << "\n\n...Testing if Advances are Valid() ...\n";
     cout << "Advance to owned Sweden is: " << printBoolValue(a1->validate());
@@ -443,23 +446,64 @@ void testOrderExecution() {
     p1->issueOrder(a4);
     p1->issueOrder(a5);
 
-    cout << "...Executing all order for player 1 ...\n\n";
+    cout << "...Executing all order for player 1 ...\n";
     p1->getOrdersList()->executeAll();
 
     cout << "...Printing player hand to confirm has received a card ...\n";
     cout<< p1->getHand();
 
     cout<<"...Printing scotland to show has now owner anymore...\n";
-    cout << scotland;
+    cout << t2scotland;
 
     cout << "...Deleting Player 1 OrdersList...\n\n";
     p1->getOrdersList()->deleteOrdersList();
 
+    cout << "...Deleting Player 1 Territories...\n\n";
+    p1->eraseTerritory(t2denmark);
+    p1->eraseTerritory(t2sweden);
+    */
 
-
+    
     cout << "\n\n---------> Test 3: Bomb <---------\n\n\n";
 
-    cout << "...Make player owner of denmark and scotland...\n";
+
+    cout << "..Player 1 ownes of denmark and sothern sweden...\n";
+    Territory* t3denmark = map1->getTerritory("Denmark");
+    Territory* t3sweden = map1->getTerritory("Southern Sweden");
+
+    cout << "...Denmark is adjacent too the following...\n";
+    for (auto t : t3denmark->getAdjacencyList()) { cout << t->getName() << " | "; }
+    cout << "\n\n";
+
+    cout << "...Southen sweden is adjacent too the following...\n";
+    for (auto t : t3sweden->getAdjacencyList()) { cout << t->getName() << " | "; }
+    cout << "\n\n";
+
     
+    
+
+
+
+
+
+
+    /*
+    deleting pointers
+    delete denmark;
+    denmark = NULL;
+    delete scotland;
+    scotland = NULL;
+
+    delete t2denmark;
+    t2denmark = NULL;
+    delete t2germany;
+    t2germany = NULL;
+    delete t2norway;
+    t2norway = NULL;
+    delete t2scotland;
+    t2scotland = NULL;
+    delete t2sweden;
+    t2sweden = NULL;
+    */
     
 }

@@ -712,7 +712,7 @@ void OrdersList::executeAll() {
         cout << "Order #" << o->getOrderID() << "\n";
         o->execute();
     }
-    cout << "\n";
+    cout << "\n\n";
 }
 
 void OrdersList::executeNextOrder(State* s) {
