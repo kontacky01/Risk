@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 
 #include "Orders.h"
 #include "../Player/Player.h"
@@ -6,6 +7,7 @@
 using namespace std;
 
 int Order::countOrderID = 0;        //start counter for orders at 0
+bool Order::pGivenCardThisTurn = false;
 
 Order::Order() {
     orderID = incrementCount();
@@ -78,7 +80,11 @@ string Order::getDescription() {
     return this->description;
 }
 
-string Order::getClassName(){return "Order";}
+string Order::getOrderName(){return "Order";}
+
+void Order::setPlayerGivenCardThisTurn(bool b){pGivenCardThisTurn = b;}
+
+bool Order::getPlayerGivenCardThisTurn() { return pGivenCardThisTurn; }
 
 bool Order::pOwnsTerr(Player* p, Territory* t){
     return (t->getOwnerId() == p->getID());
@@ -107,7 +113,7 @@ ostream& operator << (ostream& out, Order* o)
     */
     auto printBoolValue = [](bool b) { if (b) return "true"; else return "false"; };
 
-    out << o->getClassName()
+    out << o->getOrderName()
         << " | ID: #" << o->getOrderID()
         << " | Valid: " << printBoolValue(o->getValid()) << "\n\n";
     return out;
@@ -200,7 +206,7 @@ string Deploy::getDescription() {
     return this->description;
 }
 
-string Deploy::getClassName() { return "Deploy"; }
+string Deploy::getOrderName() { return "Deploy"; }
 
 /************************************************************ Advance **************************************************************/
 Advance::Advance() {
@@ -213,12 +219,13 @@ Advance::Advance(const Advance* a) {
 }
 
 
-Advance::Advance(Player* p, Territory* terrSource, Territory* terrTarget, int numReinToAdvnce){
+Advance::Advance(Player* p, Territory* terrSource, Territory* terrTarget, int numReinToAdvnce) {
     this->p = p;
     this->terrSource = terrSource;
     this->terrTarget = terrTarget;
     this->numReinToAdvnce = numReinToAdvnce;
     setValid(validate());
+    setPlayerGivenCardThisTurn(false);
 }
 
 Advance* Advance::clone() const {
@@ -239,13 +246,13 @@ void Advance::execute(State* current) {
 * 
 */
 void Advance::execute() {
-    if(this->getValid()){
-        if (!(p->getState()->getStateName().compare("executeorders") == 0)) {
+    if(this->getValid()){ // advance is valid
+        if (!(p->getState()->getStateName().compare("executeorders") == 0)) { // player in execute phase
             cout << "Can NOT execute Advance " << this->terrTarget->getName()
                 << " | Player #" << p->getID() << " is not in Execute Orders State\n";
             return; //exit function
         }
-        if(pOwnsTerr(p,this->terrTarget)){ //check player owns target
+        if(pOwnsTerr(p,this->terrTarget)){ // player owns target
            if(terrSource->getArmyCount() < numReinToAdvnce){ //check source has enough reinforcments to give to target
                cout << "Can NOT execute Advance " << this->terrSource->getName()
                     << " | The number of Army units to Advance is greater than Source Terriotory has. \n";
@@ -256,14 +263,104 @@ void Advance::execute() {
             cout << "Advance executed (player owns both Territories) | "
                 <<terrSource->getName() << " has army of " << terrSource->getArmyCount() <<", "
                 << terrTarget->getName() <<" has army of " << this->terrTarget->getArmyCount() << "\n";
+        
+        } else if (!pOwnsTerr(p, this->terrTarget)) { // player does not own target
+            int winner = battle();
+            cout << "...The battle has ended printing both Terriories after battle...\n"
+                << terrSource
+                << terrTarget;
+            if(winner == 1){
+                occupyConqueredTerr();
+                cout << "Advance executed (player attacks target) | player " <<p->getID() 
+                    << " has occupied " << this->terrTarget->getName() << " with " 
+                    << this->terrSource->getArmyCount() << " army ";
+                //TODO: each player can not receive more than one card per turn, maybe check if any more advnces in OL per person
+                if(!Order::getPlayerGivenCardThisTurn()){ //if not given card this turn  
+                    string newCard = givePLayerNewCard();
+                    cout << "| Player given " << newCard <<" card";
+                    Order::setPlayerGivenCardThisTurn(true);
+                }else{
+                    cout << "| Player already given card. ";
+                }
+                cout<<"\n";
+            }
+            if (winner == 0){
+                cout << "Advance executed (player attacks target) | player " << p->getID()
+                    << " has NOT occupied " << this->terrTarget->getName() << " and has 0 army in "
+                    << this->terrSource->getName();
+                //TODO: if attakicking army loses, set territory to NO owner?
+                this->terrSource->setOwnerId(0); // set attacking army Territory to no owner 
+            } 
         }
+    }
+    else {
+        cout << "Can NOT execute Advance " << this->terrSource->getName()
+        << " | Player does not own source \n";
     }
 }
 
+/**
+ * @brief Valid if Territory is adjacant and player owns Source Territory
+ */
 bool Advance::validate() {
     if(terrIsAdjP(this->terrSource,this->terrTarget) && pOwnsTerr(p,this->terrSource))
         return true;
     return false;
+}
+
+/**
+* Simulates battle between Source and Targer Territories, source attacks first. 
+* RoundRobin style Source and Target will have a 60% adn 70% chance
+* of winning an attack or defend, and the resulting army will lose 1
+* of their army forces until one territory reaches 0 armies. 
+* @return int 1 if source wins (target army = 0), 0 target wins (source army = 0)
+*          if 2, error;
+*/
+int Advance::battle(){
+    cout <<"... Enetering battle ...\n";
+    srand((unsigned)time(NULL)); // set seed for random number
+    while(this->terrSource->getArmyCount()>0 && this->terrTarget->getArmyCount()>0){ // stop when one Territory has 0 army
+        int random = (rand() % 10) + 1; // random number between 1-10
+        if(random <= 6) // source attack succesful
+            this->terrTarget->subFromArmy(1); // -1 army from target  
+        
+        random = (rand() % 10) + 1; // call agan for target defence
+        if(random <= 7) // defend succesffy 
+            this->terrSource->subFromArmy(1); // -1 army from source
+    }
+    if(this->terrTarget->getArmyCount() == 0)
+        return 1;
+    if (this->terrSource->getArmyCount() == 0)
+        return 0;
+    return 2;
+}
+
+/**
+* Move all army units from Source Territory to Target Territory, 
+* and declare attacking Player ownership of Target Territory. 
+*/
+void Advance::occupyConqueredTerr(){
+    this->terrTarget->setArmCount(this->terrSource->getArmyCount()); // move source army into target Territory
+    this->terrTarget->setOwnerId(this->terrSource->getId()); // ownership transfer from target to source
+}
+
+string Advance::givePLayerNewCard() {
+    srand((unsigned)time(NULL)); // set seed for random number
+    int r = (rand() % 4) + 1; // random number between 1-5
+    
+    string cardName;
+    if(r == 1)
+        cardName = "Bomb";
+    if(r == 2)
+        cardName = "Blockade";
+    if(r == 3)
+        cardName = "Airlift";
+    if(r == 4)
+        cardName = "Deplomacy";
+    
+    Card* c = new Card(cardName);
+    p->getHand()->addCard(c);
+    return cardName;
 }
 
 void Advance::addDescription() {
@@ -275,7 +372,7 @@ string Advance::getDescription() {
     return this->description;
 }
 
-string Advance::getClassName() { return "Advance"; }
+string Advance::getOrderName() { return "Advance"; }
 
 /************************************************************ Bomb **************************************************************/
 Bomb::Bomb() {
@@ -312,7 +409,7 @@ string Bomb::getDescription() {
     return this->description;
 }
 
-string Bomb::getClassName() { return "Bomb"; }
+string Bomb::getOrderName() { return "Bomb"; }
 
 /************************************************************ Blockade **************************************************************/
 Blockade::Blockade() {
@@ -349,7 +446,7 @@ string Blockade::getDescription() {
     return this->description;
 }
 
-string Blockade::getClassName() { return "Blockade"; }
+string Blockade::getOrderName() { return "Blockade"; }
 
 /************************************************************ Airlift **************************************************************/
 Airlift::Airlift() {
@@ -386,7 +483,7 @@ string Airlift::getDescription() {
     return this->description;
 }
 
-string Airlift::getClassName() { return "Airlift"; }
+string Airlift::getOrderName() { return "Airlift"; }
 
 /************************************************************ Negotiate **************************************************************/
 Negotiate::Negotiate() {
@@ -423,7 +520,7 @@ string Negotiate::getDescription() {
     return this->description;
 }
 
-string Negotiate::getClassName() { return "Negotiate"; }
+string Negotiate::getOrderName() { return "Negotiate"; }
 
 /************************************************************ OrdersList **************************************************************/
 OrdersList::OrdersList(){
@@ -549,6 +646,7 @@ void OrdersList::executeAll(State* s) {
 
 void OrdersList::executeAll() {
     for (auto o : *getOL()) {
+        cout << "Order #" << o->getOrderID() << "\n";
         o->execute();
     }
     cout << "\n";

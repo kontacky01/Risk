@@ -100,6 +100,8 @@ State* Player::getState() { return this->state; }
 
 bool Player::ownsTerritory(Territory *t){ return t->getOwnerId() == this->id;}
 
+Hand* Player::getHand(){ return this->hand;}
+
 /**
  * Returns a random list of territories that are assigned to the user which they
  * would like to defend

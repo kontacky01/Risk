@@ -23,7 +23,7 @@ public:
 
     Order(const Order* o);
 
-    ~Order();
+    virtual ~Order(); // need to delete parent when call child destructor 
 
     virtual Order* clone() const;
 
@@ -58,7 +58,11 @@ public:
 
     virtual string getDescription();
 
-    virtual string getClassName();
+    virtual string getOrderName();
+
+    void setPlayerGivenCardThisTurn(bool b);
+
+    bool getPlayerGivenCardThisTurn();
 
     bool pOwnsTerr(Player* p, Territory* t);
 
@@ -71,7 +75,7 @@ private:
     int orderID;
     bool valid;
     friend ostream& operator<<(ostream& out, Order* o);  // overide Stream insertion operator
-
+    static bool pGivenCardThisTurn; 
 };
 
 class Deploy : public Order
@@ -101,7 +105,7 @@ public:
 
     string getDescription();
 
-    string getClassName();
+    string getOrderName();
 
 private:
     Territory* terrToDeploy;
@@ -127,11 +131,21 @@ public:
 
     bool validate();
 
+    /**
+    * Simulates battle between two armies.
+    * @return int 1 if source wins, 0 if target wins
+    */
+    int battle();
+
+    void occupyConqueredTerr();
+
+    string givePLayerNewCard();
+
     void addDescription();
 
     string getDescription();
 
-    string getClassName();
+    string getOrderName();
 private:
     Player* p;
     Territory* terrSource;
@@ -156,7 +170,7 @@ public:
     
     string getDescription();
 
-    string getClassName();
+    string getOrderName();
 private:
 };
 
@@ -177,7 +191,7 @@ public:
     
     string getDescription();
 
-    string getClassName();
+    string getOrderName();
 private:
 };
 
@@ -198,7 +212,7 @@ public:
     
     string getDescription();
 
-    string getClassName();
+    string getOrderName();
 private:
 };
 
@@ -219,7 +233,7 @@ public:
     
     string getDescription();
 
-    string getClassName();
+    string getOrderName();
 private:
 };
 

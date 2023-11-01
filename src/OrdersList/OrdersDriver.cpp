@@ -418,22 +418,39 @@ void testOrderExecution() {
     Advance* a3 = new Advance(p1, germany, germany, 5);
     cout << "...Creating BAD Adavance, Source Territory does Not have enough army to give to owned target ...\n";
     Advance* a4 = new Advance(p1, denmark, sweden, 50);
-
+    cout << "...Creating GOOD Advance, player will lose the battle  ...\n";
+    Territory* norway = map1->getTerritory("Norway");
+    scotland->setOwnerId(1);
+    scotland->setArmCount(5);
+    norway->setArmCount(20);
+    norway->setOwnerId(2);
+    Advance* a5 = new Advance(p1, scotland, norway, 5);
 
     cout << "\n\n...Testing if Advances are Valid() ...\n";
     cout << "Advance to owned Sweden is: " << printBoolValue(a1->validate());
     cout << "Advance to attack Germany is: " << printBoolValue(a2->validate());
     cout << "Advance p1 does NOT own Source germany is: " << printBoolValue(a3->validate());
     cout << "Advance owned source does not have enough Army for ownder target: " << printBoolValue(a4->validate());
+    cout << "Advance owned source but will LOSE battle: " << printBoolValue(a4->validate()) << "\n";
 
     cout << "...Issueing Deploys to Player 1 ...\n";
     p1->issueOrder(a1);
     p1->issueOrder(a2);
     p1->issueOrder(a3);
     p1->issueOrder(a4);
+    p1->issueOrder(a5);
 
     cout << "...Executing all order for player 1 ...\n\n";
     p1->getOrdersList()->executeAll();
 
+    cout << "...Printing player hand to confirm has received a card ...\n";
+    cout<< p1->getHand();
+
+    cout<<"...Printing scotland to show has now owner anymore...\n";
+    cout << scotland;
+
+
+
+    cout << "\n\n---------> Test 3: Bomb <---------\n\n\n";
 
 }
