@@ -128,18 +128,17 @@ Transition::Transition(State*  initialState, string requiredCommand, State* fina
 
         Transition* t1 = new Transition(states[0], "loadmap", states[1]);
         Transition* t2 = new Transition(states[1], "loadmap", states[1]);
-        Transition* t3 = new Transition(states[1], "validate", states[2]);
+        Transition* t3 = new Transition(states[1], "validatemap", states[2]);
         Transition* t4 = new Transition(states[2], "addplayer", states[3]);
         Transition* t5 = new Transition(states[3], "addplayer", states[3]);
-        Transition* t6 = new Transition(states[3], "assigncountries", states[4]);
+        Transition* t6 = new Transition(states[3], "gamestart", states[4]);
         Transition* t7 = new Transition(states[4], "issueorder", states[5]);
         Transition* t8 = new Transition(states[5], "issueorder", states[5]);
         Transition* t9 = new Transition(states[5], "endissueorders", states[6]);
         Transition* t10 = new Transition(states[6], "execorder", states[6]);
         Transition* t11 = new Transition(states[6], "endexecorders", states[4]);
-        Transition* t12 = new Transition(states[6], "win", states[7]);
-        Transition* t13 = new Transition(states[7], "play", states[0]);
-        Transition* t14 = new Transition(states[7], "end", states[8]);
+        Transition* t12 = new Transition(states[7], "replay", states[0]);
+        Transition* t13 = new Transition(states[7], "quit", states[8]);
 
         gameTransitions.push_back(t1);
         gameTransitions.push_back(t2);
@@ -154,7 +153,6 @@ Transition::Transition(State*  initialState, string requiredCommand, State* fina
         gameTransitions.push_back(t11);
         gameTransitions.push_back(t12);
         gameTransitions.push_back(t13);
-        gameTransitions.push_back(t14);
 
         return gameTransitions;
     }
