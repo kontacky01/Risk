@@ -54,7 +54,7 @@ public:
 /**
  * Constructor with with an argument(s)
  */
-	Transition(string requiredCommand, State*  finalState);
+	Transition(State*  initialState, string requiredCommand, State*  finalState);
 /**
  * Assignment Operator
  */
@@ -70,9 +70,12 @@ public:
 
     string getCommand();
 
+    State * getCurrentState();
+    
     State * getNextState();
 
 private:
+    State* currentState;
     string command;
     State* nextState;
 };
