@@ -94,6 +94,21 @@ void Player::addTerritory(Territory* t){
   this->territories.push_back(t);
 }
 
+void Player::eraseTerritory(Territory* t){
+  if (territories.size() == 0) {
+    cout << "Error: Territroy list is empty\n";
+    return;
+  }
+  if(!ownsTerritory(t)){
+    cout <<"Error: Player does not own Territory\n";
+    return;
+  }
+  t->setOwnerId(0);
+  t->setArmCount(0);
+  auto it = find(territories.begin(),territories.end(), t);
+  territories.erase(it);
+}
+
 OrdersList* Player::getOrdersList() { return this->orderList; }
 
 State* Player::getState() { return this->state; }

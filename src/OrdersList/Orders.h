@@ -68,6 +68,8 @@ public:
 
     bool terrIsAdjP(Territory *t1, Territory* t2);
 
+    bool terrHasOwner(Territory *t);
+
 protected:
     string description;
 private:
@@ -160,11 +162,19 @@ public:
 
     Bomb(const Bomb* b);
 
+    Bomb(Player* p, Territory* terrTarget);
+
     Bomb* clone() const;
 
     void execute(State *currentState);
 
     void execute();
+
+    bool validate();
+
+    bool terrTargetIsAdjP();
+
+    void halfArmyUnits(Territory *t);
     
     void addDescription();
     
@@ -172,6 +182,8 @@ public:
 
     string getOrderName();
 private:
+    Player* p;
+    Territory* terrTarget;
 };
 
 class Blockade : public Order

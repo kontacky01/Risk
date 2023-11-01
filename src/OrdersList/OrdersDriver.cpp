@@ -321,15 +321,19 @@ void testOrderExecution() {
     Player* p1 = new Player(t, h, pOL, 1, pState); // 1 is id
     cout << "Created player.\n\n";
 
+    cout << p1;
 
+  
 
+    
     cout << "\n\n************** Testing Phase ************\n\n"
              << "---------> Test 1: Deploy  <---------\n\n\n";
 
     cout << "...Assign Denmark as starting Terrirtory to player 1...\n\n";
     Territory* denmark = map1->getTerritory("Denmark");
     p1->addTerritory(denmark);
-
+    
+    
     cout << "...Assigning 10 reinforecments to player 1 ...\n";
     p1->addReinforcement(10);
 
@@ -341,17 +345,17 @@ void testOrderExecution() {
     else 
         cout << "We can see owner ID and player ID do NOT match.\n\n";
 
-    cout << "...Creating a GOOD Deploy Order to Denmark ...\n\n";
+    cout << "...Creating a GOOD Deploy Order to Denmark ...\n";
     Deploy* d1 = new Deploy(p1, denmark, 5);
 
-    cout << "...Creating a BAD Deploy Order to Scotland ...\n\n";
+    cout << "...Creating a BAD Deploy Order to Scotland ...\n";
     Territory* scotland = map1->getTerritory("Scotland");
     Deploy* d2 = new Deploy(p1, scotland, 5);
 
-    cout << "...Creating a BAD Deploy Order to with 0 reinforcments ...\n\n";
+    cout << "...Creating a BAD Deploy Order to with 0 reinforcments ...\n";
     Deploy* d3 = new Deploy(p1, denmark, 0);
 
-    cout << "...Creating a Valid Deploy BUT Player does not have enough reinforcments ...\n\n";
+    cout << "...Creating a BAD deploy Player does not have enough reinforcments ...\n\n";
     Deploy* d4 = new Deploy(p1, denmark, 50);
 
 
@@ -385,7 +389,6 @@ void testOrderExecution() {
     cout << "\n\n---------> Test 2: Advance <---------\n\n\n";
 
     cout << "...Assiging Player 1 Denmark and Scotland...\n\n";
-    denmark->setOwnerId(p1->getID());
 
     cout << "...Set Denmark 10 Army forces...\n\n";
     denmark->setArmCount(30);
@@ -397,7 +400,7 @@ void testOrderExecution() {
     cout << "...Assign Southen Sweden to Player 1 and West Germany to aribitrary Player 2...\n\n";
     Territory* sweden = map1->getTerritory("Southern Sweden");
     Territory* germany = map1->getTerritory("West Germany");
-    sweden->setOwnerId(p1->getID());
+    p1->addTerritory(sweden);
     germany->setOwnerId(2);
 
     cout << "...Assign Sweden 5 forces and Germany 5 forces...\n\n";
@@ -416,11 +419,11 @@ void testOrderExecution() {
     Advance* a2 = new Advance(p1, denmark, germany, 5);
     cout << "...Creating BAD Adavance, player does not own Germany ...\n";
     Advance* a3 = new Advance(p1, germany, germany, 5);
-    cout << "...Creating BAD Adavance, Source Territory does Not have enough army to give to owned target ...\n";
+    cout << "...Creating VALID/BAD Adavance, source Territory does Not have enough army to give to owned target ...\n";
     Advance* a4 = new Advance(p1, denmark, sweden, 50);
     cout << "...Creating GOOD Advance, player will lose the battle  ...\n";
     Territory* norway = map1->getTerritory("Norway");
-    scotland->setOwnerId(1);
+    p1->addTerritory(scotland);
     scotland->setArmCount(5);
     norway->setArmCount(20);
     norway->setOwnerId(2);
@@ -430,7 +433,7 @@ void testOrderExecution() {
     cout << "Advance to owned Sweden is: " << printBoolValue(a1->validate());
     cout << "Advance to attack Germany is: " << printBoolValue(a2->validate());
     cout << "Advance p1 does NOT own Source germany is: " << printBoolValue(a3->validate());
-    cout << "Advance owned source does not have enough Army for ownder target: " << printBoolValue(a4->validate());
+    cout << "Advance owned source does not have enough Army for ownd target: " << printBoolValue(a4->validate());
     cout << "Advance owned source but will LOSE battle: " << printBoolValue(a4->validate()) << "\n";
 
     cout << "...Issueing Deploys to Player 1 ...\n";
@@ -449,8 +452,14 @@ void testOrderExecution() {
     cout<<"...Printing scotland to show has now owner anymore...\n";
     cout << scotland;
 
+    cout << "...Deleting Player 1 OrdersList...\n\n";
+    p1->getOrdersList()->deleteOrdersList();
+
 
 
     cout << "\n\n---------> Test 3: Bomb <---------\n\n\n";
 
+    cout << "...Make player owner of denmark and scotland...\n";
+    
+    
 }

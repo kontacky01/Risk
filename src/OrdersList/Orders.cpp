@@ -100,6 +100,11 @@ bool Order::terrIsAdjP(Territory *t1, Territory *t2){
     return false;
 }
 
+bool Order::terrHasOwner(Territory* t){
+    if(t->getOwnerId()<=0)
+        return false;
+    return true;
+}
 
 /**
 * @brief Stream insertion operator
@@ -289,7 +294,7 @@ void Advance::execute() {
                     << " has NOT occupied " << this->terrTarget->getName() << " and has 0 army in "
                     << this->terrSource->getName();
                 //TODO: if attakicking army loses, set territory to NO owner?
-                this->terrSource->setOwnerId(0); // set attacking army Territory to no owner 
+                p->eraseTerritory(this->terrSource); // set attacking army Territory to no owner 
             } 
         }
     }
@@ -384,6 +389,12 @@ Bomb::Bomb(const Bomb* b) {
     this->addDescription();
 }
 
+Bomb::Bomb(Player* p, Territory* terrTarget){
+    this->p = p;
+    this->terrTarget = terrTarget;
+    setValid(validate());
+}
+
 Bomb* Bomb::clone() const{
     return new Bomb(this);
 }
@@ -398,7 +409,59 @@ void Bomb::execute(State* current) {
     } else cout << "Can NOT execute (Bomb) order #" << getOrderID() << " ...\n";
 }
 
-void Bomb::execute(){}
+void Bomb::execute(){
+    if(getValid()){
+        halfArmyUnits(this->terrTarget);
+        cout << "Bomb executed | "
+            << terrTarget->getName() << " army is havled, and is now " 
+            << terrTarget->getArmyCount() << "\n";
+    }
+    if(!terrHasOwner(terrTarget)){
+        cout << "Bomb can NOT be executed | "
+            << terrTarget->getName()
+            << " does not have an owner";
+    }
+    else if(p->ownsTerritory(this->terrTarget)){
+        cout << "Bomb can NOT be executed | "
+            << "player owns" <<terrTarget->getName()
+            << terrTarget->getArmyCount() << "\n";
+    }
+    else if(!terrTargetIsAdjP()) {
+        cout << "Bomb can NOT be executed | "
+            << "player has no adjacent territories to" << terrTarget->getName()
+            << "\n";
+    }
+}
+
+bool Bomb::validate(){
+    if(p->ownsTerritory(this->terrTarget))
+        return false;
+    if(!terrTargetIsAdjP())
+        return false;
+    if(!terrHasOwner(terrTarget))
+        return false;
+    return true;
+}
+
+bool Bomb::terrTargetIsAdjP(){
+    for (auto t : p->getTerritories()){
+        for (auto adj: t->getAdjacencyList()){
+            if (adj->getName().compare(this->terrTarget->getName()) == 0)
+                return true;
+        }
+    }
+    return false;
+}
+
+void Bomb::halfArmyUnits(Territory *t){
+    int armySize = t->getArmyCount();
+    if(armySize%2 == 0){
+        armySize = armySize / 2;
+    }else{
+        armySize = (armySize / 2) + 1; //round upp
+    }
+    t->setArmCount(armySize);
+}
 
 void Bomb::addDescription() {
     this->description = "(Bomb) Destroy half of the army units located on a target territory. \n"
