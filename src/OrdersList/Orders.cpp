@@ -345,7 +345,7 @@ int Advance::battle(){
 * and declare attacking Player ownership of Target Territory. 
 */
 void Advance::occupyConqueredTerr(){
-    this->terrTarget->setArmCount(this->terrSource->getArmyCount()); // move source army into target Territory
+    this->terrTarget->setArmyCount(this->terrSource->getArmyCount()); // move source army into target Territory
     this->terrTarget->setOwnerId(this->terrSource->getId()); // ownership transfer from target to source
 }
 
@@ -419,12 +419,11 @@ void Bomb::execute(){
     if(!terrHasOwner(terrTarget)){
         cout << "Bomb can NOT be executed | "
             << terrTarget->getName()
-            << " does not have an owner";
+            << " does not have an owner \n";
     }
     else if(p->ownsTerritory(this->terrTarget)){
         cout << "Bomb can NOT be executed | "
-            << "player owns" <<terrTarget->getName()
-            << terrTarget->getArmyCount() << "\n";
+            << "player owns " <<terrTarget->getName() <<"\n";
     }
     else if(!terrTargetIsAdjP()) {
         cout << "Bomb can NOT be executed | "
@@ -460,7 +459,7 @@ void Bomb::halfArmyUnits(Territory *t){
     }else{
         armySize = (armySize / 2) + 1; //round upp
     }
-    t->setArmCount(armySize);
+    t->setArmyCount(armySize);
 }
 
 void Bomb::addDescription() {

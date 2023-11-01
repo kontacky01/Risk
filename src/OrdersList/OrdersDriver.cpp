@@ -393,7 +393,7 @@ void testOrderExecution() {
     p1->addTerritory(t2denmark);
 
     cout << "...Set Denmark 10 Army forces...\n\n";
-    t2denmark->setArmCount(30);
+    t2denmark->setArmyCount(30);
 
     cout << "...Denmark is adjacent too the following...\n";
     for (auto t : t2denmark->getAdjacencyList()) { cout << t->getName() << " | "; }
@@ -406,8 +406,8 @@ void testOrderExecution() {
     t2germany->setOwnerId(2);
 
     cout << "...Assign Sweden 5 forces and Germany 5 forces...\n\n";
-    t2sweden->setArmCount(5);
-    t2germany->setArmCount(5);
+    t2sweden->setArmyCount(5);
+    t2germany->setArmyCount(5);
 
     cout << "...Print Territories...\n\n";
     cout << t2denmark // p1 owns
@@ -427,8 +427,8 @@ void testOrderExecution() {
     Territory* t2norway = map1->getTerritory("Norway");
     Territory* t2scotland = map1->getTerritory("Scotland");
     p1->addTerritory(t2scotland);
-    t2scotland->setArmCount(5);
-    t2norway->setArmCount(20);
+    t2scotland->setArmyCount(5);
+    t2norway->setArmyCount(20);
     t2norway->setOwnerId(2);
     Advance* a5 = new Advance(p1, t2scotland, t2norway, 5);
 
@@ -467,19 +467,62 @@ void testOrderExecution() {
     cout << "\n\n---------> Test 3: Bomb <---------\n\n\n";
 
 
-    cout << "..Player 1 ownes of denmark and sothern sweden...\n";
+    cout << "..Player 1 ownes of denmark and sothern sweden...\n\n";
     Territory* t3denmark = map1->getTerritory("Denmark");
     Territory* t3sweden = map1->getTerritory("Southern Sweden");
+    p1->addTerritory(t3denmark);
+    p1->addTerritory(t3sweden);
 
-    cout << "...Denmark is adjacent too the following...\n";
+    cout << "...Denmark is adjacent too the following...\n\n";
     for (auto t : t3denmark->getAdjacencyList()) { cout << t->getName() << " | "; }
     cout << "\n\n";
 
-    cout << "...Southen sweden is adjacent too the following...\n";
+    cout << "...Southen sweden is adjacent too the following...\n\n";
     for (auto t : t3sweden->getAdjacencyList()) { cout << t->getName() << " | "; }
     cout << "\n\n";
 
+    cout << "...Create territory adjecent to player to bomb norway with army 15...\n\n";
+    Territory* t3norway = map1->getTerritory("Norway");
+    t3norway->setOwnerId(2);
+    t3norway->setArmyCount(15);
+
+    cout << "...Create territory NO owner...\n\n";
+    Territory* t3russia = map1->getTerritory("Northern Russia");
+
+    cout << "...Create territory NOT adjecent...\n\n";
+    Territory* t3latvia = map1->getTerritory("Latvia");
+    t3latvia->setOwnerId(2);
+
+    cout << "...Create Bomb orders ...\n";
+    cout << "...Creating GOOD Bomb, player will half Norway ...\n";
+    Bomb* b1 = new Bomb(p1, t3norway);
+    cout << "...Creating BAD Bomb, territory has no ownwer ...\n";
+    Bomb* b2 = new Bomb(p1, t3russia);
+    cout << "...Creating BAD Bomb, territory is not adjacent ...\n";
+    Bomb* b3 = new Bomb(p1, t3latvia);
+    cout << "...Creating BAD Bomb, player owns territory ...\n";
+    Bomb* b4 = new Bomb(p1, t3sweden);
+
+    cout << "\n\n...Testing if Bombs are Valid() ...\n";
+    cout << "Bomb adjacent Norway, player does not own: " << printBoolValue(b1->validate());
+    cout << "Bomb trying territory no owner: " << printBoolValue(b2->validate());
+    cout << "Bomb NOT adjacent territory: " << printBoolValue(b3->validate());
+    cout << "Bomb territory player owns: " << printBoolValue(b4->validate()) << "\n";
+
+    cout << "...Issueing Bombs to Player 1 ...\n";
+    p1->issueOrder(b1);
+    p1->issueOrder(b2);
+    p1->issueOrder(b3);
+    p1->issueOrder(b4);
+
+    cout << "...Executing all order for player 1 ...\n";
+    p1->getOrdersList()->executeAll();
+
     
+
+
+
+
     
 
 

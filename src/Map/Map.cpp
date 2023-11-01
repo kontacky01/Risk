@@ -221,7 +221,7 @@ int Territory::getArmyCount() const {
     return armyCount;
 }
 
-void Territory::setArmCount(int newCount){
+void Territory::setArmyCount(int newCount){
     this->armyCount = newCount;
 }
 

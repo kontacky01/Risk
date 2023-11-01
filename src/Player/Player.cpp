@@ -104,7 +104,7 @@ void Player::eraseTerritory(Territory* t){
     return;
   }
   t->setOwnerId(0);
-  t->setArmCount(0);
+  t->setArmyCount(0);
   auto it = find(territories.begin(),territories.end(), t);
   territories.erase(it);
 }

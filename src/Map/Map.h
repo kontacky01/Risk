@@ -68,7 +68,7 @@ public:
 
     int getArmyCount() const;
 
-    void setArmCount(int newCount);
+    void setArmyCount(int newCount);
 
     void addToArmyCount(int x);
 
