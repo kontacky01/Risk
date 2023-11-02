@@ -165,10 +165,11 @@ void Deploy::execute(State* current) {
     } else cout << "Can NOT execute (Deploy) order #" << getOrderID() << " ...\n";
 };
 
-/*
-* Checks if Deploy is valid and Player owns Territory to deploy,
-* then adds reinforcments.
-*/
+/**
+ * @brief Checks if Deploy is valid and Player owns Territory to deploy,
+ * then adds reinforcments.
+ * 
+ */
 void Deploy::execute() {
     if (!pIsInExecuteState(p, getOrderName())) { return; } // player is NOT in execute order state
     if(getValid()){
@@ -251,9 +252,14 @@ void Advance::execute(State* current) {
     } else cout << "Can NOT execute (Advance) order #" << getOrderID() << " ...\n";
 }
 
-/*
-* 
-*/
+/**
+ * @brief of player owns source territory and target is enemy territory
+ * will attack target territory. If source wins, raiming forces will occupy target
+ * and ownership changed to attacking plaver. If source loses (army units depleted 
+ * to zero) attacking player keeps ownership of source. If player owns source will transfer
+ * army units from source to target.
+ * 
+ */
 void Advance::execute() {
     if(!pIsInExecuteState(p,getOrderName())){ return; } // player is NOT in execute order state
     if(this->getValid()){ // advance is valid
@@ -292,7 +298,7 @@ void Advance::execute() {
             if (winner == 0){
                 cout << "Advance executed (player attacks target) | player " << p->getID()
                     << " has NOT occupied " << this->terrTarget->getName() << " and has 0 army in "
-                    << this->terrSource->getName();
+                    << this->terrSource->getName() <<"\n";
                 //NOTE: leave owners as is, can only occupy after successful Advance attacker
             } 
         }
@@ -378,6 +384,8 @@ string Advance::getDescription() {
 
 string Advance::getOrderName() { return "Advance"; }
 
+Territory* Advance::getTerrTarget(){ return this->terrTarget;}
+
 /************************************************************ Bomb **************************************************************/
 Bomb::Bomb() {
     this->addDescription();
@@ -408,6 +416,12 @@ void Bomb::execute(State* current) {
     } else cout << "Can NOT execute (Bomb) order #" << getOrderID() << " ...\n";
 }
 
+/**
+ * @brief if target territory is owner by another player, the army units
+ * stationed will be cut down to half. If odd number of army units, division 
+ * is rounded up.  
+ * 
+ */
 void Bomb::execute(){
     if (!pIsInExecuteState(p, getOrderName())) { return; } // player is NOT in execute order state
     if(getValid()){
@@ -510,6 +524,11 @@ void Blockade::execute(State* current) {
     } else cout << "Can NOT execute (Blockade) order #" << getOrderID() << " ...\n";
 };
 
+/**
+ * @brief if player owns target territory, will double forces 
+ * and give to neutral player
+ * 
+ */
 void Blockade::execute() {
     if (!pIsInExecuteState(p, getOrderName())) { return; } // player is NOT in execute order state
     if(getValid()){
@@ -581,6 +600,11 @@ void Airlift::execute(State* current) {
     } else cout << "Can NOT execute (Airlift) order #" << getOrderID() << " ...\n";
 };
 
+/**
+ * @brief if player ownns both territories will transfer specified
+ * amount of army units from source to target
+ * 
+ */
 void Airlift::execute() {
     if (!pIsInExecuteState(p, getOrderName())) { return; } // player is NOT in execute order state
     if(getValid()){
@@ -636,6 +660,12 @@ Negotiate::Negotiate(const Negotiate* a) {
     this->addDescription();
 }
 
+Negotiate::Negotiate(Player* pSource, Player* pTarget){
+    this->pSource = pSource;
+    this->pTarget = pTarget;
+    setValid(validate());
+}
+
 Negotiate* Negotiate::clone() const{
     return new Negotiate(this);
 }
@@ -650,7 +680,55 @@ void Negotiate::execute(State* current) {
     } else cout << "Can NOT execute (Negotiate) order #" << getOrderID() << " ...\n";
 }
 
-void Negotiate::execute() {}
+/**
+ * @brief if source player and target player are diffrent, they are forbidden
+ * from attacking eachother this turn;
+ * 
+ */
+void Negotiate::execute() {
+    if(getValid()){
+        deleteAdvancesAgainstBothPlayerTerritories();
+        cout << "Negotiate executed | "
+            << "Player " << pSource->getID() << " will not be able to attack "
+            << "Player " << pTarget->getID() << " and vice versa for the entire turn\n";
+
+    }else{
+        cout << "Negotiate can NOT be executed | "
+            << "player source " << pSource->getID()
+            << " is the same as player target" << "\n";
+    }
+}
+
+bool Negotiate::validate(){
+    if(pSource->getID() == pTarget->getID())
+        return false;
+    return true;
+}
+
+void Negotiate::deleteAdvancesAgainstBothPlayerTerritories(){
+    // will delete Advance orders from source player attacking target order
+    for(auto pSourceAdvOrder : *pSource->getOrdersList()->getOL()){ // loop through pSource orders list
+        if(pSourceAdvOrder->getOrderName().compare("Advance")==0){ // get Advance orders
+            // checks if source player's Advance order is attacking a territory that the target players own
+            // static cast to access methods from Advance Class
+            if (pTarget->ownsTerritory(static_cast<Advance*>(pSourceAdvOrder)->getTerrTarget())){
+                pSource->getOrdersList()->remove(pSourceAdvOrder->getOrderID()); // will remove Advance from ol and delete order ptr
+            }
+        }
+    }
+
+    // reapting, but delete Advance orders from target player attacking source order
+    for (auto pTargetAdvOrder : *pTarget->getOrdersList()->getOL()) { // loop through pTarget orders list
+        if (pTargetAdvOrder->getOrderName().compare("Advance") == 0) { // get Advance orders
+            // checks if target player's Advance order is attacking a territory that the source players own
+            // static cast to access methods from Advance Class
+            if (pSource->ownsTerritory(static_cast<Advance*>(pTargetAdvOrder)->getTerrTarget()))
+                pTarget->getOrdersList()->remove(pTargetAdvOrder->getOrderID()); // will remove Advance from ol and delete order ptr
+        }
+    }
+}
+
+
 
 void Negotiate::addDescription() {
     this->description = "(Negotiate) prevent attacks between the current player and another target player until the end of \n"
@@ -751,7 +829,7 @@ bool OrdersList::remove(int id) {
             index = getIndex(*OL,o);
             OL->erase(OL->begin()+index); 
             delete o;
-            o = NULL;
+            o = nullptr;
             return true;
         }
     }
@@ -787,8 +865,10 @@ void OrdersList::executeAll(State* s) {
 
 void OrdersList::executeAll() {
     for (auto o : *getOL()) {
-        cout << "Order #" << o->getOrderID() << "\n";
-        o->execute();
+        if(o->getOrderID() != 0){ // check if one of orders has been deleted 
+            cout << "Order #" << o->getOrderID() << "\n";
+            o->execute();
+        }    
     }
     cout << "\n\n";
 }

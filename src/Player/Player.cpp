@@ -99,6 +99,9 @@ void Player::removeTerritory(Territory* t){
   territories.erase(it);
 }
 
+/**
+ * @brief deletes territory and sets
+ */
 void Player::eraseTerritory(Territory* t){
   if (territories.size() == 0) {
     cout << "Error: Territroy list is empty\n";
@@ -108,10 +111,10 @@ void Player::eraseTerritory(Territory* t){
     cout <<"Error: Player does not own Territory\n";
     return;
   }
-  t->setOwnerId(0);
-  t->setArmyCount(0);
+  t->setOwnerId(0); // resets value that map points too
+  t->setArmyCount(0); // resets value that map points too
   auto it = find(territories.begin(),territories.end(), t);
-  territories.erase(it);
+  territories.erase(it); 
 }
 
 OrdersList* Player::getOrdersList() { return this->orderList; }

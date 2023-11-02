@@ -150,6 +150,8 @@ public:
     string getDescription();
 
     string getOrderName();
+
+    Territory* getTerrTarget();
 private:
     Player* p;
     Territory* terrSource;
@@ -255,11 +257,17 @@ public:
     
     Negotiate(const Negotiate* a);
 
+    Negotiate(Player* pSource, Player* pTarget);
+
     Negotiate* clone() const;
     
     void execute(State *currentState);
 
     void execute();
+
+    bool validate();
+
+    void deleteAdvancesAgainstBothPlayerTerritories();
     
     void addDescription();
     
@@ -267,6 +275,8 @@ public:
 
     string getOrderName();
 private:
+    Player* pSource;
+    Player* pTarget;
 };
 
 class OrdersList
@@ -290,6 +300,9 @@ public:
     */
     bool move(int pos, int id);
     
+    /**
+     * Will delete and set Order ptr to null
+     */
     bool remove(int id);
     
     vector <Order*> * getOL();

@@ -325,7 +325,7 @@ void testOrderExecution() {
 
     auto printBoolValue = [](bool b) { if (b) return "VALID\n"; else return "NOT VALID\n"; };
 
-    /*
+    
     cout << "\n\n************** Testing Phase ************\n\n"
              << "---------> Test 1: Deploy  <---------\n\n\n";
 
@@ -395,8 +395,8 @@ void testOrderExecution() {
 
     cout << "...Deleting Player 1 Territories...\n\n";
     p1->eraseTerritory(denmark);
-    
-    
+
+
     
     cout << "\n\n---------> Test 2: Advance <---------\n\n\n";
 
@@ -467,14 +467,13 @@ void testOrderExecution() {
     cout<<"...Printing scotland to show has now owner anymore...\n";
     cout << t2scotland;
 
+    cout <<"...Deleteing pointers..\n";
     cout << "...Deleting Player 1 OrdersList...\n\n";
     p1->getOrdersList()->deleteOrdersList();
 
     cout << "...Deleting Player 1 Territories...\n\n";
     p1->eraseTerritory(t2denmark);
     p1->eraseTerritory(t2sweden);
-    
-
     
     cout << "\n\n---------> Test 3: Bomb <---------\n\n\n";
 
@@ -581,7 +580,7 @@ void testOrderExecution() {
     p1->eraseTerritory(t4sweden);
 
 
-*/
+
 
     cout << "\n\n---------> Test 5: Airlift <---------\n\n\n";
 
@@ -632,15 +631,118 @@ void testOrderExecution() {
     p1->eraseTerritory(t5sweden);
 
 
-    /*
+    cout << "\n\n---------> Test 6: Negotiate <---------\n\n\n";
+    
+    cout << "..Creating player 2...\n";
+    vector<Territory*> t2;
+    Hand* h2 = new Hand();
+    OrdersList* pOL2 = new OrdersList();
+    State* pState2 = new State("executeorders");
+    Player* p2 = new Player(t2, h2, pOL2, 2, pState2); // 1 is id
+    cout << "Created player 2.\n\n";
+
+    // denmark adj Southern sweden, west germany
+    // Sothern sweden adj denmark, poland;
+
+    cout << "..Creating Territories Denamrk, Sweden, Germany, and Poland...\n\n";
+    Territory* t6denmark = map1->getTerritory("Denmark");
+    Territory* t6sweden = map1->getTerritory("Southern Sweden");
+    Territory* t6germany = map1->getTerritory("West Germany");
+    Territory* t6poland = map1->getTerritory("Poland");
+
+    cout <<"...Assigning Player 1 to Denmark, Germany, and Player 2 to Sweden, Poland...\n\n";
+    p1->addTerritory(t6denmark);
+    p1->addTerritory(t6germany);
+    p2->addTerritory(t6sweden);
+    p2->addTerritory(t6poland);
+
+    cout << "...Assigning reinforcemants and army forces...\n\n";
+    p1->setReinforcement(50);
+    p2->setReinforcement(50);
+    t6denmark->setArmyCount(50);
+    t6sweden->setArmyCount(50);
+
+    cout << "...Create Negotiate Orders...\n";
+    cout << "...Creating GOOD Negotiate, player 1 and player 2 Advanves aginst eachother will be deleted...\n";
+    Negotiate* n1 = new Negotiate(p1, p2);
+    cout << "...Creating BAD Negotiate, player 1 and player 2 are the same player\n";
+    Negotiate* n2 = new Negotiate(p1, p1);
+
+    cout << "\n\n...Testing if Negotiates are Valid() ...\n";
+    cout << "Negotiate different player source and target: " << printBoolValue(n1->validate());
+    cout << "Negotiate same player source and target: " << printBoolValue(n2->validate()) <<"\n";
+
+    cout << "...Create Deploy Orders for filler to not be deleted...\n";
+    cout <<"...Creating 2 deploys player 1 to germany ...\n";
+    Deploy* deploy1 = new Deploy(p1, t6germany, 5);
+    Deploy* deploy2 = new Deploy(p1, t6germany, 5);
+    cout << "...Creating 2 deploys player 2 to poland ...\n\n";
+    Deploy* deploy3 = new Deploy(p2, t6poland, 5);
+    Deploy* deploy4 = new Deploy(p2, t6poland, 5);
+  
+    cout << "...Create Advance Orders attacking own another to be deleted...\n";
+    cout << "...Creating Advance to be deleted\n\n";
+    Advance* advance1 = new Advance(p1,t6denmark, t6sweden, 5);
+    Advance* advance2 = new Advance(p1, t6denmark, t6sweden, 5);
+    Advance* advance3 = new Advance(p2, t6sweden, t6denmark, 5);
+    Advance* advance4 = new Advance(p2, t6sweden, t6denmark, 5);
+
+    cout << "...Issue Orders to player 1 and player 2...\n\n";
+    p1->issueOrder(n1); // good
+    p1->issueOrder(n2); // bad
+    p1->issueOrder(deploy1);
+    p1->issueOrder(deploy2);
+    p1->issueOrder(advance1);
+    p1->issueOrder(advance2);
+
+    p2->issueOrder(deploy3);
+    p2->issueOrder(deploy4);
+    p2->issueOrder(advance3);
+    p2->issueOrder(advance4);
+
+    cout << "...Printing player 1 and player 2 OrdersList...\n";
+    cout << "...Player 1...\n";
+    cout << p1->getOrdersList();
+    cout << "...Player 2...\n";
+    cout << p2->getOrdersList();
+
+    cout << "...Executing all orders for player 1 ...\n";
+    cout << "...Will see Advance orders are NOT executed because deleted ...\n";
+    p1->getOrdersList()->executeAll();
+
+    cout << "...Showing Advance Orders attaking each player have been deleted!...\n";
+    cout << "...Player 1...\n";
+    cout << p1->getOrdersList();
+    cout << "...Player 2...\n";
+    cout << p2->getOrdersList();
+
+    cout << "...Deleting Player 1 OrdersList...\n\n";
+    p1->getOrdersList()->deleteOrdersList();
+
+    cout << "...Deleting Player 2 OrdersList...\n\n";
+    p2->getOrdersList()->deleteOrdersList();
+    
+    cout << "...Deleting Player 1 Territories...\n\n";
+    p1->eraseTerritory(t6denmark);
+    p1->eraseTerritory(t6germany);
+
+    cout << "...Deleting Player 2 Territories...\n\n";
+    p2->eraseTerritory(t6sweden);
+    p2->eraseTerritory(t6poland);
+
+
+
+
+    cout << "\n\n---------> Deleting Pointers <---------\n\n\n";
+
     cout << "Deleting intialization pointers\n";
-    cout<<"Deleting test 1 pointers\n\n"
+    cout<<"Deleting test 1 pointers\n\n";
     delete denmark;
     denmark = NULL;
     delete scotland;
     scotland = NULL;
 
-    cout<<"Deleting test 2 pointers\n\n"
+    cout<<"Deleting test 2 pointers\n\n";
     delete t2denmark;
     t2denmark = NULL;
     delete t2germany;
@@ -652,25 +754,31 @@ void testOrderExecution() {
     delete t2sweden;
     t2sweden = NULL;
 
-    cout<<"Deleting test 3 pointers\n\n"
+    cout<<"Deleting test 3 pointers\n\n";
     delete t3denmark;
     t3denmark = NULL;
+    cout<<"1-";
     delete t3sweden;
     t3sweden = NULL;
-    delete t3latvia;
-    t3latvia = NULL;
+    cout << "1-";
     delete t3norway;
     t3norway = NULL;
+    cout << "1-";
     delete t3russia;
     t3russia = NULL;
-
-    cout<<"Deleting test 4 pointers\n\n"
+    cout << "1-";
+    delete t3latvia;
+    t3latvia = NULL;
+    cout << "1-";
+    
+    /*
+    cout<<"Deleting test 4 pointers\n\n";
     delete t4denmark;
     t4denmark = NULL;
     delete t4sweden;
     t4sweden = NULL;
 
-    cout<<"Deleting test 5 pointers\n\n"
+    cout<<"Deleting test 5 pointers\n\n";
     delete t5denmark;
     t5denmark = NULL;
     delete t5sweden;
@@ -678,6 +786,14 @@ void testOrderExecution() {
     delete t5scotland;
     t5scotland = NULL;
 
+    cout << "Deleting test 6 pointers\n\n";
+    delete t6denmark;
+    t6denmark = NULL;
+    delete t6sweden;
+    t6sweden = NULL;
+    delete t6germany;
+    t6germany = NULL;
+    delete t6poland;
+    t6poland = NULL;
     */
-    
 }
