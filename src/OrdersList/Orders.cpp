@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include "Orders.h"
 
 using namespace std;
@@ -33,6 +32,13 @@ void Order::execute(State* currentState) {
     if (currentState->getStateName().compare("executeorders") == 0 && validate() == 1) {
         cout << "Executing order #" << getOrderID() << " ...\n";
     }else cout << "Can NOT execute order #" << getOrderID() << " ...\n";
+};
+
+/**
+ * Override the stringToLog method to print about the order
+*/
+string Order::stringToLog() {
+    return "\n----------------------------------------- Logger -----------------------------------------\n Order ID: " + to_string(orderID) + "\n Order descroption: " + getDescription() + "\n------------------------------------------------------------------------------------------\n";
 };
 
 int Order::incrementCount() {
@@ -92,8 +98,9 @@ Deploy::Deploy(Deploy *d) {
 * @param currentState player's current state
 */
 void Deploy::execute(State* current) {
-    if (current->getStateName().compare("executeorders")==0 && validate() == 1){
+    if (current->getStateName().compare("executeorders") == 0 && validate() == 1){
         cout << "Executing (Deploy) order #" << getOrderID() << " ...\n";
+        notify(this);
     } else cout << "Can NOT execute (Deploy) order #" << getOrderID() << " ...\n";
 };
 
@@ -123,6 +130,7 @@ Advance::Advance(Advance *a) {
 void Advance::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
         cout << "Executing (Advance) order #" << getOrderID() << " ...\n";
+        notify(this);
     } else cout << "Can NOT execute (Advance) order #" << getOrderID() << " ...\n";
 };
 
@@ -152,6 +160,7 @@ Bomb::Bomb(Bomb* a) {
 void Bomb::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
         cout << "Executing (Bomb) order #" << getOrderID() << " ...\n";
+        notify(this);
     } else cout << "Can NOT execute (Bomb) order #" << getOrderID() << " ...\n";
 };
 
@@ -179,6 +188,7 @@ Blockade::Blockade(Blockade* a) {
 void Blockade::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
         cout << "Executing (Blockade) order #" << getOrderID() << " ...\n";
+        notify(this);
     } else cout << "Can NOT execute (Blockade) order #" << getOrderID() << " ...\n";
 };
 
@@ -208,6 +218,7 @@ Airlift::Airlift(Airlift *a) {
 void Airlift::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
         cout << "Executing (Airlift) order #" << getOrderID() << " ...\n";
+        notify(this);
     } else cout << "Can NOT execute (Airlift) order #" << getOrderID() << " ...\n";
 };
 
@@ -237,6 +248,7 @@ Negotiate::Negotiate(Negotiate* a) {
 void Negotiate::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && validate() == 1){
         cout << "Executing (Negotiate) order #" << getOrderID() << " ...\n";
+        notify(this);
     } else cout << "Can NOT execute (Negotiate) order #" << getOrderID() << " ...\n";
 };
 
@@ -265,8 +277,16 @@ OrdersList::OrdersList(const OrdersList &originalOrderList){
 };
 
 void OrdersList::addOrder(Order *o){
+    notify(this);
     OL->push_back(o);
 }
+
+/**
+ * Overload the stringtoLog method to log the orderList 
+*/
+string OrdersList::stringToLog() {
+    return "\n----------------------------------------- Logger -----------------------------------------\n OrderList: a new order was added \n------------------------------------------------------------------------------------------\n";
+};
 
 /**
 * Moves order to new location in OL

@@ -2,10 +2,11 @@
 #include <vector>
 #include <iostream>
 #include "../GameEngine/GameEngine.h"
+#include "../LoggingObserver/LoggingObserver.h"
 
 using namespace std;
 
-class Order
+class Order : public Subject, public ILoggable 
 {
 public:
 
@@ -35,6 +36,8 @@ public:
     virtual void addDescription();
 
     virtual string getDescription();
+
+    virtual string stringToLog();
 
     /**
     * Increment countOrderID by 1
@@ -138,13 +141,12 @@ public:
 private:
 };
 
-class OrdersList
+
+class OrdersList : public Subject, public ILoggable
 {
 public:
     OrdersList();
     
-    //TODO: copy constructor
-
     virtual void addOrder(Order* o);
 
     /**
@@ -163,6 +165,9 @@ public:
     void executeAll(State *s);
     
     void deleteOrdersList();
+    
+    virtual string stringToLog();
+
 
 
     /**
