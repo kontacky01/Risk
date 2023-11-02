@@ -400,6 +400,7 @@ void testOrderExecution() {
     
     cout << "\n\n---------> Test 2: Advance <---------\n\n\n";
 
+
     cout << "...Assiging Player 1 Denmark...\n\n";
     Territory* t2denmark = map1->getTerritory("Denmark");
     p1->addTerritory(t2denmark);
@@ -475,6 +476,8 @@ void testOrderExecution() {
     p1->eraseTerritory(t2denmark);
     p1->eraseTerritory(t2sweden);
     
+
+
     cout << "\n\n---------> Test 3: Bomb <---------\n\n\n";
 
 
@@ -535,9 +538,6 @@ void testOrderExecution() {
     cout << "...Deleting Player 1 Territories...\n\n";
     p1->eraseTerritory(t3denmark);
     p1->eraseTerritory(t3sweden);
-
-    cout << p1;
-
 
     cout << "\n\n---------> Test 4: Blockade <---------\n\n\n";
 
@@ -735,65 +735,15 @@ void testOrderExecution() {
 
     cout << "\n\n---------> Deleting Pointers <---------\n\n\n";
 
-    cout << "Deleting intialization pointers\n";
-    cout<<"Deleting test 1 pointers\n\n";
-    delete denmark;
-    denmark = NULL;
-    delete scotland;
-    scotland = NULL;
+    cout<<"...Deleting player 1...\n\n";
+    delete p1;
+    p1 = NULL;
+    cout << "...Deleting map 1...\n\n";
+    delete map1;
+    map1 = NULL;
 
-    cout<<"Deleting test 2 pointers\n\n";
-    delete t2denmark;
-    t2denmark = NULL;
-    delete t2germany;
-    t2germany = NULL;
-    delete t2norway;
-    t2norway = NULL;
-    delete t2scotland;
-    t2scotland = NULL;
-    delete t2sweden;
-    t2sweden = NULL;
+    cout << "...Deleting Player 2...\n\n";
+    delete p2;
+    p2 = NULL;
 
-    cout<<"Deleting test 3 pointers\n\n";
-    delete t3denmark;
-    t3denmark = NULL;
-    cout<<"1-";
-    delete t3sweden;
-    t3sweden = NULL;
-    cout << "1-";
-    delete t3norway;
-    t3norway = NULL;
-    cout << "1-";
-    delete t3russia;
-    t3russia = NULL;
-    cout << "1-";
-    delete t3latvia;
-    t3latvia = NULL;
-    cout << "1-";
-    
-    /*
-    cout<<"Deleting test 4 pointers\n\n";
-    delete t4denmark;
-    t4denmark = NULL;
-    delete t4sweden;
-    t4sweden = NULL;
-
-    cout<<"Deleting test 5 pointers\n\n";
-    delete t5denmark;
-    t5denmark = NULL;
-    delete t5sweden;
-    t5sweden = NULL;
-    delete t5scotland;
-    t5scotland = NULL;
-
-    cout << "Deleting test 6 pointers\n\n";
-    delete t6denmark;
-    t6denmark = NULL;
-    delete t6sweden;
-    t6sweden = NULL;
-    delete t6germany;
-    t6germany = NULL;
-    delete t6poland;
-    t6poland = NULL;
-    */
 }

@@ -707,23 +707,23 @@ bool Negotiate::validate(){
 
 void Negotiate::deleteAdvancesAgainstBothPlayerTerritories(){
     // will delete Advance orders from source player attacking target order
-    for(auto pSourceAdvOrder : *pSource->getOrdersList()->getOL()){ // loop through pSource orders list
-        if(pSourceAdvOrder->getOrderName().compare("Advance")==0){ // get Advance orders
+    for(auto pSourceOrder : *pSource->getOrdersList()->getOL()){ // loop through pSource orders list
+        if(pSourceOrder->getOrderName().compare("Advance")==0){ // get Advance orders
             // checks if source player's Advance order is attacking a territory that the target players own
             // static cast to access methods from Advance Class
-            if (pTarget->ownsTerritory(static_cast<Advance*>(pSourceAdvOrder)->getTerrTarget())){
-                pSource->getOrdersList()->remove(pSourceAdvOrder->getOrderID()); // will remove Advance from ol and delete order ptr
+            if (pTarget->ownsTerritory(static_cast<Advance*>(pSourceOrder)->getTerrTarget())){
+                pSource->getOrdersList()->remove(pSourceOrder->getOrderID()); // will remove Advance from ol and delete order ptr
             }
         }
     }
 
     // reapting, but delete Advance orders from target player attacking source order
-    for (auto pTargetAdvOrder : *pTarget->getOrdersList()->getOL()) { // loop through pTarget orders list
-        if (pTargetAdvOrder->getOrderName().compare("Advance") == 0) { // get Advance orders
+    for (auto pTargetOrder : *pTarget->getOrdersList()->getOL()) { // loop through pTarget orders list
+        if (pTargetOrder->getOrderName().compare("Advance") == 0) { // get Advance orders
             // checks if target player's Advance order is attacking a territory that the source players own
             // static cast to access methods from Advance Class
-            if (pSource->ownsTerritory(static_cast<Advance*>(pTargetAdvOrder)->getTerrTarget()))
-                pTarget->getOrdersList()->remove(pTargetAdvOrder->getOrderID()); // will remove Advance from ol and delete order ptr
+            if (pSource->ownsTerritory(static_cast<Advance*>(pTargetOrder)->getTerrTarget()))
+                pTarget->getOrdersList()->remove(pTargetOrder->getOrderID()); // will remove Advance from ol and delete order ptr
         }
     }
 }
@@ -829,7 +829,7 @@ bool OrdersList::remove(int id) {
             index = getIndex(*OL,o);
             OL->erase(OL->begin()+index); 
             delete o;
-            o = nullptr;
+            o = NULL;
             return true;
         }
     }
