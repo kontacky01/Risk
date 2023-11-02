@@ -225,11 +225,15 @@ public:
     
     Airlift(const Airlift* a);
 
+    Airlift(Player* p, Territory* terrSource, Territory* terrTarget, int numArmyUnits);
+
     Airlift* clone() const;
     
     void execute(State *currentState);
 
     void execute();
+
+    bool validate();
     
     void addDescription();
     
@@ -237,6 +241,11 @@ public:
 
     string getOrderName();
 private:
+    Player* p;
+    Territory* terrSource;
+    Territory* terrTarget;
+    int numArmyUnits;
+
 };
 
 class Negotiate : public Order

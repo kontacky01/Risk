@@ -228,7 +228,6 @@ Advance::Advance(const Advance* a) {
     this->addDescription();
 }
 
-
 Advance::Advance(Player* p, Territory* terrSource, Territory* terrTarget, int numReinToAdvnce) {
     this->p = p;
     this->terrSource = terrSource;
@@ -294,8 +293,7 @@ void Advance::execute() {
                 cout << "Advance executed (player attacks target) | player " << p->getID()
                     << " has NOT occupied " << this->terrTarget->getName() << " and has 0 army in "
                     << this->terrSource->getName();
-                //TODO: if attakicking army loses, set territory to NO owner?
-                p->eraseTerritory(this->terrSource); // set attacking army Territory to no owner 
+                //NOTE: leave owners as is, can only occupy after successful Advance attacker
             } 
         }
     }
@@ -347,8 +345,7 @@ int Advance::battle(){
 */
 void Advance::occupyConqueredTerr(){
     this->terrTarget->setArmyCount(this->terrSource->getArmyCount()); // move source army into target Territory
-    //TODO: 1. Add terrTarget to P1, and remove from other Player
-    this->terrTarget->setOwnerId(this->terrSource->getId()); // ownership transfer from target to source
+    p->addTerritory(terrTarget);// ownership transfer from target to source
 }
 
 string Advance::givePLayerNewCard() {
@@ -561,6 +558,15 @@ Airlift::Airlift(const Airlift* a) {
     this->addDescription();
 }
 
+Airlift::Airlift(Player* p, Territory* terrSource, Territory* terrTarget, int numArmyUnits) {
+    this->p = p;
+    this->terrTarget = terrTarget;
+    this->terrSource = terrSource;
+    this->numArmyUnits = numArmyUnits;
+    setValid(validate());
+}
+
+
 Airlift* Airlift::clone() const{
     return new Airlift(this);
 }
@@ -575,7 +581,39 @@ void Airlift::execute(State* current) {
     } else cout << "Can NOT execute (Airlift) order #" << getOrderID() << " ...\n";
 };
 
-void Airlift::execute() {}
+void Airlift::execute() {
+    if (!pIsInExecuteState(p, getOrderName())) { return; } // player is NOT in execute order state
+    if(getValid()){
+        terrSource->subFromArmy(numArmyUnits);
+        terrTarget->addToArmyCount(numArmyUnits);
+        cout << "Airlift executed | "
+            << terrSource->getName() << " has " << terrSource->getArmyCount() << " army units" 
+            << " | " << terrTarget->getName() << " has " << terrTarget->getArmyCount() << " army units" << "\n";
+    }
+    else if (!p->ownsTerritory(terrSource)) {
+        cout << "Ariflift can NOT be executed | "
+            << "player does not own " << terrSource->getName() << "\n";
+    }
+    else if (!p->ownsTerritory(terrTarget)) {
+        cout << "Ariflift can NOT be executed | "
+            << "player does not own " << terrTarget->getName() << "\n";
+    }
+    else if (terrSource->getArmyCount() < numArmyUnits) {
+        cout << "Ariflift can NOT be executed | "
+            << "player source " << terrSource->getName() 
+            << " does not have enough army units"<< "\n";
+    }
+}
+
+bool Airlift::validate() {
+    if(!p->ownsTerritory(terrSource))
+        return false;
+    if (!p->ownsTerritory(terrTarget))
+        return false;
+    if(terrSource->getArmyCount() < numArmyUnits)
+        return false;
+    return true;
+}
 
 void Airlift::addDescription() {
     this->description = "(Airlift) Advance a certain number of army units from one from one territory (source territory) to another territory \n"

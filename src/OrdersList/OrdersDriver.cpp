@@ -538,7 +538,7 @@ void testOrderExecution() {
     p1->eraseTerritory(t3sweden);
 
     cout << p1;
-*/
+
 
     cout << "\n\n---------> Test 4: Blockade <---------\n\n\n";
 
@@ -559,11 +559,11 @@ void testOrderExecution() {
     cout << "...Creating BAD Blockade, player does not own Territory...\n";
     Blockade *bl2 = new Blockade(p1, pNeutral, t4sweden);
 
-    cout << "\n\n...Testing if Bombs are Valid() ...\n";
+    cout << "\n\n...Testing if Blockade are Valid() ...\n";
     cout << "Blockade player owns Territory: " << printBoolValue(bl1->validate());
     cout << "Blockade player does not own Territory: " << printBoolValue(bl2->validate())<<"\n";
 
-    cout << "...Issueing Bombs to Player 1 ...\n";
+    cout << "...Issueing Blockade to Player 1 ...\n";
     p1->issueOrder(bl1);
     p1->issueOrder(bl2);
 
@@ -581,18 +581,66 @@ void testOrderExecution() {
     p1->eraseTerritory(t4sweden);
 
 
+*/
 
-    
+    cout << "\n\n---------> Test 5: Airlift <---------\n\n\n";
+
+    cout << "..Player 1 ownes of denmark and sweden ...\n\n";
+    Territory* t5denmark = map1->getTerritory("Denmark");
+    Territory* t5sweden = map1->getTerritory("Southern Sweden");
+    p1->addTerritory(t5denmark);
+    p1->addTerritory(t5sweden);
+
+    cout << "..Adding 10 army to Denmark  and  ...\n\n";
+    t5denmark->addToArmyCount(10);
+    t5sweden->addToArmyCount(20);
+
+    cout << "..Creating territory player does NOT own ...\n\n";
+    Territory* t5scotland = map1->getTerritory("Scotland");
+
+    cout << "...Create Airlift orders ...\n";
+    cout << "...Creating GOOD Airlift, player will move Army Denmark to sweden...\n";
+    Airlift* air1 = new Airlift(p1, t5denmark, t5sweden, 5);
+    cout << "...Creating Bad Airlift, player does not own Source...\n";
+    Airlift* air2 = new Airlift(p1, t5scotland, t5sweden, 5);
+    cout << "...Creating Bad Airlift, player does not own Source...\n";
+    Airlift* air3 = new Airlift(p1, t5denmark, t5scotland, 5);
+    cout << "...Creating Bad Airlift, player is asking to move more army unites then source owns...\n";
+    Airlift* air4 = new Airlift(p1, t5denmark, t5sweden, 30);
+
+    cout << "\n\n...Testing if Airlift are Valid() ...\n";
+    cout << "Airlift player owns source and target: " << printBoolValue(air1->validate());
+    cout << "Airlift player does not own Source: " << printBoolValue(air2->validate());
+    cout << "Airlift player does not own Target: " << printBoolValue(air3->validate());
+    cout << "Airlift source does NOT have enough army units " << printBoolValue(air4->validate())<<"\n";
+
+
+    cout << "...Issueing Airlift to Player 1 ...\n";
+    p1->issueOrder(air1);
+    p1->issueOrder(air2);
+    p1->issueOrder(air3);
+    p1->issueOrder(air4);
+
+    cout << "...Executing all orders for player 1 ...\n";
+    p1->getOrdersList()->executeAll();
+
+    cout << "...Deleting Player 1 OrdersList...\n\n";
+    p1->getOrdersList()->deleteOrdersList();
+
+    cout << "...Deleting Player 1 Territories...\n\n";
+    p1->eraseTerritory(t5denmark);
+    p1->eraseTerritory(t5sweden);
+
 
     /*
-    cout << "deleting pointers\n";
-    cout<<"test 1";
+    cout << "Deleting intialization pointers\n";
+    cout<<"Deleting test 1 pointers\n\n"
     delete denmark;
     denmark = NULL;
     delete scotland;
     scotland = NULL;
 
-     cout<<"test 2";
+    cout<<"Deleting test 2 pointers\n\n"
     delete t2denmark;
     t2denmark = NULL;
     delete t2germany;
@@ -604,7 +652,7 @@ void testOrderExecution() {
     delete t2sweden;
     t2sweden = NULL;
 
-    cout<<"test 3";
+    cout<<"Deleting test 3 pointers\n\n"
     delete t3denmark;
     t3denmark = NULL;
     delete t3sweden;
@@ -616,11 +664,19 @@ void testOrderExecution() {
     delete t3russia;
     t3russia = NULL;
 
-    cout <<"test 4";
-    delete t2denmark;
-    t2denmark = NULL;
-    delete t2sweden;
-    t2sweden = NULL;
+    cout<<"Deleting test 4 pointers\n\n"
+    delete t4denmark;
+    t4denmark = NULL;
+    delete t4sweden;
+    t4sweden = NULL;
+
+    cout<<"Deleting test 5 pointers\n\n"
+    delete t5denmark;
+    t5denmark = NULL;
+    delete t5sweden;
+    t5sweden = NULL;
+    delete t5scotland;
+    t5scotland = NULL;
 
     */
     
