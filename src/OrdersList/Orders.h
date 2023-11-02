@@ -141,13 +141,12 @@ public:
 private:
 };
 
-class OrdersList
+
+class OrdersList : public Subject, public ILoggable
 {
 public:
     OrdersList();
     
-    //TODO: copy constructor
-
     virtual void addOrder(Order* o);
 
     /**
@@ -166,6 +165,9 @@ public:
     void executeAll(State *s);
     
     void deleteOrdersList();
+    
+    virtual string stringToLog();
+
 
 
     /**

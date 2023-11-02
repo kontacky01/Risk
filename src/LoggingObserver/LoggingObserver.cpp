@@ -61,6 +61,30 @@ void testLoggingObserver() {
     deploy->attach(logger);
     // trigger execution of order to print a notif
     deploy->execute(executeordersState);
-    
-    // todo: write to file
 }
+
+// TODO after merge:
+// LogObserver that writes every game command read by a CommandProcessor object (or a
+// FileCommandProcessorAdapter object) into a log file. The game log observer should be notified by the
+// CommandProcessor::saveCommand() method that saves the command into the collection of commands, as well
+// as the and Command::saveEffect() method that records the effect of the command into the command object.
+// This should result in all the current game’s commands and their effects to be logged into a “gamelog.txt” file. 
+
+// Also in the same way, when the GameEngine’s state is changing (e.g. using GameEngine::transition()), a log
+// line should be output to the log file stating what is the new game state, using the Observer notification
+// mechanism.
+
+
+// TODO: when merged
+// CommandProcessor::saveCommand()
+// Command::saveEffect()
+// Order::execute() --> DONE, BUT THE EFFECT ISNT READY, SO NEED TO ADD IT WHEN WE MERGE
+// OrderList::addOrder()
+// GameEngine::transition()
+
+//todo: extend the following classes when merged:
+// Order - DONE 
+// OrderList
+// GameEngine 
+// Command
+// CommandProcessor

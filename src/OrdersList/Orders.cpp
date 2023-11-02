@@ -34,6 +34,9 @@ void Order::execute(State* currentState) {
     }else cout << "Can NOT execute order #" << getOrderID() << " ...\n";
 };
 
+/**
+ * Override the stringToLog method to print about the order
+*/
 string Order::stringToLog() {
     return "\n----------------------------------------- Logger -----------------------------------------\n Order ID: " + to_string(orderID) + "\n Order descroption: " + getDescription() + "\n------------------------------------------------------------------------------------------\n";
 };
@@ -274,8 +277,16 @@ OrdersList::OrdersList(const OrdersList &originalOrderList){
 };
 
 void OrdersList::addOrder(Order *o){
+    notify(this);
     OL->push_back(o);
 }
+
+/**
+ * Overload the stringtoLog method to log the orderList 
+*/
+string OrdersList::stringToLog() {
+    return "\n----------------------------------------- Logger -----------------------------------------\n OrderList: a new order was added \n------------------------------------------------------------------------------------------\n";
+};
 
 /**
 * Moves order to new location in OL
