@@ -292,6 +292,8 @@ void testOrderExecution() {
     // show that fails if player tries to move reinforcemnts to wrong location
 
     cout << "********** Preliminary Phase *********\n\n"
+
+
          << "---------> Load Map: Europe <---------\n\n";
 
     cout <<"...Loading Map of Europe...\n";
@@ -305,6 +307,8 @@ void testOrderExecution() {
 
     cout << "...Validating contents...\n";
     map1->validate();
+
+
 
 
     cout << "\n\n---------> Create Player 1 <---------\n\n\n";
@@ -325,8 +329,12 @@ void testOrderExecution() {
 
     auto printBoolValue = [](bool b) { if (b) return "VALID\n"; else return "NOT VALID\n"; };
 
+
+
     
     cout << "\n\n************** Testing Phase ************\n\n"
+
+
              << "---------> Test 1: Deploy  <---------\n\n\n";
 
     cout << "...Assign Denmark as starting Terrirtory to player 1...\n\n";
@@ -356,7 +364,6 @@ void testOrderExecution() {
 
     cout << "...Creating a BAD deploy Player does not have enough reinforcments ...\n\n";
     Deploy* d4 = new Deploy(p1, denmark, 50);
-
 
     cout << "...Testing if Deploys are Valid() ...\n";
     cout << "Denmark Deploy is " << printBoolValue(d1->validate());
@@ -397,9 +404,9 @@ void testOrderExecution() {
     p1->eraseTerritory(denmark);
 
 
+
     
     cout << "\n\n---------> Test 2: Advance <---------\n\n\n";
-
 
     cout << "...Assiging Player 1 Denmark...\n\n";
     Territory* t2denmark = map1->getTerritory("Denmark");
@@ -478,8 +485,8 @@ void testOrderExecution() {
     
 
 
-    cout << "\n\n---------> Test 3: Bomb <---------\n\n\n";
 
+    cout << "\n\n---------> Test 3: Bomb <---------\n\n\n";
 
     cout << "..Player 1 ownes of denmark and sothern sweden...\n\n";
     Territory* t3denmark = map1->getTerritory("Denmark");
@@ -538,6 +545,9 @@ void testOrderExecution() {
     cout << "...Deleting Player 1 Territories...\n\n";
     p1->eraseTerritory(t3denmark);
     p1->eraseTerritory(t3sweden);
+
+
+
 
     cout << "\n\n---------> Test 4: Blockade <---------\n\n\n";
 
@@ -629,6 +639,8 @@ void testOrderExecution() {
     cout << "...Deleting Player 1 Territories...\n\n";
     p1->eraseTerritory(t5denmark);
     p1->eraseTerritory(t5sweden);
+
+
 
 
     cout << "\n\n---------> Test 6: Negotiate <---------\n\n\n";
