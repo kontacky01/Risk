@@ -379,11 +379,23 @@ void testOrderExecution() {
     cout << "...Show Player 1 has Deploys and 5 reinforcments ...\n\n";
     cout << p1;
 
+    cout << "...Testing WRONG state will NOT execute ...\n\n";
+    p1->getState()->setStateName("BadState");
+
+    cout << "...Attempting execute while in WRONG state ...\n"
+         << "Executing (Deploy) #" << p1->getOrdersList()->getOL()->at(0)->getOrderID() << " | ";
+    p1->getOrdersList()->getOL()->at(0)->execute(); // execute first order in player OrdersList
+    cout << "\n";
+
+    cout << "...Changeing state back to executeorders  ...\n\n";
+    p1->getState()->setStateName("executeorders");
+
     cout << "...Deleting Player 1 OrdersList...\n\n";
     p1->getOrdersList()->deleteOrdersList();
 
     cout << "...Deleting Player 1 Territories...\n\n";
     p1->eraseTerritory(denmark);
+    
     
     
     cout << "\n\n---------> Test 2: Advance <---------\n\n\n";
@@ -461,7 +473,7 @@ void testOrderExecution() {
     cout << "...Deleting Player 1 Territories...\n\n";
     p1->eraseTerritory(t2denmark);
     p1->eraseTerritory(t2sweden);
-    */
+    
 
     
     cout << "\n\n---------> Test 3: Bomb <---------\n\n\n";
@@ -518,25 +530,69 @@ void testOrderExecution() {
     cout << "...Executing all order for player 1 ...\n";
     p1->getOrdersList()->executeAll();
 
+    cout << "...Deleting Player 1 OrdersList...\n\n";
+    p1->getOrdersList()->deleteOrdersList();
+
+    cout << "...Deleting Player 1 Territories...\n\n";
+    p1->eraseTerritory(t3denmark);
+    p1->eraseTerritory(t3sweden);
+
+    cout << p1;
+*/
+
+    cout << "\n\n---------> Test 4: Blockade <---------\n\n\n";
+
+    cout << "..Player 1 ownes of denmark and has Army 20 ...\n\n";
+    Territory* t4denmark = map1->getTerritory("Denmark");
+    p1->addTerritory(t4denmark);
+    t4denmark->setArmyCount(20);
+
+    cout << "...Create Sweden player 1 does NOT own...\n\n";
+    Territory* t4sweden = map1->getTerritory("Southern Sweden");
+
+    cout << "...Create Neutral player #999...\n\n";
+    Player* pNeutral = new Player(t, h, pOL, 999, pState);
+
+    cout << "...Create Blockade orders ...\n";
+    cout << "...Creating GOOD Blockade, player will double Denmark and assign to NEUTRAL player ...\n";
+    Blockade *bl1 = new Blockade(p1, pNeutral, t4denmark);
+    cout << "...Creating BAD Blockade, player does not own Territory...\n";
+    Blockade *bl2 = new Blockade(p1, pNeutral, t4sweden);
+
+    cout << "\n\n...Testing if Bombs are Valid() ...\n";
+    cout << "Blockade player owns Territory: " << printBoolValue(bl1->validate());
+    cout << "Blockade player does not own Territory: " << printBoolValue(bl2->validate())<<"\n";
+
+    cout << "...Issueing Bombs to Player 1 ...\n";
+    p1->issueOrder(bl1);
+    p1->issueOrder(bl2);
+
+    cout << "...Executing all order for player 1 ...\n";
+    p1->getOrdersList()->executeAll();
+
+    cout << "...Printing New Neutral Blockade Territory ...\n";
+    cout << t4denmark;
+
+    cout << "...Deleting Player 1 OrdersList...\n\n";
+    p1->getOrdersList()->deleteOrdersList();
+
+    cout << "...Deleting Player 1 Territories...\n\n";
+    p1->eraseTerritory(t4denmark);
+    p1->eraseTerritory(t4sweden);
+
+
+
     
-
-
-
-
-    
-
-
-
-
-
 
     /*
-    deleting pointers
+    cout << "deleting pointers\n";
+    cout<<"test 1";
     delete denmark;
     denmark = NULL;
     delete scotland;
     scotland = NULL;
 
+     cout<<"test 2";
     delete t2denmark;
     t2denmark = NULL;
     delete t2germany;
@@ -547,6 +603,25 @@ void testOrderExecution() {
     t2scotland = NULL;
     delete t2sweden;
     t2sweden = NULL;
+
+    cout<<"test 3";
+    delete t3denmark;
+    t3denmark = NULL;
+    delete t3sweden;
+    t3sweden = NULL;
+    delete t3latvia;
+    t3latvia = NULL;
+    delete t3norway;
+    t3norway = NULL;
+    delete t3russia;
+    t3russia = NULL;
+
+    cout <<"test 4";
+    delete t2denmark;
+    t2denmark = NULL;
+    delete t2sweden;
+    t2sweden = NULL;
+
     */
     
 }

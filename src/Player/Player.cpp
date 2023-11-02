@@ -94,6 +94,11 @@ void Player::addTerritory(Territory* t){
   this->territories.push_back(t);
 }
 
+void Player::removeTerritory(Territory* t){
+  auto it = find(territories.begin(), territories.end(), t);
+  territories.erase(it);
+}
+
 void Player::eraseTerritory(Territory* t){
   if (territories.size() == 0) {
     cout << "Error: Territroy list is empty\n";

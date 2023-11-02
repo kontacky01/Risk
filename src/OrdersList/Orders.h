@@ -70,6 +70,8 @@ public:
 
     bool terrHasOwner(Territory *t);
 
+    bool pIsInExecuteState(Player *p, string orderName);
+
 protected:
     string description;
 private:
@@ -193,11 +195,17 @@ public:
    
     Blockade(const Blockade* a);
 
+    Blockade(Player* p, Player* pNeutral, Territory* t);
+
     Blockade* clone() const;
     
     void execute(State *currentState);
 
     void execute();
+
+    bool validate();
+
+    void doubleArmyUnits(Territory* t);
     
     void addDescription();
     
@@ -205,6 +213,9 @@ public:
 
     string getOrderName();
 private:
+    Player* p;
+    Territory* terrTarget;
+    Player* pNeutral;
 };
 
 class Airlift : public Order

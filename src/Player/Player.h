@@ -65,6 +65,8 @@ class Player {
 
   void addTerritory(Territory* t);
 
+  void removeTerritory(Territory* t);
+
   void eraseTerritory(Territory* t);
 
   OrdersList* getOrdersList();

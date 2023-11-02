@@ -106,6 +106,16 @@ bool Order::terrHasOwner(Territory* t){
     return true;
 }
 
+bool Order::pIsInExecuteState(Player *p, string orderName){
+    if (!(p->getState()->getStateName().compare("executeorders") == 0)) {
+        cout << "Can NOT execute " << orderName  
+            << " | Player #" << p->getID() << " is not in Execute Orders State\n";
+        return false;
+    }
+    return true;
+}
+
+
 /**
 * @brief Stream insertion operator
 * Will ouptut to console everytime "cout <<" is used on Order Object
@@ -160,13 +170,8 @@ void Deploy::execute(State* current) {
 * then adds reinforcments.
 */
 void Deploy::execute() {
-
+    if (!pIsInExecuteState(p, getOrderName())) { return; } // player is NOT in execute order state
     if(getValid()){
-        if (!(p->getState()->getStateName().compare("executeorders") == 0)){
-            cout << "Can NOT execute Deploy " << this->terrToDeploy->getName()
-                << " | Player #" << p->getID() << " is not in Execute Orders State\n";
-            return; //exit function
-        }
         p->subtractReinforcemnts(numReinToDeploy);
         terrToDeploy->addToArmyCount(numReinToDeploy);
         cout << "Deploy executed | Player #" << p->getID() << " now has "
@@ -251,12 +256,8 @@ void Advance::execute(State* current) {
 * 
 */
 void Advance::execute() {
+    if(!pIsInExecuteState(p,getOrderName())){ return; } // player is NOT in execute order state
     if(this->getValid()){ // advance is valid
-        if (!(p->getState()->getStateName().compare("executeorders") == 0)) { // player in execute phase
-            cout << "Can NOT execute Advance " << this->terrTarget->getName()
-                << " | Player #" << p->getID() << " is not in Execute Orders State\n";
-            return; //exit function
-        }
         if(pOwnsTerr(p,this->terrTarget)){ // player owns target
            if(terrSource->getArmyCount() < numReinToAdvnce){ //check source has enough reinforcments to give to target
                cout << "Can NOT execute Advance " << this->terrSource->getName()
@@ -346,6 +347,7 @@ int Advance::battle(){
 */
 void Advance::occupyConqueredTerr(){
     this->terrTarget->setArmyCount(this->terrSource->getArmyCount()); // move source army into target Territory
+    //TODO: 1. Add terrTarget to P1, and remove from other Player
     this->terrTarget->setOwnerId(this->terrSource->getId()); // ownership transfer from target to source
 }
 
@@ -410,6 +412,7 @@ void Bomb::execute(State* current) {
 }
 
 void Bomb::execute(){
+    if (!pIsInExecuteState(p, getOrderName())) { return; } // player is NOT in execute order state
     if(getValid()){
         halfArmyUnits(this->terrTarget);
         cout << "Bomb executed | "
@@ -482,6 +485,19 @@ Blockade::Blockade(const Blockade* a) {
     setOrderID(getCount());
     this->addDescription();
 }
+/**
+ * @brief Needs Neutral player! Can not be zero, pick random number 999
+ * 
+ * @param p 
+ * @param pNeutral 
+ * @param terrTarget 
+ */
+Blockade::Blockade(Player* p, Player* pNeutral, Territory* terrTarget){
+    this->p = p;
+    this->terrTarget = terrTarget;
+    this->pNeutral = pNeutral;
+    setValid(validate());
+}
 
 Blockade* Blockade::clone() const{
     return new Blockade(this);
@@ -497,7 +513,32 @@ void Blockade::execute(State* current) {
     } else cout << "Can NOT execute (Blockade) order #" << getOrderID() << " ...\n";
 };
 
-void Blockade::execute() {}
+void Blockade::execute() {
+    if (!pIsInExecuteState(p, getOrderName())) { return; } // player is NOT in execute order state
+    if(getValid()){
+        doubleArmyUnits(this->terrTarget);
+        p->removeTerritory(this->terrTarget);
+        pNeutral->addTerritory(this->terrTarget);
+        cout << "Blockade executed | "
+            << terrTarget->getName() << " army is doubles, and is now "
+            << terrTarget->getArmyCount()<<" | Territory is now Neutral" << "\n";
+    }else{
+        cout << "Blockade can NOT be executed | "
+            << "player does not own " << terrTarget->getName() << "\n";
+    }
+    
+}
+
+bool Blockade::validate(){ 
+    if (p->ownsTerritory(this->terrTarget))
+        return true;
+    return false;
+}
+
+void Blockade::doubleArmyUnits(Territory* t) {
+    int armySize = t->getArmyCount();
+    t->setArmyCount(armySize * 2);
+}
 
 void Blockade::addDescription() {
     this->description = "(Blockade) Triple the number of army units on a target territory and make it a neutral territory. \n"
