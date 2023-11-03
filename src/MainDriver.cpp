@@ -3,6 +3,7 @@
 #include "OrdersList/Orders.h"
 #include "CardsDeck/Cards.h"
 #include "GameEngine/GameEngine.h"
+// #include "LoggingObserver/LoggingObserver.h"
 
 int main()
 {
@@ -19,7 +20,7 @@ int main()
     * Assignment 2
     */
     testOrderExecution();
-
+    testLoggingObserver();
 
     return 0;
 }

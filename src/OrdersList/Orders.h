@@ -4,6 +4,8 @@
 
 #include "../GameEngine/GameEngine.h"
 #include "../Map/Map.h"
+#include "../LoggingObserver/LoggingObserver.h"
+
 
 using namespace std;
 
@@ -15,7 +17,7 @@ public:
     virtual void execute() = 0;
 };
 
-class Order : public OrderAbstract
+class Order : public OrderAbstract, public Subject, public ILoggable 
 {
 public:
 
@@ -72,6 +74,8 @@ public:
 
     bool pIsInExecuteState(Player *p, string orderName);
 
+    virtual string stringToLog();
+
 protected:
     string description;
 private:
@@ -95,6 +99,8 @@ public:
 
     void execute(State *currentState);
 
+    string stringToLog();
+
     /*
     * Checks if Deploy is valid and Player owns Territory to deploy,
     * then adds reinforcments.
@@ -115,7 +121,7 @@ private:
     Territory* terrToDeploy;
     int numReinToDeploy;
     vector<Territory*> tOwned;
-    Player *p = NULL;
+    Player *p;
 };
 
 class Advance : public Order
@@ -279,7 +285,8 @@ private:
     Player* pTarget;
 };
 
-class OrdersList
+
+class OrdersList : public Subject, public ILoggable
 {
 public:
     OrdersList();
@@ -292,6 +299,8 @@ public:
     ~OrdersList();
 
     virtual void addOrder(Order* o);
+    
+    virtual string stringToLog();
 
     /**
     * Moves order to new location in OL

@@ -54,6 +54,12 @@ void Order::execute(State* currentState) {
 };
 
 void Order::execute(){};
+/**
+ * Override the stringToLog method to print about the order
+*/
+string Order::stringToLog() {
+    return "\n----------------------------------------- Logger -----------------------------------------\n Order ID: " + to_string(orderID) + "\n Order descroption: " + getDescription() + "\n------------------------------------------------------------------------------------------\n";
+};
 
 int Order::incrementCount() {
     return ++countOrderID;
@@ -156,11 +162,18 @@ Deploy* Deploy::clone() const {
 }
 
 /**
+ * Override the stringToLog method to print about the order
+*/
+string Deploy::stringToLog() {
+    return "\n----------------------------------------- Logger -----------------------------------------\n Order ID: " + getOrderName() + "\n------------------------------------------------------------------------------------------\n";
+};
+
+/**
 * Checks player state and executes order
 * @param currentState player's current state
 */
 void Deploy::execute(State* current) {
-    if (current->getStateName().compare("executeorders")==0 && getValid() == 1){
+    if (current->getStateName().compare("executeorders") == 0 && validate() == 1){
         cout << "Executing (Deploy) order #" << getOrderID() << " ...\n";
     } else cout << "Can NOT execute (Deploy) order #" << getOrderID() << " ...\n";
 };
@@ -178,6 +191,7 @@ void Deploy::execute() {
         cout << "Deploy executed | Player #" << p->getID() << " now has "
             << terrToDeploy->getArmyCount() << " reinforcments in Territory "
             << this->terrToDeploy->getName() <<"\n";
+        notify(this);
     }
     else if(this->numReinToDeploy==0){
         cout << "Can NOT execute Deploy " << this->terrToDeploy->getName()
@@ -249,6 +263,7 @@ Advance* Advance::clone() const {
 void Advance::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && getValid() == 1){
         cout << "Executing (Advance) order #" << getOrderID() << " ...\n";
+        notify(this);
     } else cout << "Can NOT execute (Advance) order #" << getOrderID() << " ...\n";
 }
 
@@ -413,6 +428,7 @@ Bomb* Bomb::clone() const{
 void Bomb::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && getValid() == 1){
         cout << "Executing (Bomb) order #" << getOrderID() << " ...\n";
+        notify(this);
     } else cout << "Can NOT execute (Bomb) order #" << getOrderID() << " ...\n";
 }
 
@@ -521,6 +537,7 @@ Blockade* Blockade::clone() const{
 void Blockade::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && getValid() == 1){
         cout << "Executing (Blockade) order #" << getOrderID() << " ...\n";
+        notify(this);
     } else cout << "Can NOT execute (Blockade) order #" << getOrderID() << " ...\n";
 };
 
@@ -597,6 +614,7 @@ Airlift* Airlift::clone() const{
 void Airlift::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && getValid() == 1){
         cout << "Executing (Airlift) order #" << getOrderID() << " ...\n";
+        notify(this);
     } else cout << "Can NOT execute (Airlift) order #" << getOrderID() << " ...\n";
 };
 
@@ -677,6 +695,7 @@ Negotiate* Negotiate::clone() const{
 void Negotiate::execute(State* current) {
     if (current->getStateName().compare("executeorders")==0 && getValid() == 1){
         cout << "Executing (Negotiate) order #" << getOrderID() << " ...\n";
+        notify(this);
     } else cout << "Can NOT execute (Negotiate) order #" << getOrderID() << " ...\n";
 }
 
@@ -770,8 +789,16 @@ OrdersList::~OrdersList(){
 }
 
 void OrdersList::addOrder(Order *o){
+    notify(this);
     OL->push_back(o);
 }
+
+/**
+ * Overload the stringtoLog method to log the orderList 
+*/
+string OrdersList::stringToLog() {
+    return "\n----------------------------------------- Logger -----------------------------------------\n OrderList: a new order was added \n------------------------------------------------------------------------------------------\n";
+};
 
 /**
 * Moves order to new location in OL
