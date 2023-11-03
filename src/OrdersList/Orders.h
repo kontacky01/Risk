@@ -158,6 +158,7 @@ public:
     string getOrderName();
 
     Territory* getTerrTarget();
+    
 private:
     Player* p;
     Territory* terrSource;
@@ -286,7 +287,7 @@ private:
 };
 
 
-class OrdersList : public Subject, public ILoggable
+class OrdersList 
 {
 public:
     OrdersList();
