@@ -5,7 +5,7 @@
  * Default Constructor
  */
 	Command::Command(){}
-/**S
+/**
  * Destructor
  */
     Command::~Command(){}
@@ -69,7 +69,13 @@
     string FileCommandProcessorAdapter::readCommand(string fileToRead){
         string commandstr;
         ifstream readCommands(fileToRead);
-        getline(readCommands, commandstr);
+
+        if (readCommands.is_open()) {
+            getline(readCommands, commandstr);
+            readCommands.close();
+        } else {
+            cout << "Error: Unable to open the file.\n";
+        }
         return commandstr;
     }
 
@@ -135,6 +141,7 @@
         Command* cobj = nullptr;
         int choice;
         string file;
+        FileCommandProcessorAdapter* fcpa = new FileCommandProcessorAdapter();
 
         while(!validChoice){
             cout << "Would you like 1. to enter commands from the console or 2. get commands from a file? Please write 1 or 2 and hit ENTER: \n";
@@ -150,19 +157,20 @@
                 case 2: 
                     cout << "Enter the file name: \n";
                     cin >> file;
-                    FileCommandProcessorAdapter* fcpa = new FileCommandProcessorAdapter();
+                    
                     retrievedCommand = fcpa->readCommand(file);
+                    cout << "=================" << retrievedCommand;
                     cobj = saveCommand(retrievedCommand);
                     cout << "The command "<< cobj->getCommand() << " was saved.\n\n";
                     validChoice = true;
-                    delete fcpa;
-                    fcpa = NULL;
                 break;
 
                 default:
                     cout << "The entered choice is invalid, TRY AGAIN!\n";
             }
         }
+        delete fcpa;
+        fcpa = NULL;
         return cobj;
     }
 /**
@@ -171,7 +179,7 @@
  * this command should be rejected
  * otherwise we update the state of the player
  */
-/*    void validate(Command* cmd, Player* p){
+    void validate(Command* cmd, Player* p){//contemplanting if i should test this in player or cpdriver, if in cpdriver how to initiate players hhum
         bool isValid = false;
         vector<Transition*> transitions = initializeGameTransitions();
         for (int i = 0; i < transitions.size(); i++) {
@@ -189,4 +197,3 @@
             }
         }
     }
-*/

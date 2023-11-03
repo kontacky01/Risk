@@ -24,6 +24,7 @@ void testPlayers() {
   // init a player
   Player* p = new Player(t, h, o, 1, NULL);
 
+
   cout << "---------> Test 1: Testing player methods (attack/defend/issueOrder) <---------\n\n";
   // show that Player contains method toDefend()
   p->toDefend();
@@ -77,4 +78,4 @@ void testPlayers() {
   // delete playerCopy pointer
   delete pCopy;
   pCopy = NULL;
-};
+}

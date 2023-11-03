@@ -1,14 +1,14 @@
-/*#pragma once*/
+#pragma once
 #include <string>
 #include <vector>
 #include <time.h>
 #include <iostream>
 #include <fstream>
 
-/*#include "../Map/Map.h"
+#include "../Map/Map.h"
 #include "../Player/Player.h"
 #include "../OrdersList/Orders.h"
-#include "../CardsDeck/Cards.h"*/
+#include "../CardsDeck/Cards.h"
 #include "../GameEngine/GameEngine.h"
 
 using namespace std;
@@ -52,6 +52,7 @@ class Command{
 
 /************************************************************ CommandProcessor **************************************************************/
 class Command;  // Forward declaration for Command class
+class Player;  // Forward declaration for Command class
 class CommandProcessor{
     public:
     /**
@@ -89,7 +90,7 @@ class CommandProcessor{
     /**
      * checks if the command is valid in the current game state
      */
-//    void validate(Command* cmd, Player* p);
+    void validate(Command* cmd, Player* p);
 
     private:
     vector<Command*> commands;

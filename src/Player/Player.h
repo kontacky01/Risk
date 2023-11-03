@@ -9,6 +9,7 @@
 #include "../GameEngine/GameEngine.h"
 #include "../Map/Map.h"
 #include "../OrdersList/Orders.h"
+#include "../CommandProcessing/CommandProcessing.h"
 
 using namespace std;
 
