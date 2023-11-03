@@ -36,6 +36,8 @@ public:
 
     string getStateName();
 
+    void setStateName(string sName);
+
 private:
     string stateName;
 };

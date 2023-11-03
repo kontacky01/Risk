@@ -17,6 +17,7 @@ using namespace std;
 class Player {
  private:
   int id;
+  int reinforcements;
   vector<Territory*> territories;
   Hand* hand;
   OrdersList* orderList;
@@ -25,15 +26,15 @@ class Player {
   /**
    * Helper method to print the list of territories to attack/defended
    */
-  friend ostream& operator<<(ostream& out,
-                             Player* o);  // overide Stream insertion operator
+  friend ostream& operator<<(ostream& out, Player* o);  // overide Stream insertion operator
+  
   void printTerritories(vector<Territory*> territories);
 
  public:
   /**
    * Constructor with with an argument list
    */
-  Player(vector<Territory*>, Hand*, OrdersList*, int, State*);
+  Player(vector<Territory*>, Hand*, OrdersList*, int id, State*);
 
   /**
    * Default Constructor
@@ -50,9 +51,31 @@ class Player {
    */
   ~Player();
 
+  int getID();
+
+  int getReinforcement();
+
+  void setReinforcement(int r);
+
+  void addReinforcement(int r);
+
+  void subtractReinforcemnts(int r);
+
+  vector<Territory*> getTerritories();
+
+  void addTerritory(Territory* t);
+
+  void removeTerritory(Territory* t);
+
+  void eraseTerritory(Territory* t);
+
   OrdersList* getOrdersList();
 
   State* getState();
+
+  bool ownsTerritory(Territory *t);
+
+  Hand* getHand();
 
   /**
    * Returns a random list of territories that are assigned to the user which
@@ -69,6 +92,8 @@ class Player {
    * Take in an order and add it into the OrderList
    */
   OrdersList* issueOrder(Order* o);
+
+  //void executeNextOrderAndRemove();
 };
 
 /************************************************************ PlayerDriver **************************************************************/

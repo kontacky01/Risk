@@ -44,6 +44,17 @@ Map::~Map() {
     };
 };
 
+map<int, Territory*> Map::getterritories() { return this->territories;}
+
+Territory* Map::getTerritory(string tName){
+    for (auto const& t : this->getterritories()) {
+        if (t.second->getName().compare(tName) == 0) {
+            return t.second;
+        }
+    }
+    return NULL;
+}
+
 /**
 * Will be stored in a key value pair ex: (1, Contient)
 */
@@ -194,18 +205,37 @@ int Territory::getId() const {
     return id;
 }
 
+int Territory::getContinentId() const {
+    return continentId;
+}
+
+int Territory::getOwnerId() const{
+    return ownerId;
+}
+
+void Territory::setOwnerId(int newOwner){
+    this->ownerId = newOwner;
+}
+
 int Territory::getArmyCount() const {
     return armyCount;
+}
+
+void Territory::setArmyCount(int newCount){
+    this->armyCount = newCount;
+}
+
+void Territory::addToArmyCount(int x) {
+    this->armyCount = this->armyCount + x;
+}
+
+void Territory::subFromArmy(int x){
+    this->armyCount = this->armyCount - x;
 }
 
 vector<Territory*> Territory::getAdjacencyList() {
     return adjacencyList;
 }
-
-int Territory::getContinentId() const {
-    return continentId;
-}
-
 
 /**
 * Per example we have A,B,C which are all objects of territory
@@ -220,6 +250,18 @@ void Territory::addAdjacentTerritory(Territory* destination) {
     // the destination object's adjecey list
     destination->adjacencyList.push_back(this);
 }
+
+
+ostream& operator << (ostream& out, Territory* t)
+{
+    out << "Territory: " << (t->getName()) 
+        << " | ID: " << t->getId()
+        << " | ContinentID: " << t->getContinentId()
+        << " | Owner: " << t->getOwnerId()
+        << " | Army Count: " << t->getArmyCount() << "\n\n";
+    return out;
+}
+
 /************************************************************ MapLoader ************************************************************/
 
 /**

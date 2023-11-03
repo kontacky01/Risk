@@ -7,11 +7,20 @@
 
 int main()
 {
-    // testLoadMaps();
-    // testOrdersLists();
-    // testPlayers();
-    // testCards();
-    // testGameStates(); 
+    /* 
+    * Assignment 1
+    */
+    //testLoadMaps();
+    //testOrdersLists();
+    //testPlayers();
+    //testCards();
+    //testGameStates(); 
+
+     /*
+    * Assignment 2
+    */
+    testOrderExecution();
     testLoggingObserver();
+
     return 0;
 }

@@ -40,6 +40,7 @@
         return stateName;
     }
 
+    void State::setStateName(string sName){this->stateName=sName;}
 /************************************************************ Transition **************************************************************/
 /**
  * Default Constructor

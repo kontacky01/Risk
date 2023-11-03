@@ -1,6 +1,4 @@
 
 ----------------------------------------- Logger -----------------------------------------
- Order ID: 1
- Order descroption: (Deploy) Move a certain number of army units from the current player's 
-            reinforcement pool to one of the current player's territories.
+ Order ID: Deploy
 ------------------------------------------------------------------------------------------

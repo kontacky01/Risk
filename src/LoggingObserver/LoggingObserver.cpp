@@ -1,5 +1,7 @@
 #include "LoggingObserver.h"
 #include "../OrdersList/Orders.h"
+#include "../Player/Player.h"
+#include "../CardsDeck/Cards.h"
 
 /************************************************************ Subject ************************************************************/
     /**
@@ -54,13 +56,21 @@ void testLoggingObserver() {
     // create the log observer
     LogObserver* logger = new LogObserver();
     // create order to test 
+    vector<Territory*> t;
+    Territory* t6 = new Territory("Bulgaria", 6, 3, 0);
     State* executeordersState = new State("executeorders");
-    Deploy* deploy = new Deploy();
+
+    Hand* h = new Hand();
+    OrdersList* o = new OrdersList;
+    t.push_back(t6);
+    Player* p = new Player(t, h, o, 1, executeordersState);
+    Deploy* deploy = new  Deploy(p, t6, 3);
+
     deploy->setValid(true);
     // attach modal to view 
     deploy->attach(logger);
     // trigger execution of order to print a notif
-    deploy->execute(executeordersState);
+    deploy->execute();
 }
 
 // TODO after merge:
