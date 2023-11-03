@@ -140,6 +140,7 @@ public:
     void execute();
 
     bool validate();
+    
 
     /**
     * Simulates battle between two armies.
@@ -287,7 +288,7 @@ private:
 };
 
 
-class OrdersList 
+class OrdersList : public Subject, public ILoggable 
 {
 public:
     OrdersList();
@@ -301,7 +302,7 @@ public:
 
     virtual void addOrder(Order* o);
     
-    virtual string stringToLog();
+    string stringToLog();
 
     /**
     * Moves order to new location in OL

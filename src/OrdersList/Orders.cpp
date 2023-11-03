@@ -53,9 +53,7 @@ void Order::execute(State* currentState) {
     }else cout << "Can NOT execute order #" << getOrderID() << " ...\n";
 };
 
-void Order::execute(){
-    notify(this);
-};
+void Order::execute(){};
 /**
  * Override the stringToLog method to print about the order
 */
@@ -193,7 +191,8 @@ void Deploy::execute() {
         cout << "Deploy executed | Player #" << p->getID() << " now has "
             << terrToDeploy->getArmyCount() << " reinforcments in Territory "
             << this->terrToDeploy->getName() <<"\n";
-        Order::execute();
+            notify(this);
+
 
     }
     else if(this->numReinToDeploy==0){
@@ -788,13 +787,13 @@ OrdersList::~OrdersList(){
 
 void OrdersList::addOrder(Order *o){
     OL->push_back(o);
+    notify(this);
 }
-
 /**
  * Overload the stringtoLog method to log the orderList 
 */
 string OrdersList::stringToLog() {
-    return "\n----------------------------------------- Logger -----------------------------------------\n OrderList: a new order was added \n------------------------------------------------------------------------------------------\n";
+    return "\n----------------------------------------- Logger -----------------------------------------\n OrderList: a new order was added with id " +  to_string(OL->back()->getOrderID())  + "\n------------------------------------------------------------------------------------------\n";
 };
 
 /**
