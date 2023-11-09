@@ -14,13 +14,15 @@ int main()
     testOrdersLists();
     //testPlayers();
     //testCards();
-    //testGameStates(); 
+    //testGameStates();
 
      /*
     * Assignment 2
     */
-    // testOrderExecution();
+    //testOrderExecution();
     //testLoggingObserver();
+    //mainGameLoop();
+    //testReinforcementPhase();
 
     return 0;
 }
