@@ -1,8 +1,7 @@
-//#pragma once
-#ifndef PLAYER_H
-#define PLAYER_H
+#pragma once
 
-#include <time.h>
+#include <ctime>
+
 #include <iostream>
 #include <string>
 #include <vector>
@@ -22,85 +21,95 @@ class Hand;//Forward declaration
 class Order;//Forward declaration
 class OrdersList;//Forward declaration
 
-class Player {
- private:
-  int id;
-  int reinforcements;
-  vector<Territory*> territories;
-  Hand* hand;
-  OrdersList* orderList;
+class Player : public Subject, ILoggable {
+private:
+    int id;
+    int reinforcements;
+    vector<Territory *> territories;
+    Hand *hand;
+    OrdersList *orderList;
+    GameEngine *gameEngine;
 
-  /**
-   * Helper method to print the list of territories to attack/defended
-   */
-  friend ostream& operator<<(ostream& out, Player* o);  // overide Stream insertion operator
-  
-  void printTerritories(vector<Territory*> territories);
+    /**
+     * Helper method to print the list of territories to attack/defended
+     */
+    friend ostream &operator<<(ostream &out, Player *o);  // override Stream insertion operator
 
- public:
-  /**
-   * Constructor with with an argument list
-   */
-  Player(vector<Territory*>, Hand*, OrdersList*, int id);
+    void printTerritories(vector<Territory *> territories);
 
-  /**
-   * Default Constructor
-   */
-  Player();
+    string gamePhase;
 
-  /**
-   * Copy Constructor
-   */
-  Player(const Player&);
+public:
+    /**
+     * Constructor with with an argument list
+     */
+    Player(vector<Territory *>, Hand *, OrdersList *, int id);
 
-  /**
-   * Destructor
-   */
-  ~Player();
+    /**
+     * Default Constructor
+     */
+    Player();
 
-  int getID();
+    /**
+     * Copy Constructor
+     */
+    Player(const Player &);
 
-  int getReinforcement();
+    /**
+     * Destructor
+     */
+    ~Player();
 
-  void setReinforcement(int r);
+    int getID() const;
 
-  void addReinforcement(int r);
+    int getReinforcement() const;
 
-  void subtractReinforcemnts(int r);
+    void setReinforcement(int r);
 
-  vector<Territory*> getTerritories();
+    void addReinforcement(int r);
 
-  void addTerritory(Territory* t);
+    void subtractReinforcements(int r);
 
-  void removeTerritory(Territory* t);
+    vector<Territory *> getTerritories();
 
-  void eraseTerritory(Territory* t);
+    void addTerritory(Territory *t);
 
-  OrdersList* getOrdersList();
+    void removeTerritory(Territory *t);
 
-  bool ownsTerritory(Territory *t);
+    void eraseTerritory(Territory *t);
 
-  Hand* getHand();
+    vector<int> continentOwnershipComplete();
 
-  /**
-   * Returns a random list of territories that are assigned to the user which
-   * they would like to defend
-   */
-  vector<Territory*> toDefend();
+    OrdersList *getOrdersList();
 
-  /**
-   * Returns a random list of territories that the user would like to attack
-   */
-  vector<Territory*> toAttack();
+    static void setGamePhase(string gamePhase);
 
-  /**
-   * Take in an order and add it into the OrderList
-   */
-  OrdersList* issueOrder(Order* o);
+    string getGamePhase();
 
-  //void executeNextOrderAndRemove();
+    bool ownsTerritory(Territory *t);
+
+    Hand *getHand();
+
+    string stringToLog() override;
+
+    /**
+     * Returns a random list of territories that are assigned to the user which
+     * they would like to defend
+     */
+    vector<Territory *> toDefend();
+
+    /**
+     * Returns a random list of territories that the user would like to attack
+     */
+    vector<Territory *> toAttack();
+
+    /**
+     * Take in an order and add it into the OrderList
+     */
+    OrdersList *issueOrder(Order *o);
+
+    //void executeNextOrderAndRemove();
 };
 
 /************************************************************ PlayerDriver **************************************************************/
 void testPlayers();
-#endif

@@ -321,7 +321,7 @@ void testOrderExecution() {
     Hand* h = new Hand();
     OrdersList* pOL = new OrdersList();
 
-    
+
     cout << "...Creating player 1 with t adjeceny list, Hand, and order list..\n";
     Player* p1 = new Player(t, h, pOL, 1); // 1 is id
     cout << "Created player.\n\n";
