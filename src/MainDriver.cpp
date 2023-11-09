@@ -3,7 +3,7 @@
 #include "OrdersList/Orders.h"
 #include "CardsDeck/Cards.h"
 #include "GameEngine/GameEngine.h"
-// #include "LoggingObserver/LoggingObserver.h"
+//#include "LoggingObserver/LoggingObserver.h"
 
 int main()
 {
@@ -14,13 +14,15 @@ int main()
     //testOrdersLists();
     //testPlayers();
     //testCards();
-    //testGameStates(); 
+    //testGameStates();
 
      /*
     * Assignment 2
     */
-    // testOrderExecution();
-    testLoggingObserver();
+    //testOrderExecution();
+    //testLoggingObserver();
+    //mainGameLoop();
+    //testReinforcementPhase();
 
     return 0;
 }

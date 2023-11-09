@@ -92,8 +92,9 @@ void testOrdersLists() {
     cout << "...Exectuing orders:... \n";
     cout << "Note: - only valid Orders can be executed\n";
     cout << "      - All orders are in proper state\n\n";
-    
-    State* sTest = new State("executeorders");
+
+    //State* sTest = new State("executeorders");
+    auto* sTest = new ExecuteordersState();
 
     cout << "...Executing order(parent class)...\n";
     o1->execute(sTest);
@@ -169,7 +170,9 @@ void testOrdersLists() {
     pOL->addOrder(pB1);
 
     cout << "...Creating state executeorders...\n";
-    State* pStateOL = new State("executeorders");
+    //State* pStateOL = new State("executeorders");
+    auto* pStateOL = new ExecuteordersState();
+
     cout << "Created execute orders.\n\n";
 
     cout << "...Creating player with t adjeceny list, Hand, and order list..\n";
@@ -318,7 +321,8 @@ void testOrderExecution() {
     OrdersList* pOL = new OrdersList();
 
     cout << "...Creating state executeorders (must be in this state to execute orders)...\n";
-    State* pState = new State("executeorders");
+    //State* pState = new State("executeorders");
+    auto* pState = new ExecuteordersState();
     cout << "Created state executeorders.\n\n";
 
     cout << "...Creating player 1 with t adjeceny list, Hand, and order list..\n";
@@ -387,7 +391,7 @@ void testOrderExecution() {
     cout << p1;
 
     cout << "...Testing WRONG state will NOT execute ...\n\n";
-    p1->getState()->setStateName("BadState");
+    // p1->getState()->setStateName("BadState");
 
     cout << "...Attempting execute while in WRONG state ...\n"
          << "Executing (Deploy) #" << p1->getOrdersList()->getOL()->at(0)->getOrderID() << " | ";
@@ -395,7 +399,7 @@ void testOrderExecution() {
     cout << "\n";
 
     cout << "...Changeing state back to executeorders  ...\n\n";
-    p1->getState()->setStateName("executeorders");
+    // p1->getState()->setStateName("executeorders");
 
     cout << "...Deleting Player 1 OrdersList...\n\n";
     p1->getOrdersList()->deleteOrdersList();
