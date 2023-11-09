@@ -207,15 +207,15 @@ string Territory::getName(){
     return name;
 }
 
-int Territory::getId(){
+int Territory::getId() const{
     return id;
 }
 
-int Territory::getContinentId(){
+int Territory::getContinentId() const{
     return continentId;
 }
 
-int Territory::getOwnerId(){
+int Territory::getOwnerId() const{
     return ownerId;
 }
 

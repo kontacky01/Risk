@@ -67,7 +67,8 @@ void testLoggingObserver() {
     Hand *h = new Hand();
     OrdersList *o = new OrdersList;
     t.push_back(t6);
-    Player *p = new Player(t, h, o, 1, executeordersState);
+    //Player *p = new Player(t, h, o, 1, executeordersState);
+    Player *p = new Player(t, h, o, 1);
     Deploy *deploy = new Deploy(p, t6, 3);
     deploy->setValid(true);
 

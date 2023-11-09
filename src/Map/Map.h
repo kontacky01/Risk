@@ -41,7 +41,7 @@ public:
 
     int getId() const;
 
-    int getContinentId();
+    int getContinentId() const;
 
     int getOwnerId() const;
 

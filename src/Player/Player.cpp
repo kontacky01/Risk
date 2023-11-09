@@ -72,8 +72,7 @@ Player::~Player() {
  */
 Player::Player(){
   this->id = 0;
-};
-Player::Player() {}
+}
 
 int Player::getID() const { return this->id; }
 
