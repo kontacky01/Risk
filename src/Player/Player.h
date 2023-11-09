@@ -1,18 +1,26 @@
-#pragma once
-#include <time.h>
+//#pragma once
+#ifndef PLAYER_H
+#define PLAYER_H
 
+#include <time.h>
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
-#include "../CardsDeck/Cards.h"
+
 #include "../GameEngine/GameEngine.h"
 #include "../Map/Map.h"
 #include "../OrdersList/Orders.h"
+#include "../CardsDeck/Cards.h"
+#include "../LoggingObserver/LoggingObserver.h"
 
 using namespace std;
 
 /************************************************************ Player **************************************************************/
+class Hand;//Forward declaration
+class Order;//Forward declaration
+class OrdersList;//Forward declaration
 
 class Player {
  private:
@@ -21,7 +29,6 @@ class Player {
   vector<Territory*> territories;
   Hand* hand;
   OrdersList* orderList;
-  State* state;
 
   /**
    * Helper method to print the list of territories to attack/defended
@@ -34,7 +41,7 @@ class Player {
   /**
    * Constructor with with an argument list
    */
-  Player(vector<Territory*>, Hand*, OrdersList*, int id, State*);
+  Player(vector<Territory*>, Hand*, OrdersList*, int id);
 
   /**
    * Default Constructor
@@ -71,8 +78,6 @@ class Player {
 
   OrdersList* getOrdersList();
 
-  State* getState();
-
   bool ownsTerritory(Territory *t);
 
   Hand* getHand();
@@ -98,3 +103,4 @@ class Player {
 
 /************************************************************ PlayerDriver **************************************************************/
 void testPlayers();
+#endif

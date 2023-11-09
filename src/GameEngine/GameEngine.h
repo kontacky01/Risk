@@ -32,7 +32,11 @@ public:
  * since gameEngine object controls the game flow
 */
     void setState(State* newState);
-
+/**
+ * This function checks if the current is executeorders -- to be used in Orders class
+*/
+    bool isCurrentStateExecuteordersState();
+    
     vector<Transition*> getTransitions();
 
 private:

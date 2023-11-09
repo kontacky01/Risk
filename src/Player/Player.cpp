@@ -4,12 +4,12 @@
 /**
  * Constructor with with an argument list
  */
-Player::Player(vector<Territory*> t, Hand* h, OrdersList* o, int id, State* s) {
+Player::Player(vector<Territory*> t, Hand* h, OrdersList* o, int id) {
   territories = t;
   hand = h;
   orderList = o;
   this->id = id;
-  state = s;
+  this->reinforcements = 0;
 
   // if seed is set to 1, the generator is reinitialized to its initial value
   // and produces the same values as before any call to rand or srand
@@ -37,17 +37,10 @@ Player::Player(const Player& p) {
   }
 
   // create a new hand
-  hand = new Hand(*p.hand);
+  hand = p.hand ? new Hand(*p.hand) : nullptr;
 
   // create a new orderlist
-  orderList = new OrdersList(*p.orderList);
-
-  // create a new state
-  if (p.state == NULL) {
-    state = NULL;
-  } else {
-    state = new State(*p.state);
-  }
+  orderList = p.orderList ? new OrdersList(*p.orderList) : nullptr;
 
   // its not a pointer, so we just increase the ID 1
   id = p.id + 1;
@@ -59,23 +52,24 @@ Player::Player(const Player& p) {
 Player::~Player() {
   cout << "...Player destructor was called...\n";
   for (int i = 0; i < territories.size(); i++) {
+    delete territories[i];
     territories.at(i) = NULL;
   };
+  territories.clear();
 
   delete hand;
   hand = NULL;
 
   delete orderList;
   orderList = NULL;
-
-  delete state;
-  state = NULL;
 }
 
 /**
  * Default Constructor
  */
-Player::Player(){};
+Player::Player(){
+  this->id = 0;
+};
 
 int Player::getID(){ return this->id;}
 
@@ -111,15 +105,19 @@ void Player::eraseTerritory(Territory* t){
     cout <<"Error: Player does not own Territory\n";
     return;
   }
-  t->setOwnerId(0); // resets value that map points too
-  t->setArmyCount(0); // resets value that map points too
-  auto it = find(territories.begin(),territories.end(), t);
-  territories.erase(it); 
+  if (t) {
+      t->setOwnerId(0);
+      t->setArmyCount(0);
+      auto it = find(territories.begin(), territories.end(), t);
+      if (it != territories.end()) {
+          territories.erase(it);
+      }
+  } else {
+      cout << "The territory you are attempting to erase is NULL!!";
+  }
 }
 
 OrdersList* Player::getOrdersList() { return this->orderList; }
-
-State* Player::getState() { return this->state; }
 
 bool Player::ownsTerritory(Territory *t){ return t->getOwnerId() == this->id;}
 
@@ -136,8 +134,8 @@ vector<Territory*> Player::toDefend() {
     cout << "...There are no territories to defend...\n";
     return defended;
   }
-  int index = rand() % territories.size() + 1;
-  for (int i = 0; i < index; i++) {
+  int index = rand() % territories.size();
+  for (int i = 0; i <= index; i++) {
     defended.push_back(territories.at(i));
   }
   cout << "\nTerritories to defend:\n -------------------\n";
@@ -154,8 +152,8 @@ vector<Territory*> Player::toAttack() {
     cout << "...There are no territories to attack...\n";
     return attacked;
   }
-  int index = rand() % territories.size() + 1;
-  for (int i = 0; i < index; i++) {
+  int index = rand() % territories.size();
+  for (int i = 0; i <= index; i++) {
     attacked.push_back(territories.at(i));
   }
   cout << "\nTerritories to attack:\n-------------------\n";
@@ -185,8 +183,5 @@ ostream& operator<<(ostream& out, Player* p) {
   p->printTerritories(p->territories);
   out << p->orderList;
   out << p->hand;
-  out << "\nCurrent player's state: "
-      << (p->state == NULL ? "no state yet" : p->state->getStateName())
-      << "\n\n";
   return out;
 }

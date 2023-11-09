@@ -92,6 +92,13 @@
         }
     }
 
+/**
+ * This function checks if the current is executeorders -- to be used in Orders class
+*/
+    bool GameEngine::isCurrentStateExecuteordersState(){
+        return dynamic_cast<ExecuteordersState*>(currentState) != nullptr;
+    }
+
 /************************************************************ State **************************************************************/
 /**
  * Default Constructor

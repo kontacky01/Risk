@@ -1,7 +1,4 @@
 #include "Orders.h"
-#include "../CardsDeck/Cards.h"
-#include "../Player/Player.h"
-#include "../Map/Map.h"
 
 void testOrdersLists() {
     cout << "\n************************************\n"
@@ -12,12 +9,21 @@ void testOrdersLists() {
 
     cout << "...Creating orders of every type... \n";
     Order* o1 = new Order();
-    Deploy* d1 = new Deploy();
-    Advance* a1 = new Advance();
-    Bomb* b1 = new Bomb();
-    Blockade* blk1 = new Blockade();
-    Airlift* air1 = new Airlift();
-    Negotiate* n1 = new Negotiate();
+
+//   ---------------------------natasha trying things------------------------------------
+//i was getting errors executing individual order
+// then i realised it is because of null pointers like no player no territory pointing a valid objects
+//so i am creating a player and a territory to check things and everything runs fine
+    Player* natasha = new Player();
+    Player* neutralplayer = new Player();
+    Territory* trialterritory = new Territory();
+
+    Deploy* d1 = new Deploy(natasha, trialterritory, 5);
+    Advance* a1 = new Advance(natasha, trialterritory, trialterritory, 5);
+    Bomb* b1 = new Bomb(natasha, trialterritory);
+    Blockade* blk1 = new Blockade(natasha, neutralplayer, trialterritory);
+    Airlift* air1 = new Airlift(natasha, trialterritory, trialterritory, 5);
+    Negotiate* n1 = new Negotiate(natasha, neutralplayer);
     cout << "Orders of type: Order, Deploy, Advance, Bomb, Blockade, Airlift and Negotiate have been created. \n\n";
 
     cout << "...Creating an OrdersList... \n";
@@ -75,7 +81,7 @@ void testOrdersLists() {
     o1->setValid(true);
     cout << "Order is now valid\n\n";
 
-    cout << "...Seeting deploy to valid ...\n";
+    cout << "...Setting deploy to valid ...\n";
     d1->setValid(true);
     cout << "Deploy is now valid\n\n";
 
@@ -92,29 +98,33 @@ void testOrdersLists() {
     cout << "...Exectuing orders:... \n";
     cout << "Note: - only valid Orders can be executed\n";
     cout << "      - All orders are in proper state\n\n";
-    
-    State* sTest = new State("executeorders");
 
     cout << "...Executing order(parent class)...\n";
-    o1->execute(sTest);
+    o1->execute();
     cout << "\n";
     cout << "...Executing Deploy ...\n";
-    d1->execute(sTest);
+    d1->execute();
+    d1->executeForThisSpecificOrder();
     cout << "\n";
-    cout << "...Execting Advance ...\n";
-    a1->execute(sTest);
+    cout << "...Executing Advance ...\n";
+    a1->execute();
+    a1->executeForThisSpecificOrder();
     cout << "\n";
     cout << "...Executing Bomb ...\n";
-    b1->execute(sTest);
+    b1->execute();
+    b1->executeForThisSpecificOrder();
     cout << "\n";
     cout << "...Executing Blockaid ...\n";
-    blk1->execute(sTest);
+    blk1->execute();
+    blk1->executeForThisSpecificOrder();
     cout << "\n";
     cout << "...Executing Airlift ...\n";
-    air1->execute(sTest);
+    air1->execute();
+    air1->executeForThisSpecificOrder();
     cout << "\n";
     cout << "..Executing Negotiate ...\n";
-    n1->execute(sTest);
+    n1->execute();
+    n1->executeForThisSpecificOrder();
     cout << "\n\n";
 
 
@@ -168,12 +178,10 @@ void testOrdersLists() {
     pOL->addOrder(pA1);
     pOL->addOrder(pB1);
 
-    cout << "...Creating state executeorders...\n";
-    State* pStateOL = new State("executeorders");
     cout << "Created execute orders.\n\n";
 
     cout << "...Creating player with t adjeceny list, Hand, and order list..\n";
-    Player* p = new Player(tOL, hOL, pOL, 1, pStateOL);
+    Player* p = new Player(tOL, hOL, pOL, 1);
     cout << "Created player.\n\n";
 
     cout << "...Printing Players orders..\n";
@@ -186,10 +194,10 @@ void testOrdersLists() {
     cout << "Players 2nd and 4th orders are valid.\n\n";
 
 
-    cout << "If Player is inside execute  rders state and will be able to execute!\n\n";
+    cout << "If Player is inside execute  orders state and will be able to execute!\n\n";
     cout << "...Executing players orders...\n";
     cout << "-------------------------------\n";
-    p->getOrdersList()->executeAll(p->getState());
+    p->getOrdersList()->executeAll();
 
 
     cout << "\n\n---------> Test 8: Deep Copy Constructor <---------\n\n\n";
@@ -250,10 +258,6 @@ void testOrdersLists() {
     hOL = NULL;
     delete p;
     p = NULL;
-    // delete pStateOL --> state will be also deleted by the player;
-    pStateOL = NULL;
-    delete sTest;
-    sTest = NULL;
     delete OL2;
     OL2 = NULL;
     delete OL2Copy;
@@ -317,12 +321,9 @@ void testOrderExecution() {
     Hand* h = new Hand();
     OrdersList* pOL = new OrdersList();
 
-    cout << "...Creating state executeorders (must be in this state to execute orders)...\n";
-    State* pState = new State("executeorders");
-    cout << "Created state executeorders.\n\n";
-
+    
     cout << "...Creating player 1 with t adjeceny list, Hand, and order list..\n";
-    Player* p1 = new Player(t, h, pOL, 1, pState); // 1 is id
+    Player* p1 = new Player(t, h, pOL, 1); // 1 is id
     cout << "Created player.\n\n";
 
     cout << p1;
@@ -386,23 +387,11 @@ void testOrderExecution() {
     cout << "...Show Player 1 has Deploys and 5 reinforcments ...\n\n";
     cout << p1;
 
-    cout << "...Testing WRONG state will NOT execute ...\n\n";
-    p1->getState()->setStateName("BadState");
-
-    cout << "...Attempting execute while in WRONG state ...\n"
-         << "Executing (Deploy) #" << p1->getOrdersList()->getOL()->at(0)->getOrderID() << " | ";
-    p1->getOrdersList()->getOL()->at(0)->execute(); // execute first order in player OrdersList
-    cout << "\n";
-
-    cout << "...Changeing state back to executeorders  ...\n\n";
-    p1->getState()->setStateName("executeorders");
-
     cout << "...Deleting Player 1 OrdersList...\n\n";
     p1->getOrdersList()->deleteOrdersList();
 
     cout << "...Deleting Player 1 Territories...\n\n";
     p1->eraseTerritory(denmark);
-
 
 
     
@@ -560,7 +549,7 @@ void testOrderExecution() {
     Territory* t4sweden = map1->getTerritory("Southern Sweden");
 
     cout << "...Create Neutral player #999...\n\n";
-    Player* pNeutral = new Player(t, h, pOL, 999, pState);
+    Player* pNeutral = new Player(t, h, pOL, 999);
 
     cout << "...Create Blockade orders ...\n";
     cout << "...Creating GOOD Blockade, player will double Denmark and assign to NEUTRAL player ...\n";

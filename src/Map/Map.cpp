@@ -185,7 +185,7 @@ int Continent::getId() const {
 /**
 * Default Constructor
 */
-Territory::Territory() {}
+Territory::Territory() {ownerId = 0;}
 
 /**
 * Param constructor
@@ -195,21 +195,22 @@ Territory::Territory(string n, int i, int ci, int a) {
     id = i;
     continentId = ci;
     armyCount = a;
+    ownerId = 0;
 }
 
-string Territory::getName() const {
+string Territory::getName(){
     return name;
 }
 
-int Territory::getId() const {
+int Territory::getId(){
     return id;
 }
 
-int Territory::getContinentId() const {
+int Territory::getContinentId(){
     return continentId;
 }
 
-int Territory::getOwnerId() const{
+int Territory::getOwnerId(){
     return ownerId;
 }
 
@@ -217,7 +218,7 @@ void Territory::setOwnerId(int newOwner){
     this->ownerId = newOwner;
 }
 
-int Territory::getArmyCount() const {
+int Territory::getArmyCount(){
     return armyCount;
 }
 
