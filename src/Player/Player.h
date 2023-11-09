@@ -16,9 +16,11 @@
 using namespace std;
 
 /************************************************************ Player **************************************************************/
-class Hand;//Forward declaration
-class Order;//Forward declaration
-class OrdersList;//Forward declaration
+ //Forward declarations
+class Hand;
+class Order;
+class OrdersList;
+class GameEngine;
 
 class Player : public Subject, ILoggable {
 private:
