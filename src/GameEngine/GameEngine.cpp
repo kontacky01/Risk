@@ -608,7 +608,7 @@ void GameEngine::reinforcementPhase() {
     // loop through every player
     for (auto &player: players) {
         // set player's game phase status to the current "Reinforcement" phase
-        Player::setGamePhase("Reinforcement"); // This should likely be player->setGamePhase, not Player::
+        Player::setGamePhase("Reinforcement");
 
         // print phase status to log
         struct InlineLoggable : public ILoggable {
