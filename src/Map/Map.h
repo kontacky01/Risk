@@ -56,17 +56,17 @@ public:
     */
     Territory(string name, int id, int continentId, int armyCount);
 
-    string getName() const;
+    string getName();
 
-    int getId() const;
+    int getId();
 
-    int getContinentId() const;
+    int getContinentId();
 
-    int getOwnerId() const;
+    int getOwnerId();
     
     void setOwnerId(int newOwner);
 
-    int getArmyCount() const;
+    int getArmyCount();
 
     void setArmyCount(int newCount);
 

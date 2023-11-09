@@ -1,11 +1,17 @@
-#pragma once
-#include <vector>
+//#pragma once
+#ifndef ORDERS_H
+#define ORDERS_H
+
 #include <iostream>
+#include <string>
+#include <vector>
+#include <algorithm>
 
 #include "../GameEngine/GameEngine.h"
 #include "../Map/Map.h"
+#include "../Player/Player.h"
+#include "../CardsDeck/Cards.h"
 #include "../LoggingObserver/LoggingObserver.h"
-
 
 using namespace std;
 
@@ -39,10 +45,8 @@ public:
     void setValid(bool v);
     
     /**
-    * Checks player state and executes order
+    * Executes order
     */
-    virtual void execute(State *currentState);
-
     virtual void execute();
 
     /**
@@ -72,8 +76,6 @@ public:
 
     bool terrHasOwner(Territory *t);
 
-    bool pIsInExecuteState(Player *p, string orderName);
-
     virtual string stringToLog();
 
 protected:
@@ -97,7 +99,7 @@ public:
 
     Deploy* clone() const;
 
-    void execute(State *currentState);
+    void execute();
 
     string stringToLog();
 
@@ -105,7 +107,7 @@ public:
     * Checks if Deploy is valid and Player owns Territory to deploy,
     * then adds reinforcments.
     */
-    void execute();
+    void executeForThisSpecificOrder();
 
     bool validate();
 
@@ -135,9 +137,9 @@ public:
 
     Advance* clone() const;
 
-    void execute(State *currentState);
-
     void execute();
+
+    void executeForThisSpecificOrder();
 
     bool validate();
     
@@ -178,9 +180,9 @@ public:
 
     Bomb* clone() const;
 
-    void execute(State *currentState);
-
     void execute();
+
+    void executeForThisSpecificOrder();
 
     bool validate();
 
@@ -209,9 +211,9 @@ public:
 
     Blockade* clone() const;
     
-    void execute(State *currentState);
-
     void execute();
+
+    void executeForThisSpecificOrder();
 
     bool validate();
 
@@ -239,9 +241,9 @@ public:
 
     Airlift* clone() const;
     
-    void execute(State *currentState);
-
     void execute();
+
+    void executeForThisSpecificOrder();
 
     bool validate();
     
@@ -269,9 +271,9 @@ public:
 
     Negotiate* clone() const;
     
-    void execute(State *currentState);
-
     void execute();
+
+    void executeForThisSpecificOrder();
 
     bool validate();
 
@@ -320,11 +322,9 @@ public:
 
     int getIndex(vector<Order*> ol, Order *o);
 
-    void executeAll(State *s); //A1
-
     void executeAll(); //A2
 
-    void executeNextOrder(State *s);
+    void executeNextOrder();
     
     void deleteOrdersList();
   
@@ -344,3 +344,4 @@ void testOrdersLists();
 * test driver A2
 */
 void testOrderExecution();
+#endif
