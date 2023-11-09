@@ -7,7 +7,6 @@
 #include <iostream>
 #include "Map.h"
 
-
 using namespace std;
 
 /********************************************************** Game Engine **********************************************/
@@ -75,7 +74,7 @@ public:
 
     void reinforcementPhase();
 
-//void issueOrdersPhase();
+    void issueOrdersPhase();
 //void executeOrdersPhase();
 //bool isGameOver();
 //void announceWinner();

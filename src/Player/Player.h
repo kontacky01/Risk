@@ -7,7 +7,6 @@
 #include <vector>
 #include <algorithm>
 
-
 #include "../GameEngine/GameEngine.h"
 #include "../Map/Map.h"
 #include "../OrdersList/Orders.h"

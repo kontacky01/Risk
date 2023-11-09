@@ -89,6 +89,10 @@ string Order::getDescription() {
 
 string Order::getOrderName() { return "Order"; }
 
+void Order::setOrderName(const string& name) {
+    orderName = name;
+}
+
 void Order::setPlayerGivenCardThisTurn(bool b) { pGivenCardThisTurn = b; }
 
 bool Order::getPlayerGivenCardThisTurn() { return pGivenCardThisTurn; }

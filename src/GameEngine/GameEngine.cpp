@@ -112,9 +112,9 @@ void GameEngine::setState(State *newState) {
 /**
  * This function checks if the current is executeorders -- to be used in Orders class
 */
-    bool GameEngine::isCurrentStateExecuteordersState(){
-        return dynamic_cast<ExecuteordersState*>(currentState) != nullptr;
-    }
+bool GameEngine::isCurrentStateExecuteordersState() {
+    return dynamic_cast<ExecuteordersState *>(currentState) != nullptr;
+}
 
 /************************************************************ State **************************************************************/
 Map *GameEngine::gameMap() {
@@ -610,7 +610,7 @@ void GameEngine::reinforcementPhase() {
         // set player's game phase status to the current "Reinforcement" phase
         Player::setGamePhase("Reinforcement");
 
-        // print phase status to log
+        // notify log of phase status change
         struct InlineLoggable : public ILoggable {
             std::string logMessage;
 
@@ -618,7 +618,7 @@ void GameEngine::reinforcementPhase() {
 
             std::string stringToLog() override { return logMessage; }
         } logMessage("Player: " + to_string(player->getID()) +
-                     " notifies you that they are in the Reinforcement phase");
+                     " is now in the \"Reinforcement\" phase of the game.");
         player->notify(&logMessage);
 
         // display current reinforcement pool of player
@@ -634,6 +634,85 @@ void GameEngine::reinforcementPhase() {
             player->setReinforcement(player->getReinforcement() + bonus);
         }
         printPlayerReinforcement(player);
+    }
+}
+
+// orders: deploy, advance, bomb, blockade, airlift, negotiate
+void GameEngine::issueOrdersPhase() {
+    // loop through all players in the game
+    for (auto &player: players) {
+        // player is now in "issue order" phase of the game loop, notify log
+        Player::setGamePhase("Issuing Orders");
+
+        // notify log of phase status change
+        struct InlineLoggable : public ILoggable {
+            std::string logMessage;
+
+            explicit InlineLoggable(std::string msg) : logMessage(std::move(msg)) {}
+
+            std::string stringToLog() override { return logMessage; }
+        } logMessage("Player: " + to_string(player->getID()) +
+                     " is now in the \"Issuing Orders\" phase of the game.");
+        player->notify(&logMessage);
+
+        // get current player's id and hand to determine what orders they are allowed to issue
+        int currentPlayer = player->getID();
+
+        vector<Card *> currentPlayerHand = player->getHand()->hand;
+
+        Order *order;
+        string orderName;
+        string userInput;
+        int armyUnitsNum = player->getReinforcement();
+
+        while (userInput != "n" && userInput != "N" && userInput != "no" && userInput != "NO") {
+            cout << "Player " << currentPlayer << ", what's your move? Issue your order now: ";
+            cin >> orderName;
+            order->setOrderName(orderName);
+
+            // if player has no cards, issue error statement
+            if (currentPlayerHand.empty()) {
+                cout << "Sorry! Your hand is empty." << endl;
+            } else {
+                // we only allow "deploy" orders until reinforcement pool is empty
+                if (orderName == "deploy") {
+                    if (player->getReinforcement() == 0) {
+                        cout << "Sorry! Your hand is empty." << endl;
+                    } else {
+                        player->issueOrder(order);
+                        cout << "You have issued order: " << orderName;
+                        cout << "You now have " << currentPlayerHand.size() << " cards left." << endl;
+                    }
+                } // if any other card
+                else if (orderName == "advance" || orderName == "airlift" || orderName == "blockade" ||
+                         orderName == "bomb" || orderName == "negotiate") {
+                    if (player->getReinforcement() == 0) {
+                        player->issueOrder(order);
+                        cout << "You have issued order: " << orderName;
+                        cout << "You now have " << currentPlayerHand.size() << " cards left." << endl;
+                    } else {
+                        cout << "Invalid: You still have " << player->getReinforcement() << " army units to deploy."
+                             << endl;
+                    }
+                    for (int j = 0; j < currentPlayerHand.size(); j++) {
+                        if (currentPlayerHand[j]->getType() == orderName) {
+                            player->play(orderName, deck);
+                        } else {
+                            cout << "Such a card does not exist in your deck!" << endl;
+                        }
+                    }
+                } else {
+                    cout << "Invalid order! There is no such card." << endl;
+                }
+                // continue to prompt player for more orders until player says NO, then on to the next player
+                cout << "Do you need to issue another order? YES or NO" << endl;
+                cin >> userInput;
+                if (userInput == "n" && userInput == "N" && userInput == "no" && userInput == "NO") {
+                    break;
+                }
+                cout << endl << endl;
+            }
+        }
     }
 }
 

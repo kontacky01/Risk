@@ -6,7 +6,7 @@
 
 using namespace std;
 
-/************************************************************ Card ************************************************************/
+/************************************************************ Card ***************************************************/
 class OrdersList;//Forward declaration
 class Card {
 public:
@@ -56,7 +56,7 @@ protected:
     static const vector<string> cardTypes; // The 'cardTypes' vector stores all possible card types
 };
 
-/************************************************************ Deck ************************************************************/
+/************************************************************ Deck ***************************************************/
 class Deck : public Card { // inherits Card class
 public:
     /**
@@ -125,7 +125,7 @@ protected:
     vector<Card *> transfer;
 };
 
-/************************************************************ Hand ************************************************************/
+/************************************************************ Hand ****************************************************/
 class Hand : public Deck {
 public:
     /**
@@ -169,13 +169,13 @@ public:
     void play(string &playedCardType,
               Deck *returningDeck);
 
-protected:
-    friend ostream& operator << (ostream& out, Hand* o); // overide Stream insertion operator
+    OrdersList *ordersList;
     vector<Card *> hand; // stores collection of cards created by fillHand
-    //OrdersList OL; // TODO: make it a pointer @paulo
+
+    friend ostream &operator<<(ostream &out, Hand *o); // override Stream insertion operator
 };
 
-/************************************************************ Cards Driver ************************************************************/
+/************************************************************ Cards Driver *******************************************/
 /**
     * testCards is a testing function
     */
