@@ -3,44 +3,45 @@
 #include "../Player/Player.h"
 #include "../CardsDeck/Cards.h"
 
-/************************************************************ Subject ************************************************************/
-    /**
-     * Attach to view
-     */
-    void Subject::attach(Observer* observer){
-        observers.push_back(observer);
-    }
+/************************************************ Subject ************************************************************/
+/**
+ * Attach to view
+ */
+void Subject::attach(Observer *observer) {
+    observers.push_back(observer);
+}
 
-    /**
-     * Detach from view
-     */
-    void Subject::detach(Observer* observer){
-        observers.remove(observer);
-    }
+/**
+ * Detach from view
+ */
+void Subject::detach(Observer *observer) {
+    observers.remove(observer);
+}
 
-    /**
-     * Notify all observers that a change has been made in the state
-     */
-    void Subject::notify(ILoggable* loggable){
-        // create an iterator
-        list<Observer*>::iterator i = observers.begin();
-        for(;i != observers.end(); i++){
-            (*i)->update(loggable);
-        }
+/**
+ * Notify all observers that a change has been made in the state
+ */
+void Subject::notify(ILoggable *loggable) {
+    // create an iterator
+    list<Observer *>::iterator i = observers.begin();
+    for (; i != observers.end(); i++) {
+        (*i)->update(loggable);
     }
-/************************************************************ LogObserver ************************************************************/
-void LogObserver::update(ILoggable* loggable) {
+}
+
+/*************************************************** LogObserver *****************************************************/
+void LogObserver::update(ILoggable *loggable) {
     string log = loggable->stringToLog();
     cout << log;
     printToFileHelper(log);
 }
 
-void LogObserver::printToFileHelper(string log){
+void LogObserver::printToFileHelper(string log) {
 
     // Create an ofstream object to work with a file
     ofstream outputFile;
     // Append instead of overwrite
-    outputFile.open("gamelog.txt", ios_base::app); 
+    outputFile.open("gamelog.txt", ios_base::app);
 
 
     // Check if the file is successfully opened
@@ -52,20 +53,23 @@ void LogObserver::printToFileHelper(string log){
         outputFile.close();
     }
 }
-/************************************************************ LoggingDriver ************************************************************/
+
+/****************************************** LoggingDriver ************************************************************/
 
 void testLoggingObserver() {
     // create the log observer
-    LogObserver* logger = new LogObserver();
+    LogObserver *logger = new LogObserver();
     // create  territory, state, hand, orderlist and player to test
-    vector<Territory*> t;
-    Territory* t6 = new Territory("Bulgaria", 6, 3, 0);
-    State* executeordersState = new State("executeorders");
-    Hand* h = new Hand();
-    OrdersList* o = new OrdersList;
+    vector<Territory *> t;
+    Territory *t6 = new Territory("Bulgaria", 6, 3, 0);
+    //ExecuteordersState *executeordersState = new ExecuteordersState("executeorders");
+    auto *executeordersState = new ExecuteordersState();
+    Hand *h = new Hand();
+    OrdersList *o = new OrdersList;
     t.push_back(t6);
-    Player* p = new Player(t, h, o, 1, executeordersState);
-    Deploy* deploy = new  Deploy(p, t6, 3);
+    //Player *p = new Player(t, h, o, 1, executeordersState);
+    Player *p = new Player(t, h, o, 1);
+    Deploy *deploy = new Deploy(p, t6, 3);
     deploy->setValid(true);
 
     // attach modal to view 
@@ -77,7 +81,7 @@ void testLoggingObserver() {
     o->attach(logger);
     // add the order to the player's orderlist 
     p->issueOrder(deploy); // should call Order::addOrder and notify the observer
-    
+
     delete t6;
     t6 = NULL;
 
@@ -87,7 +91,6 @@ void testLoggingObserver() {
 
     delete logger;
     logger = NULL;
-
 
 
 }

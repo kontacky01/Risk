@@ -1,4 +1,5 @@
 #pragma once
+
 #include <iostream>
 #include <fstream>
 #include <list>
@@ -6,6 +7,7 @@
 
 
 using namespace std;
+
 /************************************************************ ILoggable ************************************************************/
 class ILoggable {
 // ? : does this need a constructor and destructor
@@ -16,15 +18,15 @@ public:
 /************************************************************ Observer ************************************************************/
 class Observer {
 public:
-    virtual void update(ILoggable* loggable) = 0;
+    virtual void update(ILoggable *loggable) = 0;
 };
 
 /************************************************************ LogObserver ************************************************************/
 class LogObserver : public Observer {
-    public: 
-    void update(ILoggable* loggable);
+public:
+    void update(ILoggable *loggable);
 
-    private:
+private:
     void printToFileHelper(string log);
 };
 
@@ -34,20 +36,20 @@ public:
     /**
      * Attach to view
      */
-    void attach(Observer* observer);
+    void attach(Observer *observer);
 
     /**
      * Detach from view
      */
-    void detach(Observer* observer);
+    void detach(Observer *observer);
 
     /**
      * Notify all observers that a change has been made in the state
      */
-    void notify(ILoggable* loggable);
+    void notify(ILoggable *loggable);
 
-    private:
-    list<Observer*> observers;
+private:
+    list<Observer *> observers;
 };
 
 

@@ -7,7 +7,7 @@ using namespace std;
 /**
 * Default constructor
 */
-Map::Map() {};
+Map::Map() {}
 
 /**
 * Copy constructor
@@ -16,7 +16,7 @@ Map::Map(const Map& m) {
     cout << "...Testing the copy constructor...\n";
     territories = m.territories;
     continents = m.continents;
-};
+}
 
 /**
 * Param constructor
@@ -24,27 +24,32 @@ Map::Map(const Map& m) {
 Map::Map(map<int, Continent*> c, map<int, Territory*> t) {
     continents = c;
     territories = t;
-};
+}
 
 /**
-* Deconstructor
+* Destructor
 */
 Map::~Map() {
     // delete all territories
     for (pair<int, Territory*> territory : territories){
         delete territory.second;
         territory.second = NULL;
-    };
+    }
 
 
     // delete all continents
-     for (pair<int, Continent*> contient : continents){
-        delete contient.second;
-        contient.second = NULL;
-    };
-};
+     for (pair<int, Continent*> continent : continents){
+        delete continent.second;
+        continent.second = NULL;
+    }
+}
 
 map<int, Territory*> Map::getterritories() { return this->territories;}
+
+string Territory::getContinentName()
+{
+    return continentName;
+}
 
 Territory* Map::getTerritory(string tName){
     for (auto const& t : this->getterritories()) {
@@ -56,7 +61,7 @@ Territory* Map::getTerritory(string tName){
 }
 
 /**
-* Will be stored in a key value pair ex: (1, Contient)
+* Will be stored in a key value pair ex: (1, Continent)
 */
 void Map::addContinent(Continent* continent) {
     continents[continent->getId()] = continent;
@@ -99,19 +104,19 @@ bool Map::validate() {
     cout << "...Validate the map...\n";
     // 1) confirm that the graph is NOT fully connected
     // 2) find a continent that is not connected
-    map<int, bool> visited;  
-    map<int, bool> visitedContinent;  
+    map<int, bool> visited;
+    map<int, bool> visitedContinent;
     stack<Territory*> territoryStack;
 
     territoryStack.push(territories.find(1)->second);
-    while (!territoryStack.empty()) { 
+    while (!territoryStack.empty()) {
         Territory* current = territoryStack.top();
         territoryStack.pop();
 
         // check if the key exists in visited
         if (visited.count(current->getId()) == 0) {
             visited[current->getId()] = true;
-            // check if adjecent territories have a key in visited and if not add them to the territoryStack to test them next
+            // check if adjacent territories have a key in visited and if not add them to the territoryStack to test them next
             for (Territory* neighbor : current->getAdjacencyList()) {
                 if (visited.count(neighbor->getId()) == 0) {
                     territoryStack.push(neighbor);
@@ -122,7 +127,7 @@ bool Map::validate() {
         if (visitedContinent.count(current->getId()) == 0) {
             visitedContinent[current->getContinentId()] = true;
         }
-        
+
     }
     // loop through territories and see if they have been visited
     for(int i = 1 ; i < territories.size() + 1 ; i++){
@@ -141,11 +146,11 @@ bool Map::validate() {
             return false;
         }
     }
-    
+
     // 3) ensure country belongs to only one and only continent
     // make a copy of the adjacency list
-    // Finding duplicates comfirms that a territory belongs to multiple continents because when creating the map, 
-    // the territory instance will only ever contain one contient
+    // Finding duplicates confirms that a territory belongs to multiple continents because when creating the map,
+    // the territory instance will only ever contain one continent
      for(int i = 1 ; i < territories.size() + 1; i++){
         for(int j = i + 1; j < territories.size() + 1; j++) {
             if(territories.at(i)->getName().compare(territories.at(j)->getName()) == 0) {
@@ -157,7 +162,7 @@ bool Map::validate() {
      }
     cout << "...Success! Map has been validated\n\n";
     return true;
-    
+
 }
 
 /************************************************************ Continent ************************************************************/
@@ -185,7 +190,7 @@ int Continent::getId() const {
 /**
 * Default Constructor
 */
-Territory::Territory() {}
+Territory::Territory() {ownerId = 0;}
 
 /**
 * Param constructor
@@ -195,17 +200,18 @@ Territory::Territory(string n, int i, int ci, int a) {
     id = i;
     continentId = ci;
     armyCount = a;
+    ownerId = 0;
 }
 
-string Territory::getName() const {
+string Territory::getName(){
     return name;
 }
 
-int Territory::getId() const {
+int Territory::getId() const{
     return id;
 }
 
-int Territory::getContinentId() const {
+int Territory::getContinentId() const{
     return continentId;
 }
 
@@ -217,7 +223,7 @@ void Territory::setOwnerId(int newOwner){
     this->ownerId = newOwner;
 }
 
-int Territory::getArmyCount() const {
+int Territory::getArmyCount(){
     return armyCount;
 }
 
@@ -242,19 +248,19 @@ vector<Territory*> Territory::getAdjacencyList() {
 * If we call A.addAdjacentTerritory(B) then:
 * 1. We will keep track of B from A
 * 2. Keep track of A from B
-* Hence we keep track of adjecent territories
+* Hence we keep track of adjacent territories
 */
 void Territory::addAdjacentTerritory(Territory* destination) {
     // current object's adjacency list
     this->adjacencyList.push_back(destination);
-    // the destination object's adjecey list
+    // the destination object's adjacency list
     destination->adjacencyList.push_back(this);
 }
 
 
 ostream& operator << (ostream& out, Territory* t)
 {
-    out << "Territory: " << (t->getName()) 
+    out << "Territory: " << (t->getName())
         << " | ID: " << t->getId()
         << " | ContinentID: " << t->getContinentId()
         << " | Owner: " << t->getOwnerId()
@@ -267,11 +273,11 @@ ostream& operator << (ostream& out, Territory* t)
 /**
 * Will read the map file (will handle errors if file doesnt exist or can't open)
 * Will parse line by line
-* The file is devided in to two important sections: Continents & Territories
+* The file is divided in to two important sections: Continents & Territories
 * Continents look like so: 
 * continentName=howManyTerritoriesItHas
 * Territories look like so: 
-* territoryName, coord-x, coord-y, continent, listOfAdjecentTerritories seperated by commas
+* territoryName, coord-x, coord-y, continent, listOfAdjacentTerritories seperated by commas
 */
 Map* MapLoader::loadMap(string filename) {
     cout << "...Loading the map...\n";
@@ -295,11 +301,11 @@ Map* MapLoader::loadMap(string filename) {
     string line;
     // While there exists lines in the file
     while (getline(inputFile, line) && !inputFile.eof()) {
-        // Go over the contintents (if we found the word "Continents" the start index of the line should be 0)
+        // Go over the continents (if we found the word "Continents" the start index of the line should be 0)
         if (line.find("[Continents]") == 0) {
             // Keep track of the # of continents we created to use it as their ID
             int continentId = 0;
-            // While we havent not reached a space (to the next section)
+            // While we have not reached a space (to the next section)
             while (getline(inputFile, line) && line.find("[Territories]") != 0) {
                 // if there is return carriage character at the end of a line, erase it, to facilitate Conquest Map processing
                 if (line.find("\r") == line.length() - 1) {
@@ -309,7 +315,7 @@ Map* MapLoader::loadMap(string filename) {
                 if (line.length() == 0) {
                     continue;
                 }
-                // Create a vector of words that were split by a equals (look the map file for details)
+                // Create a vector of words that were split by an equals (look the map file for details)
                 vector<string> words = MapLoader::split(line, "=");
 
                 // The line should contain the name and number of territories that belong to the continent (hence 2 words)
@@ -319,9 +325,20 @@ Map* MapLoader::loadMap(string filename) {
                 }
 
                 string continentName = words[0];
-                // Create a new contintent with an auto incrementing id
-                Continent* continent = new Continent(continentName, ++continentId);
+                int controlBonusValue;
+                try {
+                    controlBonusValue = stoi(words[1]);
+                } catch (const std::invalid_argument& e) {
+                    cout << "...Error: Not an integer...\n";
+                    return loadedMap;
+                } catch (const std::out_of_range& e) {
+                    cout << "...Error: Out of range for an int...\n";
+                    return loadedMap;
+                }
+                // Create a new continent with an auto incrementing id
+                auto* continent = new Continent(continentName, ++continentId);
                 loadedMap->addContinent(continent);
+                continentsAndBonus.insert(std::pair<int, Continent*>(controlBonusValue, continent));
                 // Keep track of the list of continents we created thus far
                 continents.push_back(continent);
             }
@@ -330,7 +347,7 @@ Map* MapLoader::loadMap(string filename) {
         // Go over the territories (if we found the word "Territories" the start index of the line should be 0)
         if (line.find("[Territories]") == 0 && !inputFile.eof()) {
             int territoryId = 0;
-            // While we havent not reached the end of the file
+            // While we have not reached the end of the file
             while (getline(inputFile, line)) {
                 // if there is return carriage character at the end of a line, erase it, to facilitate Conquest Map processing
                 if (line.find("\r") == line.length() - 1) {
@@ -346,12 +363,11 @@ Map* MapLoader::loadMap(string filename) {
                 if (words.size() < 4) {
                     cout << "...Error: Invalid territory information...\n";
                     return loadedMap;
-                    ;
                 }
                 string territoryName = words[0];
                 string territoryContinentName = words[3]; // the continent that the territory belongs to
                 // We have access to the continent name by reading the file, but not the id
-                // hence we need to loop through our priviously created list of continents and find the id of the continent by the given name
+                // hence we need to loop through our previously created list of continents and find the id of the continent by the given name
                 int continentId = -1;
                 for (int i = 0; i < continents.size(); i++) {
                     if (continents.at(i)->getName() == territoryContinentName) {
@@ -365,13 +381,13 @@ Map* MapLoader::loadMap(string filename) {
                     return loadedMap;
                 }
                 // Create a new territory
-                Territory* territory = new Territory(territoryName, ++territoryId, continentId, 0);
+                auto* territory = new Territory(territoryName, ++territoryId, continentId, 0);
                 loadedMap->addTerritory(territory);
                 // Anything past index 3 is what is connected to our territory
                 for (int i = 4; i < words.size(); i++) {
                     // Create an adjacency map list
                     territoryAdjacencyMap[territory].push_back(words[i]);
-                    // Keep track of all the territories like so: (name, Territory), will be used in the adjecency proccess
+                    // Keep track of all the territories like so: (name, Territory), will be used in the adjacency process
                     territoryMap[territory->getName()] = territory;
 
                 }
@@ -380,10 +396,10 @@ Map* MapLoader::loadMap(string filename) {
 
         // Going over the adjacency list to add the territories the adjacencyList of the territory
         for (auto const& territory : territoryAdjacencyMap) {
-            // Loop through all the adjecent territories
+            // Loop through all the adjacent territories
             for (int i = 0; i < territory.second.size(); i++) {
                 string key = territory.second.at(i);
-                // create linckage 
+                // create linkage
                 territory.first->addAdjacentTerritory(territoryMap.at(key));
 
             }

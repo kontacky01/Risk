@@ -7,6 +7,7 @@
 using namespace std;
 
 /************************************************************ Card ************************************************************/
+class OrdersList;//Forward declaration
 class Card {
 public:
 
@@ -171,7 +172,7 @@ public:
 protected:
     friend ostream& operator << (ostream& out, Hand* o); // overide Stream insertion operator
     vector<Card *> hand; // stores collection of cards created by fillHand
-    OrdersList OL; // TODO: make it a pointer @paulo
+    //OrdersList OL; // TODO: make it a pointer @paulo
 };
 
 /************************************************************ Cards Driver ************************************************************/
