@@ -429,5 +429,4 @@ private:
 
 /***************************************************** GameEngineDriver **********************************************/
 void testGameStates();
-
-void testReinforcementPhase();
+void testMainGameLoop();

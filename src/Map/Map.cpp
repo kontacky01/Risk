@@ -223,7 +223,7 @@ void Territory::setOwnerId(int newOwner){
     this->ownerId = newOwner;
 }
 
-int Territory::getArmyCount(){
+int Territory::getArmyCount() const{
     return armyCount;
 }
 

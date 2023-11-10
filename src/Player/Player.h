@@ -28,8 +28,11 @@ private:
     int id;
     int reinforcements;
     vector<Territory *> territories;
+    vector<Territory*> attackList;
+    vector<Territory*> defendList;
     Hand *hand;
-    OrdersList *orderList;
+    Deck *deck;
+
     GameEngine *gameEngine;
 
     /**
@@ -76,6 +79,8 @@ public:
 
     void addTerritory(Territory *t);
 
+    void addTerritoryToList(Territory *territory, const string &listType);
+
     void removeTerritory(Territory *t);
 
     void eraseTerritory(Territory *t);
@@ -84,7 +89,7 @@ public:
 
     OrdersList *getOrdersList();
 
-    static void setGamePhase(string gamePhase);
+    void setGamePhase(string gamePhase);
 
     string getGamePhase();
 
@@ -108,10 +113,14 @@ public:
     /**
      * Take in an order and add it into the OrderList
      */
-    OrdersList *issueOrder(Order *o);
+    void issueOrder();
+
+    OrdersList *issuesOrder(Order *o);
 
     //void executeNextOrderAndRemove();
     void playCard(Card *card, Deck *deck);
+
+    OrdersList *orderList;
 };
 
 /************************************************************ PlayerDriver **************************************************************/

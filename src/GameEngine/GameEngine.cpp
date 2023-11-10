@@ -5,6 +5,7 @@
 #include <memory>
 #include "Cards.h"
 #include "Player.h"
+#include "Orders.h"
 
 /**
  * Default Constructor
@@ -620,22 +621,22 @@ void GameEngine::reinforcementPhase() {
     // loop through every player
     for (auto &player: players) {
         // set player's game phase status to the current "Reinforcement" phase
-        Player::setGamePhase("Reinforcement");
+        player->setGamePhase("Reinforcement");
 
         // notify log of phase status change
         InlineLoggable logMessage = createLogMessage(
-                "Player: " + to_string(player->getID()) + " is now in the \"Reinforcement\" phase of the game.");
+                "Player " + to_string(player->getID()) + " is now in the [Reinforcement] phase of the game.");
         player->notify(&logMessage);
 
         // display current reinforcement pool of player
-        std::cout << "Reinforcement Pool of Player " << player->getID() << ": " << player->getReinforcement() << "\n";
+        cout << "Reinforcement Pool of Player " << player->getID() << ": " << player->getReinforcement() << endl;
 
-        // calculate base reinforcement based on territories owned, with a minimum of 3
-        int baseReinforcement = std::max(3, static_cast<int>(player->getTerritories().size() / 3));
+        // calculate base reinforcement based on territories owned, with a minimum of 3 (rounded down)
+        int baseReinforcement = max(3, static_cast<int>(player->getTerritories().size() / 3));
         player->setReinforcement(player->getReinforcement() + baseReinforcement);
 
         // if player owns continent, award control bonus value
-        std::vector<int> continentBonuses = player->continentOwnershipComplete();
+        vector<int> continentBonuses = player->continentOwnershipComplete();
         for (int bonus: continentBonuses) {
             player->setReinforcement(player->getReinforcement() + bonus);
         }
@@ -643,84 +644,80 @@ void GameEngine::reinforcementPhase() {
     }
 }
 
-// orders: deploy, advance, bomb, blockade, airlift, negotiate
 void GameEngine::issueOrdersPhase() {
     // loop through all players in the game
     for (auto &player: players) {
         // player is now in "issue order" phase of the game loop, notify log
-        Player::setGamePhase("Issuing Orders");
+        player->setGamePhase("Issuing Orders");
 
         // log phase status change
-        InlineLoggable logMessage("Player: " + std::to_string(player->getID()) +
+        InlineLoggable logMessage("Player: " + to_string(player->getID()) +
                                   " is now in the \"Issuing Orders\" phase of the game.");
         player->notify(&logMessage);
-
         // get current player's id and hand to determine what orders they are allowed to issue
-        string userInput;
-        do {
-            cout << "Player " << player->getID() << ", what's your move? Issue your order now: ";
+        bool continueIssuingOrders = true;
+        while (continueIssuingOrders) {
+            string userInput;
+            cout << "Player " << player->getID() << ", would you like to issue an order? (YES/NO): ";
             cin >> userInput;
-            Order *order;
-            if (userInput == "deploy" && player->getReinforcement() > 0) {
-                // create and issue deploy order
-                order = new Deploy(); //TODO: DELETE AND NULLPTR LATER OR CHANGE TO SMART POINTER
-                player->issueOrder(order);
-                cout << "You have issued a Deploy order." << endl;
-            } else if (userInput == "advance" || userInput == "airlift" || userInput == "blockade" ||
-                       userInput == "bomb" || userInput == "diplomacy") {
-                if (player->getReinforcement() > 0) {
-                    cout << "Invalid: You still have " << player->getReinforcement() << " army units to deploy."
-                         << endl;
-                } else {
-                    // Check if the player has the card in their hand
-                    bool hasCard = false;
-                    for (auto &card: player->getHand()->hand) {
-                        if (card->getType() == userInput) { //TODO: MAKE SURE THIS IS RIGHT, ALSO DELETE AND NULLPTR
-                            if (userInput == "advance") {
-                                order = new Advance();
-                            } else if (userInput == "airlift") {
-                                order = new Airlift();
-                            } else if (userInput == "blockade") {
-                                order = new Blockade();
-                            } else if (userInput == "bomb") {
-                                order = new Bomb();
-                            } else if (userInput == "diplomacy") {
-                                order = new Negotiate();
-                            }
-                            if (order != nullptr) {
-                                player->issueOrder(order);
-                                cout << "You have issued order: " << userInput << "." << endl;
-                                player->playCard(card, deck);
-                                hasCard = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (!hasCard) {
-                        cout << "You do not have a " << userInput << " card in your deck!" << endl;
-                    }
-                }
-            } else {
-                cout << "Invalid order! There is no such card." << endl;
-            }
+            // transform input to lowercase
+            transform(userInput.begin(), userInput.end(), userInput.begin(),
+                      [](unsigned char c) { return toupper(c); });
 
-            // continue to prompt player for more orders until player says NO, then on to the next player
-            cout << "Do you need to issue another order? (YES/NO)" << endl;
-            cin >> userInput;
-            if (userInput == "n" || userInput == "N" || userInput == "no" || userInput == "NO") {
-                break;
+            if (userInput == "YES") {
+                player->issueOrder();
+                // keep asking user to issue orders
+            } else if (userInput == "NO") {
+                continueIssuingOrders = false; // stop asking
+            } else {
+                std::cout << "Invalid input! Please enter YES or NO." << endl;
             }
-            cout << endl << endl;
-        } while (userInput != "n" && userInput != "N" && userInput != "no" && userInput != "NO");
+        }
+        // display order list of player
+        cout << player->orderList << endl;
     }
 }
 
-
-void testGameEngine() {
-
-}
-
-void GameEngine::mainGameLoop() {
+/*void mainGameLoop() {
     GameEngine gameEngine;
-    reinforcementPhase();
+    gameEngine.reinforcementPhase();
+    gameEngine.issueOrdersPhase();
+}*/
+
+void testMainGameLoop() {
+    //cout << "Nothing to see here" << endl;
+    Player *player[3];
+    string gamePhase = "Reinforcement";
+
+    // initialize 3 players
+    for (int i = 0; i < 3; ++i) {
+        player[i] = new Player(); // create new player
+        player[i]->orderList = new OrdersList(); // create player's orders list
+        player[i]->setReinforcement(50); // give player 50 army units
+        cout << player[i]->getReinforcement() << endl; // output the units
+        player[i]->setGamePhase(gamePhase); // set game phase
+    }
+
+    string phase = player[1]->getGamePhase();
+    cout << phase << endl;
+
+    // issue orders and add them to orders list
+    bool continueIssuingOrders = true;
+    while (continueIssuingOrders) {
+        string userInput;
+        cout << "Player " << player[1]->getID() << ", would you like to issue an order? (YES/NO): ";
+        cin >> userInput;
+        transform(userInput.begin(), userInput.end(), userInput.begin(),
+                  [](unsigned char c) { return toupper(c); });
+        if (userInput == "YES") {
+            player[1]->issueOrder();
+
+        } else if (userInput == "NO") {
+            continueIssuingOrders = false;
+        } else {
+            std::cout << "Invalid input! Please enter YES or NO." << endl;
+        }
+    }
+    // display order list of player
+    cout << player[1]->orderList << endl;
 }

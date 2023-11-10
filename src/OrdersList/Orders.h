@@ -327,10 +327,10 @@ public:
 
     void deleteOrdersList();
 
-private:
     vector<Order *> *OL;
 
-    friend ostream &operator<<(ostream &out, OrdersList *ol); // overide Stream insertion operator
+private:
+    friend ostream &operator<<(ostream &out, OrdersList *ol); // override Stream insertion operator
 
 };
 

@@ -47,7 +47,7 @@ public:
 
     void setOwnerId(int newOwner);
 
-    int getArmyCount();
+    int getArmyCount() const;
 
     void setArmyCount(int newCount);
 

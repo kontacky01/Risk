@@ -188,7 +188,7 @@ void Deploy::executeForThisSpecificOrder() {
         cout << "Can NOT execute Deploy " << this->terrToDeploy->getName()
              << " | Deploy has 0 reinforcements\n";
     }
-    else if (!pHasEnoughRein()) { //player has enough reinforcemnts
+    else if (!pHasEnoughRein()) { //player has enough reinforcements
         cout << "Can NOT execute Deploy " << this->terrToDeploy->getName()
              << " | Player #" << p->getID() << " does NOT enough have reinforcements\n";
     }
