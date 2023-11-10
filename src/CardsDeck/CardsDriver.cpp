@@ -9,9 +9,10 @@ void testCards() {
     /**
     * Declare some variables for later use
     */
-    string cardToPlay = "Bomb";
+    //string cardToPlay = "Bomb";
     string checkCardType;
     Card* drawnCard;
+    Card *card1;
 
     cout << "---------> Testing Phase 1: Creating/Setting/Validating Cards <---------\n\n";
 
@@ -22,7 +23,7 @@ void testCards() {
      * We test the getter method by retrieving Card 5's new type
      * Validates type of Card 2
     */
-    Card card1("Bomb");
+    card1->setType("Bomb");
     Card card2("Reinforcement");
     Card card3("Blockade");
     Card card4("Airlift");
@@ -30,7 +31,7 @@ void testCards() {
     Card card5("Breakfast");
     cout << "\n";
 
-    cout << "Card 1 type: " << card1.getType() << "\n";
+    cout << "Card 1 type: " << card1->getType() << "\n";
     cout << "Card 2 type: " << card2.getType() << "\n";
     cout << "Card 3 type: " << card3.getType() << "\n";
     cout << "Card 4 type: " << card4.getType() << "\n";
@@ -100,7 +101,7 @@ void testCards() {
     // testing play function
     cout << "\n...Player is choosing a card to play...\n\n";
     cout << "...Checking Orders List for created order...\n\n";
-    hand.play(cardToPlay, &newDeck);
+    hand.play(card1, &newDeck);
     cout << "\n";
     cout << "...Checking Your Hand for remaining cards...\n\n";
     hand.printHand();

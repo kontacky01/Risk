@@ -64,9 +64,9 @@ public:
 */
     bool isCurrentStateExecuteordersState();
 
-    int getPlayerNum();
+    int getPlayerNum() const;
 
-    vector<Player *> getPlayers();
+    static vector<Player *> getPlayers();
 
     void start();
 
@@ -84,7 +84,7 @@ public:
 
 private:
     State *currentState;
-    Map *currentGameMap;
+    Map *currentGameMap{};
     vector<Transition *> transitions;
     int playerNum;
 //int currentPlayerIndex;
@@ -92,7 +92,7 @@ private:
     vector<Player *> players;
     vector<int> playerOrder;
     Deck *deck;
-    Map *map;
+    Map *map{};
     ::map<int, std::vector<Territory *>> playerTerritories;
 };
 

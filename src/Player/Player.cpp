@@ -221,3 +221,7 @@ vector<int> Player::continentOwnershipComplete() {
     }
     return controlBonuses;
 }
+
+void Player::playCard(Card *card, Deck *deck) {
+    this->hand->play(card, deck);
+}

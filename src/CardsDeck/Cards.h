@@ -166,7 +166,7 @@ public:
     /**
     * The play method removes a card from hand, creates a new order, and returns card to deck of origin
     */
-    void play(string &playedCardType,
+    void play(Card *card,
               Deck *returningDeck);
 
     OrdersList *ordersList;

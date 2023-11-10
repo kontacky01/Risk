@@ -16,9 +16,12 @@
 using namespace std;
 
 /************************************************************ Player **************************************************************/
-class Hand;//Forward declaration
-class Order;//Forward declaration
-class OrdersList;//Forward declaration
+//Forward declarations
+class Hand;
+class Deck;
+class Card;
+class Order;
+class OrdersList;
 
 class Player : public Subject, ILoggable {
 private:
@@ -90,6 +93,8 @@ public:
     Hand *getHand();
 
     string stringToLog() override;
+
+    void playCard(Card *card, Deck *deck);
 
     /**
      * Returns a random list of territories that are assigned to the user which

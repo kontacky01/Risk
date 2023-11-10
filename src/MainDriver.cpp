@@ -11,9 +11,9 @@ int main()
     * Assignment 1
     */
     //testLoadMaps();
-    testOrdersLists();
+    //testOrdersLists();
     //testPlayers();
-    //testCards();
+    testCards();
     //testGameStates();
 
      /*
