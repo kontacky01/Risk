@@ -5,24 +5,26 @@
 #include <vector>
 #include <ctime>
 #include <iostream>
+#include <utility>
+#include <memory>
 
-#include "Map.h"
+#include "../Player/Player.h"
+#include "../Map/Map.h"
+#include "../OrdersList/Orders.h"
+#include "../CardsDeck/Cards.h"
+#include "../LoggingObserver/LoggingObserver.h"
 
 using namespace std;
 
 /********************************************************** Game Engine **********************************************/
 // Forward declarations
 class State;
-
 class Transition;
-
 class Player;
-
 class Map;
-
 class Deck;
-
-class Subject;
+//class Subject;
+//class ILoggable;
 
 class GameEngine {
 public:

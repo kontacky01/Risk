@@ -1,11 +1,4 @@
-#include "LoggingObserver.h"
 #include "GameEngine.h"
-
-#include <utility>
-#include <memory>
-#include "Cards.h"
-#include "Player.h"
-#include "Orders.h"
 
 /**
  * Default Constructor
@@ -626,7 +619,7 @@ void GameEngine::reinforcementPhase() {
         // notify log of phase status change
         InlineLoggable logMessage = createLogMessage(
                 "Player " + to_string(player->getID()) + " is now in the [Reinforcement] phase of the game.");
-        player->notify(&logMessage);
+        //player->notify(&logMessage);
 
         // display current reinforcement pool of player
         cout << "Reinforcement Pool of Player " << player->getID() << ": " << player->getReinforcement() << endl;
@@ -653,7 +646,7 @@ void GameEngine::issueOrdersPhase() {
         // log phase status change
         InlineLoggable logMessage("Player: " + to_string(player->getID()) +
                                   " is now in the \"Issuing Orders\" phase of the game.");
-        player->notify(&logMessage);
+        //player->notify(&logMessage);
         // get current player's id and hand to determine what orders they are allowed to issue
         bool continueIssuingOrders = true;
         while (continueIssuingOrders) {
