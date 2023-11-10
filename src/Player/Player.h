@@ -94,8 +94,6 @@ public:
 
     string stringToLog() override;
 
-    void playCard(Card *card, Deck *deck);
-
     /**
      * Returns a random list of territories that are assigned to the user which
      * they would like to defend
@@ -113,6 +111,7 @@ public:
     OrdersList *issueOrder(Order *o);
 
     //void executeNextOrderAndRemove();
+    void playCard(Card *card, Deck *deck);
 };
 
 /************************************************************ PlayerDriver **************************************************************/

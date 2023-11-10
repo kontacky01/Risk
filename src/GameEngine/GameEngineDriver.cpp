@@ -1,4 +1,6 @@
 #include "GameEngine.h"
+#include "Player.h"
+#include <algorithm>
 
 void testGameStates() {
     cout << "\n************************************\nTesting Game Driver!!! \n************************************\n\n";

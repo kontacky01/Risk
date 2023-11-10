@@ -1,7 +1,10 @@
-#include <utility>
-#include <memory>
+#include "LoggingObserver.h"
 #include "GameEngine.h"
 
+#include <utility>
+#include <memory>
+#include "Cards.h"
+#include "Player.h"
 
 /**
  * Default Constructor
@@ -660,7 +663,7 @@ void GameEngine::issueOrdersPhase() {
             Order *order;
             if (userInput == "deploy" && player->getReinforcement() > 0) {
                 // create and issue deploy order
-                order = new Deploy(); //TODO: DELETE AND NULLPTR
+                order = new Deploy(); //TODO: DELETE AND NULLPTR LATER OR CHANGE TO SMART POINTER
                 player->issueOrder(order);
                 cout << "You have issued a Deploy order." << endl;
             } else if (userInput == "advance" || userInput == "airlift" || userInput == "blockade" ||
