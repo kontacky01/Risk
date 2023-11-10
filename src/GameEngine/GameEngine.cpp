@@ -47,6 +47,12 @@
 
         // Initialize with the starting state
         setState(s1);
+
+        playerNum = int(0);
+        playerOrder;
+        deck = new Deck();
+        map = new Map();
+        firstRound = true;
     }
 /**
  * This function initializes game transitions
@@ -142,14 +148,20 @@
     }
 
 /************************************************************ State **************************************************************/
+    Map *GameEngine::gameMap() {
+        return currentGameMap;
+    }
+
+/************************************************************ State **************************************************************/
 /**
  * Default Constructor
  */
-    State::State(){}
+    State::State() = default;
 /**
  * Destructor
  */
-    State::~State(){}
+    
+    State::~State() = default;
 /**
  * This functions informs the user what state they are in and the valid commands
 */
@@ -494,7 +506,7 @@
 /**
  * Destructor
  */
-    Transition::~Transition(){}
+    Transition::~Transition() = default;
 /**
  * Constructor with with an argument(s)
  */
@@ -539,3 +551,83 @@
     State * Transition::getNextState(){
         return nextState;
     }
+/***************************************************** GameEngine **************************************************/
+/**
+ * Default constructor
+ **/
+
+/**
+ * Destructor
+ **/
+GameEngine::~GameEngine() {
+    for (auto &player: players) {
+        delete player;
+    }
+    players.clear();
+    playerOrder.clear();
+}
+
+void GameEngine::start() {
+    //start(startupPhase()map);
+    //GameEngine();
+}
+
+void GameEngine::setPlayers(vector<Player *> p) {
+    players = std::move(p);
+    //players = p;
+}
+
+vector<Player *> GameEngine::getPlayers() {
+    return {};
+    //return players;
+}
+
+int GameEngine::getPlayerNum() {
+    return playerNum;
+}
+
+void printPlayerReinforcement(const Player *player) {
+    std::cout << "[NEW] Reinforcement Pool of Player " << player->getID() << ": ";
+    std::cout << player->getReinforcement() << std::endl;
+}
+
+void GameEngine::reinforcementPhase() {
+    // loop through every player
+    for (auto &player: players) {
+        // set player's game phase status to the current "Reinforcement" phase
+        Player::setGamePhase("Reinforcement");
+
+        // print phase status to log
+        struct InlineLoggable : public ILoggable {
+            std::string logMessage;
+
+            explicit InlineLoggable(std::string msg) : logMessage(std::move(msg)) {}
+
+            std::string stringToLog() override { return logMessage; }
+        } logMessage("Player: " + to_string(player->getID()) +
+                     " notifies you that they are in the Reinforcement phase");
+        player->notify(&logMessage);
+
+        // display current reinforcement pool of player
+        std::cout << "Reinforcement Pool of Player " << player->getID() << ": " << player->getReinforcement() << "\n";
+
+        // calculate base reinforcement based on territories owned, with a minimum of 3
+        int baseReinforcement = std::max(3, static_cast<int>(player->getTerritories().size() / 3));
+        player->setReinforcement(player->getReinforcement() + baseReinforcement);
+
+        // if player owns continent, award control bonus value
+        std::vector<int> continentBonuses = player->continentOwnershipComplete();
+        for (int bonus: continentBonuses) {
+            player->setReinforcement(player->getReinforcement() + bonus);
+        }
+        printPlayerReinforcement(player);
+    }
+}
+
+        void testGameEngine() {
+
+        }
+        void GameEngine::mainGameLoop() {
+            GameEngine gameEngine;
+            reinforcementPhase();
+        }

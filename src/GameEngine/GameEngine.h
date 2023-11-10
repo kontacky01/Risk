@@ -3,18 +3,42 @@
 #include <vector>
 #include <time.h>
 #include <iostream>
+#include <utility>
+#include <memory>
+
+#include "../CommandProcessing/CommandProcessing.h"
+#include "../Map/Map.h"
+#include "../OrdersList/Orders.h"
+#include "../CardsDeck/Cards.h"
+#include "../Player/Player.h"
+#include "../LoggingObserver/LoggingObserver.h"
 
 using namespace std;
 
 /********************************************************** Game Engine ***********************************************************/
-class State;// Forward declaration
-class Transition;// Forward declaration
+// Forward declarations
+class State;
+
+class Transition;
+
+class Player;
+
+class Map;
+
+class Deck;
+
+class Subject;
+
 class GameEngine{
 public:
 /**
  * Default Constructor
  */
     GameEngine();
+/**
+ * Destructor
+ */
+    ~GameEngine();
 /**
  * This function initializes game transitions
 */
@@ -32,6 +56,8 @@ public:
  * since gameEngine object controls the game flow
 */
     void setState(State* newState);
+
+    Map *gameMap();
 
     vector<Transition *> getTransitions();
 /**
@@ -67,7 +93,36 @@ public:
 */
     bool isCurrentStateWinState();
 
+        int getPlayerNum();
+
+    vector<Player *> getPlayers();
+
+    void start();
+
+    void mainGameLoop();
+
+    void reinforcementPhase();
+
+    //void issueOrdersPhase();
+    //void executeOrdersPhase();
+    //bool isGameOver();
+    //void announceWinner();
+    //void switchToNextPlayer();
+
+    void setPlayers(vector<Player *> p);
+
 private:
+    State *currentState;
+    Map *currentGameMap;
+    vector<Transition *> transitions;
+    int playerNum;
+    //int currentPlayerIndex;
+    //bool gameIsOver;
+    vector<Player *> players;
+    vector<int> playerOrder;
+    Deck *deck;
+    Map *map;
+    ::map<int, std::vector<Territory *>> playerTerritories;
     State* currentState;
     vector<Transition*> transitions;
 };
@@ -346,5 +401,10 @@ private:
     string command;
     State* nextState;
 };
+/***************************************************** GameEngineDriver **********************************************/
+void testGameStates();
+
+void testReinforcementPhase();
+
 /************************************************************ GameEngineDriver **************************************************************/
 void testGameStates();
