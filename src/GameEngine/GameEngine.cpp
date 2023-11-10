@@ -1,10 +1,7 @@
-#include "LoggingObserver.h"
-#include "GameEngine.h"
-
 #include <utility>
 #include <memory>
-#include "Cards.h"
-#include "Player.h"
+#include "GameEngine.h"
+
 
 /**
  * Default Constructor

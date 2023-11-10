@@ -5,7 +5,12 @@
 #include <vector>
 #include <ctime>
 #include <iostream>
-#include "Map.h"
+
+#include "../LoggingObserver/LoggingObserver.h"
+#include "../CardsDeck/Cards.h"
+#include "../Map/Map.h"
+#include "../OrdersList/Orders.h"
+#include "../Player/Player.h"
 
 using namespace std;
 
