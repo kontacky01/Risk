@@ -110,7 +110,9 @@ Deck::Deck() {
 * Destructor
 */
 Deck::~Deck() {
-
+    for (Card *card: deck) {
+        delete card;
+    }
 }
 
 /**
@@ -127,8 +129,14 @@ Deck::Deck(const Deck &other) {
 */
 Deck &Deck::operator=(const Deck &other) {
     if (this != &other) {
-        for (size_t i = 0; i < other.deck.size(); ++i) {
-            deck.push_back(new Card(*(other.deck[i])));
+        for (Card *card: deck) {
+            delete card;
+        }
+        deck.clear();
+
+        deck.reserve(other.deck.size());
+        for (Card *card: other.deck) {
+            deck.push_back(new Card(*card));
         }
     }
     return *this;
@@ -137,11 +145,20 @@ Deck &Deck::operator=(const Deck &other) {
 /**
 * Method fills a deck with three cards of each type
 */
-void Deck::fillDeck() {
+/*void Deck::fillDeck() {
     for (int i = 0; i < 3; i++) {
         for (size_t j = 0; j < cardTypes.size(); j++) {
             Card *newCard = new Card(cardTypes[j]);
             deck.push_back(newCard);
+        }
+    }
+}*/
+
+void Deck::fillDeck(int cPerType) {
+    deck.reserve(cPerType * cardTypes.size());
+    for (int i = 0; i < cPerType; i++) {
+        for (const auto &type: cardTypes) {
+            deck.push_back(new Card(type));
         }
     }
 }
@@ -195,6 +212,17 @@ Card *Deck::draw(Deck &transfer) {
     return drawnCard;
 }
 
+Card *Deck::drawACard() {
+    if (deck.empty()) {
+        cout << "Cannot draw card; The Deck is empty!\n";
+        return nullptr;
+    }
+
+    Card *drawnCard = deck.back();
+    deck.pop_back();
+    return drawnCard;
+}
+
 /**
 * Method adds card from deck to temporary vector
 */
@@ -206,9 +234,20 @@ void Deck::addCard(Card *transferCard) {
 /**
 * Method returns a card to the deck of origin
 */
-void Deck::returnCard(Card *returningCard) {
+/*void Hand::returnCard(Card *card, Deck *originalDeck) {
+    auto it = find(hand.begin(), hand.end(), card);
+    if (it != hand.end()) {
+        originalDeck->addCard(*it);
+        hand.erase(it);
+    }
+}*/
 
-    deck.push_back(returningCard);
+void Deck::returnCard(Card *returningCard) {
+    if (returningCard != nullptr) {
+        deck.push_back(returningCard);
+    } else {
+        // Handle the null pointer scenario, e.g., log an error
+    }
 }
 
 /************************************************************ Hand ************************************************************/
@@ -224,12 +263,21 @@ Hand::Hand() {
 */
 Hand::~Hand() {
     cout << "...Hand destructor was called..." << endl;
+
+    // Iterate through the cards in the hand and delete them
+    for (Card *card: hand) {
+        delete card;
+    }
+
+    // Clear the cards vector to release resources and prevent further access
+    hand.clear();
 }
 
 /**
 * Deep copy constructor
 */
-Hand::Hand(const Hand &other) {
+Hand::Hand(
+        const Hand &other) {
     for (size_t i = 0; i < other.hand.size(); ++i) {
         hand.push_back(new Card(*(other.hand[i])));
     }
@@ -282,12 +330,12 @@ void Hand::play(Card *card, Deck *returningDeck) {
     auto *OL = new OrdersList();
 
     // Check that the card is actually in the hand before proceeding
-    auto it = std::find_if(hand.begin(), hand.end(), [card](const Card* c) {
+    auto it = find_if(hand.begin(), hand.end(), [card](const Card *c) {
         return c->getType() == card->getType();
     });
 
     if (it != hand.end()) {
-        cout << "You played the " << "\"" << card->getType() << "\" card.\n";
+        //cout << "You played the " << "\"" << card->getType() << "\" card.\n";
 
         // Determine the card type and create the appropriate order
         if (card->getType() == "bomb") {
@@ -303,33 +351,27 @@ void Hand::play(Card *card, Deck *returningDeck) {
         } else {
             cout << "Invalid card type: " << card->getType() << "\n";
         }
-
-        // Output the orders list
         cout << "\n" << OL;
-
-        // Return the card to the deck and remove it from the hand
-        returningDeck->returnCard(*it); // Assuming returnCard accepts a Card*
+        returningDeck->returnCard(*it);
         hand.erase(it);
     } else {
         cout << "Error: Card not found in hand!\n";
     }
 }
 
+
 /**
  * Override the stream operator for Card
  */
-ostream& operator << (ostream& out, Hand* h) {
+ostream &operator<<(ostream &out, Hand *h) {
     out << "The Hand contains \n------------------------\n";
     int handSize = h->hand.size();
-    if(handSize == 0 ) {
+    if (handSize == 0) {
         out << "Hand is empty\n";
-    }
-    else {
-        for(int i = 0 ; i < h->hand.size(); i++){
+    } else {
+        for (int i = 0; i < h->hand.size(); i++) {
             out << "Card type:" << h->hand.at(i)->getType() << "\n";
         }
     }
-
     return out;
 }
-

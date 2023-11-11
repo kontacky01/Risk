@@ -18,17 +18,22 @@ using namespace std;
 /************************************************************ Player **************************************************************/
 //Forward declarations
 class Hand;
+
 class Deck;
+
 class Card;
+
 class Order;
+
 class OrdersList;
 
 class Player : public Subject, ILoggable {
 private:
     int id;
     int reinforcements;
-    vector<Territory*> attackList;
-    vector<Territory*> defendList;
+    int bonusCounter;
+    vector<Territory *> attackList;
+    vector<Territory *> defendList;
     Hand *hand;
     Deck *deck;
 
@@ -121,7 +126,9 @@ public:
 
     OrdersList *orderList;
     vector<Territory *> territories;
-};
+
+    void setHand(Hand *hand);
+}
 
 /************************************************************ PlayerDriver **************************************************************/
 void testPlayers();

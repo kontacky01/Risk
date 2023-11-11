@@ -616,7 +616,6 @@ InlineLoggable createLogMessage(const std::string &message) {
 }
 
 /***************************************************** MainGameLoop **************************************************/
-
 void GameEngine::reinforcementPhase() {
     // loop through every player
     for (auto &player: players) {
@@ -679,48 +678,113 @@ void GameEngine::issueOrdersPhase() {
     }
 }
 
-/*void mainGameLoop() {
-    GameEngine gameEngine;
-    gameEngine.reinforcementPhase();
-    gameEngine.issueOrdersPhase();
-}*/
+Player* GameEngine::checkForWinner() {
+    Player* winner = nullptr;
 
-void testMainGameLoop() {
-    //cout << "Nothing to see here" << endl;
-    Player *player[3];
-    string gamePhase = "Reinforcement";
-
-    // initialize 3 players
-    for (int i = 0; i < 3; ++i) {
-        player[i] = new Player(); // create new player
-        player[i]->orderList = new OrdersList(); // create player's orders list
-        //distribute territories
-        player[i]->setReinforcement(50); // give player 50 army units
-        cout << player[i]->getReinforcement() << endl; // output the units
-        player[i]->setGamePhase(gamePhase); // set game phase
-    }
-
-    string phase = player[1]->getGamePhase();
-    cout << phase << endl;
-
-    // issue orders and add them to orders list
-    bool continueIssuingOrders = true;
-    while (continueIssuingOrders) {
-        string userInput;
-        cout << "\nPlayer " << player[1]->getID() << ", would you like to issue an order? (YES/NO): ";
-        cin >> userInput;
-        cout << "\n";
-        transform(userInput.begin(), userInput.end(), userInput.begin(),
-                  [](unsigned char c) { return toupper(c); });
-        if (userInput == "YES") {
-            player[1]->issueOrder();
-
-        } else if (userInput == "NO") {
-            continueIssuingOrders = false;
-        } else {
-            std::cout << "\nInvalid input! Please enter YES or NO.";
+    for (auto& player : players) {
+        // Check if the player owns all territories
+        if (player->getTerritories().size() == gameMap()->territoryList.size()) {
+            winner = player;
+            break; // Exit loop, we found a winner
         }
     }
-    // display order list of player
-    cout << player[1]->orderList << endl;
+    return winner;
+    exit(0);
+}
+
+void GameEngine::removePlayersWithoutTerritories() {
+    auto it = players.begin();
+    while (it != players.end()) {
+        if ((*it)->getTerritories().empty()) {
+            // Player has no territories, remove them
+            cout << "Player " << (*it)->getID() << " has been removed from the game." << endl;
+            it = players.erase(it);
+        } else {
+            ++it; // Move to the next player
+        }
+    }
+}
+
+// helper function to execute orders for a player
+void executeAssistForPlayer(Player *player, const string &orderName, const string &phase) {
+    // check if player's order list is empty
+    if (player->getOrdersList()->getSize() == 0) {
+        return;
+    }
+
+    // setting the player's phase and notifying the log
+    player->setGamePhase(phase);
+    InlineLoggable logMessage("\nPlayer: " + to_string(player->getID()) +
+                              " is now in the [" + phase + "] phase of the game.");
+    player->notify(&logMessage);
+
+    // getting the player's current order list
+    OrdersList *currentPlayerOrdersList = player->getOrdersList();
+
+    // retrieve the vector of orders
+    vector<Order *> *ordersVector = currentPlayerOrdersList->getOL();
+
+    // check if the ordersVector is not empty
+    if (ordersVector != nullptr && !ordersVector->empty()) {
+        for (int j = 0; j < ordersVector->size(); j++) {
+            // retrieve the current order from the vector
+            Order *currentOrder = (*ordersVector)[j];
+
+            // check if the order matches the specified order name
+            if (currentOrder != nullptr && currentOrder->getOrderName() == orderName) {
+                // execute the order
+                currentOrder->execute();
+            }
+        }
+    }
+}
+void GameEngine::executeOrdersPhase() {
+    while (true) {
+        // loop through each player
+        for (auto currentPlayer : players) {
+            // Your existing code for executing orders here...
+
+            // check if the player owns all territories on any continent
+            for (auto &continent : gameMap()->continentList) {
+                bool ownsAllTerritories = true;
+                for (auto &territory : continent->territoriesInContinents) {
+                    if (territory->getOwnerId() != currentPlayer->getID()) {
+                        ownsAllTerritories = false;
+                        break;
+                    }
+                }
+                if (ownsAllTerritories) {
+                    // award control bonus for owning all territories in the continent
+                    int controlBonus = continent->getControlBonusValue();
+                    currentPlayer->setReinforcement(controlBonus);
+                }
+            }
+        }
+
+        // Check for game end condition
+        Player* winner = checkForWinner();
+        if (winner != nullptr) {
+            cout << "Player " << winner->getID() << " wins!" << endl;
+            exit(0);
+        }
+
+        // Remove players without territories
+        removePlayersWithoutTerritories();
+        reinforcementPhase();
+    }
+}
+void mainGameLoop() {
+    GameEngine gameEngine;
+
+    while (true) {
+        gameEngine.reinforcementPhase();
+        gameEngine.issueOrdersPhase();
+        gameEngine.executeOrdersPhase();
+
+        Player* winner = gameEngine.checkForWinner();
+        if (winner != nullptr) {
+            cout << "Player " << winner->getID() << " wins!" << endl;
+            break;
+        }
+    }
 }

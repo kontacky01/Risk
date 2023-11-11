@@ -16,8 +16,11 @@ void testCards() {
     string checkCardType;
     Card *drawnCard;
     //Card *card1 = new Card();
-    unique_ptr<Card> card1 = make_unique<Card>();
-    card1->setType("bomb");
+    Card *card1 = new Card();
+    Card *card2 = new Card();
+    Card *card3 = new Card();
+    Card *card4 = new Card();
+    Card *card5 = new Card();
 
     cout << "---------> Testing Phase 1: Creating/Setting/Validating Cards <---------\n\n";
 
@@ -29,24 +32,24 @@ void testCards() {
      * Validates type of Card 2
     */
     card1->setType("bomb");
-    Card card2("Reinforcement");
-    Card card3("Blockade");
-    Card card4("Airlift");
+    card2->setType("reinforcement");
+    card3->setType("blockade");
+    card4->setType("airlift");
     cout << "...Setting Card5 to \"Breakfast\"...\n";
-    Card card5("Breakfast");
+    card5->setType("breakfast");
     cout << "\n";
 
     cout << "Card 1 type: " << card1->getType() << "\n";
-    cout << "Card 2 type: " << card2.getType() << "\n";
-    cout << "Card 3 type: " << card3.getType() << "\n";
-    cout << "Card 4 type: " << card4.getType() << "\n";
-    cout << "Card 5 type: " << card5.getType() << "\n\n";
+    cout << "Card 2 type: " << card2->getType() << "\n";
+    cout << "Card 3 type: " << card3->getType() << "\n";
+    cout << "Card 4 type: " << card4->getType() << "\n";
+    cout << "Card 5 type: " << card5->getType() << "\n\n";
     cout << "...Setting Card5 to a valid type...\n";
-    card5.setType("Diplomacy");
-    cout << "Card5 is now a \"" << card5.getType() << "\" card.\n\n";
+    card5->setType("diplomacy");
+    cout << "Card5 is now a \"" << card5->getType() << "\" card.\n\n";
 
     cout << "...Validating Card2 type...\n";
-    checkCardType = card2.getType();
+    checkCardType = card2->getType();
     if (Card::isValidCardType(checkCardType)) {
         cout << "Card type \"" << checkCardType << "\" is valid.\n\n";
     } else {
@@ -62,16 +65,16 @@ void testCards() {
      * Create a deck and do the same
     */
     cout << "...Making a deep copy of Card4...\n";
-    Card copiedCard(card4);
-    cout << "Card4 type: \"" << card4.getType() << "\"\n";
+    Card *copiedCard(card4);
+    cout << "Card4 type: \"" << card4->getType() << "\"\n";
     cout << "...Setting Card4 type to \"Blockade\"...\n";
-    card4.setType("Blockade");
-    cout << "Card4 original is now: \"" << card4.getType() << "\"\n";
-    cout << "Card4 copy is now: \"" << copiedCard.getType() << "\"\n" << "Deep copy is a success!\n\n";
+    card4->setType("Blockade");
+    cout << "Card4 original is now: \"" << card4->getType() << "\"\n";
+    cout << "Card4 copy is now: \"" << copiedCard->getType() << "\"\n" << "Deep copy is a success!\n\n";
 
     cout << "...Creating a new deck of cards...\n\n";
     Deck newDeck;
-    newDeck.fillDeck();
+    newDeck.fillDeck(3);
     newDeck.printDeck();
     newDeck.getDeckSize();
     cout << "\n";
@@ -108,7 +111,8 @@ void testCards() {
     // testing play function
     cout << "\n...Player is choosing a card to play...\n\n";
     cout << "...Checking Orders List for created order...\n\n";
-    hand.play(card1.get(), &newDeck);
+    hand.play(card1, &newDeck);
+    hand.play(card3, &newDeck);
     cout << "\n";
     cout << "...Checking Your Hand for remaining cards...\n\n";
     hand.printHand();

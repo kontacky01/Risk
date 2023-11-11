@@ -304,6 +304,7 @@ public:
     virtual void addOrder(Order *o);
 
     string stringToLog();
+    int getSize() const;
 
     /**
     * Moves order to new location in OL

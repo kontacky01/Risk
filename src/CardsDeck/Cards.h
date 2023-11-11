@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <memory>
 #include "../OrdersList/Orders.h"
 
 using namespace std;
@@ -82,7 +83,8 @@ public:
     /**
     * The fillDeck method creates a finite collection of cards
     */
-    void fillDeck(); // creates finite collection of cards
+    void fillDeck(int cardPerType);
+   // void fillDeck(); // creates finite collection of cards
 
     /**
     * The printDeck prints out the contents of the deck
@@ -104,6 +106,7 @@ public:
     */
     Card *draw(Deck &transfer);
 
+    Card *drawACard();
     /**
     * The addCard method adds card to a temporary vector
     */
@@ -113,7 +116,6 @@ public:
     * The returnCard method returns a card back to its deck of origin
     */
     void returnCard(Card *returningCard);
-
 protected:
     /**
     * 'deck' vector stores the collection of cards created by the fillDeck method
@@ -123,6 +125,8 @@ protected:
     * 'transfer' is a temporary vector used to transfer cards from deck to hand and back
     */
     vector<Card *> transfer;
+
+
 };
 
 /************************************************************ Hand ****************************************************/
@@ -170,9 +174,12 @@ public:
               Deck *returningDeck);
 
     OrdersList *ordersList;
-    vector<Card *> hand; // stores collection of cards created by fillHand
+
+    vector<Card *> hand;
 
     friend ostream &operator<<(ostream &out, Hand *o); // override Stream insertion operator
+
+    //void returnCard(Card *card, Deck *originalDeck);
 };
 
 /************************************************************ Cards Driver *******************************************/

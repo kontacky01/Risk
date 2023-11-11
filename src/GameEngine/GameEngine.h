@@ -5,7 +5,6 @@
 #include <vector>
 #include <ctime>
 #include <iostream>
-
 #include "Map.h"
 
 using namespace std;
@@ -60,6 +59,7 @@ public:
     Map *gameMap();
 
     vector<Transition *> getTransitions();
+
 /**
  * This function checks if the current is executeorders -- to be used in Orders class
 */
@@ -76,10 +76,12 @@ public:
     void reinforcementPhase();
 
     void issueOrdersPhase();
-//void executeOrdersPhase();
-//bool isGameOver();
-//void announceWinner();
-//void switchToNextPlayer();
+
+    void executeOrdersPhase();
+
+    Player *checkForWinner();
+
+    void removePlayersWithoutTerritories();
 
     void setPlayers(vector<Player *> p);
 
@@ -429,4 +431,5 @@ private:
 
 /***************************************************** GameEngineDriver **********************************************/
 void testGameStates();
+
 void testMainGameLoop();
