@@ -22,6 +22,7 @@ int main()
     //testOrderExecution();
     //testLoggingObserver();
     //mainGameLoop();
+    testStartupPhase();
     testMainGameLoop();
 
     return 0;

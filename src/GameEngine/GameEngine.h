@@ -1,18 +1,20 @@
 #pragma once
 
-#include <string>
 #include <algorithm>
-#include <vector>
 #include <ctime>
 #include <iostream>
-#include <utility>
+#include <filesystem>
+#include <fstream>
 #include <memory>
+#include <string>
+#include <utility>
+#include <vector>
 
-#include "../Player/Player.h"
-#include "../Map/Map.h"
-#include "../OrdersList/Orders.h"
 #include "../CardsDeck/Cards.h"
 #include "../LoggingObserver/LoggingObserver.h"
+#include "../Map/Map.h"
+#include "../OrdersList/Orders.h"
+#include "../Player/Player.h"
 
 using namespace std;
 
@@ -432,3 +434,4 @@ private:
 /***************************************************** GameEngineDriver **********************************************/
 void testGameStates();
 void testMainGameLoop();
+void testStartupPhase();
