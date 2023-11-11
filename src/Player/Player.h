@@ -27,7 +27,6 @@ class Player : public Subject, ILoggable {
 private:
     int id;
     int reinforcements;
-    vector<Territory *> territories;
     vector<Territory*> attackList;
     vector<Territory*> defendList;
     Hand *hand;
@@ -121,6 +120,7 @@ public:
     void playCard(Card *card, Deck *deck);
 
     OrdersList *orderList;
+    vector<Territory *> territories;
 };
 
 /************************************************************ PlayerDriver **************************************************************/

@@ -202,6 +202,7 @@ void Player::addTerritoryToList(Territory *territory, const string &listType) {
 void Player::issueOrder() {
     //cards: "bomb", "blockade", "airlift", "diplomacy" -- "reinforcement" (not associated with any order)
     //orders: "bomb", "deploy", "advance", "blockade", "airlift", "negotiate"
+    int armyUnits;
     string orderName;
     cout << "Enter an order (bomb, reinforcement, blockade, airlift, diplomacy, deploy, advance): ";
     cin >> orderName;
@@ -210,29 +211,113 @@ void Player::issueOrder() {
 
     if (this->getReinforcement() > 0 && orderName == "deploy") {
         Order *deployOrder = new Deploy(); // create a deploy order
-        this->orderList->addOrder(deployOrder); // add to orders list
-        cout << "You have issued an order to: [" << orderName << "] !" << endl;
+        cout << "\n~~~~~~ You have issued an order to: [" << orderName << "] !\n";
 
+        int territoryId;
+        // ask for the territory ID
+        cout << "\nEnter the territory ID you wish to deploy to: ";
+        cin >> territoryId;
+
+        // ask for the number of units
+        cout << "\nEnter the number of army units you wish to deploy: ";
+        cin >> armyUnits;
+
+        // check if the territory is owned by the player
+        Territory *targetTerritory = nullptr;
+        for (int i = 0; i < territories.size(); i++) {
+            if (territories[i]->getId() == territoryId) {
+                targetTerritory = territories[i];
+                break;
+            }
+        }
+        if (targetTerritory != nullptr) { // the player owns the territory
+            // allocate reinforcements to the territory
+            targetTerritory->setArmyCount(targetTerritory->getArmyCount() + armyUnits);
+            // add the territory to the defend list
+            addTerritoryToList(targetTerritory, "defend");
+            // add the "deploy" order to the player's orders list
+            this->orderList->addOrder(deployOrder); // add order to list
+            cout << "\n" << targetTerritory->getName() << " now has " << targetTerritory->getArmyCount()
+                 << " army units!\n";
+            cout << orderList;
+        } else {
+            cout << "\nYou do not own territory with ID " << territoryId << ".\n";
+        }
     } else if (this->getReinforcement() == 0 && orderName == "deploy") {
-        cout << "Invalid: You have deployed all your army units." << endl;
+        cout << "\nInvalid: You have deployed all your army units.\n";
 
     } else if (this->getReinforcement() > 0 && orderName == "advance") {
-        cout << "Invalid: You still have " << this->getReinforcement() << " army units to deploy!" << endl;
+        cout << "\nInvalid: You still have " << this->getReinforcement() << " army units to deploy!\n";
 
     } else if (this->getReinforcement() == 0 && orderName == "advance") {
         Order *advanceOrder = new Advance(); // create an advance order
-        this->orderList->addOrder(advanceOrder); // add to orders list
-        cout << "You have issued an order to: [" << orderName << "] !" << endl;
+        cout << "\n~~~~~~ You have issued an order to: [" << orderName << "] !\n";
 
+        int sourceTerritoryId, targetTerritoryId;
+        cout << "\nEnter the territory you wish to move army units FROM: ";
+        cin >> sourceTerritoryId;
+        cout << "\nEnter the territory you wish to move army units TO: ";
+        cin >> targetTerritoryId;
+        cout << "\nEnter the amount of army units you wish to advance TO " << targetTerritoryId << ": ";
+        cin >> armyUnits;
+
+        // check if the player owns the source territory
+        Territory *sourceTerritory = nullptr;
+        for (auto &territory: territories) {
+            if (territory->getId() == sourceTerritoryId) {
+                sourceTerritory = territory;
+                break;
+            }
+        }
+        if (sourceTerritory->getArmyCount() < armyUnits) { // check if enough army units to transfer
+            cout << "Invalid: Source territory does not have enough army units. It only has "
+                 << sourceTerritory->getArmyCount() << " units.\n";
+            return;
+        }
+        if (sourceTerritory != nullptr) { // player owns the source territory, check for the target territory
+            Territory *targetTerritory = nullptr;
+            for (auto &territory: territories) {
+                if (territory->getId() == targetTerritoryId) {
+                    targetTerritory = territory;
+                    break;
+                }
+            }
+            if (targetTerritory != nullptr) { // player is trying to DEFEND
+                addTerritoryToList(targetTerritory, "defend"); // add to defend list
+                // reallocate army units
+                sourceTerritory->subFromArmy(armyUnits); // subtract from source
+                targetTerritory->addToArmyCount(armyUnits); // add to target
+                this->orderList->addOrder(advanceOrder); // add order to list
+                cout << "\n" << targetTerritory->getName() << " now has " << targetTerritory->getArmyCount()
+                     << " army units!";
+                cout << "\n" << sourceTerritory->getName() << " now has " << sourceTerritory->getArmyCount()
+                     << " army units!\n";
+                cout << orderList;
+            } else {
+                // player is trying to ATTACK, check if target territory is adjacent
+                if (find(sourceTerritory->getAdjacencyList().begin(),
+                         sourceTerritory->getAdjacencyList().end(),
+                         targetTerritoryId) != sourceTerritory->getAdjacencyList().end()) {
+                    // Target is neighboring
+                    addTerritoryToList(targetTerritory, "attack"); // Add to attack list
+                    // Reallocate army units
+                    sourceTerritory->subFromArmy(armyUnits); // Subtract from source
+                    this->orderList->addOrder(advanceOrder); // Add order to list
+                } else {
+                    cout << "\nInvalid: Territory " << targetTerritoryId << " is too far away to attack!\n";
+                }
+            }
+        } else {
+            cout << "\nInvalid: You cannot transfer army units from a territory you do not own!\n";
+        }
     } else if (this->getReinforcement() > 0 && (orderName == "airlift" || orderName == "blockade" ||
                                                 orderName == "bomb" || orderName == "diplomacy" ||
                                                 orderName == "negotiate")) {
-        cout << "Invalid: You still have " << this->getReinforcement() << " army units to deploy!" << endl;
+        cout << "\nInvalid: You still have " << this->getReinforcement() << " army units to deploy!";
 
     } else if (this->getReinforcement() == 0 && (orderName == "airlift" || orderName == "blockade" ||
                                                  orderName == "bomb" || orderName == "diplomacy" ||
                                                  orderName == "negotiate")) {
-
         bool hasCard = false; // check if the player has the card in their hand
         Order *order;
         for (auto &card: this->getHand()->hand) {
@@ -250,21 +335,20 @@ void Player::issueOrder() {
                 }
                 if (order != nullptr) {
                     this->playCard(card, deck);
-                    cout << "You have issued an order to: [" << orderName << "] !" << endl;
+                    cout << "\n~~~~~~ You have issued an order to: [" << orderName << "] !\n";
                     hasCard = true;
                     break;
                 }
             }
         }
         if (!hasCard) {
-            cout << "You do not have a [" << orderName << "] card in your hand!" << endl;
+            cout << "\nYou do not have a [" << orderName << "] card in your hand!\n";
         }
     } else {
-        cout << "Invalid: There is no such card." << endl;
+        cout << "\nInvalid: There is no such card.\n";
     }
-
-    cout << "okay next" << endl;
 }
+
 
 /**
  * Override the stream operator for Player

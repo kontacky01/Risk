@@ -625,11 +625,11 @@ void GameEngine::reinforcementPhase() {
 
         // notify log of phase status change
         InlineLoggable logMessage = createLogMessage(
-                "Player " + to_string(player->getID()) + " is now in the [Reinforcement] phase of the game.");
+                "\nPlayer " + to_string(player->getID()) + " is now in the [Reinforcement] phase of the game.");
         player->notify(&logMessage);
 
         // display current reinforcement pool of player
-        cout << "Reinforcement Pool of Player " << player->getID() << ": " << player->getReinforcement() << endl;
+        cout << "\nReinforcement Pool of Player " << player->getID() << ": " << player->getReinforcement() << endl;
 
         // calculate base reinforcement based on territories owned, with a minimum of 3 (rounded down)
         int baseReinforcement = max(3, static_cast<int>(player->getTerritories().size() / 3));
@@ -651,15 +651,16 @@ void GameEngine::issueOrdersPhase() {
         player->setGamePhase("Issuing Orders");
 
         // log phase status change
-        InlineLoggable logMessage("Player: " + to_string(player->getID()) +
-                                  " is now in the \"Issuing Orders\" phase of the game.");
+        InlineLoggable logMessage("\nPlayer: " + to_string(player->getID()) +
+                                  " is now in the [Issuing Orders] phase of the game.");
         player->notify(&logMessage);
         // get current player's id and hand to determine what orders they are allowed to issue
         bool continueIssuingOrders = true;
         while (continueIssuingOrders) {
             string userInput;
-            cout << "Player " << player->getID() << ", would you like to issue an order? (YES/NO): ";
+            cout << "\nPlayer " << player->getID() << ", would you like to issue an order? (YES/NO): ";
             cin >> userInput;
+            cout << "\n";
             // transform input to lowercase
             transform(userInput.begin(), userInput.end(), userInput.begin(),
                       [](unsigned char c) { return toupper(c); });
@@ -670,7 +671,7 @@ void GameEngine::issueOrdersPhase() {
             } else if (userInput == "NO") {
                 continueIssuingOrders = false; // stop asking
             } else {
-                std::cout << "Invalid input! Please enter YES or NO." << endl;
+                std::cout << "\nInvalid input! Please enter YES or NO." << endl;
             }
         }
         // display order list of player
@@ -693,6 +694,7 @@ void testMainGameLoop() {
     for (int i = 0; i < 3; ++i) {
         player[i] = new Player(); // create new player
         player[i]->orderList = new OrdersList(); // create player's orders list
+        //distribute territories
         player[i]->setReinforcement(50); // give player 50 army units
         cout << player[i]->getReinforcement() << endl; // output the units
         player[i]->setGamePhase(gamePhase); // set game phase
@@ -705,8 +707,9 @@ void testMainGameLoop() {
     bool continueIssuingOrders = true;
     while (continueIssuingOrders) {
         string userInput;
-        cout << "Player " << player[1]->getID() << ", would you like to issue an order? (YES/NO): ";
+        cout << "\nPlayer " << player[1]->getID() << ", would you like to issue an order? (YES/NO): ";
         cin >> userInput;
+        cout << "\n";
         transform(userInput.begin(), userInput.end(), userInput.begin(),
                   [](unsigned char c) { return toupper(c); });
         if (userInput == "YES") {
@@ -715,7 +718,7 @@ void testMainGameLoop() {
         } else if (userInput == "NO") {
             continueIssuingOrders = false;
         } else {
-            std::cout << "Invalid input! Please enter YES or NO." << endl;
+            std::cout << "\nInvalid input! Please enter YES or NO.";
         }
     }
     // display order list of player
