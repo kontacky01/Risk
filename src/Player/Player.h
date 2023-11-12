@@ -121,12 +121,14 @@ public:
     OrdersList *issuesOrder(Order *o);
 
     //void executeNextOrderAndRemove();
-    void playCard(Card *card, Deck *deck);
+    void playCard(Card *card, Deck *deck, OrdersList *OL);
 
     OrdersList *orderList;
     vector<Territory *> territories;
 
     void setHand(Hand *hand);
+
+    Deck* getDeck();
 
 /************************************************************ PlayerDriver **************************************************************/
 void testPlayers(){

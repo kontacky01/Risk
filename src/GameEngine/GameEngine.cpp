@@ -742,7 +742,22 @@ void GameEngine::executeOrdersPhase() {
     while (true) {
         // loop through each player
         for (auto currentPlayer : players) {
-            // Your existing code for executing orders here...
+            // get a reference to the current player.
+            // store the size of the player's territory list before executing deploy orders.
+            int territoriesBefore = currentPlayer->getTerritories().size();
+
+            // execute all "deploy" orders for the current player.
+            executeAssistForPlayer(currentPlayer, "deploy", "~~~~~~ Executing [deploy] Orders");
+
+            // store the size of the player's territory list after executing deploy orders.
+            int territoriesAfter = currentPlayer->getTerritories().size();
+
+            // check if the player has gained new territories (territory list size increased).
+            if (territoriesAfter > territoriesBefore) {
+                // if new territories were gained, draw a card from the deck for the player.
+                Card* drawnCard = deck->draw();
+                currentPlayer->getHand()->addCard(drawnCard);
+            }
 
             // check if the player owns all territories on any continent
             for (auto &continent : gameMap()->continentList) {
@@ -759,6 +774,12 @@ void GameEngine::executeOrdersPhase() {
                     currentPlayer->setReinforcement(controlBonus);
                 }
             }
+            // executes
+            executeAssistForPlayer(currentPlayer, "advance", "~~~~~~ Executing [advance] Orders");
+            executeAssistForPlayer(currentPlayer, "airlift", "~~~~~~ Executing [airlift] Orders");
+            executeAssistForPlayer(currentPlayer, "blockade", "~~~~~~ Executing [blockade] Orders");
+            executeAssistForPlayer(currentPlayer, "bomb", "~~~~~~ Executing [bomb] Orders");
+            executeAssistForPlayer(currentPlayer, "negotiate", "~~~~~~ Executing [negotiate] Orders");
         }
 
         // Check for game end condition
@@ -773,6 +794,7 @@ void GameEngine::executeOrdersPhase() {
         reinforcementPhase();
     }
 }
+
 void mainGameLoop() {
     GameEngine gameEngine;
 
