@@ -1,10 +1,11 @@
-#include "../CommandProcessing/CommandProcessing.h"
-#include "../GameEngine/GameEngine.h"
-#include "../Map/Map.h"
-#include "../Player/Player.h"
-#include "../OrdersList/Orders.h"
-#include "../CardsDeck/Cards.h"
-#include "LoggingObserver/LoggingObserver.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/GameEngine/GameEngine.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/Map/Map.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/OrdersList/Orders.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/CardsDeck/Cards.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/Player/Player.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/CommandProcessing/CommandProcessing.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/LoggingObserver/LoggingObserver.h"
+
 
 int main()
 {
@@ -15,7 +16,7 @@ int main()
     //testOrdersLists();
     //testPlayers();
     //testCards();
-    //testGameStates();
+    testGameStates();
 
     /*
     * Assignment 2

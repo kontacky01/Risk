@@ -47,6 +47,14 @@
     
     void Command::saveEffect(string& effect){
         this->effect = effect;
+        notify(this);
+    }
+
+/**
+ * Override the string to log
+*/
+    string Command::stringToLog(){ 
+        return "\n\n----------------------------------------- Logger -----------------------------------------\n\nCommand with name: " + command + " was saved with the following effect " +  effect + "\n\n------------------------------------------------------------------------------------------\n\n";
     }
 
 /************************************************************ CommandProcessor **************************************************************/
@@ -102,6 +110,7 @@
     void CommandProcessor::saveCommand(string& commandstr){
         Command* commandObj = new Command(commandstr);
         commands.push_back(commandObj);
+        notify(this);
     }
 /**
  * public method for other objects such as the GameEngine or the Player
@@ -138,6 +147,12 @@
 
     vector<Command*> CommandProcessor::getCommands(){
         return this->commands;
+    }
+/**
+ * Override the string to log
+*/
+    string CommandProcessor::stringToLog(){ 
+        return "\n\n----------------------------------------- Logger -----------------------------------------\n\n" + commands.back()->getCommand() + " was saved to the collection of commands\n\n------------------------------------------------------------------------------------------\n\n";
     }
 
 /*************************************************** FileCommandProcessorAdapter ***************************************************/

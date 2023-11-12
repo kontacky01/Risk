@@ -1,6 +1,4 @@
-//#pragma once
-#ifndef COMMANDPROCESSING_H
-#define COMMANDPROCESSING_H
+#pragma once
 
 #include <ctime>
 #include <iostream>
@@ -9,18 +7,18 @@
 #include <vector>
 #include <algorithm>
 
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/GameEngine/GameEngine.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/Map/Map.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/OrdersList/Orders.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/CardsDeck/Cards.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/Player/Player.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/LoggingObserver/LoggingObserver.h"
 
-#include "../GameEngine/GameEngine.h"
-#include "../Map/Map.h"
-#include "../OrdersList/Orders.h"
-#include "../CardsDeck/Cards.h"
-#include "../Player/Player.h"
-#include "../LoggingObserver/LoggingObserver.h"
 
 using namespace std;
 
 /************************************************************ Command **************************************************************/
-class Command{
+class Command : public Subject, public ILoggable{
     public:
     /**
      * Destructor
@@ -48,6 +46,10 @@ class Command{
 	string getEffect();
     
     void saveEffect(string& effect);
+/**
+ * Override string to log (observer pattern)
+*/
+    string stringToLog();
 
     private:
     string command;
@@ -57,7 +59,7 @@ class Command{
 /************************************************************ CommandProcessor **************************************************************/
 class Command;// Forward declaration
 class GameEngine;// Forward declaration
-class CommandProcessor{
+class CommandProcessor : public Subject, public ILoggable{
     public:
     /**
      * Default Constructor
@@ -97,6 +99,10 @@ class CommandProcessor{
     bool validate(GameEngine &engine, string& commandstr);
 
     vector<Command*> getCommands();
+/**
+ * Override string to log (observer pattern)
+*/
+    string stringToLog();
 
     private:
     vector<Command*> commands;
@@ -126,4 +132,3 @@ class FileCommandProcessorAdapter : public CommandProcessor{
 
 /************************************************************ CommandProcessingDriver **************************************************************/
 void testCommandProcessor();
-#endif

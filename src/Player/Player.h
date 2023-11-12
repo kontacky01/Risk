@@ -7,11 +7,13 @@
 #include <vector>
 #include <algorithm>
 
-#include "../GameEngine/GameEngine.h"
-#include "../Map/Map.h"
-#include "../OrdersList/Orders.h"
-#include "../CardsDeck/Cards.h"
-#include "../LoggingObserver/LoggingObserver.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/GameEngine/GameEngine.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/Map/Map.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/OrdersList/Orders.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/CardsDeck/Cards.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/CommandProcessing/CommandProcessing.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/LoggingObserver/LoggingObserver.h"
+
 
 using namespace std;
 
@@ -27,7 +29,9 @@ class Order;
 
 class OrdersList;
 
-class Player : public Subject, ILoggable {
+class GameEngine;
+
+class Player{
 private:
     int id;
     int reinforcements;
@@ -100,8 +104,6 @@ public:
 
     Hand *getHand();
 
-    string stringToLog() override;
-
     /**
      * Returns a random list of territories that are assigned to the user which
      * they would like to defend
@@ -127,7 +129,6 @@ public:
     vector<Territory *> territories;
 
     void setHand(Hand *hand);
-
+};
 /************************************************************ PlayerDriver **************************************************************/
-void testPlayers(){
-}};
+void testPlayers();

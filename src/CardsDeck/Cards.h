@@ -3,7 +3,14 @@
 #include <string>
 #include <vector>
 #include <memory>
-#include "../OrdersList/Orders.h"
+
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/GameEngine/GameEngine.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/Map/Map.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/OrdersList/Orders.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/Player/Player.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/CommandProcessing/CommandProcessing.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/LoggingObserver/LoggingObserver.h"
+
 
 using namespace std;
 

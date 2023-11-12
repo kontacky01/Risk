@@ -1,21 +1,23 @@
-//#pragma once
-#ifndef ORDERS_H
-#define ORDERS_H
+#pragma once
 
 #include <iostream>
 #include <string>
 #include <vector>
 #include <algorithm>
 
-#include "../GameEngine/GameEngine.h"
-#include "../Map/Map.h"
-#include "../Player/Player.h"
-#include "../CardsDeck/Cards.h"
-#include "../LoggingObserver/LoggingObserver.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/GameEngine/GameEngine.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/Map/Map.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/CardsDeck/Cards.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/Player/Player.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/CommandProcessing/CommandProcessing.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/LoggingObserver/LoggingObserver.h"
 
 using namespace std;
 
+// Forward declarations
 class Player;
+class Subject;
+class ILoggable;
 
 class OrderAbstract {
 public:
@@ -344,5 +346,3 @@ void testOrdersLists();
 * test driver A2
 */
 void testOrderExecution();
-
-#endif

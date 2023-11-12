@@ -3,8 +3,13 @@
 #include <iostream>
 #include <fstream>
 #include <list>
-#include "../GameEngine/GameEngine.h"
 
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/GameEngine/GameEngine.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/Map/Map.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/OrdersList/Orders.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/CardsDeck/Cards.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/Player/Player.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/CommandProcessing/CommandProcessing.h"
 
 using namespace std;
 

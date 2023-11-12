@@ -2,9 +2,6 @@
 
 #include <utility>
 #include <memory>
-#include "Cards.h"
-#include "Player.h"
-#include "Orders.h"
 
 /**
  * Default Constructor
@@ -58,7 +55,7 @@
         playerOrder;
         deck = new Deck();
         map = new Map();
-        firstRound = true;
+     //   firstRound = true;
     }
 /**
  * This function initializes game transitions
@@ -100,6 +97,7 @@
             currentState->onExit(*this);
         }
         currentState = newState;
+        notify(this);
         if (currentState) {
             currentState->onEnter(*this);
         }
@@ -151,6 +149,18 @@
 */
     bool GameEngine::isCurrentStateWinState(){
         return dynamic_cast<WinState*>(currentState) != nullptr;
+    }
+/**
+ * Override the string to log
+*/
+    string GameEngine::stringToLog(){
+        string log;
+        for(int i=0;i<transitions.size();i++){
+            if(currentState == transitions[i]->getNextState()){
+                log = transitions[i]->getCommand();
+            }
+        } 
+        return "\n\n----------------------------------------- Logger -----------------------------------------\n\nThe new state of the game is " + log + " state\n\n------------------------------------------------------------------------------------------\n\n";
     }
 
 /************************************************************ State **************************************************************/

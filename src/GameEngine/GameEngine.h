@@ -6,12 +6,13 @@
 #include <utility>
 #include <memory>
 
-#include "../CommandProcessing/CommandProcessing.h"
-#include "../Map/Map.h"
-#include "../OrdersList/Orders.h"
-#include "../CardsDeck/Cards.h"
-#include "../Player/Player.h"
-#include "../LoggingObserver/LoggingObserver.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/Map/Map.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/OrdersList/Orders.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/CardsDeck/Cards.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/Player/Player.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/CommandProcessing/CommandProcessing.h"
+#include "C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/LoggingObserver/LoggingObserver.h"
+
 
 using namespace std;
 
@@ -29,7 +30,9 @@ class Deck;
 
 class Subject;
 
-class GameEngine{
+class ILoggable;
+
+class GameEngine : public Subject, public ILoggable{
 public:
 /**
  * Default Constructor
@@ -113,6 +116,10 @@ public:
     void removePlayersWithoutTerritories();
 
     void setPlayers(vector<Player *> p);
+/**
+ * Override string to log (observer pattern)
+*/
+    string stringToLog();
 
 private:
     State *currentState;

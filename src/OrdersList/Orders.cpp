@@ -50,7 +50,7 @@ void Order::execute() {
     if (getValid() == 1) {
         cout << "Executing order #" << getOrderID() << " ...\n";
     }else cout << "Can NOT execute order #" << getOrderID() << " ...\n";
-    //notify(this);
+    notify(this);
 };
 
 /**
@@ -203,7 +203,7 @@ void Deploy::executeForThisSpecificOrder() {
             cout << "Deploy executed | Player #" << p->getID() << " now has "
                 << this->terrToDeploy->getArmyCount() << " reinforcements in Territory "
                 << this->terrToDeploy->getName() <<"\n";
-                //notify(this);
+                notify(this);
         }
     }
 }
@@ -777,7 +777,7 @@ OrdersList::~OrdersList() {
 
 void OrdersList::addOrder(Order *o) {
     OL->push_back(o);
-    //notify(this);
+    notify(this);
 }
 
 /**

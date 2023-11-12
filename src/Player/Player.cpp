@@ -2,9 +2,9 @@
 #include <cstdlib>
 #include <memory>
 #include <cctype>
-#include "GameEngine.h"
+
 #include "Player.h"
-#include "Cards.h"
+
 
 using namespace std;
 
@@ -424,10 +424,6 @@ ostream &operator<<(ostream &out, Player *p) {
     out << p->orderList;
     out << p->hand;
     return out;
-}
-
-string Player::stringToLog() {
-    return {};
 }
 
 void Player::playCard(Card *card, Deck *deck) {
