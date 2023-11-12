@@ -6,6 +6,9 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <cstdlib>
+#include <memory>
+#include <cctype>
 
 #include "../GameEngine/GameEngine.h"
 #include "../Map/Map.h"
@@ -17,14 +20,13 @@ using namespace std;
 
 /************************************************************ Player **************************************************************/
 //Forward declarations
+//class Subject;
+//class ILoggable;
 class Hand;
-
 class Deck;
-
+class GameEngine;
 class Card;
-
 class Order;
-
 class OrdersList;
 
 class Player : public Subject, ILoggable {
@@ -129,5 +131,5 @@ public:
     void setHand(Hand *hand);
 
 /************************************************************ PlayerDriver **************************************************************/
-void testPlayers(){
-}};
+void testPlayers()
+};

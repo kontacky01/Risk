@@ -15,11 +15,12 @@ int main()
     //testOrdersLists();
     //testPlayers();
     //testCards();
-    //testGameStates();
+    testGameStates();
 
     /*
     * Assignment 2
     */
+
     //testCommandProcessor(); //part 1 in CommandProcessingDriver.cpp
     //testStartupPhase();  //part2 in GameEngineDriver.cpp
     //testMainGameLoop();  //part3 in GameEngineDriver.cpp

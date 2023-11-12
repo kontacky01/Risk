@@ -1,35 +1,49 @@
 #pragma once
-#include <string>
-#include <vector>
-#include <time.h>
-#include <iostream>
-#include <utility>
-#include <memory>
 
+#include <algorithm>
+#include <ctime>
+#include <iostream>
+#include <filesystem>
+#include <fstream>
+#include <memory>
+#include <string>
+#include <sstream>
+#include <utility>
+#include <vector>
+
+#include "../CardsDeck/Cards.h"
 #include "../CommandProcessing/CommandProcessing.h"
+#include "../LoggingObserver/LoggingObserver.h"
 #include "../Map/Map.h"
 #include "../OrdersList/Orders.h"
-#include "../CardsDeck/Cards.h"
 #include "../Player/Player.h"
-#include "../LoggingObserver/LoggingObserver.h"
 
 using namespace std;
 
 /********************************************************** Game Engine ***********************************************************/
 // Forward declarations
 class State;
-
 class Transition;
-
 class Player;
-
 class Map;
-
 class Deck;
+//class Subject;
+//class ILoggable;
 
-class Subject;
 
-class GameEngine{
+class GameEngine {
+private:
+    State *currentState;
+    Map *currentGameMap{};
+    vector<Transition *> transitions;
+    int playerNum;
+//int currentPlayerIndex;
+//bool gameIsOver;
+    vector<Player *> players;
+    vector<int> playerOrder;
+    Deck *deck;
+    Map *map{};
+    ::map<int, std::vector<Territory *>> playerTerritories;
 public:
 /**
  * Default Constructor
@@ -58,7 +72,7 @@ public:
     void setState(State* newState);
 
     Map *gameMap();
-
+    void setGameMap(Map* map);
     vector<Transition *> getTransitions();
 
 /**
@@ -118,18 +132,6 @@ public:
 
     void setPlayers(vector<Player *> p);
 
-private:
-    State *currentState;
-    Map *currentGameMap{};
-    vector<Transition *> transitions;
-    int playerNum;
-    //int currentPlayerIndex;
-    //bool gameIsOver;
-    vector<Player *> players;
-    vector<int> playerOrder;
-    Deck *deck;
-    Map *map{};
-    ::map<int, std::vector<Territory *>> playerTerritories;
 };
 /************************************************************ State **************************************************************/
 class State {
@@ -408,7 +410,6 @@ private:
 };
 /***************************************************** GameEngineDriver **********************************************/
 void testGameStates();
-
 void testMainGameLoop();
-
+void testStartupPhase();
 void testReinforcementPhase();

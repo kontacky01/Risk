@@ -1,7 +1,4 @@
 #include "GameEngine.h"
-#include "Player.h"
-#include "Map.h"
-#include <algorithm>
 
 /*void testGameStates() {
     cout << "\n************************************\nTesting Game Driver!!! \n************************************\n\n";
@@ -10,14 +7,14 @@
 
     while (true) {
         cout << "\nEnter a command: ";
-        cin >> command;
+        getline(cin, command);
 
         if (command == "quit") {
             break;
         }
-
         engine.executeCommand(command);
     }
+
 }*/
 
 void testMainGameLoop() {
