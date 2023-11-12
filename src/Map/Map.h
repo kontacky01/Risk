@@ -47,7 +47,7 @@ public:
 
     void setOwnerId(int newOwner);
 
-    int getArmyCount();
+    int getArmyCount() const;
 
     void setArmyCount(int newCount);
 
@@ -103,7 +103,6 @@ public:
 
 class Map {
 private:
-    map<int, Territory *> territories;
     map<int, Continent *> continents;
 
 public:
@@ -148,6 +147,7 @@ public:
 
     vector<Continent *> continentList;
     vector<Territory *> territoryList;
+    map<int, Territory *> territories;
 };
 
 

@@ -20,11 +20,11 @@ int main()
     /*
     * Assignment 2
     */
-    testCommandProcessor(); //part 1 in CommandProcessingDriver.cpp
-    //testStartupPhase();  part2 in GameEngineDriver.cpp
-    //testMainGameLoop();  part3 in GameEngineDriver.cpp
-    //testOrderExecution();  part4 in OrdersDriver.cpp
-    //testLoggingObserver(); part5 in LoggingObserverDriver.cpp
-
+    //testCommandProcessor(); //part 1 in CommandProcessingDriver.cpp
+    //testStartupPhase();  //part2 in GameEngineDriver.cpp
+    //testMainGameLoop();  //part3 in GameEngineDriver.cpp
+    //testOrderExecution();  //part4 in OrdersDriver.cpp
+    //testLoggingObserver(); //part5 in LoggingObserverDriver.cpp
+  
     return 0;
 }

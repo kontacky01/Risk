@@ -80,7 +80,7 @@ void testLoggingObserver() {
     // attach modal to view 
     o->attach(logger);
     // add the order to the player's orderlist 
-    p->issueOrder(deploy); // should call Order::addOrder and notify the observer
+    p->issuesOrder(deploy); // should call Order::addOrder and notify the observer
 
     delete t6;
     t6 = NULL;

@@ -64,11 +64,15 @@ string Order::stringToLog() {
 
 int Order::incrementCount() {
     return ++countOrderID;
-};
+}
 
 int Order::getCount() {
     return countOrderID;
-};
+}
+
+int OrdersList::getSize() const {
+    return OL->size();
+}
 
 
 void Order::setOrderID(int id) {
@@ -88,6 +92,10 @@ string Order::getDescription() {
 }
 
 string Order::getOrderName() { return "Order"; }
+
+void Order::setOrderName(const string& name) {
+    orderName = name;
+}
 
 void Order::setPlayerGivenCardThisTurn(bool b) { pGivenCardThisTurn = b; }
 
@@ -184,7 +192,7 @@ void Deploy::executeForThisSpecificOrder() {
         cout << "Can NOT execute Deploy " << this->terrToDeploy->getName()
              << " | Deploy has 0 reinforcements\n";
     }
-    else if (!pHasEnoughRein()) { //player has enough reinforcemnts
+    else if (!pHasEnoughRein()) { //player has enough reinforcements
         cout << "Can NOT execute Deploy " << this->terrToDeploy->getName()
              << " | Player #" << p->getID() << " does NOT enough have reinforcements\n";
     }
@@ -317,7 +325,7 @@ void Advance::executeForThisSpecificOrder() {
 }
 
 /**
- * @brief Valid if Territory is adjacant and player owns Source Territory
+ * @brief Valid if Territory is adjacent and player owns Source Territory
  */
 bool Advance::validate() {
     if (terrIsAdjP(this->terrSource, this->terrTarget) && pOwnsTerr(p, this->terrSource))
@@ -326,7 +334,7 @@ bool Advance::validate() {
 }
 
 /**
-* Simulates battle between Source and Targer Territories, source attacks first. 
+* Simulates battle between Source and Target Territories, source attacks first.
 * RoundRobin style Source and Target will have a 60% adn 70% chance
 * of winning an attack or defend, and the resulting army will lose 1
 * of their army forces until one territory reaches 0 armies. 

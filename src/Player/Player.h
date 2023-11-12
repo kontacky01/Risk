@@ -7,7 +7,6 @@
 #include <vector>
 #include <algorithm>
 
-
 #include "../GameEngine/GameEngine.h"
 #include "../Map/Map.h"
 #include "../OrdersList/Orders.h"
@@ -17,17 +16,26 @@
 using namespace std;
 
 /************************************************************ Player **************************************************************/
-class Hand;//Forward declaration
-class Order;//Forward declaration
-class OrdersList;//Forward declaration
+//Forward declarations
+class Hand;
+
+class Deck;
+
+class Card;
+
+class Order;
+
+class OrdersList;
 
 class Player : public Subject, ILoggable {
 private:
     int id;
     int reinforcements;
-    vector<Territory *> territories;
+    vector<Territory *> attackList;
+    vector<Territory *> defendList;
     Hand *hand;
-    OrdersList *orderList;
+    Deck *deck;
+    string gamePhase;
     GameEngine *gameEngine;
 
     /**
@@ -36,8 +44,6 @@ private:
     friend ostream &operator<<(ostream &out, Player *o);  // override Stream insertion operator
 
     void printTerritories(vector<Territory *> territories);
-
-    string gamePhase;
 
 public:
     /**
@@ -74,15 +80,19 @@ public:
 
     void addTerritory(Territory *t);
 
+    void addTerritoryToList(Territory *territory, const string &listType);
+
     void removeTerritory(Territory *t);
 
     void eraseTerritory(Territory *t);
+
+    void setDeck(Deck *deck);
 
     vector<int> continentOwnershipComplete();
 
     OrdersList *getOrdersList();
 
-    static void setGamePhase(string gamePhase);
+    void setGamePhase(string gamePhase);
 
     string getGamePhase();
 
@@ -106,10 +116,18 @@ public:
     /**
      * Take in an order and add it into the OrderList
      */
-    OrdersList *issueOrder(Order *o);
+    void issueOrder();
+
+    OrdersList *issuesOrder(Order *o);
 
     //void executeNextOrderAndRemove();
-};
+    void playCard(Card *card, Deck *deck);
+
+    OrdersList *orderList;
+    vector<Territory *> territories;
+
+    void setHand(Hand *hand);
 
 /************************************************************ PlayerDriver **************************************************************/
-void testPlayers();
+void testPlayers(){
+}};

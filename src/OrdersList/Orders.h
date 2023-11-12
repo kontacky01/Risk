@@ -17,23 +17,21 @@ using namespace std;
 
 class Player;
 
-class OrderAbstract
-{
+class OrderAbstract {
 public:
     virtual void execute() = 0;
 };
 
-class Order : public OrderAbstract, public Subject, public ILoggable 
-{
+class Order : public OrderAbstract, public Subject, public ILoggable {
 public:
 
     Order();
 
-    Order(const Order* o);
+    Order(const Order *o);
 
     virtual ~Order(); // need to delete parent when call child destructor 
 
-    virtual Order* clone() const;
+    virtual Order *clone() const;
 
     /**
     * Checks if valid for execution, invalid orders can exist
@@ -43,7 +41,7 @@ public:
     bool getValid();
 
     void setValid(bool v);
-    
+
     /**
     * Executes order
     */
@@ -52,7 +50,7 @@ public:
     /**
     * Increment countOrderID by 1
     */
-    int incrementCount(); 
+    int incrementCount();
 
     int getCount();
 
@@ -66,13 +64,15 @@ public:
 
     virtual string getOrderName();
 
+    virtual void setOrderName(const string& orderName);
+
     void setPlayerGivenCardThisTurn(bool b);
 
     bool getPlayerGivenCardThisTurn();
 
-    bool pOwnsTerr(Player* p, Territory* t);
+    bool pOwnsTerr(Player *p, Territory *t);
 
-    bool terrIsAdjP(Territory *t1, Territory* t2);
+    bool terrIsAdjP(Territory *t1, Territory *t2);
 
     bool terrHasOwner(Territory *t);
 
@@ -83,21 +83,22 @@ protected:
 private:
     static int countOrderID;
     int orderID;
+    string orderName;
     bool valid;
-    friend ostream& operator<<(ostream& out, Order* o);  // overide Stream insertion operator
-    static bool pGivenCardThisTurn; 
+
+    friend ostream &operator<<(ostream &out, Order *o);  // override Stream insertion operator
+    static bool pGivenCardThisTurn;
 };
 
-class Deploy : public Order
-{
+class Deploy : public Order {
 public:
     Deploy();
 
-    Deploy(Player* p, Territory* terrToDeploy, int numReinToDeploy);
+    Deploy(Player *p, Territory *terrToDeploy, int numReinToDeploy);
 
-    Deploy(const Deploy* d);
+    Deploy(const Deploy *d);
 
-    Deploy* clone() const;
+    Deploy *clone() const;
 
     void execute();
 
@@ -120,29 +121,28 @@ public:
     string getOrderName();
 
 private:
-    Territory* terrToDeploy;
+    Territory *terrToDeploy;
     int numReinToDeploy;
-    vector<Territory*> tOwned;
+    vector<Territory *> tOwned;
     Player *p;
 };
 
-class Advance : public Order
-{
+class Advance : public Order {
 public:
     Advance();
 
-    Advance(const Advance* a);
+    Advance(const Advance *a);
 
-    Advance(Player* p, Territory* terrSource, Territory* terrTarget, int numReinToAdvnce);
+    Advance(Player *p, Territory *terrSource, Territory *terrTarget, int numReinToAdvnce);
 
-    Advance* clone() const;
+    Advance *clone() const;
 
     void execute();
 
     void executeForThisSpecificOrder();
 
     bool validate();
-    
+
 
     /**
     * Simulates battle between two armies.
@@ -160,25 +160,24 @@ public:
 
     string getOrderName();
 
-    Territory* getTerrTarget();
-    
+    Territory *getTerrTarget();
+
 private:
-    Player* p;
-    Territory* terrSource;
-    Territory* terrTarget;
+    Player *p;
+    Territory *terrSource;
+    Territory *terrTarget;
     int numReinToAdvnce;
 };
 
-class Bomb : public Order
-{
+class Bomb : public Order {
 public:
     Bomb();
 
-    Bomb(const Bomb* b);
+    Bomb(const Bomb *b);
 
-    Bomb(Player* p, Territory* terrTarget);
+    Bomb(Player *p, Territory *terrTarget);
 
-    Bomb* clone() const;
+    Bomb *clone() const;
 
     void execute();
 
@@ -189,88 +188,88 @@ public:
     bool terrTargetIsAdjP();
 
     void halfArmyUnits(Territory *t);
-    
+
     void addDescription();
-    
+
     string getDescription();
 
     string getOrderName();
+
 private:
-    Player* p;
-    Territory* terrTarget;
+    Player *p;
+    Territory *terrTarget;
 };
 
-class Blockade : public Order
-{
+class Blockade : public Order {
 public:
     Blockade();
-   
-    Blockade(const Blockade* a);
 
-    Blockade(Player* p, Player* pNeutral, Territory* t);
+    Blockade(const Blockade *a);
 
-    Blockade* clone() const;
-    
+    Blockade(Player *p, Player *pNeutral, Territory *t);
+
+    Blockade *clone() const;
+
     void execute();
 
     void executeForThisSpecificOrder();
 
     bool validate();
 
-    void doubleArmyUnits(Territory* t);
-    
+    void doubleArmyUnits(Territory *t);
+
     void addDescription();
-    
+
     string getDescription();
 
     string getOrderName();
+
 private:
-    Player* p;
-    Territory* terrTarget;
-    Player* pNeutral;
+    Player *p;
+    Territory *terrTarget;
+    Player *pNeutral;
 };
 
-class Airlift : public Order
-{
+class Airlift : public Order {
 public:
     Airlift();
-    
-    Airlift(const Airlift* a);
 
-    Airlift(Player* p, Territory* terrSource, Territory* terrTarget, int numArmyUnits);
+    Airlift(const Airlift *a);
 
-    Airlift* clone() const;
-    
+    Airlift(Player *p, Territory *terrSource, Territory *terrTarget, int numArmyUnits);
+
+    Airlift *clone() const;
+
     void execute();
 
     void executeForThisSpecificOrder();
 
     bool validate();
-    
+
     void addDescription();
-    
+
     string getDescription();
 
     string getOrderName();
+
 private:
-    Player* p;
-    Territory* terrSource;
-    Territory* terrTarget;
+    Player *p;
+    Territory *terrSource;
+    Territory *terrTarget;
     int numArmyUnits;
 
 };
 
-class Negotiate : public Order
-{
+class Negotiate : public Order {
 public:
     Negotiate();
-    
-    Negotiate(const Negotiate* a);
 
-    Negotiate(Player* pSource, Player* pTarget);
+    Negotiate(const Negotiate *a);
 
-    Negotiate* clone() const;
-    
+    Negotiate(Player *pSource, Player *pTarget);
+
+    Negotiate *clone() const;
+
     void execute();
 
     void executeForThisSpecificOrder();
@@ -278,23 +277,23 @@ public:
     bool validate();
 
     void deleteAdvancesAgainstBothPlayerTerritories();
-    
+
     void addDescription();
-    
+
     string getDescription();
 
     string getOrderName();
+
 private:
-    Player* pSource;
-    Player* pTarget;
+    Player *pSource;
+    Player *pTarget;
 };
 
 
-class OrdersList : public Subject, public ILoggable 
-{
+class OrdersList : public Subject, public ILoggable {
 public:
     OrdersList();
-    
+
     /**
      * Copy Constructor
      */
@@ -302,9 +301,10 @@ public:
 
     ~OrdersList();
 
-    virtual void addOrder(Order* o);
-    
+    virtual void addOrder(Order *o);
+
     string stringToLog();
+    int getSize() const;
 
     /**
     * Moves order to new location in OL
@@ -312,26 +312,26 @@ public:
     * @param id order ID of order to be moved
     */
     bool move(int pos, int id);
-    
+
     /**
      * Will delete and set Order ptr to null
      */
     bool remove(int id);
-    
-    vector <Order*> * getOL();
 
-    int getIndex(vector<Order*> ol, Order *o);
+    vector<Order *> *getOL();
+
+    int getIndex(vector<Order *> ol, Order *o);
 
     void executeAll(); //A2
 
     void executeNextOrder();
-    
-    void deleteOrdersList();
-  
-private:
-    vector<Order*> *OL;
 
-    friend ostream& operator << (ostream& out, OrdersList* ol); // overide Stream insertion operator
+    void deleteOrdersList();
+
+    vector<Order *> *OL;
+
+private:
+    friend ostream &operator<<(ostream &out, OrdersList *ol); // override Stream insertion operator
 
 };
 
@@ -344,4 +344,5 @@ void testOrdersLists();
 * test driver A2
 */
 void testOrderExecution();
+
 #endif

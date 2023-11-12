@@ -275,7 +275,7 @@ void testOrderExecution() {
             << "Time to test OrderExecution!! \n"
             << "*****************************\n\n";
     
-    // issueORders
+    // issuesOrders
     // go to each player ask then pick to add orders in the following sequence
     // pick 1 card > all Deploy > all Executions
 
@@ -373,10 +373,10 @@ void testOrderExecution() {
     cout << "Denmark Deploy with 50 reinforcnments Deploy is " << printBoolValue(d3->validate()) << "\n";
 
     cout << "...Issueing Deploys to Player 1 ...\n";
-    p1->issueOrder(d1);
-    p1->issueOrder(d2);
-    p1->issueOrder(d3);
-    p1->issueOrder(d4); 
+    p1->issuesOrder(d1);
+    p1->issuesOrder(d2);
+    p1->issuesOrder(d3);
+    p1->issuesOrder(d4); 
 
     cout << "...Show Player 1 has Deploys and 10 reinforcments ...\n\n";
     cout << p1;
@@ -449,11 +449,11 @@ void testOrderExecution() {
     cout << "Advance owned source but will LOSE battle: " << printBoolValue(a4->validate()) << "\n";
 
     cout << "...Issueing Deploys to Player 1 ...\n";
-    p1->issueOrder(a1);
-    p1->issueOrder(a2);
-    p1->issueOrder(a3);
-    p1->issueOrder(a4);
-    p1->issueOrder(a5);
+    p1->issuesOrder(a1);
+    p1->issuesOrder(a2);
+    p1->issuesOrder(a3);
+    p1->issuesOrder(a4);
+    p1->issuesOrder(a5);
 
     cout << "...Executing all order for player 1 ...\n";
     p1->getOrdersList()->executeAll();
@@ -520,10 +520,10 @@ void testOrderExecution() {
     cout << "Bomb territory player owns: " << printBoolValue(b4->validate()) << "\n";
 
     cout << "...Issueing Bombs to Player 1 ...\n";
-    p1->issueOrder(b1);
-    p1->issueOrder(b2);
-    p1->issueOrder(b3);
-    p1->issueOrder(b4);
+    p1->issuesOrder(b1);
+    p1->issuesOrder(b2);
+    p1->issuesOrder(b3);
+    p1->issuesOrder(b4);
 
     cout << "...Executing all order for player 1 ...\n";
     p1->getOrdersList()->executeAll();
@@ -562,8 +562,8 @@ void testOrderExecution() {
     cout << "Blockade player does not own Territory: " << printBoolValue(bl2->validate())<<"\n";
 
     cout << "...Issueing Blockade to Player 1 ...\n";
-    p1->issueOrder(bl1);
-    p1->issueOrder(bl2);
+    p1->issuesOrder(bl1);
+    p1->issuesOrder(bl2);
 
     cout << "...Executing all order for player 1 ...\n";
     p1->getOrdersList()->executeAll();
@@ -614,10 +614,10 @@ void testOrderExecution() {
 
 
     cout << "...Issueing Airlift to Player 1 ...\n";
-    p1->issueOrder(air1);
-    p1->issueOrder(air2);
-    p1->issueOrder(air3);
-    p1->issueOrder(air4);
+    p1->issuesOrder(air1);
+    p1->issuesOrder(air2);
+    p1->issuesOrder(air3);
+    p1->issuesOrder(air4);
 
     cout << "...Executing all orders for player 1 ...\n";
     p1->getOrdersList()->executeAll();
@@ -689,17 +689,17 @@ void testOrderExecution() {
     Advance* advance4 = new Advance(p2, t6sweden, t6denmark, 5);
 
     cout << "...Issue Orders to player 1 and player 2...\n\n";
-    p1->issueOrder(n1); // good
-    p1->issueOrder(n2); // bad
-    p1->issueOrder(deploy1);
-    p1->issueOrder(deploy2);
-    p1->issueOrder(advance1);
-    p1->issueOrder(advance2);
+    p1->issuesOrder(n1); // good
+    p1->issuesOrder(n2); // bad
+    p1->issuesOrder(deploy1);
+    p1->issuesOrder(deploy2);
+    p1->issuesOrder(advance1);
+    p1->issuesOrder(advance2);
 
-    p2->issueOrder(deploy3);
-    p2->issueOrder(deploy4);
-    p2->issueOrder(advance3);
-    p2->issueOrder(advance4);
+    p2->issuesOrder(deploy3);
+    p2->issuesOrder(deploy4);
+    p2->issuesOrder(advance3);
+    p2->issuesOrder(advance4);
 
     cout << "...Printing player 1 and player 2 OrdersList...\n";
     cout << "...Player 1...\n";

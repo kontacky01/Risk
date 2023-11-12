@@ -60,6 +60,7 @@ public:
     Map *gameMap();
 
     vector<Transition *> getTransitions();
+
 /**
  * This function checks if the currentState is startstate
 */
@@ -93,9 +94,9 @@ public:
 */
     bool isCurrentStateWinState();
 
-        int getPlayerNum();
+    int getPlayerNum() const;
 
-    vector<Player *> getPlayers();
+    static vector<Player *> getPlayers();
 
     void start();
 
@@ -103,17 +104,19 @@ public:
 
     void reinforcementPhase();
 
-    //void issueOrdersPhase();
-    //void executeOrdersPhase();
-    //bool isGameOver();
-    //void announceWinner();
-    //void switchToNextPlayer();
+    void issueOrdersPhase();
+
+    void executeOrdersPhase();
+
+    Player *checkForWinner();
+
+    void removePlayersWithoutTerritories();
 
     void setPlayers(vector<Player *> p);
 
 private:
     State *currentState;
-    Map *currentGameMap;
+    Map *currentGameMap{};
     vector<Transition *> transitions;
     int playerNum;
     //int currentPlayerIndex;
@@ -121,10 +124,8 @@ private:
     vector<Player *> players;
     vector<int> playerOrder;
     Deck *deck;
-    Map *map;
+    Map *map{};
     ::map<int, std::vector<Territory *>> playerTerritories;
-    State* currentState;
-    vector<Transition*> transitions;
 };
 /************************************************************ State **************************************************************/
 class State {
@@ -404,7 +405,6 @@ private:
 /***************************************************** GameEngineDriver **********************************************/
 void testGameStates();
 
-void testReinforcementPhase();
+void testMainGameLoop();
 
-/************************************************************ GameEngineDriver **************************************************************/
-void testGameStates();
+void testReinforcementPhase();

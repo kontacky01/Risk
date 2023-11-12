@@ -24,18 +24,18 @@ void testPlayers() {
   // init a player
   Player* p = new Player(t, h, o, 1);
 
-  cout << "---------> Test 1: Testing player methods (attack/defend/issueOrder) <---------\n\n";
+  cout << "---------> Test 1: Testing player methods (attack/defend/issuesOrder) <---------\n\n";
   // show that Player contains method toDefend()
   p->toDefend();
 
   // show that Player contains method toAttack()
   p->toAttack();
 
-  // show that Player contains method issueOrder()
+  // show that Player contains method issuesOrder()
   Order* newOrder = new Order();
-  p->issueOrder(newOrder);
+  p->issuesOrder(newOrder);
 
-  cout << "---------> Test 2: Testing coppied player methods (attack/defend/issueOrder) <---------\n\n";
+  cout << "---------> Test 2: Testing coppied player methods (attack/defend/issuesOrder) <---------\n\n";
   // show that player contains a copy constructor
   Player* pCopy = new Player(*p);
 
@@ -45,9 +45,9 @@ void testPlayers() {
   // show that Player contains method toAttack()
   pCopy->toAttack();
 
-  // show that Player contains method issueOrder()
+  // show that Player contains method issuesOrder()
   Order* newOrderCopy = new Order();
-  pCopy->issueOrder(newOrderCopy);
+  pCopy->issuesOrder(newOrderCopy);
 
   // print player details
   cout << p;
