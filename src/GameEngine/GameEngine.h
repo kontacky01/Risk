@@ -93,6 +93,10 @@ public:
  * This function checks if the currentState is winstate
 */
     bool isCurrentStateWinState();
+/**
+ * This function checks if the currentState is endstate
+*/
+    bool isCurrentStateEndState();
 
     int getPlayerNum() const;
 
