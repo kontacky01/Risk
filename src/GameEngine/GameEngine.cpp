@@ -58,8 +58,7 @@ GameEngine::GameEngine() : currentState(nullptr) {
     playerNum = int(0);
     playerOrder;
     deck = new Deck();
-    //map = new Map();
-    //firstRound = true;
+    currentGameMap = new Map();
 }
 
 /**
@@ -569,11 +568,11 @@ State *Transition::getNextState() {
  * Destructor
  **/
 GameEngine::~GameEngine() {
-    for (auto &player: players) {
-        delete player;
-    }
-    players.clear();
-    playerOrder.clear();
+    //for (auto &player: players) {
+   //     delete player;
+  //  }
+  //  players.clear();
+   // playerOrder.clear();
 }
 
 void GameEngine::start() {
@@ -597,8 +596,8 @@ int GameEngine::getPlayerNum() const {
 
 /************************************************* Helper functions **************************************************/
 void printPlayerReinforcement(const Player *player) {
-    std::cout << "[NEW] Reinforcement Pool of Player " << player->getID() << ": ";
-    std::cout << player->getReinforcement() << std::endl;
+    cout << "[NEW] Reinforcement Pool of Player " << player->getID() << ": ";
+    cout << player->getReinforcement() << std::endl;
 }
 
 struct InlineLoggable : public ILoggable {
@@ -613,6 +612,17 @@ struct InlineLoggable : public ILoggable {
 
 InlineLoggable createLogMessage(const std::string &message) {
     return InlineLoggable(message);
+}
+
+bool GameEngine::isGameOver() const {
+    for (auto& player : players) {
+        if (player->getTerritories().size() == currentGameMap->territoryList.size()) {
+            // This player owns all territories, game over
+            return true;
+        }
+    }
+    // No player owns all territories yet, game continues
+    return false;
 }
 
 /***************************************************** MainGameLoop **************************************************/
@@ -678,10 +688,10 @@ void GameEngine::issueOrdersPhase() {
     }
 }
 
-Player* GameEngine::checkForWinner() {
-    Player* winner = nullptr;
+Player *GameEngine::checkForWinner() {
+    Player *winner = nullptr;
 
-    for (auto& player : players) {
+    for (auto &player: players) {
         // Check if the player owns all territories
         if (player->getTerritories().size() == gameMap()->territoryList.size()) {
             winner = player;
@@ -692,7 +702,8 @@ Player* GameEngine::checkForWinner() {
     exit(0);
 }
 
-void GameEngine::removePlayersWithoutTerritories() {
+bool GameEngine::removePlayersWithoutTerritories() {
+    bool playerRemoved = false;
     auto it = players.begin();
     while (it != players.end()) {
         if ((*it)->getTerritories().empty()) {
@@ -703,6 +714,7 @@ void GameEngine::removePlayersWithoutTerritories() {
             ++it; // Move to the next player
         }
     }
+    return playerRemoved;
 }
 
 // helper function to execute orders for a player
@@ -738,10 +750,11 @@ void executeAssistForPlayer(Player *player, const string &orderName, const strin
         }
     }
 }
+
 void GameEngine::executeOrdersPhase() {
     while (true) {
         // loop through each player
-        for (auto currentPlayer : players) {
+        for (auto currentPlayer: players) {
             // get a reference to the current player.
             // store the size of the player's territory list before executing deploy orders.
             int territoriesBefore = currentPlayer->getTerritories().size();
@@ -755,14 +768,14 @@ void GameEngine::executeOrdersPhase() {
             // check if the player has gained new territories (territory list size increased).
             if (territoriesAfter > territoriesBefore) {
                 // if new territories were gained, draw a card from the deck for the player.
-                Card* drawnCard = deck->draw();
+                Card *drawnCard = deck->draw();
                 currentPlayer->getHand()->addCard(drawnCard);
             }
 
             // check if the player owns all territories on any continent
-            for (auto &continent : gameMap()->continentList) {
+            for (auto &continent: gameMap()->continentList) {
                 bool ownsAllTerritories = true;
-                for (auto &territory : continent->territoriesInContinents) {
+                for (auto &territory: continent->territoriesInContinents) {
                     if (territory->getOwnerId() != currentPlayer->getID()) {
                         ownsAllTerritories = false;
                         break;
@@ -783,7 +796,7 @@ void GameEngine::executeOrdersPhase() {
         }
 
         // Check for game end condition
-        Player* winner = checkForWinner();
+        Player *winner = checkForWinner();
         if (winner != nullptr) {
             cout << "Player " << winner->getID() << " wins!" << endl;
             exit(0);
@@ -792,21 +805,5 @@ void GameEngine::executeOrdersPhase() {
         // Remove players without territories
         removePlayersWithoutTerritories();
         reinforcementPhase();
-    }
-}
-
-void mainGameLoop() {
-    GameEngine gameEngine;
-
-    while (true) {
-        gameEngine.reinforcementPhase();
-        gameEngine.issueOrdersPhase();
-        gameEngine.executeOrdersPhase();
-
-        Player* winner = gameEngine.checkForWinner();
-        if (winner != nullptr) {
-            cout << "Player " << winner->getID() << " wins!" << endl;
-            break;
-        }
     }
 }

@@ -61,15 +61,15 @@ Player::~Player() {
     cout << "...Player destructor was called...\n";
     for (int i = 0; i < territories.size(); i++) {
         delete territories[i];
-        territories.at(i) = NULL;
+        territories.at(i) = nullptr;
     };
     territories.clear();
 
     delete hand;
-    hand = NULL;
+    hand = nullptr;
 
     delete orderList;
-    orderList = NULL;
+    orderList = nullptr;
 }
 
 /**

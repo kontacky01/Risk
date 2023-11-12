@@ -65,6 +65,8 @@ public:
 */
     bool isCurrentStateExecuteordersState();
 
+    bool isGameOver() const;
+
     int getPlayerNum() const;
 
     static vector<Player *> getPlayers();
@@ -81,9 +83,13 @@ public:
 
     Player *checkForWinner();
 
-    void removePlayersWithoutTerritories();
+    bool removePlayersWithoutTerritories();
 
     void setPlayers(vector<Player *> p);
+
+    void setMap(Map* map) {
+        this->currentGameMap = map;
+    }
 
 private:
     State *currentState;
@@ -95,7 +101,6 @@ private:
     vector<Player *> players;
     vector<int> playerOrder;
     Deck *deck;
-    Map *map{};
     ::map<int, std::vector<Territory *>> playerTerritories;
 };
 
