@@ -16,7 +16,6 @@ Player::Player(vector<Territory *> t, Hand *h, OrdersList *o, int id) {
     territories = t;
     hand = h;
     orderList = o;
-    bonusCounter = 0;
     this->id = id;
     this->reinforcements = 0;
 
@@ -399,7 +398,7 @@ void Player::issueOrder() {
         bool hasCard = false; // check if the player has the card in their hand
         for (auto &card : this->getHand()->hand) {
             if (card->getType() == orderName) {
-                this->playCard(card, deck);
+                playCard(card, deck);
                 cout << "\n~~~~~~ You have issued an order to: [" << card->getType() << "] !\n";
                 hasCard = true;
                 break;
@@ -431,29 +430,12 @@ string Player::stringToLog() {
     return {};
 }
 
-/*vector<int> Player::continentOwnershipComplete() {
-    int territoriesInCurrentContinent;
-    std::vector<int> controlBonuses;
-    // iterate through the continents on the game map and get number of territories in each
-    for (auto &continent: gameEngine->gameMap()->continentList) {
-        territoriesInCurrentContinent = continent->territoriesInContinents.size();
-        int territoryOwnershipCount = 0;
-
-        for (auto &territory: territories) {
-            if (territory->getContinentName() == continent->getName()) {
-                territoryOwnershipCount++;
-            }
-        }
-        // If player owns all territories in the continent, get its control bonus value
-        if (territoriesInCurrentContinent == territoryOwnershipCount) {
-            controlBonuses.push_back(continent->getControlBonusValue());
-        }
-    }
-    return controlBonuses;
-}*/
-
 void Player::playCard(Card *card, Deck *deck) {
     this->hand->play(card, deck);
+}
+
+void Player::setDeck(Deck *deck){
+    this->deck = deck;
 }
 
 OrdersList *Player::issuesOrder(Order *o) {

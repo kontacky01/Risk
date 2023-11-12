@@ -25,15 +25,19 @@ void testMainGameLoop() {
     Player *player[2];
     Deck *theDeck = new Deck();
     Card *card1 = new Card();
+    Card *card2 = new Card();
     card1->setType("bomb");
+    card2->setType("blockade");
 
     theDeck->fillDeck(3);  // Fill the deck with cards
 
     // Initialize 2 players
     for (int i = 0; i < 2; ++i) {
         player[i] = new Player();  // Create a new player
-        player[i]->setHand(new Hand());  // Allocate a new hand for the player
-        player[i]->getHand()->addCard(card1);
+        Hand* hand = new Hand();
+        hand->addCard(card1);
+        player[i]->setHand(hand);
+        player[i]->setDeck(theDeck);
         player[i]->orderList = new OrdersList();  // Create the player's orders list
         player[i]->setReinforcement(0);  // Give the player 50 army units
         cout << player[i]->getReinforcement() << endl;  // Output the units

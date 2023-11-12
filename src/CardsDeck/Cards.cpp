@@ -263,13 +263,6 @@ Hand::Hand() {
 */
 Hand::~Hand() {
     cout << "...Hand destructor was called..." << endl;
-
-    // Iterate through the cards in the hand and delete them
-    for (Card *card: hand) {
-        delete card;
-    }
-
-    // Clear the cards vector to release resources and prevent further access
     hand.clear();
 }
 
@@ -288,6 +281,12 @@ Hand::Hand(
 */
 Hand &Hand::operator=(const Hand &other) {
     if (this != &other) {
+        for (Card* card : hand) {
+            delete card;
+        }
+        hand.clear();
+
+        // Copy new cards
         for (size_t i = 0; i < other.hand.size(); ++i) {
             hand.push_back(new Card(*(other.hand[i])));
         }
