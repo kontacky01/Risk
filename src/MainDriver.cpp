@@ -14,7 +14,7 @@ int main()
     //testOrdersLists();
     //testPlayers();
     //testCards();
-    //testGameStates();
+    testGameStates();
 
     /*
     * Assignment 2

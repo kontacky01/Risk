@@ -115,6 +115,10 @@ Map *GameEngine::gameMap() {
     return currentGameMap;
 }
 
+void GameEngine::setGameMap(Map* map) {
+    currentGameMap = map;
+}
+
 /************************************************************ State **************************************************/
 /**
  * Default Constructor
@@ -178,10 +182,25 @@ void StartState::onExit(GameEngine &engine) {
 */
 void StartState::processCommand(GameEngine &engine, const string &command) {
     vector<Transition *> t = engine.getTransitions();
-    if (command == "loadmap") {
-        engine.setState(t[1]->getNextState());
+
+    // Find the position of the first space in the command
+    size_t spacePos = command.find(' ');
+    // Check if a space was found
+    if (spacePos != string::npos) {
+        // Extract the command and filename using substr
+        string cmd = command.substr(0, spacePos);
+        string filename = command.substr(spacePos + 1);
+
+        if (cmd == "loadmap") {
+            Map* gameMap = gameLoadMap("src/Map/MapFolder/" + filename);
+            engine.setGameMap(gameMap); // Set the loaded map in the engine
+            engine.setState(t[1]->getNextState());
+        } else {
+            cout << "Invalid command in Start State\n";
+            engine.displayAvailableCommands();
+        }
     } else {
-        cout << "Invalid command in Start State\n";
+        cout << "Invalid command format. Use 'loadmap filename'\n";
         engine.displayAvailableCommands();
     }
 }
@@ -217,14 +236,30 @@ void MaploadedState::onExit(GameEngine &engine) {
 */
 void MaploadedState::processCommand(GameEngine &engine, const string &command) {
     vector<Transition *> t = engine.getTransitions();
-    if (command == "loadmap") {
-        engine.setState(t[1]->getNextState());
+
+    //cout << "command: " << command << endl;
+    // Find the position of the first space in the command
+    size_t spacePos = command.find(' ');
+    // Check if a space was found
+    if (spacePos != string::npos) {
+        // Extract the command and filename using substr
+        string cmd = command.substr(0, spacePos);
+        string filename = command.substr(spacePos + 1);
+        if (cmd == "loadmap") {
+            Map* gameMap = gameLoadMap("src/Map/MapFolder/" + filename);
+            engine.setGameMap(gameMap); // Set the loaded map in the engine
+            engine.setState(t[1]->getNextState());
+        } else {
+            cout << "Invalid command in Maploaded State\n";
+            engine.displayAvailableCommands();
+        }
     } else if (command == "validatemap") {
+        validateMap(*engine.gameMap());
         engine.setState(t[2]->getNextState());
     } else {
         cout << "Invalid command in Maploaded State\n";
         engine.displayAvailableCommands();
-    }
+    }    
 }
 
 /************************************************************ MapvalidatedState **************************************/
@@ -714,3 +749,8 @@ void testMainGameLoop() {
     // display order list of player
     cout << player[1]->orderList << endl;
 }
+
+void testStartupPhase() {
+    testMainGameLoop();
+//    deleteMap(gameMap);
+};

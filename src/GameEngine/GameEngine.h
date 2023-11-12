@@ -7,6 +7,7 @@
 #include <fstream>
 #include <memory>
 #include <string>
+#include <sstream>
 #include <utility>
 #include <vector>
 
@@ -29,6 +30,18 @@ class Deck;
 //class ILoggable;
 
 class GameEngine {
+private:
+    State *currentState;
+    Map *currentGameMap{};
+    vector<Transition *> transitions;
+    int playerNum;
+//int currentPlayerIndex;
+//bool gameIsOver;
+    vector<Player *> players;
+    vector<int> playerOrder;
+    Deck *deck;
+    Map *map{};
+    ::map<int, std::vector<Territory *>> playerTerritories;
 public:
 /**
  * Default Constructor
@@ -62,7 +75,7 @@ public:
     void setState(State *newState);
 
     Map *gameMap();
-
+    void setGameMap(Map* map);
     vector<Transition *> getTransitions();
 /**
  * This function checks if the current is executeorders -- to be used in Orders class
@@ -87,18 +100,6 @@ public:
 
     void setPlayers(vector<Player *> p);
 
-private:
-    State *currentState;
-    Map *currentGameMap{};
-    vector<Transition *> transitions;
-    int playerNum;
-//int currentPlayerIndex;
-//bool gameIsOver;
-    vector<Player *> players;
-    vector<int> playerOrder;
-    Deck *deck;
-    Map *map{};
-    ::map<int, std::vector<Territory *>> playerTerritories;
 };
 
 /************************************************************ State *************************************************/
