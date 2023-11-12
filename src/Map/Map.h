@@ -154,9 +154,9 @@ public:
 /************************************************************ MapDriver ************************************************************/
 
 void testLoadMaps();
-Map gameLoadMap(string);
-void gameValidateMap(Map);
-void deleteMap(Map);
+Map* gameLoadMap(string);
+void validateMap(Map& map);
+void deleteMap(Map* map);
 
 /************************************************************ MapLoader ************************************************************/
 

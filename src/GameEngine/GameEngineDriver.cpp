@@ -19,6 +19,7 @@ void testGameStates() {
 
 void testStartupPhase() {
     vector<string> mapFiles;
+    Map* gameMap = nullptr;
     string directoryPath = "src/Map/MapFolder";  // Update this to your directory path
 
     // Check if the directory exists
@@ -35,11 +36,31 @@ void testStartupPhase() {
         }
     }
 
-    // Sort the vector of map files
+    // Sort the vector of map files and print the ordered list
     sort(mapFiles.begin(), mapFiles.end());
-
-    // Print the ordered list
     for (size_t i = 0; i < mapFiles.size(); ++i) {
-        cout << i << " - " << mapFiles[i] << endl;
+        cout << mapFiles[i] << endl;
     }
+
+    while(true) {
+        cout << "\nChoose a map file to open. Alternatively, enter \"quit\" to exit.\n";
+        string userInput;
+        cin >> userInput;
+        
+        if (userInput == "quit") {
+            return;
+        }
+        
+    // Validate the user input matching any map file
+        auto it = find(mapFiles.begin(), mapFiles.end(), userInput);
+        if (it != mapFiles.end()) {
+            gameMap = gameLoadMap(directoryPath + "/" + *it);
+            validateMap(*gameMap);
+            break;
+        } else {
+            cout << "\nInvalid map file. Please choose a valid one." << endl;
+        }
+    }
+    testMainGameLoop();
+    deleteMap(gameMap);
 };

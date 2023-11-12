@@ -19,11 +19,11 @@ int main()
     /*
     * Assignment 2
     */
+    testStartupPhase();
     //testOrderExecution();
     //testLoggingObserver();
     //mainGameLoop();
-    testStartupPhase();
-    testMainGameLoop();
+    //testMainGameLoop();
 
     return 0;
 }

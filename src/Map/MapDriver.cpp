@@ -76,22 +76,23 @@ void testLoadMaps() {
     map9 = NULL;
 };
 
-Map loadMap(string mapfile) {
+Map* gameLoadMap(string mapfile) {
     MapLoader* loader = new MapLoader();
 
     cout << "---------> Test 1: Load a map <---------\n\n";
     Map* map1 = loader->loadMap(mapfile);
     map1->printMapSummary();
 
-    return *map1;
+    delete loader;
+    return map1;
 };
 
-void validateMap(Map *map) {
+void validateMap(Map& map) {
     cout << "---------> Test 2: Validate a map <---------\n\n";
-    map->validate();
+    map.validate();
 };
 
-void deleteMap(Map *map) {
+void deleteMap(Map* map) {
     cout << "---------> Test 3: Delete the map <---------\n\n";
     delete map;
     map = NULL;
