@@ -1,8 +1,9 @@
-#include "Map/Map.h"
-#include "Player/Player.h"
-#include "OrdersList/Orders.h"
-#include "CardsDeck/Cards.h"
-#include "GameEngine/GameEngine.h"
+#include "../CommandProcessing/CommandProcessing.h"
+#include "../GameEngine/GameEngine.h"
+#include "../Map/Map.h"
+#include "../Player/Player.h"
+#include "../OrdersList/Orders.h"
+#include "../CardsDeck/Cards.h"
 #include "LoggingObserver/LoggingObserver.h"
 
 int main()
@@ -19,11 +20,12 @@ int main()
     /*
     * Assignment 2
     */
-    testStartupPhase();
-    //testOrderExecution();
-    //testLoggingObserver();
-    //mainGameLoop();
-    //testMainGameLoop();
 
+    //testCommandProcessor(); //part 1 in CommandProcessingDriver.cpp
+    //testStartupPhase();  //part2 in GameEngineDriver.cpp
+    //testMainGameLoop();  //part3 in GameEngineDriver.cpp
+    //testOrderExecution();  //part4 in OrdersDriver.cpp
+    //testLoggingObserver(); //part5 in LoggingObserverDriver.cpp
+  
     return 0;
 }

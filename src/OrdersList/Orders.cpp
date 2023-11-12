@@ -64,11 +64,15 @@ string Order::stringToLog() {
 
 int Order::incrementCount() {
     return ++countOrderID;
-};
+}
 
 int Order::getCount() {
     return countOrderID;
-};
+}
+
+int OrdersList::getSize() const {
+    return OL->size();
+}
 
 
 void Order::setOrderID(int id) {
@@ -321,7 +325,7 @@ void Advance::executeForThisSpecificOrder() {
 }
 
 /**
- * @brief Valid if Territory is adjacant and player owns Source Territory
+ * @brief Valid if Territory is adjacent and player owns Source Territory
  */
 bool Advance::validate() {
     if (terrIsAdjP(this->terrSource, this->terrTarget) && pOwnsTerr(p, this->terrSource))
@@ -330,7 +334,7 @@ bool Advance::validate() {
 }
 
 /**
-* Simulates battle between Source and Targer Territories, source attacks first. 
+* Simulates battle between Source and Target Territories, source attacks first.
 * RoundRobin style Source and Target will have a 60% adn 70% chance
 * of winning an attack or defend, and the resulting army will lose 1
 * of their army forces until one territory reaches 0 armies. 

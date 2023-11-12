@@ -33,12 +33,11 @@ class Player : public Subject, ILoggable {
 private:
     int id;
     int reinforcements;
-    vector<Territory *> territories;
-    vector<Territory*> attackList;
-    vector<Territory*> defendList;
+    vector<Territory *> attackList;
+    vector<Territory *> defendList;
     Hand *hand;
     Deck *deck;
-
+    string gamePhase;
     GameEngine *gameEngine;
 
     /**
@@ -47,8 +46,6 @@ private:
     friend ostream &operator<<(ostream &out, Player *o);  // override Stream insertion operator
 
     void printTerritories(vector<Territory *> territories);
-
-    string gamePhase;
 
 public:
     /**
@@ -91,6 +88,8 @@ public:
 
     void eraseTerritory(Territory *t);
 
+    void setDeck(Deck *deck);
+
     vector<int> continentOwnershipComplete();
 
     OrdersList *getOrdersList();
@@ -127,7 +126,10 @@ public:
     void playCard(Card *card, Deck *deck);
 
     OrdersList *orderList;
-};
+    vector<Territory *> territories;
+
+    void setHand(Hand *hand);
 
 /************************************************************ PlayerDriver **************************************************************/
-void testPlayers();
+void testPlayers()
+};
