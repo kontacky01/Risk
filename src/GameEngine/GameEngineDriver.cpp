@@ -4,72 +4,32 @@
 #include "Cards.h"
 #include "Orders.h"
 
-void testMainGameLoop() {
-    // initialize game engine and map loader
-    GameEngine gameEngine;
-    MapLoader mapLoader;
-    Map *map = mapLoader.loadMap("../src/Map/MapFolder/World.map"); // loading map
-    gameEngine.setMap(map); // set the map in the game engine
+void testMainGameLoop(GameEngine& gameEngine) {
+    // Create test territories
+    Territory* territoryA = new Territory("Territory A", 1, 1, 10);
+    Territory* territoryB = new Territory("Territory B", 2, 2, 15);
+    Territory* territoryC = new Territory("Territory C", 3, 1, 20);
 
-    vector<Territory *> territoriesPlayer1;
-    vector<Territory *> territoriesPlayer2;
+    // Add territories to player 1
+    vector<Territory*> territoriesPlayer1 { territoryA, territoryB };
 
-    for (int i = 0; i < map->territoryList.size(); i++) {
-        if (i < map->territoryList.size() / 2) {
-            territoriesPlayer1.push_back(map->territoryList[i]);
+    // Add territories to player 2
+    vector<Territory*> territoriesPlayer2 { territoryC };
+
+    // Print territories for Player 1
+    cout << "\n\nTerritories for Player 1:" << endl;
+    for (Territory* territory : territoriesPlayer1) {
+        if (territory != nullptr) {
+            cout << territory->getName() << endl;
         } else {
-            territoriesPlayer2.push_back(map->territoryList[i]);
-        }
-    }
-    Hand *handPlayer1 = new Hand(); // Assuming Hand has a default constructor
-    Hand *handPlayer2 = new Hand();
-
-    OrdersList *ordersListPlayer1 = new OrdersList(); // Assuming OrdersList has a default constructor
-    OrdersList *ordersListPlayer2 = new OrdersList();
-
-    Player player1(territoriesPlayer1, handPlayer1, ordersListPlayer1, 1); // Player ID: 1
-    Player player2(territoriesPlayer2, handPlayer2, ordersListPlayer2, 2); // Player ID: 2
-    gameEngine.setPlayers({&player1, &player2});
-
-
-    // begin game loop
-    while (!gameEngine.isGameOver()) {
-        cout << "Starting Reinforcement Phase" << endl;
-        gameEngine.reinforcementPhase();
-        cout << "Reinforcements for Player " << player1.getID() << ":" << endl;
-        cout << "Reinforcements for Player " << player2.getID() << ":" << endl;
-
-
-        cout << "Starting Issue Orders Phase" << endl;
-        gameEngine.issueOrdersPhase();
-        // Display issued orders
-        // ...
-
-        cout << "Starting Execute Orders Phase" << endl;
-        gameEngine.executeOrdersPhase();
-        // Display results of executed orders
-        // ...
-
-        // check for players to remove
-        if (gameEngine.removePlayersWithoutTerritories()) {
-            cout << "Players without territories have been removed." << endl;
-        }
-
-        // check for game end condition
-        Player *winner = gameEngine.checkForWinner();
-        if (winner != nullptr) {
-            cout << "Player " << winner->getID() << " wins the game!" << endl;
-            break;
+            cout << "Null territory found in Player 1's list." << endl;
         }
     }
 
-    // cleanup
-    cout << "...Cleaning up game resources..." << endl;
-
-    delete map;
-    map = nullptr;
-
-    cout << "Game resources cleaned up successfully." << endl;
+    // Dynamic allocation of players and their components
+    Player* player1 = new Player(territoriesPlayer1, new Hand(), new OrdersList(), 1);
+    Player* player2 = new Player(territoriesPlayer2, new Hand(), new OrdersList(), 2);
+    gameEngine.setPlayers({player1, player2});
 }
 
 

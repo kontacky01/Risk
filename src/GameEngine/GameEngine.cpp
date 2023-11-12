@@ -626,7 +626,26 @@ bool GameEngine::isGameOver() const {
 }
 
 /***************************************************** MainGameLoop **************************************************/
+void GameEngine::mainGameLoop() {
+
+    testMainGameLoop(*this);
+
+    reinforcementPhase();
+    issueOrdersPhase();
+    //executeOrdersPhase();
+
+}
+
+void GameEngine::cleanupResources() {
+    for (Player *player : players) {
+        delete player;
+    }
+    players.clear();
+
+}
+
 void GameEngine::reinforcementPhase() {
+    cout << "Entering Reinforcement Phase" << endl;
     // loop through every player
     for (auto &player: players) {
         // set player's game phase status to the current "Reinforcement" phase
