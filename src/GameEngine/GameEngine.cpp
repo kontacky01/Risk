@@ -74,7 +74,7 @@
  * This functions informs the user what state they are in and the valid commands
 */
     void GameEngine::displayAvailableCommands(){
-        if (currentState) {
+        if (currentState && !isCurrentStateEndState) {
             cout << "\nThe valid Command in this state is: ";
             for(int i=0;i<transitions.size();i++){
                 if(currentState == transitions[i]->getCurrentState()){
@@ -151,6 +151,12 @@
 */
     bool GameEngine::isCurrentStateWinState(){
         return dynamic_cast<WinState*>(currentState) != nullptr;
+    }
+/**
+ * This function checks if the currentState is endstate
+*/
+    bool GameEngine::isCurrentStateEndState(){
+	    return dynamic_cast<EndState*>(currentState) != nullptr;
     }
 
 /************************************************************ State **************************************************************/
