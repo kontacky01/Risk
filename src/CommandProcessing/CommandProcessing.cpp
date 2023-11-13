@@ -5,7 +5,7 @@
  * Destructor
  */
     Command::~Command(){
-		cout << "Command Destructor was called";
+		cout << "\nCommand Destructor was called";
 	}
 /**
  * Constructor with an argument(s)
@@ -45,7 +45,7 @@
         return this->effect;
     }
     
-    void Command::saveEffect(string& effect){
+    void Command::saveEffect(string effect){
         this->effect = effect;
         notify(this);
     }
@@ -66,7 +66,7 @@
  * Destructor
  */
     CommandProcessor::~CommandProcessor(){
-		cout << "CommandProcessor Destructor was called";
+		cout << "\nCommandProcessor Destructor was called";
 	}
 /**
  * Constructor with with an argument(s)
@@ -99,7 +99,7 @@
  */
     string CommandProcessor::readCommand(){
         string commandstr;
-        cout << "Enter a command:\n";
+        cout << "\nEnter a command:\n";
         cin >> commandstr;
         saveCommand(commandstr);
         return commandstr;

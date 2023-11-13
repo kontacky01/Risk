@@ -1,8 +1,8 @@
 #include "GameEngine.h"
-#include "Player.h"
-#include "Map.h"
-#include "Cards.h"
-#include "Orders.h"
+#include "../Player/Player.h"
+#include "../Map/Map.h"
+#include "../CardsDeck/Cards.h"
+#include "../OrdersList/Orders.h"
 #include <random>
 
 void initializeGameMap(GameEngine *gameEngine) {

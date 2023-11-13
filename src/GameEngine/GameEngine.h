@@ -105,6 +105,8 @@ public:
 */
     bool isCurrentStateEndState();
 
+    bool isGameOver() const;
+
     int getPlayerNum() const;
 
     static vector<Player *> getPlayers();
@@ -141,7 +143,7 @@ private:
     Deck *deck;
     Map *map;
     ::map<int, vector<Territory *>> playerTerritories;
-};+
+};
 /************************************************************ State **************************************************************/
 class State {
 public:
@@ -422,6 +424,6 @@ void testGameStates();
 
 void initializeGame(GameEngine &engine);
 
-int testMainGameLoop();
+void testMainGameLoop();
 
 void testStartupPhase();
