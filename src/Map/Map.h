@@ -146,7 +146,6 @@ public:
     bool validate();
 
     vector<Continent *> continentList;
-
     vector<Territory *> territoryList;
     map<int, Territory *> territories;
 };
