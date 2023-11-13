@@ -78,6 +78,14 @@ public:
 
     void subtractReinforcements(int r);
 
+    void setTerritories(const std::vector<Territory*>& newTerritories) {
+        territories = newTerritories;
+    }
+
+    const std::vector<Territory*>& getTerritories() const {
+        return territories;
+    }
+
     vector<Territory *> getTerritories();
 
     void addTerritory(Territory *t);
@@ -123,12 +131,14 @@ public:
     OrdersList *issuesOrder(Order *o);
 
     //void executeNextOrderAndRemove();
-    void playCard(Card *card, Deck *deck);
+    void playCard(Card *card, Deck *deck, OrdersList *OL);
 
     OrdersList *orderList;
     vector<Territory *> territories;
 
     void setHand(Hand *hand);
+
+    Deck* getDeck();
 
 /************************************************************ PlayerDriver **************************************************************/
 void testPlayers()
