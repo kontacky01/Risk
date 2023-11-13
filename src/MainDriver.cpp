@@ -13,14 +13,17 @@ int main() {
     //testOrdersLists();
     //testPlayers();
     //testCards();
-    //testGameStates();
+    testGameStates();
 
     /*
     * Assignment 2
     */
-    //testOrderExecution();
-    //testLoggingObserver();
-    //mainGameLoop();
 
-    testMainGameLoop();
+    //testCommandProcessor(); //part 1 in CommandProcessingDriver.cpp
+    //testStartupPhase();  //part2 in GameEngineDriver.cpp
+    //testMainGameLoop();  //part3 in GameEngineDriver.cpp
+    //testOrderExecution();  //part4 in OrdersDriver.cpp
+    //testLoggingObserver(); //part5 in LoggingObserverDriver.cpp
+  
+    return 0;
 }

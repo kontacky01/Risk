@@ -1,30 +1,52 @@
 #pragma once
 
-#include <string>
+
 #include <algorithm>
-#include <vector>
 #include <ctime>
 #include <iostream>
-#include "Map.h"
+#include <filesystem>
+#include <fstream>
+#include <memory>
+#include <string>
+#include <sstream>
+#include <utility>
+#include <vector>
+
+#include "../CardsDeck/Cards.h"
+#include "../CommandProcessing/CommandProcessing.h"
+#include "../LoggingObserver/LoggingObserver.h"
+#include "../Map/Map.h"
+#include "../OrdersList/Orders.h"
+#include "../Player/Player.h"
 
 using namespace std;
 
 /********************************************************** Game Engine **********************************************/
 // Forward declarations
 class State;
-
 class Transition;
-
 class Player;
-
 class Map;
-
 class Deck;
+//class Subject;
+//class ILoggable;
 
-class Subject;
 
 class GameEngine {
-public:
+private:
+    State *currentState;
+    Map *currentGameMap{};
+    vector<Transition *> transitions;
+    int playerNum;
+//int currentPlayerIndex;
+//bool gameIsOver;
+    vector<Player *> players;
+    vector<int> playerOrder;
+    Deck *deck;
+    Map *map{};
+    ::map<int, std::vector<Territory *>> playerTerritories;
+
+  public:
 /**
  * Default Constructor
  */
@@ -59,7 +81,7 @@ public:
     void setGameMap(Map* map);
 
     Map *gameMap();
-
+    void setGameMap(Map* map);
     vector<Transition *> getTransitions();
 
 /**
@@ -68,6 +90,16 @@ public:
     bool isCurrentStateExecuteordersState();
 
     bool isGameOver() const;
+
+/**
+ * This function checks if the currentState is winstate
+*/
+    bool isCurrentStateWinState();
+/**
+ * This function checks if the currentState is endstate
+*/
+    bool isCurrentStateEndState();
+
 
     int getPlayerNum() const;
 
@@ -88,6 +120,7 @@ public:
     bool removePlayersWithoutTerritories();
 
     void setPlayers(vector<Player *> p);
+
 
     void setMap(Map* map);
 
@@ -116,6 +149,7 @@ private:
 
     Map *map;
     bool firstRound;
+
 };
 
 /************************************************************ State *************************************************/
@@ -450,5 +484,7 @@ private:
 
 /***************************************************** GameEngineDriver **********************************************/
 void testGameStates();
+
 void initializeGame(GameEngine& engine);
 int testMainGameLoop();
+void testStartupPhase();

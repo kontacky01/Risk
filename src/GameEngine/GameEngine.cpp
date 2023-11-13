@@ -1,12 +1,6 @@
 #include "LoggingObserver.h"
 #include "GameEngine.h"
 
-#include <utility>
-#include <memory>
-#include "Cards.h"
-#include "Player.h"
-#include "Orders.h"
-
 /**
  * Default Constructor
  */
@@ -76,12 +70,14 @@ vector<Transition *> GameEngine::getTransitions() {
 /**
  * This functions informs the user what state they are in and the valid commands
 */
-void GameEngine::displayAvailableCommands() {
-    if (currentState) {
-        cout << "\nThe valid Command in this state is: ";
-        for (int i = 0; i < transitions.size(); i++) {
-            if (currentState == transitions[i]->getCurrentState()) {
-                cout << i + 1 << ")" << transitions[i]->getCommand() << "  ";
+
+    void GameEngine::displayAvailableCommands(){
+        if (currentState && !isCurrentStateEndState) {
+            cout << "\nThe valid Command in this state is: ";
+            for(int i=0;i<transitions.size();i++){
+                if(currentState == transitions[i]->getCurrentState()){
+                    cout << i+1 << ")" << transitions[i]->getCommand() << "  ";
+                }
             }
         }
     }
@@ -113,20 +109,28 @@ void GameEngine::setState(State *newState) {
 /**
  * This function checks if the current is executeorders -- to be used in Orders class
 */
-bool GameEngine::isCurrentStateExecuteordersState() {
-    return dynamic_cast<ExecuteordersState *>(currentState) != nullptr;
-}
+
+    bool GameEngine::isCurrentStateWinState(){
+        return dynamic_cast<WinState*>(currentState) != nullptr;
+    }
+/**
+ * This function checks if the currentState is endstate
+*/
+    bool GameEngine::isCurrentStateEndState(){
+	    return dynamic_cast<EndState*>(currentState) != nullptr;
+    }
 
 /************************************************************ State **************************************************************/
 Map *GameEngine::gameMap() {
     return currentGameMap;
 }
 
-void GameEngine::setMap(Map *map) {
-    this->currentGameMap = map;
+void GameEngine::setGameMap(Map* map) {
+    currentGameMap = map;
 }
 
-/************************************************************ State **************************************************/
+/************************************************************ State **************************************************************/
+
 /**
  * Default Constructor
  */
@@ -187,12 +191,29 @@ void StartState::onExit(GameEngine &engine) {
 /**
  * This functions processes the user's command if it is valid and updates the state of the game
 */
+
 void StartState::processCommand(GameEngine &engine, const string &command) {
     vector<Transition *> t = engine.getTransitions();
-    if (command == "loadmap") {
-        engine.setState(t[1]->getNextState());
+
+    // Find the position of the first space in the command
+    size_t spacePos = command.find(' ');
+    // Check if a space was found
+    if (spacePos != string::npos) {
+        // Extract the command and filename using substr
+        string cmd = command.substr(0, spacePos);
+        string filename = command.substr(spacePos + 1);
+
+        if (cmd == "loadmap") {
+            Map* gameMap = gameLoadMap("src/Map/MapFolder/" + filename);
+            engine.setGameMap(gameMap); // Set the loaded map in the engine
+            engine.setState(t[1]->getNextState());
+        } else {
+            cout << "Invalid command in Start State\n";
+            engine.displayAvailableCommands();
+        }
+
     } else {
-        cout << "Invalid command in Start State\n";
+        cout << "Invalid command format. Use 'loadmap filename'\n";
         engine.displayAvailableCommands();
     }
 }
@@ -226,16 +247,33 @@ void MaploadedState::onExit(GameEngine &engine) {
 /**
  * This functions processes the user's command if it is valid and updates the state of the game
 */
+
 void MaploadedState::processCommand(GameEngine &engine, const string &command) {
     vector<Transition *> t = engine.getTransitions();
-    if (command == "loadmap") {
-        engine.setState(t[1]->getNextState());
+
+    //cout << "command: " << command << endl;
+    // Find the position of the first space in the command
+    size_t spacePos = command.find(' ');
+    // Check if a space was found
+    if (spacePos != string::npos) {
+        // Extract the command and filename using substr
+        string cmd = command.substr(0, spacePos);
+        string filename = command.substr(spacePos + 1);
+        if (cmd == "loadmap") {
+            Map* gameMap = gameLoadMap("src/Map/MapFolder/" + filename);
+            engine.setGameMap(gameMap); // Set the loaded map in the engine
+            engine.setState(t[1]->getNextState());
+        } else {
+            cout << "Invalid command in Maploaded State\n";
+            engine.displayAvailableCommands();
+        }
     } else if (command == "validatemap") {
+        validateMap(*engine.gameMap());
         engine.setState(t[2]->getNextState());
     } else {
         cout << "Invalid command in Maploaded State\n";
         engine.displayAvailableCommands();
-    }
+    }    
 }
 
 /************************************************************ MapvalidatedState **************************************/
@@ -660,6 +698,7 @@ void GameEngine::reinforcementPhase() {
 
         // notify log of phase status change
         InlineLoggable logMessage = createLogMessage(
+
                 "\nPlayer " + to_string(player->getID()) + " is now in the [Reinforcement] phase of the game.");
         player->notify(&logMessage);
 
@@ -695,6 +734,7 @@ void GameEngine::issueOrdersPhase() {
         InlineLoggable logMessage("\nPlayer: " + to_string(player->getID()) +
                                   " is now in the [Issuing Orders] phase of the game.");
         player->notify(&logMessage);
+
         // get current player's id and hand to determine what orders they are allowed to issue
         bool continueIssuingOrders = true;
         while (continueIssuingOrders) {
@@ -783,6 +823,10 @@ void executeAssistForPlayer(Player *player, const string &orderName, const strin
     }
 }
 
+void testStartupPhase() {
+    testMainGameLoop();
+//    deleteMap(gameMap);
+};
 void GameEngine::executeOrdersPhase() {
     while (true) {
         // loop through each player
