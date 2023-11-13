@@ -1,52 +1,40 @@
 #pragma once
 
-
+#include <string>
 #include <algorithm>
+#include <vector>
 #include <ctime>
 #include <iostream>
-#include <filesystem>
-#include <fstream>
+#include <utility>
 #include <memory>
 #include <string>
 #include <sstream>
 #include <utility>
 #include <vector>
 
+#include "../LoggingObserver/LoggingObserver.h"
 #include "../CardsDeck/Cards.h"
 #include "../CommandProcessing/CommandProcessing.h"
-#include "../LoggingObserver/LoggingObserver.h"
-#include "../Map/Map.h"
 #include "../OrdersList/Orders.h"
 #include "../Player/Player.h"
+#include "../Map/Map.h"
 
 using namespace std;
 
 /********************************************************** Game Engine **********************************************/
 // Forward declarations
 class State;
+
 class Transition;
+
 class Player;
+
 class Map;
+
 class Deck;
-//class Subject;
-//class ILoggable;
 
-
-class GameEngine {
-private:
-    State *currentState;
-    Map *currentGameMap{};
-    vector<Transition *> transitions;
-    int playerNum;
-//int currentPlayerIndex;
-//bool gameIsOver;
-    vector<Player *> players;
-    vector<int> playerOrder;
-    Deck *deck;
-    Map *map{};
-    ::map<int, std::vector<Territory *>> playerTerritories;
-
-  public:
+class GameEngine : public Subject, public ILoggable{
+public:
 /**
  * Default Constructor
  */
@@ -78,14 +66,44 @@ private:
 */
     void setState(State *newState);
 
-    void setGameMap(Map* map);
+    void setGameMap(Map *map);
 
     Map *gameMap();
-    void setGameMap(Map* map);
+
     vector<Transition *> getTransitions();
 
 /**
- * This function checks if the current is executeorders -- to be used in Orders class
+ * This function checks if the currentState is startstate
+*/
+    bool isCurrentStateStartState();
+
+/**
+ * This function checks if the currentState is maploadedstate
+*/
+    bool isCurrentStateMaploadedState();
+
+/**
+ * This function checks if the currentState is mapvalidatedstate
+*/
+    bool isCurrentStateMapvalidatedState();
+
+/**
+ * This function checks if the currentState is playersaddedstate
+*/
+    bool isCurrentStatePlayersaddedState();
+
+/**
+ * This function checks if the currentState is assignreinforcementstate
+*/
+    bool isCurrentStateAssignreinforcementState();
+
+/**
+ * This function checks if the currentState is issueordersstate
+*/
+    bool isCurrentStateIssueordersState();
+
+/**
+ * This function checks if the current is executeorders
 */
     bool isCurrentStateExecuteordersState();
 
@@ -95,11 +113,11 @@ private:
  * This function checks if the currentState is winstate
 */
     bool isCurrentStateWinState();
+
 /**
  * This function checks if the currentState is endstate
 */
     bool isCurrentStateEndState();
-
 
     int getPlayerNum() const;
 
@@ -121,35 +139,23 @@ private:
 
     void setPlayers(vector<Player *> p);
 
-
-    void setMap(Map* map);
-
-    void setMap(map<int, Territory*>& territoriesMap) {
-        playerTerritoriesMap = territoriesMap;
-    }
-
-    void setMap(map<int, vector<Territory *>> &territories) {
-        playerTerritories = territories;
-    }
-
     void cleanupResources();
-    ::map<int, std::vector<Territory *>> playerTerritories;
-    std::map<int, Territory*> playerTerritoriesMap;
+
+    string stringToLog();
+
+    void addPlayer(Player* player);
+
 
 private:
     State *currentState;
     Map *currentGameMap;
     vector<Transition *> transitions;
     int playerNum;
-//int currentPlayerIndex;
-//bool gameIsOver;
     vector<Player *> players;
     vector<int> playerOrder;
     Deck *deck;
-
     Map *map;
-    bool firstRound;
-
+    ::map<int, vector<Territory *>> playerTerritories;
 };
 
 /************************************************************ State *************************************************/
@@ -485,6 +491,8 @@ private:
 /***************************************************** GameEngineDriver **********************************************/
 void testGameStates();
 
-void initializeGame(GameEngine& engine);
+void initializeGame(GameEngine &engine);
+
 int testMainGameLoop();
+
 void testStartupPhase();

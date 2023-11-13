@@ -1,35 +1,39 @@
 #include "LoggingObserver.h"
 #include "GameEngine.h"
 
+#include <utility>
+#include <memory>
+
 /**
  * Default Constructor
- */
-GameEngine::GameEngine() : currentState(nullptr) {
+ */StartState *s1 = new StartState();
 
-    auto *s1 = new StartState();
-    auto *s2 = new MaploadedState();
-    auto *s3 = new MapvalidatedState();
-    auto *s4 = new PlayersaddedState();
-    auto *s5 = new AssignreinforcementState();
-    auto *s6 = new IssueordersState();
-    auto *s7 = new ExecuteordersState();
-    auto *s8 = new WinState();
-    auto *s9 = new EndState();
+GameEngine::GameEngine() : currentState(s1) {
 
-    auto *t1 = new Transition(s1, "loadmap", s2);
-    auto *t2 = new Transition(s2, "loadmap", s2);
-    auto *t3 = new Transition(s2, "validatemap", s3);
-    auto *t4 = new Transition(s3, "addplayer", s4);
-    auto *t5 = new Transition(s4, "addplayer", s4);
-    auto *t6 = new Transition(s4, "gamestart", s5);
-    auto *t7 = new Transition(s5, "issueorder", s6);
-    auto *t8 = new Transition(s6, "issueorder", s6);
-    auto *t9 = new Transition(s6, "endissueorders", s7);
-    auto *t10 = new Transition(s7, "execorder", s7);
-    auto *t11 = new Transition(s7, "win", s8);
-    auto *t12 = new Transition(s7, "endexecorders", s5);
-    auto *t13 = new Transition(s8, "replay", s1);
-    auto *t14 = new Transition(s8, "quit", s9);
+
+    MaploadedState *s2 = new MaploadedState();
+    MapvalidatedState *s3 = new MapvalidatedState();
+    PlayersaddedState *s4 = new PlayersaddedState();
+    AssignreinforcementState *s5 = new AssignreinforcementState();
+    IssueordersState *s6 = new IssueordersState();
+    ExecuteordersState *s7 = new ExecuteordersState();
+    WinState *s8 = new WinState();
+    EndState *s9 = new EndState();
+
+    Transition *t1 = new Transition(s1, "loadmap", s2);
+    Transition *t2 = new Transition(s2, "loadmap", s2);
+    Transition *t3 = new Transition(s2, "validatemap", s3);
+    Transition *t4 = new Transition(s3, "addplayer", s4);
+    Transition *t5 = new Transition(s4, "addplayer", s4);
+    Transition *t6 = new Transition(s4, "gamestart", s5);
+    Transition *t7 = new Transition(s5, "issueorder", s6);
+    Transition *t8 = new Transition(s6, "issueorder", s6);
+    Transition *t9 = new Transition(s6, "endissueorders", s7);
+    Transition *t10 = new Transition(s7, "execorder", s7);
+    Transition *t11 = new Transition(s7, "win", s8);
+    Transition *t12 = new Transition(s7, "endexecorders", s5);
+    Transition *t13 = new Transition(s8, "replay", s1);
+    Transition *t14 = new Transition(s8, "quit", s9);
 
     addTransition(t1);
     addTransition(t2);
@@ -53,7 +57,6 @@ GameEngine::GameEngine() : currentState(nullptr) {
     playerOrder;
     deck = new Deck();
     currentGameMap = new Map();
-
 }
 
 /**
@@ -70,14 +73,12 @@ vector<Transition *> GameEngine::getTransitions() {
 /**
  * This functions informs the user what state they are in and the valid commands
 */
-
-    void GameEngine::displayAvailableCommands(){
-        if (currentState && !isCurrentStateEndState) {
-            cout << "\nThe valid Command in this state is: ";
-            for(int i=0;i<transitions.size();i++){
-                if(currentState == transitions[i]->getCurrentState()){
-                    cout << i+1 << ")" << transitions[i]->getCommand() << "  ";
-                }
+void GameEngine::displayAvailableCommands() {
+    if (currentState && !isCurrentStateEndState()) {
+        cout << "\nThe valid Command in this state is: ";
+        for (int i = 0; i < transitions.size(); i++) {
+            if (currentState == transitions[i]->getCurrentState()) {
+                cout << i + 1 << ")" << transitions[i]->getCommand() << "  ";
             }
         }
     }
@@ -101,32 +102,88 @@ void GameEngine::setState(State *newState) {
         currentState->onExit(*this);
     }
     currentState = newState;
+    notify(this);
     if (currentState) {
         currentState->onEnter(*this);
     }
 }
 
 /**
- * This function checks if the current is executeorders -- to be used in Orders class
+ * This function checks if the currentState is startstate
 */
+bool GameEngine::isCurrentStateStartState() {
+    return dynamic_cast<StartState *>(currentState) != nullptr;
+}
 
-    bool GameEngine::isCurrentStateWinState(){
-        return dynamic_cast<WinState*>(currentState) != nullptr;
-    }
+/**
+ * This function checks if the currentState is maploadedstate
+*/
+bool GameEngine::isCurrentStateMaploadedState() {
+    return dynamic_cast<MaploadedState *>(currentState) != nullptr;
+}
+
+/**
+ * This function checks if the currentState is mapvalidatedstate
+*/
+bool GameEngine::isCurrentStateMapvalidatedState() {
+    return dynamic_cast<MapvalidatedState *>(currentState) != nullptr;
+}
+
+/**
+ * This function checks if the currentState is playersaddedstate
+*/
+bool GameEngine::isCurrentStatePlayersaddedState() {
+    return dynamic_cast<PlayersaddedState *>(currentState) != nullptr;
+}
+
+/**
+ * This function checks if the currentState is assignreinforcementstate
+*/
+bool GameEngine::isCurrentStateAssignreinforcementState() {
+    return dynamic_cast<AssignreinforcementState *>(currentState) != nullptr;
+}
+
+/**
+ * This function checks if the currentState is issueordersstate
+*/
+bool GameEngine::isCurrentStateIssueordersState() {
+    return dynamic_cast<IssueordersState *>(currentState) != nullptr;
+}
+
+/**
+ * This function checks if the currentState is executeorders
+*/
+bool GameEngine::isCurrentStateExecuteordersState() {
+    return dynamic_cast<ExecuteordersState *>(currentState) != nullptr;
+}
+
+/**
+ * This function checks if the currentState is winstate
+*/
+bool GameEngine::isCurrentStateWinState() {
+    return dynamic_cast<WinState *>(currentState) != nullptr;
+}
+
 /**
  * This function checks if the currentState is endstate
 */
-    bool GameEngine::isCurrentStateEndState(){
-	    return dynamic_cast<EndState*>(currentState) != nullptr;
-    }
-
-/************************************************************ State **************************************************************/
-Map *GameEngine::gameMap() {
-    return currentGameMap;
+bool GameEngine::isCurrentStateEndState() {
+    return dynamic_cast<EndState *>(currentState) != nullptr;
 }
 
-void GameEngine::setGameMap(Map* map) {
-    currentGameMap = map;
+/**
+ * Override the string to log
+*/
+string GameEngine::stringToLog() {
+    string log;
+    for (int i = 0; i < transitions.size(); i++) {
+        if (currentState == transitions[i]->getNextState()) {
+            log = transitions[i]->getCommand();
+        }
+    }
+    return "\n\n----------------------------------------- Logger -----------------------------------------\n\nThe new state of the game is " +
+           log +
+           " state\n\n------------------------------------------------------------------------------------------\n\n";
 }
 
 /************************************************************ State **************************************************************/
@@ -171,7 +228,7 @@ StartState::StartState() = default;
 /**
  * Destructor
  */
-StartState::~StartState() = default;
+StartState::~StartState() {}
 
 /**
  * This functions informs the user what state they are in and the valid commands
@@ -191,43 +248,26 @@ void StartState::onExit(GameEngine &engine) {
 /**
  * This functions processes the user's command if it is valid and updates the state of the game
 */
-
 void StartState::processCommand(GameEngine &engine, const string &command) {
     vector<Transition *> t = engine.getTransitions();
-
-    // Find the position of the first space in the command
-    size_t spacePos = command.find(' ');
-    // Check if a space was found
-    if (spacePos != string::npos) {
-        // Extract the command and filename using substr
-        string cmd = command.substr(0, spacePos);
-        string filename = command.substr(spacePos + 1);
-
-        if (cmd == "loadmap") {
-            Map* gameMap = gameLoadMap("src/Map/MapFolder/" + filename);
-            engine.setGameMap(gameMap); // Set the loaded map in the engine
-            engine.setState(t[1]->getNextState());
-        } else {
-            cout << "Invalid command in Start State\n";
-            engine.displayAvailableCommands();
-        }
-
+    if (command == "loadmap") {
+        engine.setState(t[1]->getNextState());
     } else {
-        cout << "Invalid command format. Use 'loadmap filename'\n";
+        cout << "Invalid command in Start State\n";
         engine.displayAvailableCommands();
     }
 }
 
-/************************************************************ MaploadedState *****************************************/
+/************************************************************ MaploadedState **************************************************************/
 /**
  * Default Constructor
  */
-MaploadedState::MaploadedState() = default;
+MaploadedState::MaploadedState() {}
 
 /**
  * Destructor
  */
-MaploadedState::~MaploadedState() = default;
+MaploadedState::~MaploadedState() {}
 
 /**
  * This functions informs the user what state they are in and the valid commands
@@ -247,45 +287,28 @@ void MaploadedState::onExit(GameEngine &engine) {
 /**
  * This functions processes the user's command if it is valid and updates the state of the game
 */
-
 void MaploadedState::processCommand(GameEngine &engine, const string &command) {
     vector<Transition *> t = engine.getTransitions();
-
-    //cout << "command: " << command << endl;
-    // Find the position of the first space in the command
-    size_t spacePos = command.find(' ');
-    // Check if a space was found
-    if (spacePos != string::npos) {
-        // Extract the command and filename using substr
-        string cmd = command.substr(0, spacePos);
-        string filename = command.substr(spacePos + 1);
-        if (cmd == "loadmap") {
-            Map* gameMap = gameLoadMap("src/Map/MapFolder/" + filename);
-            engine.setGameMap(gameMap); // Set the loaded map in the engine
-            engine.setState(t[1]->getNextState());
-        } else {
-            cout << "Invalid command in Maploaded State\n";
-            engine.displayAvailableCommands();
-        }
+    if (command == "loadmap") {
+        engine.setState(t[1]->getNextState());
     } else if (command == "validatemap") {
-        validateMap(*engine.gameMap());
         engine.setState(t[2]->getNextState());
     } else {
         cout << "Invalid command in Maploaded State\n";
         engine.displayAvailableCommands();
-    }    
+    }
 }
 
-/************************************************************ MapvalidatedState **************************************/
+/************************************************************ MapvalidatedState **************************************************************/
 /**
  * Default Constructor
  */
-MapvalidatedState::MapvalidatedState() = default;
+MapvalidatedState::MapvalidatedState() {}
 
 /**
  * Destructor
  */
-MapvalidatedState::~MapvalidatedState() = default;
+MapvalidatedState::~MapvalidatedState() {}
 
 /**
  * This functions informs the user what state they are in and the valid commands
@@ -315,16 +338,16 @@ void MapvalidatedState::processCommand(GameEngine &engine, const string &command
     }
 }
 
-/************************************************************ PlayersaddedState **************************************/
+/************************************************************ PlayersaddedState **************************************************************/
 /**
  * Default Constructor
  */
-PlayersaddedState::PlayersaddedState() = default;
+PlayersaddedState::PlayersaddedState() {}
 
 /**
  * Destructor
  */
-PlayersaddedState::~PlayersaddedState() = default;
+PlayersaddedState::~PlayersaddedState() {}
 
 /**
  * This functions informs the user what state they are in and the valid commands
@@ -356,16 +379,16 @@ void PlayersaddedState::processCommand(GameEngine &engine, const string &command
     }
 }
 
-/************************************************************ AssignreinforcementState *******************************/
+/************************************************************ AssignreinforcementState **************************************************************/
 /**
  * Default Constructor
  */
-AssignreinforcementState::AssignreinforcementState() = default;
+AssignreinforcementState::AssignreinforcementState() {}
 
 /**
  * Destructor
  */
-AssignreinforcementState::~AssignreinforcementState() = default;
+AssignreinforcementState::~AssignreinforcementState() {}
 
 /**
  * This functions informs the user what state they are in and the valid commands
@@ -395,16 +418,16 @@ void AssignreinforcementState::processCommand(GameEngine &engine, const string &
     }
 }
 
-/************************************************************ IssueordersState ***************************************/
+/************************************************************ IssueordersState **************************************************************/
 /**
  * Default Constructor
  */
-IssueordersState::IssueordersState() = default;
+IssueordersState::IssueordersState() {}
 
 /**
  * Destructor
  */
-IssueordersState::~IssueordersState() = default;
+IssueordersState::~IssueordersState() {}
 
 /**
  * This functions informs the user what state they are in and the valid commands
@@ -436,16 +459,16 @@ void IssueordersState::processCommand(GameEngine &engine, const string &command)
     }
 }
 
-/************************************************************ ExecuteordersState *************************************/
+/************************************************************ ExecuteordersState **************************************************************/
 /**
  * Default Constructor
  */
-ExecuteordersState::ExecuteordersState() = default;
+ExecuteordersState::ExecuteordersState() {}
 
 /**
  * Destructor
  */
-ExecuteordersState::~ExecuteordersState() = default;
+ExecuteordersState::~ExecuteordersState() {}
 
 /**
  * This functions informs the user what state they are in and the valid commands
@@ -479,16 +502,16 @@ void ExecuteordersState::processCommand(GameEngine &engine, const string &comman
     }
 }
 
-/************************************************************ WinState ***********************************************/
+/************************************************************ WinState **************************************************************/
 /**
  * Default Constructor
  */
-WinState::WinState() = default;
+WinState::WinState() {}
 
 /**
  * Destructor
  */
-WinState::~WinState() = default;
+WinState::~WinState() {}
 
 /**
  * This functions informs the user what state they are in and the valid commands
@@ -520,16 +543,16 @@ void WinState::processCommand(GameEngine &engine, const string &command) {
     }
 }
 
-/************************************************************ EndState ***********************************************/
+/************************************************************ EndState **************************************************************/
 /**
  * Default Constructor
  */
-EndState::EndState() = default;
+EndState::EndState() {}
 
 /**
  * Destructor
  */
-EndState::~EndState() = default;
+EndState::~EndState() {}
 
 /**
  * This functions informs the user what state they are in and the valid commands
@@ -553,7 +576,7 @@ void EndState::processCommand(GameEngine &engine, const string &command) {
     cout << "Invalid command in End State\n";
 }
 
-/************************************************************ Transition *********************************************/
+/************************************************************ Transition **************************************************************/
 /**
  * Destructor
  */
@@ -571,7 +594,12 @@ Transition::Transition(State *fromState, const string &command, State *toState) 
 /**
  * Assignment Operator
  */
-Transition &Transition::operator=(const Transition &other) = default;
+Transition &Transition::operator=(const Transition &other) {
+    this->currentState = other.currentState;
+    this->command = other.command;
+    this->nextState = other.nextState;
+    return *this;
+}
 
 /**
  * Copy Constructor
@@ -601,7 +629,6 @@ State *Transition::getCurrentState() {
 State *Transition::getNextState() {
     return nextState;
 }
-
 /***************************************************** GameEngine **************************************************/
 /**
  * Default constructor
@@ -611,16 +638,21 @@ State *Transition::getNextState() {
  * Destructor
  **/
 GameEngine::~GameEngine() {
-    //for (auto &player: players) {
-    //     delete player;
-    //  }
-    //  players.clear();
-    // playerOrder.clear();
+    for (auto &player: players) {
+        delete player;
+    }
+    players.clear();
+    playerOrder.clear();
+    delete currentGameMap;
 }
 
 void GameEngine::start() {
     //start(startupPhase()map);
     //GameEngine();
+}
+
+Map *GameEngine::gameMap() {
+    return currentGameMap;
 }
 
 void GameEngine::setGameMap(Map *map) {
@@ -629,7 +661,6 @@ void GameEngine::setGameMap(Map *map) {
 
 void GameEngine::setPlayers(vector<Player *> p) {
     players = std::move(p);
-    //players = p;
 }
 
 vector<Player *> GameEngine::getPlayers() {
@@ -673,13 +704,20 @@ bool GameEngine::isGameOver() const {
 
 /***************************************************** MainGameLoop **************************************************/
 void GameEngine::mainGameLoop() {
-
+    while (true) {
+        if (isGameOver()) {
+            Player *winner = checkForWinner();
+            if (winner) {
+                cout << "why are you here";
+            }
+            break;
+        }
         reinforcementPhase();
-        //issueOrdersPhase();
-        //executeOrdersPhase();
+        issueOrdersPhase();
+        executeOrdersPhase();
 
-        //removePlayersWithoutTerritories();
-
+        removePlayersWithoutTerritories();
+    }
 }
 
 void GameEngine::cleanupResources() {
@@ -698,12 +736,11 @@ void GameEngine::reinforcementPhase() {
 
         // notify log of phase status change
         InlineLoggable logMessage = createLogMessage(
-
                 "\nPlayer " + to_string(player->getID()) + " is now in the [Reinforcement] phase of the game.");
         player->notify(&logMessage);
 
         // display current reinforcement pool of player
-        cout << "\nReinforcement Pool of Player " << player->getID() << ": " << player->getReinforcement() << endl;
+        cout << "\nReinforcement Pool of Player " << player->getID() << ": " << player->getReinforcement() << " army units" << endl;
 
         if (playerTerritories.find(player->getID()) != playerTerritories.end()) {
             // Retrieve the territories owned by the player with playerID
@@ -723,7 +760,6 @@ void GameEngine::reinforcementPhase() {
         printPlayerReinforcement(player);
     }
 }
-
 void GameEngine::issueOrdersPhase() {
     // loop through all players in the game
     for (auto &player: players) {
@@ -824,9 +860,10 @@ void executeAssistForPlayer(Player *player, const string &orderName, const strin
 }
 
 void testStartupPhase() {
-    testMainGameLoop();
+    //testMainGameLoop();
 //    deleteMap(gameMap);
 };
+
 void GameEngine::executeOrdersPhase() {
     while (true) {
         // loop through each player
@@ -883,3 +920,28 @@ void GameEngine::executeOrdersPhase() {
         reinforcementPhase();
     }
 }
+
+void GameEngine::addPlayer(Player *player) {
+    players.push_back(player);
+}
+
+/*void mainGameLoop() {
+    GameEngine gameEngine;
+
+    while (true) {
+        gameEngine.reinforcementPhase();
+        gameEngine.issueOrdersPhase();
+        gameEngine.executeOrdersPhase();
+
+        Player* winner = gameEngine.checkForWinner();
+        if (winner != nullptr) {
+            cout << "Player " << winner->getID() << " wins!" << endl;
+            break;
+        }
+    }
+}
+
+  void GameEngine::mainGameLoop() {
+      GameEngine gameEngine;
+      reinforcementPhase();
+  }*/
