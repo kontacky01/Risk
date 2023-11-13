@@ -1,49 +1,39 @@
 #pragma once
 
 #include <algorithm>
+#include <vector>
 #include <ctime>
 #include <iostream>
-#include <filesystem>
-#include <fstream>
+#include <utility>
 #include <memory>
 #include <string>
 #include <sstream>
 #include <utility>
 #include <vector>
 
+#include "../LoggingObserver/LoggingObserver.h"
 #include "../CardsDeck/Cards.h"
 #include "../CommandProcessing/CommandProcessing.h"
-#include "../LoggingObserver/LoggingObserver.h"
-#include "../Map/Map.h"
 #include "../OrdersList/Orders.h"
 #include "../Player/Player.h"
+#include "../Map/Map.h"
 
 using namespace std;
 
 /********************************************************** Game Engine ***********************************************************/
 // Forward declarations
 class State;
+
 class Transition;
+
 class Player;
+
 class Map;
+
 class Deck;
-//class Subject;
-//class ILoggable;
 
+class GameEngine : public Subject, public ILoggable{
 
-class GameEngine {
-private:
-    State *currentState;
-    Map *currentGameMap{};
-    vector<Transition *> transitions;
-    int playerNum;
-//int currentPlayerIndex;
-//bool gameIsOver;
-    vector<Player *> players;
-    vector<int> playerOrder;
-    Deck *deck;
-    Map *map{};
-    ::map<int, std::vector<Territory *>> playerTerritories;
 public:
 /**
  * Default Constructor
@@ -69,10 +59,12 @@ public:
  * This method sets the gameEngine'state or the current state to the new state
  * since gameEngine object controls the game flow
 */
-    void setState(State* newState);
+    void setState(State *newState);
+
+    void setGameMap(Map *map);
 
     Map *gameMap();
-    void setGameMap(Map* map);
+
     vector<Transition *> getTransitions();
 
 /**
@@ -107,6 +99,7 @@ public:
  * This function checks if the currentState is winstate
 */
     bool isCurrentStateWinState();
+
 /**
  * This function checks if the currentState is endstate
 */
@@ -132,7 +125,23 @@ public:
 
     void setPlayers(vector<Player *> p);
 
-};
+    void cleanupResources();
+
+    string stringToLog();
+
+    void addPlayer(Player* player);
+
+private:
+    State *currentState;
+    Map *currentGameMap;
+    vector<Transition *> transitions;
+    int playerNum;
+    vector<Player *> players;
+    vector<int> playerOrder;
+    Deck *deck;
+    Map *map;
+    ::map<int, vector<Territory *>> playerTerritories;
+};+
 /************************************************************ State **************************************************************/
 class State {
 public:
@@ -410,6 +419,9 @@ private:
 };
 /***************************************************** GameEngineDriver **********************************************/
 void testGameStates();
-void testMainGameLoop();
+
+void initializeGame(GameEngine &engine);
+
+int testMainGameLoop();
+
 void testStartupPhase();
-void testReinforcementPhase();

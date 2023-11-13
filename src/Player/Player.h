@@ -10,11 +10,11 @@
 #include <memory>
 #include <cctype>
 
+#include "../LoggingObserver/LoggingObserver.h"
 #include "../GameEngine/GameEngine.h"
 #include "../Map/Map.h"
 #include "../OrdersList/Orders.h"
 #include "../CardsDeck/Cards.h"
-#include "../LoggingObserver/LoggingObserver.h"
 
 using namespace std;
 
@@ -131,5 +131,5 @@ public:
     void setHand(Hand *hand);
 
 /************************************************************ PlayerDriver **************************************************************/
-void testPlayers()
+void testPlayers();
 };

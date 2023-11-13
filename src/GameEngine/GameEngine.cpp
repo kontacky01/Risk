@@ -1,59 +1,60 @@
 #include "GameEngine.h"
 
+#include <utility>
+#include <memory>
+
 /**
  * Default Constructor
  */
-    GameEngine::GameEngine() : currentState(nullptr) {
-        
-        StartState* s1 = new StartState();
-        MaploadedState* s2 = new MaploadedState();
-        MapvalidatedState* s3 = new MapvalidatedState();
-        PlayersaddedState* s4 = new PlayersaddedState();
-        AssignreinforcementState* s5 = new AssignreinforcementState();
-        IssueordersState* s6 = new IssueordersState();
-        ExecuteordersState* s7 = new ExecuteordersState();
-        WinState* s8 = new WinState();
-        EndState* s9 = new EndState();
-        
-        Transition* t1 = new Transition(s1, "loadmap", s2);
-        Transition* t2 = new Transition(s2, "loadmap", s2);
-        Transition* t3 = new Transition(s2, "validatemap", s3);
-        Transition* t4 = new Transition(s3, "addplayer", s4);
-        Transition* t5 = new Transition(s4, "addplayer", s4);
-        Transition* t6 = new Transition(s4, "gamestart", s5);
-        Transition* t7 = new Transition(s5, "issueorder", s6);
-        Transition* t8 = new Transition(s6, "issueorder", s6);
-        Transition* t9 = new Transition(s6, "endissueorders", s7);
-        Transition* t10 = new Transition(s7, "execorder", s7);
-        Transition* t11 = new Transition(s7, "win", s8);
-        Transition* t12 = new Transition(s7, "endexecorders", s5);
-        Transition* t13 = new Transition(s8, "replay", s1);
-        Transition* t14 = new Transition(s8, "quit", s9);
+StartState *s1 = new StartState();
+GameEngine::GameEngine() : currentState(s1) {
+    MaploadedState *s2 = new MaploadedState();
+    MapvalidatedState *s3 = new MapvalidatedState();
+    PlayersaddedState *s4 = new PlayersaddedState();
+    AssignreinforcementState *s5 = new AssignreinforcementState();
+    IssueordersState *s6 = new IssueordersState();
+    ExecuteordersState *s7 = new ExecuteordersState();
+    WinState *s8 = new WinState();
+    EndState *s9 = new EndState();
 
-        addTransition(t1);
-        addTransition(t2);
-        addTransition(t3);
-        addTransition(t4);
-        addTransition(t5);
-        addTransition(t6);
-        addTransition(t7);
-        addTransition(t8);
-        addTransition(t9);
-        addTransition(t10);
-        addTransition(t11);
-        addTransition(t12);
-        addTransition(t13);
-        addTransition(t14);
+    Transition *t1 = new Transition(s1, "loadmap", s2);
+    Transition *t2 = new Transition(s2, "loadmap", s2);
+    Transition *t3 = new Transition(s2, "validatemap", s3);
+    Transition *t4 = new Transition(s3, "addplayer", s4);
+    Transition *t5 = new Transition(s4, "addplayer", s4);
+    Transition *t6 = new Transition(s4, "gamestart", s5);
+    Transition *t7 = new Transition(s5, "issueorder", s6);
+    Transition *t8 = new Transition(s6, "issueorder", s6);
+    Transition *t9 = new Transition(s6, "endissueorders", s7);
+    Transition *t10 = new Transition(s7, "execorder", s7);
+    Transition *t11 = new Transition(s7, "win", s8);
+    Transition *t12 = new Transition(s7, "endexecorders", s5);
+    Transition *t13 = new Transition(s8, "replay", s1);
+    Transition *t14 = new Transition(s8, "quit", s9);
 
-        // Initialize with the starting state
-        setState(s1);
+    addTransition(t1);
+    addTransition(t2);
+    addTransition(t3);
+    addTransition(t4);
+    addTransition(t5);
+    addTransition(t6);
+    addTransition(t7);
+    addTransition(t8);
+    addTransition(t9);
+    addTransition(t10);
+    addTransition(t11);
+    addTransition(t12);
+    addTransition(t13);
+    addTransition(t14);
 
-        playerNum = int(0);
-        playerOrder;
-        deck = new Deck();
-        map = new Map();
-        firstRound = true;
-    }
+    // Initialize with the starting state
+    setState(s1);
+
+    playerNum = int(0);
+    playerOrder;
+    deck = new Deck();
+    currentGameMap = new Map();
+}
 /**
  * This function initializes game transitions
 */
@@ -63,7 +64,6 @@
     vector<Transition*> GameEngine::getTransitions(){
         return transitions;
     }
-
 /**
  * This functions informs the user what state they are in and the valid commands
 */
@@ -94,6 +94,7 @@
             currentState->onExit(*this);
         }
         currentState = newState;
+        notify(this);
         if (currentState) {
             currentState->onEnter(*this);
         }
@@ -149,20 +150,27 @@
 /**
  * This function checks if the currentState is endstate
 */
-    bool GameEngine::isCurrentStateEndState(){
-	    return dynamic_cast<EndState*>(currentState) != nullptr;
+bool GameEngine::isCurrentStateEndState() {
+    return dynamic_cast<EndState *>(currentState) != nullptr;
+}
+/**
+ * Override the string to log
+*/
+string GameEngine::stringToLog() {
+    string log;
+    for (int i = 0; i < transitions.size(); i++) {
+        if (currentState == transitions[i]->getNextState()) {
+            log = transitions[i]->getCommand();
+        }
     }
-
+    return "\n\n----------------------------------------- Logger -----------------------------------------\n\nThe new state of the game is " +
+           log +
+           " state\n\n------------------------------------------------------------------------------------------\n\n";
+}
 /************************************************************ State **************************************************************/
     Map *GameEngine::gameMap() {
         return currentGameMap;
     }
-
-
-void GameEngine::setGameMap(Map* map) {
-    currentGameMap = map;
-}
-
 /************************************************************ State **************************************************************/
 
 /**
@@ -201,7 +209,7 @@ void GameEngine::setGameMap(Map* map) {
 /**
  * Destructor
  */
-    StartState::~StartState(){}
+    StartState::~StartState() {}
 /**
  * This functions informs the user what state they are in and the valid commands
 */
@@ -218,29 +226,12 @@ void GameEngine::setGameMap(Map* map) {
 /**
  * This functions processes the user's command if it is valid and updates the state of the game
 */
-
 void StartState::processCommand(GameEngine &engine, const string &command) {
     vector<Transition *> t = engine.getTransitions();
-
-    // Find the position of the first space in the command
-    size_t spacePos = command.find(' ');
-    // Check if a space was found
-    if (spacePos != string::npos) {
-        // Extract the command and filename using substr
-        string cmd = command.substr(0, spacePos);
-        string filename = command.substr(spacePos + 1);
-
-        if (cmd == "loadmap") {
-            Map* gameMap = gameLoadMap("src/Map/MapFolder/" + filename);
-            engine.setGameMap(gameMap); // Set the loaded map in the engine
-            engine.setState(t[1]->getNextState());
-        } else {
-            cout << "Invalid command in Start State\n";
-            engine.displayAvailableCommands();
-        }
-
+    if (command == "loadmap") {
+        engine.setState(t[1]->getNextState());
     } else {
-        cout << "Invalid command format. Use 'loadmap filename'\n";
+        cout << "Invalid command in Start State\n";
         engine.displayAvailableCommands();
     }
 
@@ -269,33 +260,16 @@ void StartState::processCommand(GameEngine &engine, const string &command) {
 /**
  * This functions processes the user's command if it is valid and updates the state of the game
 */
-
 void MaploadedState::processCommand(GameEngine &engine, const string &command) {
     vector<Transition *> t = engine.getTransitions();
-
-    //cout << "command: " << command << endl;
-    // Find the position of the first space in the command
-    size_t spacePos = command.find(' ');
-    // Check if a space was found
-    if (spacePos != string::npos) {
-        // Extract the command and filename using substr
-        string cmd = command.substr(0, spacePos);
-        string filename = command.substr(spacePos + 1);
-        if (cmd == "loadmap") {
-            Map* gameMap = gameLoadMap("src/Map/MapFolder/" + filename);
-            engine.setGameMap(gameMap); // Set the loaded map in the engine
-            engine.setState(t[1]->getNextState());
-        } else {
-            cout << "Invalid command in Maploaded State\n";
-            engine.displayAvailableCommands();
-        }
+    if (command == "loadmap") {
+        engine.setState(t[1]->getNextState());
     } else if (command == "validatemap") {
-        validateMap(*engine.gameMap());
         engine.setState(t[2]->getNextState());
     } else {
         cout << "Invalid command in Maploaded State\n";
         engine.displayAvailableCommands();
-    }    
+    }
 }
 
 /************************************************************ MapvalidatedState **************************************************************/
@@ -409,6 +383,7 @@ void MaploadedState::processCommand(GameEngine &engine, const string &command) {
 /**
  * Default Constructor
  */
+=======
     IssueordersState::IssueordersState(){}
 /**
  * Destructor
@@ -584,7 +559,6 @@ void MaploadedState::processCommand(GameEngine &engine, const string &command) {
         cout << "Here print whatever as place holder. not sure if i need this stream insertion\n";
         return out;
     }
-
     string Transition::getCommand(){
         return command;
     }
@@ -610,6 +584,7 @@ GameEngine::~GameEngine() {
     }
     players.clear();
     playerOrder.clear();
+    delete currentGameMap;
 }
 
 void GameEngine::start() {
@@ -617,9 +592,15 @@ void GameEngine::start() {
     //GameEngine();
 }
 
+Map *GameEngine::gameMap() {
+    return currentGameMap;
+}
+
+void GameEngine::setGameMap(Map *map) {
+    currentGameMap = map;
+}
 void GameEngine::setPlayers(vector<Player *> p) {
     players = std::move(p);
-    //players = p;
 }
 
 vector<Player *> GameEngine::getPlayers() {
@@ -652,6 +633,32 @@ InlineLoggable createLogMessage(const std::string &message) {
 }
 
 /***************************************************** MainGameLoop **************************************************/
+
+void GameEngine::mainGameLoop() {
+    while (true) {
+        if (isGameOver()) {
+            Player *winner = checkForWinner();
+            if (winner) {
+                cout << "why are you here";
+            }
+            break;
+        }
+        reinforcementPhase();
+        issueOrdersPhase();
+        executeOrdersPhase();
+
+        removePlayersWithoutTerritories();
+    }
+}
+
+void GameEngine::cleanupResources() {
+    for (Player *player: players) {
+        delete player;
+    }
+    players.clear();
+
+}
+  
 void GameEngine::reinforcementPhase() {
     // loop through every player
     for (auto &player: players) {
@@ -660,12 +667,11 @@ void GameEngine::reinforcementPhase() {
 
         // notify log of phase status change
         InlineLoggable logMessage = createLogMessage(
-
                 "\nPlayer " + to_string(player->getID()) + " is now in the [Reinforcement] phase of the game.");
         player->notify(&logMessage);
 
         // display current reinforcement pool of player
-        cout << "\nReinforcement Pool of Player " << player->getID() << ": " << player->getReinforcement() << endl;
+        cout << "\nReinforcement Pool of Player " << player->getID() << ": " << player->getReinforcement() << " army units" << endl;
 
         // calculate base reinforcement based on territories owned, with a minimum of 3 (rounded down)
         int baseReinforcement = max(3, static_cast<int>(player->getTerritories().size() / 3));
@@ -679,7 +685,6 @@ void GameEngine::reinforcementPhase() {
         printPlayerReinforcement(player);
     }
 }
-
 void GameEngine::issueOrdersPhase() {
     // loop through all players in the game
     for (auto &player: players) {
@@ -779,9 +784,10 @@ void executeAssistForPlayer(Player *player, const string &orderName, const strin
 
 
 void testStartupPhase() {
-    testMainGameLoop();
+    //testMainGameLoop();
 //    deleteMap(gameMap);
 };
+
 void GameEngine::executeOrdersPhase() {
     while (true) {
         // loop through each player
@@ -817,7 +823,14 @@ void GameEngine::executeOrdersPhase() {
         reinforcementPhase();
     }
 }
-void mainGameLoop() {
+
+void GameEngine::addPlayer(Player *player) {
+    players.push_back(player);
+}
+/*============================================================================================================*/
+                   //experimental mainGameLoop() functions that did't make it lol//
+/*============================================================================================================*/
+/*void mainGameLoop() {
     GameEngine gameEngine;
 
     while (true) {
@@ -836,4 +849,4 @@ void mainGameLoop() {
   void GameEngine::mainGameLoop() {
       GameEngine gameEngine;
       reinforcementPhase();
-  }
+  }*/

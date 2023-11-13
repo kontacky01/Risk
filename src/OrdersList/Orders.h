@@ -1,4 +1,4 @@
-//#pragma once
+#pragma once
 #ifndef ORDERS_H
 #define ORDERS_H
 
@@ -7,11 +7,10 @@
 #include <vector>
 #include <algorithm>
 
+#include "../LoggingObserver/LoggingObserver.h"
 #include "../GameEngine/GameEngine.h"
 #include "../Map/Map.h"
-#include "../Player/Player.h"
 #include "../CardsDeck/Cards.h"
-#include "../LoggingObserver/LoggingObserver.h"
 
 using namespace std;
 
