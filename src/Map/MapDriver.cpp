@@ -15,15 +15,12 @@ void testLoadMaps() {
     map1->validate();
 
     cout << "\n\n---------> Test 2: Load a valid map <---------\n\n";
-
     Map *map2 = new Map(*loader->loadMap("src/Map/MapFolder/solarSystem.map"));
     map2->printMapSummary();
     map2->validate();
 
     cout << "\n\n---------> Test 3: Load a Conquest map <---------\n\n";
-  
     Map *map3 = new Map(*loader->loadMap("src/Map/MapFolder/Europe.map"));
-
     map3->printMapSummary();
     map3->validate();
 

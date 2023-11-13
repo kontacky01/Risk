@@ -104,9 +104,9 @@ public:
     /**
     * The draw method draws a card and removes it from a deck
     */
-    Card *drawCards(Deck &transfer);
+    Card *draw(Deck &transfer);
 
-    Card *draw();
+    Card *drawACard();
     /**
     * The addCard method adds card to a temporary vector
     */
@@ -170,7 +170,8 @@ public:
     /**
     * The play method removes a card from hand, creates a new order, and returns card to deck of origin
     */
-    void play(Card *card, Deck *returningDeck, OrdersList* OL);
+    void play(Card *card,
+              Deck *returningDeck);
 
     OrdersList *ordersList;
 
