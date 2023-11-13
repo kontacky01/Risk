@@ -55,15 +55,15 @@ Player::~Player() {
     cout << "...Player destructor was called...\n";
     for (int i = 0; i < territories.size(); i++) {
         delete territories[i];
-        territories.at(i) = nullptr;
+        territories.at(i) = NULL;
     };
     territories.clear();
 
     delete hand;
-    hand = nullptr;
+    hand = NULL;
 
     delete orderList;
-    orderList = nullptr;
+    orderList = NULL;
 }
 
 /**
@@ -244,10 +244,18 @@ void Player::addTerritoryToList(Territory *territory, const string &listType) {
 }
 
 
-//cards: "bomb", "blockade", "airlift", "diplomacy" -- "reinforcement" (not associated with any order)
-//orders: "bomb", "deploy", "advance", "blockade", "airlift", "negotiate"
-
+/**
+ * Take in an order and add it into the OrderList
+ */
 void Player::issueOrder() {
+    //cards: "bomb", "blockade", "airlift", "diplomacy" -- "reinforcement" (not associated with any order)
+    //orders: "bomb", "deploy", "advance", "blockade", "airlift", "negotiate"
+
+    auto *loader = new MapLoader();
+    Map *gameMap = loader->loadMap("../src/Map/MapFolder/cliff.map");
+
+    vector<Territory*> currentTerritoryList = gameMap->territoryList;
+
     int armyUnits;
     string orderName;
     cout << "Enter an order (bomb, reinforcement, blockade, airlift, diplomacy, deploy, advance): ";
@@ -382,9 +390,9 @@ void Player::issueOrder() {
                                                  orderName == "bomb" || orderName == "diplomacy" ||
                                                  orderName == "negotiate")) {
         bool hasCard = false; // check if the player has the card in their hand
-        for (auto &card: this->getHand()->hand) {
+        for (auto &card : this->getHand()->hand) {
             if (card->getType() == orderName) {
-                playCard(card, deck, orderList);
+                playCard(card, deck);
                 cout << "\n~~~~~~ You have issued an order to: [" << card->getType() << "] !\n";
                 hasCard = true;
                 break;
@@ -416,11 +424,11 @@ string Player::stringToLog() {
     return {};
 }
 
-void Player::playCard(Card *card, Deck *deck, OrdersList *OL) {
-    this->hand->play(card, deck, OL);
+void Player::playCard(Card *card, Deck *deck) {
+    this->hand->play(card, deck);
 }
 
-void Player::setDeck(Deck *deck) {
+void Player::setDeck(Deck *deck){
     this->deck = deck;
 }
 
@@ -429,8 +437,4 @@ OrdersList *Player::issuesOrder(Order *o) {
     cout << "...Pushed a new order to orderList...\n";
     cout << "New order id: " << o->getOrderID() << "\n\n";
     return orderList;
-}
-
-Deck* Player::getDeck() {
-    return deck;
 }
