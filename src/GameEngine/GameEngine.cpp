@@ -59,6 +59,7 @@ GameEngine::GameEngine() : currentState(nullptr) {
     playerOrder;
     deck = new Deck();
     currentGameMap = new Map();
+
 }
 
 /**
@@ -120,6 +121,32 @@ bool GameEngine::isCurrentStateExecuteordersState() {
 Map *GameEngine::gameMap() {
     return currentGameMap;
 }
+
+void GameEngine::setMap(Map* map) {
+    this->currentGameMap = map;
+}
+
+/*std::map<int, Territory*> GameEngine::getPlayerTerritories() {
+    return playerTerritories;
+}
+
+std::map<int, Territory*> GameEngine::getPlayerTerritories() {
+    std::map<int, Territory*> result;
+
+    for (const auto& entry : playerTerritories) {
+        int playerID = entry.first;
+        const std::vector<Territory*>& territories = entry.second;
+
+        Territory* combinedTerritory = nullptr;
+        if (!territories.empty()) {
+            combinedTerritory = territories[0];
+        }
+
+        result[playerID] = combinedTerritory;
+    }
+
+    return result;
+}*/
 
 /************************************************************ State **************************************************/
 /**
@@ -569,15 +596,19 @@ State *Transition::getNextState() {
  **/
 GameEngine::~GameEngine() {
     //for (auto &player: players) {
-   //     delete player;
-  //  }
-  //  players.clear();
-   // playerOrder.clear();
+    //     delete player;
+    //  }
+    //  players.clear();
+    // playerOrder.clear();
 }
 
 void GameEngine::start() {
     //start(startupPhase()map);
     //GameEngine();
+}
+
+void GameEngine::setGameMap(Map* map) {
+    currentGameMap = map;
 }
 
 void GameEngine::setPlayers(vector<Player *> p) {
@@ -615,29 +646,21 @@ InlineLoggable createLogMessage(const std::string &message) {
 }
 
 bool GameEngine::isGameOver() const {
-    for (auto& player : players) {
+    for (auto &player: players) {
         if (player->getTerritories().size() == currentGameMap->territoryList.size()) {
             // This player owns all territories, game over
             return true;
         }
     }
-    // No player owns all territories yet, game continues
     return false;
 }
-
 /***************************************************** MainGameLoop **************************************************/
 void GameEngine::mainGameLoop() {
-
-    testMainGameLoop(*this);
-
-    reinforcementPhase();
-    issueOrdersPhase();
-    //executeOrdersPhase();
 
 }
 
 void GameEngine::cleanupResources() {
-    for (Player *player : players) {
+    for (Player *player: players) {
         delete player;
     }
     players.clear();
@@ -645,9 +668,9 @@ void GameEngine::cleanupResources() {
 }
 
 void GameEngine::reinforcementPhase() {
-    cout << "Entering Reinforcement Phase" << endl;
     // loop through every player
     for (auto &player: players) {
+        cout << "Entering Reinforcement Phase" << endl;
         // set player's game phase status to the current "Reinforcement" phase
         player->setGamePhase("Reinforcement");
 
@@ -659,8 +682,14 @@ void GameEngine::reinforcementPhase() {
         // display current reinforcement pool of player
         cout << "\nReinforcement Pool of Player " << player->getID() << ": " << player->getReinforcement() << endl;
 
+        if (playerTerritories.find(player->getID()) != playerTerritories.end()) {
+            // Retrieve the territories owned by the player with playerID
+            vector<Territory *> territoriesOwnedByPlayer = playerTerritories[player->getID()];
+            for (Territory *territory: territoriesOwnedByPlayer) {
+            }
+        }
         // calculate base reinforcement based on territories owned, with a minimum of 3 (rounded down)
-        int baseReinforcement = max(3, static_cast<int>(player->getTerritories().size() / 3));
+        int baseReinforcement = max(3, static_cast<int>(playerTerritories.size() / 3));
         player->setReinforcement(player->getReinforcement() + baseReinforcement);
 
         // if player owns continent, award control bonus value

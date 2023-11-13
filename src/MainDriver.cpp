@@ -21,14 +21,6 @@ int main() {
     //testOrderExecution();
     //testLoggingObserver();
     //mainGameLoop();
-    //testMainGameLoop();
 
-
-    GameEngine gameEngine;
-
-    gameEngine.mainGameLoop();
-
-    gameEngine.cleanupResources();
-
-    return 0;
+    testMainGameLoop();
 }

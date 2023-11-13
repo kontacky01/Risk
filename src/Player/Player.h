@@ -76,6 +76,14 @@ public:
 
     void subtractReinforcements(int r);
 
+    void setTerritories(const std::vector<Territory*>& newTerritories) {
+        territories = newTerritories;
+    }
+
+    const std::vector<Territory*>& getTerritories() const {
+        return territories;
+    }
+
     vector<Territory *> getTerritories();
 
     void addTerritory(Territory *t);

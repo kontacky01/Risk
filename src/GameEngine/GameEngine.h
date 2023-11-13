@@ -56,6 +56,8 @@ public:
 */
     void setState(State *newState);
 
+    void setGameMap(Map* map);
+
     Map *gameMap();
 
     vector<Transition *> getTransitions();
@@ -87,15 +89,23 @@ public:
 
     void setPlayers(vector<Player *> p);
 
-    void setMap(Map* map) {
-        this->currentGameMap = map;
+    void setMap(Map* map);
+
+    void setMap(map<int, Territory*>& territoriesMap) {
+        playerTerritoriesMap = territoriesMap;
+    }
+
+    void setMap(map<int, vector<Territory *>> &territories) {
+        playerTerritories = territories;
     }
 
     void cleanupResources();
+    ::map<int, std::vector<Territory *>> playerTerritories;
+    std::map<int, Territory*> playerTerritoriesMap;
 
 private:
     State *currentState;
-    Map *currentGameMap{};
+    Map *currentGameMap;
     vector<Transition *> transitions;
     int playerNum;
 //int currentPlayerIndex;
@@ -103,10 +113,9 @@ private:
     vector<Player *> players;
     vector<int> playerOrder;
     Deck *deck;
-    ::map<int, std::vector<Territory *>> playerTerritories;
+
     Map *map;
     bool firstRound;
-
 };
 
 /************************************************************ State *************************************************/
@@ -441,4 +450,5 @@ private:
 
 /***************************************************** GameEngineDriver **********************************************/
 void testGameStates();
-void testMainGameLoop(GameEngine& engine);
+void initializeGame(GameEngine& engine);
+int testMainGameLoop();

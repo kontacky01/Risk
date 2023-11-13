@@ -4,32 +4,45 @@
 #include "Cards.h"
 #include "Orders.h"
 
-void testMainGameLoop(GameEngine& gameEngine) {
-    // Create test territories
-    Territory* territoryA = new Territory("Territory A", 1, 1, 10);
-    Territory* territoryB = new Territory("Territory B", 2, 2, 15);
-    Territory* territoryC = new Territory("Territory C", 3, 1, 20);
+void initializeGame(GameEngine &gameEngine) {
+    MapLoader mapLoader;
+    Map *map = mapLoader.loadMap("../src/Map/MapFolder/World.map");
 
-    // Add territories to player 1
-    vector<Territory*> territoriesPlayer1 { territoryA, territoryB };
+    // Obtain a list of all territories from the loaded map
+    vector<Territory *> allTerritories = map->territoryList;
 
-    // Add territories to player 2
-    vector<Territory*> territoriesPlayer2 { territoryC };
+    // Create Player 1 and assign territories
+    Player *player1 = new Player({}, new Hand(), new OrdersList(), 1);
+    player1->setReinforcement(50);
 
-    // Print territories for Player 1
-    cout << "\n\nTerritories for Player 1:" << endl;
-    for (Territory* territory : territoriesPlayer1) {
-        if (territory != nullptr) {
-            cout << territory->getName() << endl;
+    // Create Player 2 and assign territories
+    Player *player2 = new Player({}, new Hand(), new OrdersList(), 2);
+    player2->setReinforcement(0);
+
+    // Distribute territories to players
+    // For simplicity, let's distribute the territories in alternating fashion
+    for (size_t i = 0; i < allTerritories.size(); ++i) {
+        if (i % 2 == 0) {
+            player1->addTerritory(allTerritories[i]);
         } else {
-            cout << "Null territory found in Player 1's list." << endl;
+            player2->addTerritory(allTerritories[i]);
         }
     }
 
-    // Dynamic allocation of players and their components
-    Player* player1 = new Player(territoriesPlayer1, new Hand(), new OrdersList(), 1);
-    Player* player2 = new Player(territoriesPlayer2, new Hand(), new OrdersList(), 2);
+    gameEngine.setGameMap(map);
     gameEngine.setPlayers({player1, player2});
+}
+
+int testMainGameLoop() {
+    GameEngine gameEngine;
+
+    initializeGame(gameEngine);
+
+    gameEngine.mainGameLoop();
+
+    gameEngine.cleanupResources();
+
+    return 0;
 }
 
 
