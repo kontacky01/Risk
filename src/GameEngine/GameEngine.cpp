@@ -122,31 +122,9 @@ Map *GameEngine::gameMap() {
     return currentGameMap;
 }
 
-void GameEngine::setMap(Map* map) {
+void GameEngine::setMap(Map *map) {
     this->currentGameMap = map;
 }
-
-/*std::map<int, Territory*> GameEngine::getPlayerTerritories() {
-    return playerTerritories;
-}
-
-std::map<int, Territory*> GameEngine::getPlayerTerritories() {
-    std::map<int, Territory*> result;
-
-    for (const auto& entry : playerTerritories) {
-        int playerID = entry.first;
-        const std::vector<Territory*>& territories = entry.second;
-
-        Territory* combinedTerritory = nullptr;
-        if (!territories.empty()) {
-            combinedTerritory = territories[0];
-        }
-
-        result[playerID] = combinedTerritory;
-    }
-
-    return result;
-}*/
 
 /************************************************************ State **************************************************/
 /**
@@ -607,7 +585,7 @@ void GameEngine::start() {
     //GameEngine();
 }
 
-void GameEngine::setGameMap(Map* map) {
+void GameEngine::setGameMap(Map *map) {
     currentGameMap = map;
 }
 
@@ -654,8 +632,15 @@ bool GameEngine::isGameOver() const {
     }
     return false;
 }
+
 /***************************************************** MainGameLoop **************************************************/
 void GameEngine::mainGameLoop() {
+
+        reinforcementPhase();
+        //issueOrdersPhase();
+        //executeOrdersPhase();
+
+        //removePlayersWithoutTerritories();
 
 }
 
@@ -668,7 +653,6 @@ void GameEngine::cleanupResources() {
 }
 
 void GameEngine::reinforcementPhase() {
-    // loop through every player
     for (auto &player: players) {
         cout << "Entering Reinforcement Phase" << endl;
         // set player's game phase status to the current "Reinforcement" phase
