@@ -68,7 +68,7 @@ GameEngine::GameEngine() : currentState(s1) {
  * This functions informs the user what state they are in and the valid commands
 */
     void GameEngine::displayAvailableCommands(){
-        if (currentState && !isCurrentStateEndState) {
+        if (currentState && !isCurrentStateEndState()) {
             cout << "\nThe valid Command in this state is: ";
             for(int i=0;i<transitions.size();i++){
                 if(currentState == transitions[i]->getCurrentState()){
@@ -168,10 +168,6 @@ string GameEngine::stringToLog() {
            " state\n\n------------------------------------------------------------------------------------------\n\n";
 }
 /************************************************************ State **************************************************************/
-    Map *GameEngine::gameMap() {
-        return currentGameMap;
-    }
-/************************************************************ State **************************************************************/
 
 /**
  * Default Constructor
@@ -230,11 +226,12 @@ void StartState::processCommand(GameEngine &engine, const string &command) {
     vector<Transition *> t = engine.getTransitions();
     if (command == "loadmap") {
         engine.setState(t[1]->getNextState());
+        
     } else {
         cout << "Invalid command in Start State\n";
         engine.displayAvailableCommands();
     }
-
+}
 /************************************************************ MaploadedState **************************************************************/
 /**
  * Default Constructor
@@ -300,7 +297,7 @@ void MaploadedState::processCommand(GameEngine &engine, const string &command) {
     void MapvalidatedState::processCommand(GameEngine& engine, const string& command){
         vector<Transition*> t = engine.getTransitions();
         if (command == "addplayer") {
-            engine.setState(t[3]->getNextState());
+            engine.setState(t[4]->getNextState());
         } else {
             cout << "Invalid command in Mapvalidated State\n";
             engine.displayAvailableCommands();
@@ -383,7 +380,6 @@ void MaploadedState::processCommand(GameEngine &engine, const string &command) {
 /**
  * Default Constructor
  */
-=======
     IssueordersState::IssueordersState(){}
 /**
  * Destructor
@@ -633,7 +629,15 @@ InlineLoggable createLogMessage(const std::string &message) {
 }
 
 /***************************************************** MainGameLoop **************************************************/
-
+bool GameEngine::isGameOver() const {
+    for (auto &player: players) {
+        if (player->getTerritories().size() == currentGameMap->territoryList.size()) {
+            // This player owns all territories, game over
+            return true;
+        }
+    }
+    return false;
+}
 void GameEngine::mainGameLoop() {
     while (true) {
         if (isGameOver()) {

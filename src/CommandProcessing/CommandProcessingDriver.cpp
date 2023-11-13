@@ -4,7 +4,6 @@ void testCommandProcessor(){
     cout << "\n************************************\nTesting Command Processing!!! \n************************************\n\n";
     
     bool validChoice = false;
-    GameEngine engine;
 
     while(!validChoice){
 
@@ -17,6 +16,7 @@ void testCommandProcessor(){
 
         cout << "Would you like to\n1. enter commands from the console or,\n2. get commands from a file?\nPlease write 1 or 2 and hit ENTER: \n";
         cin >> choice;
+        GameEngine engine;
 
         switch (choice){            
             case 1:{
@@ -24,25 +24,31 @@ void testCommandProcessor(){
                     CommandProcessor* cpObj = new CommandProcessor();
                     retrievedCommand = cpObj->getCommand();
                     if (retrievedCommand == "quit") {
+                        cout << retrievedCommand << " command was read from console and is valid to execute. YOU\"LL EXIT THE GAME\n\n";
                         engine.setState(new EndState());
-                        //cpObj->getCommands().back()->saveEffect(positiveEffect); will be joined with LoggingObserver
+                        //cpObj->getCommands().back()->saveEffect(positiveEffect); //will be joined with LoggingObserver
                         break;
                     }
                     if(cpObj->validate(engine, retrievedCommand)){
+                        cout <<"\n\n" << retrievedCommand << " command was read from console and is valid to execute in current game state.\n\n";
                         engine.executeCommand(retrievedCommand);
-                        //cpObj->getCommands().back()->saveEffect(positiveEffect); will be joined with LoggingObserver
+                        //cpObj->getCommands().back()->saveEffect(positiveEffect); //will be joined with LoggingObserver
                     }
                     else{
-                        cout << "Invalid command in current game state\n";
-                        //cpObj->getCommands().back()->saveEffect(negativeEffect); will be joined with LoggingObserver
+                        cout <<"\n\n" << retrievedCommand << " command was read from console and is NOT VALID to execute in current game state.\n\n";
+                        //cpObj->getCommands().back()->saveEffect(negativeEffect); //will be joined with LoggingObserver
                     }
+
+                    delete cpObj;
+                    cpObj = NULL;
                 }
                 validChoice = true;
             break;
             }
             case 2:{
+                cout << "\n\nYou choose to read commands from a file.\n\n";
                 /**
-                 * i can't seem to opena file by passing its name on the console
+                 * i can't seem to open a file by passing its name on the console
                  * so i hardcoded a file path instead of asking the user to enter the name of the file.
                 */
                 //cout << "Enter the file name: \n";
@@ -50,24 +56,29 @@ void testCommandProcessor(){
                 cout << "\n/***********************************************************************************************************/\n";
                 FileCommandProcessorAdapter* fcpaObj = new FileCommandProcessorAdapter("C:/Users/konta/OneDrive/Desktop/COMP 345//Risk/src/CommandProcessing/Commands.txt");
                 fileCommands = fcpaObj->getCommands();
+
                 for(int i=0; i<fileCommands.size(); i++){
                     retrievedCommand = fileCommands[i]->getCommand();
                     if(retrievedCommand == "quit"){
-                        cout <<"\n" << retrievedCommand << " was read from file and is valid to execute\n";
+                        cout << retrievedCommand << " command was read from file and is valid to execute. YOU\"LL EXIT THE GAME\n\n";
                         engine.setState(new EndState());
-                        //fileCommands[i]->saveEffect(positiveEffect); will be joined with LoggingObserver
+                        //fileCommands[i]->saveEffect(positiveEffect); //will be joined with LoggingObserver
                         break;
                     }
                     if(fcpaObj->validate(engine, retrievedCommand)){
-                        cout <<"\n" << retrievedCommand << " was read from file and is valid to execute\n";
+                        cout <<"\n\n" << retrievedCommand << " command was read from file and is valid to execute in current game state.\n\n";
                         engine.executeCommand(retrievedCommand);
-                        //fileCommands[i]->saveEffect(positiveEffect); will be joined with LoggingObserver
+                        //fileCommands[i]->saveEffect(positiveEffect); //will be joined with LoggingObserver
                     }
                     else{
-                        cout << "\nInvalid command in current game state and is NOT VALID to execute\n";
-                        //fileCommands[i]->saveEffect(negativeEffect); will be joined with LoggingObserver
+                        cout <<"\n\n" << retrievedCommand << " command was read from file and is NOT VALID to execute in current game state.\n\n";
+                        //fileCommands[i]->saveEffect(negativeEffect); //will be joined with LoggingObserver
                     }
                 }
+
+                delete fcpaObj;
+                fcpaObj = NULL;
+
                 validChoice = true;
             break;
             }

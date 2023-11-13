@@ -1,6 +1,4 @@
 #pragma once
-#ifndef COMMANDPROCESSING_H
-#define COMMANDPROCESSING_H
 
 #include <ctime>
 #include <iostream>
@@ -50,7 +48,7 @@ public:
 
     string getEffect();
 
-    void saveEffect(string &effect);
+    void saveEffect(string effect);
 
 /**
  * Override string to log (observer pattern)
@@ -150,5 +148,3 @@ public:
 
 /************************************************************ CommandProcessingDriver **************************************************************/
 void testCommandProcessor();
-
-#endif
