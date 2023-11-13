@@ -149,6 +149,8 @@ public:
 
     vector<Territory *> territoryList;
     map<int, Territory *> territories;
+
+    vector<Territory *> getTerritories(int playerID);
 };
 
 

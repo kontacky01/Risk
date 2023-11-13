@@ -5,12 +5,71 @@
 #include "Orders.h"
 #include <random>
 
+
+void initializeGame(GameEngine &gameEngine) {
+    Map *map = new Map();
+    MapLoader mapLoader;
+    map = mapLoader.loadMap("../src/Map/MapFolder/World.map");
+
+    // Obtain a list of all territories from the loaded map
+    vector<Territory *> allTerritories = map->territoryList;
+
+    // Create Player 1 and assign random territories (between 1 and 5)
+    Player *player1 = new Player({}, new Hand(), new OrdersList(), 1);
+    player1->setReinforcement(50);
+
+    // Create Player 2 and assign random territories (between 1 and 5)
+    Player *player2 = new Player({}, new Hand(), new OrdersList(), 2);
+    // Set the player's reinforcement to 0
+    player2->setReinforcement(0);
+    // Create a Card object with the type "bomb"
+    Card *drawnCard = new Card("bomb");
+    // Draw the card and add it to the player's hand
+    player2->getHand()->addCard(drawnCard);
+
+
+    // Shuffle the territories randomly
+    shuffle(allTerritories.begin(), allTerritories.end(), std::mt19937(std::random_device()()));
+
+    // Assign territories to players
+    for (size_t i = 0; i < allTerritories.size(); ++i) {
+        if (i % 2 == 0 && player1->getTerritories().size() < 5) {
+            player1->addTerritory(allTerritories[i]);
+        } else if (player2->getTerritories().size() < 5) {
+            player2->addTerritory(allTerritories[i]);
+        }
+    }
+
+    gameEngine.setGameMap(map);
+    gameEngine.setPlayers({player1, player2});
+}
+
+int testMainGameLoop() {
+    auto *gameEngine = new GameEngine;
+
+    initializeGame(*gameEngine);
+
+    //gameEngine->reinforcementPhase();
+    gameEngine->issueOrdersPhase();
+    gameEngine->executeOrdersPhase();
+
+    gameEngine->cleanupResources();
+
+    delete gameEngine;
+
+    return 0;
+}
+
+/*
 void initializeGameMap(GameEngine *gameEngine) {
+    MapLoader mapLoader;
+    Map *gameMap = mapLoader.loadMap("../src/Map/MapFolder/World.map");
+
     // initialize deck and fill it with cards
     Deck *deck = new Deck();
     deck->fillDeck(3);
 
-   // cout << "\n"; deck->printDeck();
+    // cout << "\n"; deck->printDeck();
 
     // create players
     auto *player1 = new Player();
@@ -34,41 +93,27 @@ void initializeGameMap(GameEngine *gameEngine) {
     vector<Player *> players = {player1, player2, player3};
     gameEngine->setPlayers(players);
 
-    // create continents
-    auto *northAmerica = new Continent("north america", 5);
-    auto *europe = new Continent("europe", 5);
+    int playerIndex = 0;
+    int territoriesToAssign = gameMap->territoryList.size();
 
-    // create territories
-    auto *usa = new Territory("usa", 1, northAmerica->getId(), 500);
-    auto *canada = new Territory("canada", 2, northAmerica->getId(), 0);
-    auto *france = new Territory("france", 3, europe->getId(), 50);
-    auto *germany = new Territory("germany", 4, europe->getId(), 700);
+    for (const auto &territoryPair: gameMap->territories) {
+        Territory *territory = territoryPair.second;
 
-    // assign territories to the players
-    player1->addTerritory(usa);
-    player1->addTerritory(france);
-    player1->addTerritory(germany);
+        if (playerIndex == 0 && territoriesToAssign > 0) {
+            players[playerIndex]->addTerritory(territory);
+            territoriesToAssign--;
+        } else if (playerIndex == 2 && territoriesToAssign == 0) {
+            // Player 2 gets 0 territories
+            playerIndex = (playerIndex + 1) % players.size();
+        } else if (playerIndex == 2 && territoriesToAssign > 0) {
+            players[playerIndex]->addTerritory(territory);
+            territoriesToAssign--;
+        } else {
+            players[playerIndex]->addTerritory(territory);
+        }
 
-    // set territory adjacency
-    usa->addAdjacentTerritory(canada);
-    canada->addAdjacentTerritory(usa);
-
-    // add territories to continents
-    northAmerica->territoriesInContinents.push_back(usa);
-    northAmerica->territoriesInContinents.push_back(canada);
-    europe->territoriesInContinents.push_back(france);
-    europe->territoriesInContinents.push_back(germany);
-
-    // create game map and add continents
-    Map *gameMap = new Map();
-    gameMap->addContinent(northAmerica);
-    gameMap->addContinent(europe);
-
-    // add territories to the map
-    gameMap->addTerritory(usa);
-    gameMap->addTerritory(canada);
-    gameMap->addTerritory(france);
-    gameMap->addTerritory(germany);
+        playerIndex = (playerIndex + 1) % players.size();
+    }
 
     // set game map in
     gameEngine->setGameMap(gameMap);
@@ -76,36 +121,17 @@ void initializeGameMap(GameEngine *gameEngine) {
 
 int testMainGameLoop() {
 
-         auto *engine = new GameEngine;
+    auto *engine = new GameEngine;
     initializeGameMap(engine);
 
-    //*************************************************************//
-    //                     W E L C O M E                           //
-    //                          T O                                //
-    //                         R I S K                             //
-    //*************************************************************//
+    engine->reinforcementPhase();
+    engine->issueOrdersPhase();
+    //engine->executeOrdersPhase();
+
+    // check for players without territories and remove them
+    //engine->removePlayersWithoutTerritories();
 
 
-    // simulation of game phases
-  //  while (!engine->isGameOver()) {
-        engine->reinforcementPhase();
-        engine->issueOrdersPhase();
-        engine->executeOrdersPhase();
-
-        // check for players without territories and remove them
-        engine->removePlayersWithoutTerritories();
-
-        // check if a player has won
-     //   if (engine->checkForWinner()) {
-     //       break;
-    //    }
-  //  }
-
-    // announce winner or game status
-   // Player *winner = engine->checkForWinner();
-  //  if (winner) {
-  //      cout << "Player " << winner->getID() << " wins the game!" << endl;
-  //  }
 
     delete engine;
     engine = nullptr;
@@ -114,62 +140,6 @@ int testMainGameLoop() {
 }
 
 
-
-
-
-
-
-
-
-
-
-/*
-void initializeGame(GameEngine &gameEngine) {
-    Map *map = new Map();
-    MapLoader mapLoader;
-    map = mapLoader.loadMap("../src/Map/MapFolder/World.map");
-
-
-    // Obtain a list of all territories from the loaded map
-    vector<Territory *> allTerritories = map->territoryList;
-
-    // Create Player 1 and assign random territories (between 1 and 5)
-    Player *player1 = new Player({}, new Hand(), new OrdersList(), 1);
-    player1->setReinforcement(50);
-
-    // Create Player 2 and assign random territories (between 1 and 5)
-    Player *player2 = new Player({}, new Hand(), new OrdersList(), 2);
-    player2->setReinforcement(0);
-
-    // Shuffle the territories randomly
-    shuffle(allTerritories.begin(), allTerritories.end(), std::mt19937(std::random_device()()));
-
-    // Assign territories to players
-    for (size_t i = 0; i < allTerritories.size(); ++i) {
-        if (i % 2 == 0 && player1->getTerritories().size() < 5) {
-            player1->addTerritory(allTerritories[i]);
-        } else if (player2->getTerritories().size() < 5) {
-            player2->addTerritory(allTerritories[i]);
-        }
-    }
-
-    gameEngine.setGameMap(map);
-    gameEngine.setPlayers({player1, player2});
-}
-
-int testMainGameLoop() {
-    GameEngine* gameEngine = new GameEngine;
-
-    initializeGame(*gameEngine);
-
-    gameEngine->mainGameLoop();
-
-    gameEngine->cleanupResources();
-
-    delete gameEngine;
-
-    return 0;
-}
 
 
 /*void testGameStates() {

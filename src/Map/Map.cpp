@@ -46,6 +46,18 @@ Map::~Map() {
 
 map<int, Territory*> Map::getterritories() { return this->territories;}
 
+// Modify the Map class to include this member function
+vector<Territory*> Map::getTerritories(int playerID) {
+    vector<Territory*> territoriesOwnedByPlayer;
+    for (const auto& territoryPair : territories) {
+        Territory* territory = territoryPair.second;
+        if (territory->getOwnerId() == playerID) {
+            territoriesOwnedByPlayer.push_back(territory);
+        }
+    }
+    return territoriesOwnedByPlayer;
+}
+
 string Territory::getContinentName()
 {
     return continentName;

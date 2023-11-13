@@ -3,14 +3,15 @@
 
 #include <utility>
 #include <memory>
+#include <algorithm>
+
 
 /**
  * Default Constructor
- */StartState *s1 = new StartState();
+ */
+GameEngine::GameEngine() : currentState(nullptr) {
 
-GameEngine::GameEngine() : currentState(s1) {
-
-
+    StartState *s1 = new StartState();
     MaploadedState *s2 = new MaploadedState();
     MapvalidatedState *s3 = new MapvalidatedState();
     PlayersaddedState *s4 = new PlayersaddedState();
@@ -57,6 +58,7 @@ GameEngine::GameEngine() : currentState(s1) {
     playerOrder;
     deck = new Deck();
     currentGameMap = new Map();
+    currentGameMap = nullptr;
 }
 
 /**
@@ -643,7 +645,7 @@ GameEngine::~GameEngine() {
     }
     players.clear();
     playerOrder.clear();
-    delete currentGameMap;
+    //delete currentGameMap;
 }
 
 void GameEngine::start() {
@@ -704,21 +706,15 @@ bool GameEngine::isGameOver() const {
 
 /***************************************************** MainGameLoop **************************************************/
 void GameEngine::mainGameLoop() {
-    while (true) {
-        if (isGameOver()) {
-            Player *winner = checkForWinner();
-            if (winner) {
-                cout << "why are you here";
-            }
-            break;
-        }
-        reinforcementPhase();
-        issueOrdersPhase();
-        executeOrdersPhase();
+    Map *map = currentGameMap;
+
+        //reinforcementPhase();
+        //issueOrdersPhase();
+        //executeOrdersPhase();
 
         removePlayersWithoutTerritories();
     }
-}
+
 
 void GameEngine::cleanupResources() {
     for (Player *player: players) {
@@ -729,8 +725,8 @@ void GameEngine::cleanupResources() {
 }
 
 void GameEngine::reinforcementPhase() {
+    cout << "\n\nEntering Reinforcement Phase" << endl;
     for (auto &player: players) {
-        cout << "Entering Reinforcement Phase" << endl;
         // set player's game phase status to the current "Reinforcement" phase
         player->setGamePhase("Reinforcement");
 
@@ -740,16 +736,10 @@ void GameEngine::reinforcementPhase() {
         player->notify(&logMessage);
 
         // display current reinforcement pool of player
-        cout << "\nReinforcement Pool of Player " << player->getID() << ": " << player->getReinforcement() << " army units" << endl;
+        cout << "\nReinforcement Pool of Player " << player->getID() << ": " << player->getReinforcement() << endl;
 
-        if (playerTerritories.find(player->getID()) != playerTerritories.end()) {
-            // Retrieve the territories owned by the player with playerID
-            vector<Territory *> territoriesOwnedByPlayer = playerTerritories[player->getID()];
-            for (Territory *territory: territoriesOwnedByPlayer) {
-            }
-        }
         // calculate base reinforcement based on territories owned, with a minimum of 3 (rounded down)
-        int baseReinforcement = max(3, static_cast<int>(playerTerritories.size() / 3));
+        int baseReinforcement = std::max(3, static_cast<int>(player->territories.size()) / 3);
         player->setReinforcement(player->getReinforcement() + baseReinforcement);
 
         // if player owns continent, award control bonus value
@@ -758,8 +748,10 @@ void GameEngine::reinforcementPhase() {
             player->setReinforcement(player->getReinforcement() + bonus);
         }
         printPlayerReinforcement(player);
+        issueOrdersPhase();
     }
 }
+
 void GameEngine::issueOrdersPhase() {
     // loop through all players in the game
     for (auto &player: players) {
@@ -924,24 +916,3 @@ void GameEngine::executeOrdersPhase() {
 void GameEngine::addPlayer(Player *player) {
     players.push_back(player);
 }
-
-/*void mainGameLoop() {
-    GameEngine gameEngine;
-
-    while (true) {
-        gameEngine.reinforcementPhase();
-        gameEngine.issueOrdersPhase();
-        gameEngine.executeOrdersPhase();
-
-        Player* winner = gameEngine.checkForWinner();
-        if (winner != nullptr) {
-            cout << "Player " << winner->getID() << " wins!" << endl;
-            break;
-        }
-    }
-}
-
-  void GameEngine::mainGameLoop() {
-      GameEngine gameEngine;
-      reinforcementPhase();
-  }*/

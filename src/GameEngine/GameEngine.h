@@ -33,7 +33,7 @@ class Map;
 
 class Deck;
 
-class GameEngine : public Subject, public ILoggable{
+class GameEngine : public Subject, public ILoggable {
 public:
 /**
  * Default Constructor
@@ -143,9 +143,9 @@ public:
 
     string stringToLog();
 
-    void addPlayer(Player* player);
+    void addPlayer(Player *player);
 
-
+    ::map<int, vector<Territory *>> playerTerritories;
 private:
     State *currentState;
     Map *currentGameMap;
@@ -155,7 +155,7 @@ private:
     vector<int> playerOrder;
     Deck *deck;
     Map *map;
-    ::map<int, vector<Territory *>> playerTerritories;
+
 };
 
 /************************************************************ State *************************************************/
