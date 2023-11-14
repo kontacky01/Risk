@@ -35,7 +35,7 @@ public:
     */
     Territory(string name, int id, int continentId, int armyCount);
 
-    string getName();
+    string getName() const;
 
     string getContinentName();
 
@@ -92,9 +92,7 @@ public:
 
     int getId() const;
 
-    int getControlBonusValue() const {
-        return controlBonusValue;
-    }
+    int getControlBonusValue() const;
 
     vector<Territory *> territoriesInContinents;
 };

@@ -109,7 +109,7 @@ void Map::printMapSummary() {
 /**
 * Validate the map structure
 * 1) the map is a connected graph
-* 2) continents are connected subgraphs 
+* 2) continents are connected subgraphs
 * 3) each country belongs to one and only one continent
 */
 bool Map::validate() {
@@ -198,6 +198,10 @@ string Continent::getName() const {
 int Continent::getId() const {
     return id;
 }
+
+int Continent::getControlBonusValue() const {
+    return controlBonusValue;
+}
 /************************************************************ Territory ************************************************************/
 /**
 * Default Constructor
@@ -215,11 +219,11 @@ Territory::Territory(string n, int i, int ci, int a) {
     ownerId = 0;
 }
 
-string Territory::getName(){
+string Territory::getName() const {
     return name;
 }
 
-int Territory::getId() const{
+int Territory::getId() const {
     return id;
 }
 
@@ -286,9 +290,9 @@ ostream& operator << (ostream& out, Territory* t)
 * Will read the map file (will handle errors if file doesnt exist or can't open)
 * Will parse line by line
 * The file is divided in to two important sections: Continents & Territories
-* Continents look like so: 
+* Continents look like so:
 * continentName=howManyTerritoriesItHas
-* Territories look like so: 
+* Territories look like so:
 * territoryName, coord-x, coord-y, continent, listOfAdjacentTerritories seperated by commas
 */
 Map* MapLoader::loadMap(string filename) {
