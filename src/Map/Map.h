@@ -19,7 +19,7 @@ private:
     int continentId;
     int ownerId;
     int armyCount;
-    string continentName;
+
     vector<Territory *> adjacencyList;
 
     friend ostream &operator<<(ostream &out, Territory *o); // override Stream insertion operator
@@ -66,6 +66,7 @@ public:
     * hence we keep track of adjacent territories
     */
     void addAdjacentTerritory(Territory *);
+    string continentName;
 };
 
 /************************************************************ Continent ************************************************************/
@@ -95,6 +96,8 @@ public:
     int getControlBonusValue() const;
 
     vector<Territory *> territoriesInContinents;
+
+    vector<Territory *> getTerritories();
 };
 
 /************************************************************ Map ************************************************************/
@@ -127,7 +130,11 @@ public:
 
     map<int, Territory *> getterritories();
 
+    vector<Territory *> getTerritories();
+
     Territory *getTerritory(string tName);
+
+    Continent* getContinentById(int continentId);
 
     void addContinent(Continent *);
 
@@ -144,20 +151,23 @@ public:
     bool validate();
 
     vector<Continent *> continentList;
-
+    vector<Continent *> getContinents();
     vector<Territory *> territoryList;
     map<int, Territory *> territories;
 
-    vector<Territory *> getTerritories(int playerID);
+
 };
 
 
 /************************************************************ MapDriver ************************************************************/
 
 void testLoadMaps();
-Map* gameLoadMap(string);
-void validateMap(Map& map);
-void deleteMap(Map* map);
+
+Map *gameLoadMap(string);
+
+void validateMap(Map &map);
+
+void deleteMap(Map *map);
 
 /************************************************************ MapLoader ************************************************************/
 

@@ -7,49 +7,89 @@
 
 
 void initializeGame(GameEngine &gameEngine) {
-    Map *map = new Map();
+    // Load the map
     MapLoader mapLoader;
-    map = mapLoader.loadMap("../src/Map/MapFolder/World.map");
+    Map *currentGameMap = mapLoader.loadMap("../src/Map/MapFolder/World.map");
+
+    if (currentGameMap == nullptr) {
+        cout << "Failed to load the map." << endl;
+        return; // Exit the function if map loading fails
+    }
 
     // Obtain a list of all territories from the loaded map
-    vector<Territory *> allTerritories = map->territoryList;
+    vector<Territory *> allTerritories = currentGameMap->getTerritories();
 
     // Create Player 1 and assign random territories (between 1 and 5)
     Player *player1 = new Player({}, new Hand(), new OrdersList(), 1);
     player1->setReinforcement(50);
+    player1->setGameEngine(&gameEngine);
 
     // Create Player 2 and assign random territories (between 1 and 5)
     Player *player2 = new Player({}, new Hand(), new OrdersList(), 2);
-    // Set the player's reinforcement to 0
     player2->setReinforcement(0);
-    // Create a Card object with the type "bomb"
-    Card *drawnCard = new Card("bomb");
-    // Draw the card and add it to the player's hand
-    player2->getHand()->addCard(drawnCard);
+    player2->setGameEngine(&gameEngine);
 
+    // Create a Card object with the type "bomb" for Player 2
+    Card *drawnCard = new Card("bomb");
+    player2->getHand()->addCard(drawnCard);
 
     // Shuffle the territories randomly
     shuffle(allTerritories.begin(), allTerritories.end(), std::mt19937(std::random_device()()));
 
     // Assign territories to players
+    // Shuffle the territories randomly
+    shuffle(allTerritories.begin(), allTerritories.end(), std::mt19937(std::random_device()()));
+
+// Assign territories to players
     for (size_t i = 0; i < allTerritories.size(); ++i) {
         if (i % 2 == 0 && player1->getTerritories().size() < 5) {
-            player1->addTerritory(allTerritories[i]);
+            Territory* territory = allTerritories[i];
+            player1->addTerritory(territory);
+            territory->setOwnerId(player1->getID());
+            territory->continentName = currentGameMap->getContinentById(territory->getContinentId())->getName();
         } else if (player2->getTerritories().size() < 5) {
-            player2->addTerritory(allTerritories[i]);
+            Territory* territory = allTerritories[i];
+            player2->addTerritory(territory);
+            territory->setOwnerId(player2->getID());
+            territory->continentName = currentGameMap->getContinentById(territory->getContinentId())->getName();
         }
     }
 
-    gameEngine.setGameMap(map);
+
+
+    // Debug print statements to check the state of the game objects
+    cout << "Map loaded successfully." << endl;
+
+    cout << "Player 1 territories: " << player1->getTerritories().size() << endl;
+    vector<Territory*> player1Territories = player1->getTerritories();
+
+    cout << "Player 1's territories:" << endl;
+
+    for (const auto& territory : player1Territories) {
+        cout << "Territory Name: " << territory->getName() << endl;
+        // You can print other information about the territory here
+        cout << "Continent: " << territory->getContinentName() << endl;
+        cout << "Army Count: " << territory->getArmyCount() << endl;
+        // Add more information if needed
+        cout << endl;
+    }
+
+    cout << "Player 2 territories: " << player2->getTerritories().size() << endl;
+
+    // Set the map and players in the game engine
+    gameEngine.setGameMap(currentGameMap);
     gameEngine.setPlayers({player1, player2});
 }
+
 
 int testMainGameLoop() {
     auto *gameEngine = new GameEngine;
 
     initializeGame(*gameEngine);
 
-    //gameEngine->reinforcementPhase();
+    //gameEngine->gameMap()->printMapSummary();
+
+    gameEngine->reinforcementPhase();
     gameEngine->issueOrdersPhase();
     gameEngine->executeOrdersPhase();
 

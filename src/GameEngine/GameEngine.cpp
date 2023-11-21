@@ -58,7 +58,7 @@ GameEngine::GameEngine() : currentState(nullptr) {
     playerOrder;
     deck = new Deck();
     currentGameMap = new Map();
-    currentGameMap = nullptr;
+    //currentGameMap = nullptr;
 }
 
 /**
@@ -645,7 +645,6 @@ GameEngine::~GameEngine() {
     }
     players.clear();
     playerOrder.clear();
-    //delete currentGameMap;
 }
 
 void GameEngine::start() {
@@ -708,9 +707,9 @@ bool GameEngine::isGameOver() const {
 void GameEngine::mainGameLoop() {
     Map *map = currentGameMap;
 
-        //reinforcementPhase();
-        //issueOrdersPhase();
-        //executeOrdersPhase();
+        reinforcementPhase();
+        issueOrdersPhase();
+        executeOrdersPhase();
 
         removePlayersWithoutTerritories();
     }
@@ -739,7 +738,7 @@ void GameEngine::reinforcementPhase() {
         cout << "\nReinforcement Pool of Player " << player->getID() << ": " << player->getReinforcement() << endl;
 
         // calculate base reinforcement based on territories owned, with a minimum of 3 (rounded down)
-        int baseReinforcement = std::max(3, static_cast<int>(player->territories.size()) / 3);
+        int baseReinforcement = std::max(3, static_cast<int>(player->getTerritories().size()) / 3);
         player->setReinforcement(player->getReinforcement() + baseReinforcement);
 
         // if player owns continent, award control bonus value

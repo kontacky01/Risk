@@ -46,16 +46,12 @@ Map::~Map() {
 
 map<int, Territory*> Map::getterritories() { return this->territories;}
 
-// Modify the Map class to include this member function
-vector<Territory*> Map::getTerritories(int playerID) {
-    vector<Territory*> territoriesOwnedByPlayer;
+vector<Territory*> Map::getTerritories() {
+    vector<Territory*> allTerritories;
     for (const auto& territoryPair : territories) {
-        Territory* territory = territoryPair.second;
-        if (territory->getOwnerId() == playerID) {
-            territoriesOwnedByPlayer.push_back(territory);
-        }
+        allTerritories.push_back(territoryPair.second);
     }
-    return territoriesOwnedByPlayer;
+    return allTerritories;
 }
 
 string Territory::getContinentName()
@@ -199,6 +195,25 @@ int Continent::getId() const {
     return id;
 }
 
+Continent* Map::getContinentById(int continentId) {
+    auto it = continents.find(continentId);
+    if (it != continents.end()) {
+        return it->second;
+    }
+    return nullptr; // Return nullptr if the continent is not found
+}
+
+vector<Continent*> Map::getContinents() {
+    vector<Continent*> continentList;
+
+    // Iterate through the map's continents and add them to the list
+    for (const auto& continentPair : continents) {
+        continentList.push_back(continentPair.second);
+    }
+
+    return continentList;
+}
+
 int Continent::getControlBonusValue() const {
     return controlBonusValue;
 }
@@ -257,6 +272,17 @@ void Territory::subFromArmy(int x){
 
 vector<Territory*> Territory::getAdjacencyList() {
     return adjacencyList;
+}
+
+vector<Territory*> Continent::getTerritories() {
+    vector<Territory*> territoryList;
+
+    // Iterate through the continent's territories and add them to the list
+    for (const auto& territory : territoriesInContinents) {
+        territoryList.push_back(territory);
+    }
+
+    return territoryList;
 }
 
 /**

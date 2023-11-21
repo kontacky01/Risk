@@ -146,6 +146,7 @@ public:
     void addPlayer(Player *player);
 
     ::map<int, vector<Territory *>> playerTerritories;
+
 private:
     State *currentState;
     Map *currentGameMap;
@@ -155,7 +156,6 @@ private:
     vector<int> playerOrder;
     Deck *deck;
     Map *map;
-
 };
 
 /************************************************************ State *************************************************/

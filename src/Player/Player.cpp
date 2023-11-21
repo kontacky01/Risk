@@ -83,22 +83,29 @@ string Player::getGamePhase() {
     return gamePhase;
 }
 
+void Player::setGameEngine(GameEngine* engine) {
+    gameEngine = engine;
+}
+
 vector<int> Player::continentOwnershipComplete() {
     vector<int> controlBonuses; // Store control bonuses for continents
     vector<string> awardedContinents; // Store the names of awarded continents
 
-    // Iterate through all continents on the game map
-    for (auto &continent : gameEngine->gameMap()->continentList) {
-        int territoriesInCurrentContinent = continent->territoriesInContinents.size();
+    // Iterate through all continents in the current game map
+    for (auto &continent : gameEngine->gameMap()->getContinents()) { // Use the correct getter function for continents
+        int territoriesInCurrentContinent = continent->getTerritories().size();
         int territoryOwnershipCount = 0;
+
+        //cout << continent->getTerritories().size();
 
         // Check how many territories in the continent are owned by the player
         for (auto &territory : territories) {
-            if (territory->getContinentName() == continent->getName()) {
+            if (territory->getContinentId() == continent->getId()) {
                 territoryOwnershipCount++;
             }
         }
-        // Check if the player owns all territories in the continent and it hasn't been awarded already
+
+        // Check if the player owns all territories in the continent and that bonus for it hasn't been awarded already
         if (territoriesInCurrentContinent == territoryOwnershipCount &&
             find(awardedContinents.begin(), awardedContinents.end(), continent->getName()) == awardedContinents.end()) {
             // Get the bonus value for the continent and add it to the controlBonuses vector

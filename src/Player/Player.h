@@ -23,10 +23,15 @@ using namespace std;
 //class Subject;
 //class ILoggable;
 class Hand;
+
 class Deck;
+
 class GameEngine;
+
 class Card;
+
 class Order;
+
 class OrdersList;
 
 class Player : public Subject, ILoggable {
@@ -78,11 +83,11 @@ public:
 
     void subtractReinforcements(int r);
 
-    void setTerritories(const std::vector<Territory*>& newTerritories) {
+    void setTerritories(const std::vector<Territory *> &newTerritories) {
         territories = newTerritories;
     }
 
-    const std::vector<Territory*>& getTerritories() const {
+    const std::vector<Territory *> &getTerritories() const {
         return territories;
     }
 
@@ -98,13 +103,13 @@ public:
 
     void setDeck(Deck *deck);
 
-    vector<int> continentOwnershipComplete();
-
     OrdersList *getOrdersList();
 
     void setGamePhase(string gamePhase);
 
     string getGamePhase();
+
+    void setGameEngine(GameEngine *engine);
 
     bool ownsTerritory(Territory *t);
 
@@ -138,8 +143,10 @@ public:
 
     void setHand(Hand *hand);
 
-    Deck* getDeck();
+    Deck *getDeck();
 
 /************************************************************ PlayerDriver **************************************************************/
-void testPlayers();
+    void testPlayers();
+
+    vector<int> continentOwnershipComplete();
 };
