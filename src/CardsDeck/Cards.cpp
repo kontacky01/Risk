@@ -353,7 +353,9 @@ void Hand::play(Card *card, Deck *returningDeck, OrdersList *OL) {
 
         // Return the card to the deck and remove it from the player's hand
         returningDeck->returnCard(*it);
-        hand.erase(it);
+
+        swap(*it, hand.back());
+        hand.pop_back();
 
         cout << "You played the " << "\"" << card->getType() << "\" card.\n";
     } else {

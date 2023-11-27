@@ -147,6 +147,8 @@ public:
 
     ::map<int, vector<Territory *>> playerTerritories;
 
+    Deck *getDeck();
+
 private:
     State *currentState;
     Map *currentGameMap;

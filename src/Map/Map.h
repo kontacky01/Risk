@@ -98,6 +98,8 @@ public:
     vector<Territory *> territoriesInContinents;
 
     vector<Territory *> getTerritories();
+
+    void addTerritory(Territory *territory);
 };
 
 /************************************************************ Map ************************************************************/

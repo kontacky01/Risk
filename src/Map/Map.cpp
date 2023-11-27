@@ -80,6 +80,11 @@ void Map::addContinent(Continent* continent) {
 */
 void Map::addTerritory(Territory* territory) {
     territories[territory->getId()] = territory;
+
+    Continent* continent = getContinentById(territory->getContinentId());
+    if (continent) {
+        continent->addTerritory(territory);
+    }
 }
 
 /**
@@ -201,6 +206,10 @@ Continent* Map::getContinentById(int continentId) {
         return it->second;
     }
     return nullptr; // Return nullptr if the continent is not found
+}
+
+void Continent::addTerritory(Territory* territory) {
+    territoriesInContinents.push_back(territory);
 }
 
 vector<Continent*> Map::getContinents() {

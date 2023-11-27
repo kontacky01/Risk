@@ -136,7 +136,8 @@ public:
     OrdersList *issuesOrder(Order *o);
 
     //void executeNextOrderAndRemove();
-    void playCard(Card *card, Deck *deck, OrdersList *OL);
+
+    void playCard(Card *card, Deck *returningDeck, OrdersList *OL);
 
     OrdersList *orderList;
     vector<Territory *> territories;

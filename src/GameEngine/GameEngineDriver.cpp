@@ -13,25 +13,34 @@ void initializeGame(GameEngine &gameEngine) {
 
     if (currentGameMap == nullptr) {
         cout << "Failed to load the map." << endl;
-        return; // Exit the function if map loading fails
+        return;
     }
 
     // Obtain a list of all territories from the loaded map
     vector<Territory *> allTerritories = currentGameMap->getTerritories();
 
+    Deck *deck = gameEngine.getDeck();
+    deck->fillDeck(5);
+    deck->shuffleDeck();
+    deck->printDeck();
+
     // Create Player 1 and assign random territories (between 1 and 5)
     Player *player1 = new Player({}, new Hand(), new OrdersList(), 1);
     player1->setReinforcement(50);
     player1->setGameEngine(&gameEngine);
+    player1->setDeck(deck);
 
     // Create Player 2 and assign random territories (between 1 and 5)
     Player *player2 = new Player({}, new Hand(), new OrdersList(), 2);
     player2->setReinforcement(0);
     player2->setGameEngine(&gameEngine);
+    player2->setDeck(deck);
 
-    // Create a Card object with the type "bomb" for Player 2
-    Card *drawnCard = new Card("bomb");
-    player2->getHand()->addCard(drawnCard);
+
+    for (int i = 0; i < 5; ++i) {
+        Card *drawnCard = deck->draw();
+        player1->getHand()->addCard(drawnCard);
+    }
 
     // Shuffle the territories randomly
     shuffle(allTerritories.begin(), allTerritories.end(), std::mt19937(std::random_device()()));
@@ -55,12 +64,9 @@ void initializeGame(GameEngine &gameEngine) {
         }
     }
 
-
-
     // Debug print statements to check the state of the game objects
     cout << "Map loaded successfully." << endl;
 
-    cout << "Player 1 territories: " << player1->getTerritories().size() << endl;
     vector<Territory*> player1Territories = player1->getTerritories();
 
     cout << "Player 1's territories:" << endl;
@@ -73,6 +79,8 @@ void initializeGame(GameEngine &gameEngine) {
         // Add more information if needed
         cout << endl;
     }
+
+    cout << "Player 1 cards: " << player1->getHand() << endl;
 
     cout << "Player 2 territories: " << player2->getTerritories().size() << endl;
 

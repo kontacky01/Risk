@@ -915,3 +915,7 @@ void GameEngine::executeOrdersPhase() {
 void GameEngine::addPlayer(Player *player) {
     players.push_back(player);
 }
+
+Deck *GameEngine::getDeck() {
+    return deck;
+}

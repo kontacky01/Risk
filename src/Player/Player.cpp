@@ -89,31 +89,24 @@ void Player::setGameEngine(GameEngine* engine) {
 
 vector<int> Player::continentOwnershipComplete() {
     vector<int> controlBonuses; // Store control bonuses for continents
-    vector<string> awardedContinents; // Store the names of awarded continents
 
     // Iterate through all continents in the current game map
-    for (auto &continent : gameEngine->gameMap()->getContinents()) { // Use the correct getter function for continents
+    for (auto &continent : gameEngine->gameMap()->getContinents()) {
         int territoriesInCurrentContinent = continent->getTerritories().size();
         int territoryOwnershipCount = 0;
 
-        //cout << continent->getTerritories().size();
-
         // Check how many territories in the continent are owned by the player
         for (auto &territory : territories) {
-            if (territory->getContinentId() == continent->getId()) {
+            if (territory->getContinentId() == continent->getId() && territory->getOwnerId() == this->id) {
                 territoryOwnershipCount++;
             }
         }
 
-        // Check if the player owns all territories in the continent and that bonus for it hasn't been awarded already
-        if (territoriesInCurrentContinent == territoryOwnershipCount &&
-            find(awardedContinents.begin(), awardedContinents.end(), continent->getName()) == awardedContinents.end()) {
+        // Check if the player owns all territories in the continent
+        if (territoriesInCurrentContinent == territoryOwnershipCount) {
             // Get the bonus value for the continent and add it to the controlBonuses vector
             int bonus = continent->getControlBonusValue();
             controlBonuses.push_back(bonus);
-
-            // Add the continent to the awardedContinents vector to track it
-            awardedContinents.push_back(continent->getName());
         }
     }
     return controlBonuses; // Return the control bonuses for continents
@@ -298,6 +291,7 @@ void Player::issueOrder() {
             addTerritoryToList(targetTerritory, "defend");
             // add the "deploy" order to the player's orders list
             this->orderList->addOrder(deployOrder); // add order to list
+            this->reinforcements -= armyUnits;
             cout << "\n" << targetTerritory->getName() << " now has " << targetTerritory->getArmyCount()
                  << " army units!\n";
             cout << orderList;
@@ -391,9 +385,12 @@ void Player::issueOrder() {
         bool hasCard = false; // check if the player has the card in their hand
         for (auto &card: this->getHand()->hand) {
             if (card->getType() == orderName) {
-                playCard(card, deck, orderList);
                 cout << "\n~~~~~~ You have issued an order to: [" << card->getType() << "] !\n";
+                playCard(card, deck, orderList);
                 hasCard = true;
+                cout << orderList;
+                hand->printHand();
+                deck->printDeck();
                 break;
             }
         }
@@ -423,8 +420,8 @@ string Player::stringToLog() {
     return {};
 }
 
-void Player::playCard(Card *card, Deck *deck, OrdersList *OL) {
-    this->hand->play(card, deck, OL);
+void Player::playCard(Card *drawnCard, Deck *returningDeck, OrdersList *OL) {
+    this->hand->play(drawnCard, returningDeck, OL);
 }
 
 void Player::setDeck(Deck *deck) {
