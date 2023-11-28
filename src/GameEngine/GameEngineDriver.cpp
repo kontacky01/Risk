@@ -22,6 +22,7 @@ void initializeGame(GameEngine &gameEngine) {
     Deck *deck = gameEngine.getDeck();
     deck->fillDeck(5);
     deck->shuffleDeck();
+    cout << "\n";
     deck->printDeck();
 
     // Create Player 1 and assign random territories (between 1 and 5)
@@ -40,6 +41,7 @@ void initializeGame(GameEngine &gameEngine) {
     for (int i = 0; i < 5; ++i) {
         Card *drawnCard = deck->draw();
         player1->getHand()->addCard(drawnCard);
+        player2->getHand()->addCard(drawnCard);
     }
 
     // Shuffle the territories randomly
@@ -64,13 +66,8 @@ void initializeGame(GameEngine &gameEngine) {
         }
     }
 
-    // Debug print statements to check the state of the game objects
-    cout << "Map loaded successfully." << endl;
-
     vector<Territory*> player1Territories = player1->getTerritories();
-
-    cout << "Player 1's territories:" << endl;
-
+    cout << "\n================================== Player 1's territories & cards ==================================" << endl;
     for (const auto& territory : player1Territories) {
         cout << "Territory Name: " << territory->getName() << endl;
         // You can print other information about the territory here
@@ -79,10 +76,19 @@ void initializeGame(GameEngine &gameEngine) {
         // Add more information if needed
         cout << endl;
     }
+    cout << player1->getHand() << endl;
 
-    cout << "Player 1 cards: " << player1->getHand() << endl;
-
-    cout << "Player 2 territories: " << player2->getTerritories().size() << endl;
+    vector<Territory*> player2Territories = player2->getTerritories();
+    cout << "================================== Player 2 territories & cards ==================================" << endl;
+    for (const auto& territory : player2Territories) {
+        cout << "Territory Name: " << territory->getName() << endl;
+        // You can print other information about the territory here
+        cout << "Continent: " << territory->getContinentName() << endl;
+        cout << "Army Count: " << territory->getArmyCount() << endl;
+        // Add more information if needed
+        cout << endl;
+    }
+    cout << player2->getHand() << endl;
 
     // Set the map and players in the game engine
     gameEngine.setGameMap(currentGameMap);
@@ -94,99 +100,13 @@ int testMainGameLoop() {
     auto *gameEngine = new GameEngine;
 
     initializeGame(*gameEngine);
-
-    //gameEngine->gameMap()->printMapSummary();
-
-    gameEngine->reinforcementPhase();
-    gameEngine->issueOrdersPhase();
-    gameEngine->executeOrdersPhase();
-
+    gameEngine->mainGameLoop();
     gameEngine->cleanupResources();
 
     delete gameEngine;
 
     return 0;
 }
-
-/*
-void initializeGameMap(GameEngine *gameEngine) {
-    MapLoader mapLoader;
-    Map *gameMap = mapLoader.loadMap("../src/Map/MapFolder/World.map");
-
-    // initialize deck and fill it with cards
-    Deck *deck = new Deck();
-    deck->fillDeck(3);
-
-    // cout << "\n"; deck->printDeck();
-
-    // create players
-    auto *player1 = new Player();
-    auto *player2 = new Player();
-    auto *player3 = new Player();
-
-    // set initial army units for each player
-    player1->setReinforcement(500);
-    player2->setReinforcement(50);
-    player3->setReinforcement(0);
-
-    // assign hands and decks to players
-    player1->setHand(new Hand());
-    player2->setHand(new Hand());
-    player3->setHand(new Hand());
-    player1->setDeck(deck);
-    player2->setDeck(deck);
-    player3->setDeck(deck);
-
-    // add players to the game engine
-    vector<Player *> players = {player1, player2, player3};
-    gameEngine->setPlayers(players);
-
-    int playerIndex = 0;
-    int territoriesToAssign = gameMap->territoryList.size();
-
-    for (const auto &territoryPair: gameMap->territories) {
-        Territory *territory = territoryPair.second;
-
-        if (playerIndex == 0 && territoriesToAssign > 0) {
-            players[playerIndex]->addTerritory(territory);
-            territoriesToAssign--;
-        } else if (playerIndex == 2 && territoriesToAssign == 0) {
-            // Player 2 gets 0 territories
-            playerIndex = (playerIndex + 1) % players.size();
-        } else if (playerIndex == 2 && territoriesToAssign > 0) {
-            players[playerIndex]->addTerritory(territory);
-            territoriesToAssign--;
-        } else {
-            players[playerIndex]->addTerritory(territory);
-        }
-
-        playerIndex = (playerIndex + 1) % players.size();
-    }
-
-    // set game map in
-    gameEngine->setGameMap(gameMap);
-}
-
-int testMainGameLoop() {
-
-    auto *engine = new GameEngine;
-    initializeGameMap(engine);
-
-    engine->reinforcementPhase();
-    engine->issueOrdersPhase();
-    //engine->executeOrdersPhase();
-
-    // check for players without territories and remove them
-    //engine->removePlayersWithoutTerritories();
-
-
-
-    delete engine;
-    engine = nullptr;
-
-    return 0;
-}
-
 
 
 

@@ -253,7 +253,7 @@ void Player::issueOrder() {
     cout << "Enter an order (bomb, reinforcement, blockade, airlift, diplomacy, deploy, advance): ";
     cin >> orderName;
     transform(orderName.begin(), orderName.end(), orderName.begin(),
-              [](unsigned char c) { return std::tolower(c); });
+              [](unsigned char c) { return tolower(c); });
 
     if (this->getReinforcement() > 0 && orderName == "deploy") {
         Order *deployOrder = new Deploy(); // create a deploy order
@@ -267,6 +267,13 @@ void Player::issueOrder() {
         // ask for the number of units
         cout << "\nEnter the number of army units you wish to deploy: ";
         cin >> armyUnits;
+
+        // Check if player has enough reinforcement units to deploy
+        if (armyUnits > this->getReinforcement()) {
+            cout << "Invalid: You cannot deploy more units than you have available." << endl;
+            cout << "You have " << this->getReinforcement() << " units available." << endl;
+            return; // Return early if the player does not have enough units
+        }
 
         // check if the territory is owned by the player
         Territory *targetTerritory = nullptr;
@@ -318,7 +325,7 @@ void Player::issueOrder() {
         cout << "\nEnter the amount of army units you wish to advance TO " << targetTerritoryName << ": ";
         cin >> armyUnits;
 
-        Territory *sourceTerritory = nullptr;
+        Territory *sourceTerritory = gameEngine->gameMap()->getTerritory(sourceTerritoryName);
         //for (auto &territory: currentTerritoryList) {
         for (auto &territory: territories) {
             if (territory->getName() == sourceTerritoryName) {
@@ -337,7 +344,7 @@ void Player::issueOrder() {
             delete advanceOrder;
             return;
         }
-        Territory *targetTerritory = nullptr;
+        Territory *targetTerritory = gameEngine->gameMap()->getTerritory(targetTerritoryName);
         //for (auto &territory: currentTerritoryList) {
         for (auto &territory: territories) {
             if (territory->getName() == targetTerritoryName) {
@@ -400,6 +407,8 @@ void Player::issueOrder() {
     } else {
         cout << "\nInvalid: There is no such card.\n";
     }
+    toDefend();
+    toAttack();
 }
 
 /**

@@ -704,15 +704,22 @@ bool GameEngine::isGameOver() const {
 }
 
 /***************************************************** MainGameLoop **************************************************/
+
 void GameEngine::mainGameLoop() {
-    Map *map = currentGameMap;
+    while (true) {
+        for (auto &player: players) {
+            reinforcementPhase();
+            issueOrdersPhase();
+            executeOrdersPhase();
 
-        reinforcementPhase();
-        issueOrdersPhase();
-        executeOrdersPhase();
-
-        removePlayersWithoutTerritories();
+            Player *winner = checkForWinner();
+            if (winner != nullptr) {
+                cout << "Player " << winner->getID() << " wins!" << endl;
+                break;
+            }
+        }
     }
+}
 
 
 void GameEngine::cleanupResources() {
@@ -724,11 +731,9 @@ void GameEngine::cleanupResources() {
 }
 
 void GameEngine::reinforcementPhase() {
-    cout << "\n\nEntering Reinforcement Phase" << endl;
     for (auto &player: players) {
         // set player's game phase status to the current "Reinforcement" phase
         player->setGamePhase("Reinforcement");
-
         // notify log of phase status change
         InlineLoggable logMessage = createLogMessage(
                 "\nPlayer " + to_string(player->getID()) + " is now in the [Reinforcement] phase of the game.");
@@ -747,8 +752,8 @@ void GameEngine::reinforcementPhase() {
             player->setReinforcement(player->getReinforcement() + bonus);
         }
         printPlayerReinforcement(player);
-        issueOrdersPhase();
     }
+    issueOrdersPhase();
 }
 
 void GameEngine::issueOrdersPhase() {
@@ -779,12 +784,13 @@ void GameEngine::issueOrdersPhase() {
             } else if (userInput == "NO") {
                 continueIssuingOrders = false; // stop asking
             } else {
-                std::cout << "\nInvalid input! Please enter YES or NO." << endl;
+                cout << "\nInvalid input! Please enter YES or NO." << endl;
             }
         }
         // display order list of player
         cout << player->orderList << endl;
     }
+    executeOrdersPhase();
 }
 
 Player *GameEngine::checkForWinner() {
@@ -838,12 +844,12 @@ void executeAssistForPlayer(Player *player, const string &orderName, const strin
     // check if the ordersVector is not empty
     if (ordersVector != nullptr && !ordersVector->empty()) {
         for (int j = 0; j < ordersVector->size(); j++) {
-            // retrieve the current order from the vector
             Order *currentOrder = (*ordersVector)[j];
 
-            // check if the order matches the specified order name
             if (currentOrder != nullptr && currentOrder->getOrderName() == orderName) {
-                // execute the order
+                cout << "Player " << player->getID() << " is executing " << phase << " order: " << currentOrder->getOrderName() << endl;
+
+                // Execute the order
                 currentOrder->execute();
             }
         }

@@ -156,8 +156,6 @@ public:
     vector<Continent *> getContinents();
     vector<Territory *> territoryList;
     map<int, Territory *> territories;
-
-
 };
 
 
