@@ -19,7 +19,7 @@ private:
     int continentId;
     int ownerId;
     int armyCount;
-    string continentName;
+
     vector<Territory *> adjacencyList;
 
     friend ostream &operator<<(ostream &out, Territory *o); // override Stream insertion operator
@@ -35,7 +35,7 @@ public:
     */
     Territory(string name, int id, int continentId, int armyCount);
 
-    string getName();
+    string getName() const;
 
     string getContinentName();
 
@@ -66,6 +66,7 @@ public:
     * hence we keep track of adjacent territories
     */
     void addAdjacentTerritory(Territory *);
+    string continentName;
 };
 
 /************************************************************ Continent ************************************************************/
@@ -92,11 +93,13 @@ public:
 
     int getId() const;
 
-    int getControlBonusValue() const {
-        return controlBonusValue;
-    }
+    int getControlBonusValue() const;
 
     vector<Territory *> territoriesInContinents;
+
+    vector<Territory *> getTerritories();
+
+    void addTerritory(Territory *territory);
 };
 
 /************************************************************ Map ************************************************************/
@@ -129,7 +132,11 @@ public:
 
     map<int, Territory *> getterritories();
 
+    vector<Territory *> getTerritories();
+
     Territory *getTerritory(string tName);
+
+    Continent* getContinentById(int continentId);
 
     void addContinent(Continent *);
 
@@ -146,6 +153,7 @@ public:
     bool validate();
 
     vector<Continent *> continentList;
+    vector<Continent *> getContinents();
     vector<Territory *> territoryList;
     map<int, Territory *> territories;
 };
@@ -154,9 +162,12 @@ public:
 /************************************************************ MapDriver ************************************************************/
 
 void testLoadMaps();
-Map* gameLoadMap(string);
-void validateMap(Map& map);
-void deleteMap(Map* map);
+
+Map *gameLoadMap(string);
+
+void validateMap(Map &map);
+
+void deleteMap(Map *map);
 
 /************************************************************ MapLoader ************************************************************/
 

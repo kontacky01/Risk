@@ -125,8 +125,6 @@ protected:
     * 'transfer' is a temporary vector used to transfer cards from deck to hand and back
     */
     vector<Card *> transfer;
-
-
 };
 
 /************************************************************ Hand ****************************************************/

@@ -5,111 +5,110 @@
 #include "../OrdersList/Orders.h"
 #include <random>
 
-void initializeGameMap(GameEngine *gameEngine) {
-    // initialize deck and fill it with cards
-    Deck *deck = new Deck();
-    deck->fillDeck(3);
+void initializeGame(GameEngine &gameEngine) {
+    // Load the map
+    MapLoader mapLoader;
+    Map *currentGameMap = mapLoader.loadMap("../src/Map/MapFolder/World.map");
 
-   // cout << "\n"; deck->printDeck();
+    if (currentGameMap == nullptr) {
+        cout << "Failed to load the map." << endl;
+        return;
+    }
 
-    // create players
-    auto *player1 = new Player();
-    auto *player2 = new Player();
-    auto *player3 = new Player();
+    // Obtain a list of all territories from the loaded map
+    vector<Territory *> allTerritories = currentGameMap->getTerritories();
 
-    // set initial army units for each player
-    player1->setReinforcement(500);
-    player2->setReinforcement(50);
-    player3->setReinforcement(0);
+    Deck *deck = gameEngine.getDeck();
+    deck->fillDeck(5);
+    deck->shuffleDeck();
+    cout << "\n";
+    deck->printDeck();
 
-    // assign hands and decks to players
-    player1->setHand(new Hand());
-    player2->setHand(new Hand());
-    player3->setHand(new Hand());
+    // Create Player 1 and assign random territories (between 1 and 5)
+    Player *player1 = new Player({}, new Hand(), new OrdersList(), 1);
+    player1->setReinforcement(50);
+    player1->setGameEngine(&gameEngine);
     player1->setDeck(deck);
+
+    // Create Player 2 and assign random territories (between 1 and 5)
+    Player *player2 = new Player({}, new Hand(), new OrdersList(), 2);
+    player2->setReinforcement(0);
+    player2->setGameEngine(&gameEngine);
     player2->setDeck(deck);
-    player3->setDeck(deck);
 
-    // add players to the game engine
-    vector<Player *> players = {player1, player2, player3};
-    gameEngine->setPlayers(players);
 
-    // create continents
-    auto *northAmerica = new Continent("north america", 5);
-    auto *europe = new Continent("europe", 5);
+    for (int i = 0; i < 5; ++i) {
+        Card *drawnCard = deck->draw();
+        player1->getHand()->addCard(drawnCard);
+        player2->getHand()->addCard(drawnCard);
+    }
 
-    // create territories
-    auto *usa = new Territory("usa", 1, northAmerica->getId(), 500);
-    auto *canada = new Territory("canada", 2, northAmerica->getId(), 0);
-    auto *france = new Territory("france", 3, europe->getId(), 50);
-    auto *germany = new Territory("germany", 4, europe->getId(), 700);
+    // Shuffle the territories randomly
+    shuffle(allTerritories.begin(), allTerritories.end(), std::mt19937(std::random_device()()));
 
-    // assign territories to the players
-    player1->addTerritory(usa);
-    player1->addTerritory(france);
-    player1->addTerritory(germany);
+    // Assign territories to players
+    // Shuffle the territories randomly
+    shuffle(allTerritories.begin(), allTerritories.end(), std::mt19937(std::random_device()()));
 
-    // set territory adjacency
-    usa->addAdjacentTerritory(canada);
-    canada->addAdjacentTerritory(usa);
+// Assign territories to players
+    for (size_t i = 0; i < allTerritories.size(); ++i) {
+        if (i % 2 == 0 && player1->getTerritories().size() < 5) {
+            Territory* territory = allTerritories[i];
+            player1->addTerritory(territory);
+            territory->setOwnerId(player1->getID());
+            territory->continentName = currentGameMap->getContinentById(territory->getContinentId())->getName();
+        } else if (player2->getTerritories().size() < 5) {
+            Territory* territory = allTerritories[i];
+            player2->addTerritory(territory);
+            territory->setOwnerId(player2->getID());
+            territory->continentName = currentGameMap->getContinentById(territory->getContinentId())->getName();
+        }
+    }
 
-    // add territories to continents
-    northAmerica->territoriesInContinents.push_back(usa);
-    northAmerica->territoriesInContinents.push_back(canada);
-    europe->territoriesInContinents.push_back(france);
-    europe->territoriesInContinents.push_back(germany);
+    vector<Territory*> player1Territories = player1->getTerritories();
+    cout << "\n================================== Player 1's territories & cards ==================================" << endl;
+    for (const auto& territory : player1Territories) {
+        cout << "Territory Name: " << territory->getName() << endl;
+        // You can print other information about the territory here
+        cout << "Continent: " << territory->getContinentName() << endl;
+        cout << "Army Count: " << territory->getArmyCount() << endl;
+        // Add more information if needed
+        cout << endl;
+    }
+    cout << player1->getHand() << endl;
 
-    // create game map and add continents
-    Map *gameMap = new Map();
-    gameMap->addContinent(northAmerica);
-    gameMap->addContinent(europe);
+    vector<Territory*> player2Territories = player2->getTerritories();
+    cout << "================================== Player 2 territories & cards ==================================" << endl;
+    for (const auto& territory : player2Territories) {
+        cout << "Territory Name: " << territory->getName() << endl;
+        // You can print other information about the territory here
+        cout << "Continent: " << territory->getContinentName() << endl;
+        cout << "Army Count: " << territory->getArmyCount() << endl;
+        // Add more information if needed
+        cout << endl;
+    }
+    cout << player2->getHand() << endl;
 
-    // add territories to the map
-    gameMap->addTerritory(usa);
-    gameMap->addTerritory(canada);
-    gameMap->addTerritory(france);
-    gameMap->addTerritory(germany);
-
-    // set game map in
-    gameEngine->setGameMap(gameMap);
+    // Set the map and players in the game engine
+    gameEngine.setGameMap(currentGameMap);
+    gameEngine.setPlayers({player1, player2});
 }
 
-void testMainGameLoop() {
 
-         auto *engine = new GameEngine;
-    initializeGameMap(engine);
+int testMainGameLoop() {
+    auto *gameEngine = new GameEngine;
 
-    //*************************************************************//
-    //                     W E L C O M E                           //
-    //                          T O                                //
-    //                         R I S K                             //
-    //*************************************************************//
+    initializeGame(*gameEngine);
+    gameEngine->mainGameLoop();
+    gameEngine->cleanupResources();
 
+    delete gameEngine;
 
-//       simulation of game phases
-//       while (!engine->isGameOver()) {
-        engine->reinforcementPhase();
-        engine->issueOrdersPhase();
-        engine->executeOrdersPhase();
-
-        // check for players without territories and remove them
-        engine->removePlayersWithoutTerritories();
-
-//         check if a player has won
-//         if (engine->checkForWinner()) {
-//            break;
-//         }
-//       }
-
-//    announce winner or game status
-//    Player *winner = engine->checkForWinner();
-//    if (winner) {
-//        cout << "Player " << winner->getID() << " wins the game!" << endl;
-//    }
-   
-    delete engine;
-    engine = nullptr;
+    return 0;
 }
+
+
+
 /*void testGameStates() {
     cout << "\n************************************\nTesting Game Driver!!! \n************************************\n\n";
     GameEngine engine;
@@ -124,110 +123,4 @@ void testMainGameLoop() {
         }
         engine.executeCommand(command);
     }
-}*/
-/*============================================================================================================*/
-                   //experimental testMainGameLoop() functions that did't make it lol//
-/*============================================================================================================*/
-/*void testMainGameLoop() {
-    string gamePhase = "Reinforcement";
-    Player *player[2];
-    Deck *theDeck = new Deck();
-    Card *card1 = new Card();
-    Card *card2 = new Card();
-    card1->setType("bomb");
-    card2->setType("blockade");
-
-    theDeck->fillDeck(3);  // Fill the deck with cards
-
-    // Initialize 2 players
-    for (int i = 0; i < 2; ++i) {
-        player[i] = new Player();  // Create a new player
-        Hand* hand = new Hand();
-        hand->addCard(card1);
-        player[i]->setHand(hand);
-        player[i]->setDeck(theDeck);
-        player[i]->orderList = new OrdersList();  // Create the player's orders list
-        player[i]->setReinforcement(0);  // Give the player 50 army units
-        cout << player[i]->getReinforcement() << endl;  // Output the units
-        player[i]->setGamePhase(gamePhase);  // Set the game phase
-    }
-
-    string phase = player[1]->getGamePhase();
-    cout << phase << endl;
-
-    // issue orders and add them to orders list
-    bool continueIssuingOrders = true;
-    while (continueIssuingOrders) {
-        string userInput;
-        cout << "\nPlayer " << player[1]->getID() << ", would you like to issue an order? (YES/NO): ";
-        cin >> userInput;
-        cout << "\n";
-        transform(userInput.begin(), userInput.end(), userInput.begin(),
-                  [](unsigned char c) { return toupper(c); });
-        if (userInput == "YES") {
-            player[1]->issueOrder();
-
-        } else if (userInput == "NO") {
-            continueIssuingOrders = false;
-        } else {
-            std::cout << "\nInvalid input! Please enter YES or NO.";
-        }
-    }
-    cout << player[1]->orderList << endl;
-
-    for (int i = 0; i < 2; ++i) {
-        delete player[i];
-        player[i] = nullptr;
-    }
-    delete theDeck;
-    theDeck = nullptr;
-    delete card1;
-    card1 = nullptr;
-}*/
-/*
-void initializeGame(GameEngine &gameEngine) {
-    Map *map = new Map();
-    MapLoader mapLoader;
-    map = mapLoader.loadMap("../src/Map/MapFolder/World.map");
-
-
-    // Obtain a list of all territories from the loaded map
-    vector<Territory *> allTerritories = map->territoryList;
-
-    // Create Player 1 and assign random territories (between 1 and 5)
-    Player *player1 = new Player({}, new Hand(), new OrdersList(), 1);
-    player1->setReinforcement(50);
-
-    // Create Player 2 and assign random territories (between 1 and 5)
-    Player *player2 = new Player({}, new Hand(), new OrdersList(), 2);
-    player2->setReinforcement(0);
-
-    // Shuffle the territories randomly
-    shuffle(allTerritories.begin(), allTerritories.end(), std::mt19937(std::random_device()()));
-
-    // Assign territories to players
-    for (size_t i = 0; i < allTerritories.size(); ++i) {
-        if (i % 2 == 0 && player1->getTerritories().size() < 5) {
-            player1->addTerritory(allTerritories[i]);
-        } else if (player2->getTerritories().size() < 5) {
-            player2->addTerritory(allTerritories[i]);
-        }
-    }
-
-    gameEngine.setGameMap(map);
-    gameEngine.setPlayers({player1, player2});
-}
-
-int testMainGameLoop() {
-    GameEngine* gameEngine = new GameEngine;
-
-    initializeGame(*gameEngine);
-
-    gameEngine->mainGameLoop();
-
-    gameEngine->cleanupResources();
-
-    delete gameEngine;
-
-    return 0;
 }*/

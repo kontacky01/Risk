@@ -46,6 +46,14 @@ Map::~Map() {
 
 map<int, Territory*> Map::getterritories() { return this->territories;}
 
+vector<Territory*> Map::getTerritories() {
+    vector<Territory*> allTerritories;
+    for (const auto& territoryPair : territories) {
+        allTerritories.push_back(territoryPair.second);
+    }
+    return allTerritories;
+}
+
 string Territory::getContinentName()
 {
     return continentName;
@@ -72,6 +80,11 @@ void Map::addContinent(Continent* continent) {
 */
 void Map::addTerritory(Territory* territory) {
     territories[territory->getId()] = territory;
+
+    Continent* continent = getContinentById(territory->getContinentId());
+    if (continent) {
+        continent->addTerritory(territory);
+    }
 }
 
 /**
@@ -97,7 +110,7 @@ void Map::printMapSummary() {
 /**
 * Validate the map structure
 * 1) the map is a connected graph
-* 2) continents are connected subgraphs 
+* 2) continents are connected subgraphs
 * 3) each country belongs to one and only one continent
 */
 bool Map::validate() {
@@ -162,7 +175,6 @@ bool Map::validate() {
      }
     cout << "...Success! Map has been validated\n\n";
     return true;
-
 }
 
 /************************************************************ Continent ************************************************************/
@@ -186,6 +198,33 @@ string Continent::getName() const {
 int Continent::getId() const {
     return id;
 }
+
+Continent* Map::getContinentById(int continentId) {
+    auto it = continents.find(continentId);
+    if (it != continents.end()) {
+        return it->second;
+    }
+    return nullptr; // Return nullptr if the continent is not found
+}
+
+void Continent::addTerritory(Territory* territory) {
+    territoriesInContinents.push_back(territory);
+}
+
+vector<Continent*> Map::getContinents() {
+    vector<Continent*> continentList;
+
+    // Iterate through the map's continents and add them to the list
+    for (const auto& continentPair : continents) {
+        continentList.push_back(continentPair.second);
+    }
+
+    return continentList;
+}
+
+int Continent::getControlBonusValue() const {
+    return controlBonusValue;
+}
 /************************************************************ Territory ************************************************************/
 /**
 * Default Constructor
@@ -203,11 +242,11 @@ Territory::Territory(string n, int i, int ci, int a) {
     ownerId = 0;
 }
 
-string Territory::getName(){
+string Territory::getName() const {
     return name;
 }
 
-int Territory::getId() const{
+int Territory::getId() const {
     return id;
 }
 
@@ -243,6 +282,17 @@ vector<Territory*> Territory::getAdjacencyList() {
     return adjacencyList;
 }
 
+vector<Territory*> Continent::getTerritories() {
+    vector<Territory*> territoryList;
+
+    // Iterate through the continent's territories and add them to the list
+    for (const auto& territory : territoriesInContinents) {
+        territoryList.push_back(territory);
+    }
+
+    return territoryList;
+}
+
 /**
 * Per example we have A,B,C which are all objects of territory
 * If we call A.addAdjacentTerritory(B) then:
@@ -274,9 +324,9 @@ ostream& operator << (ostream& out, Territory* t)
 * Will read the map file (will handle errors if file doesnt exist or can't open)
 * Will parse line by line
 * The file is divided in to two important sections: Continents & Territories
-* Continents look like so: 
+* Continents look like so:
 * continentName=howManyTerritoriesItHas
-* Territories look like so: 
+* Territories look like so:
 * territoryName, coord-x, coord-y, continent, listOfAdjacentTerritories seperated by commas
 */
 Map* MapLoader::loadMap(string filename) {

@@ -2,12 +2,15 @@
 
 #include <utility>
 #include <memory>
+#include <algorithm>
+
 
 /**
  * Default Constructor
  */
-StartState *s1 = new StartState();
-GameEngine::GameEngine() : currentState(s1) {
+GameEngine::GameEngine() : currentState(nullptr) {
+
+    StartState *s1 = new StartState();
     MaploadedState *s2 = new MaploadedState();
     MapvalidatedState *s3 = new MapvalidatedState();
     PlayersaddedState *s4 = new PlayersaddedState();
@@ -54,6 +57,7 @@ GameEngine::GameEngine() : currentState(s1) {
     playerOrder;
     deck = new Deck();
     currentGameMap = new Map();
+    //currentGameMap = nullptr;
 }
 /**
  * This function initializes game transitions
@@ -580,7 +584,6 @@ GameEngine::~GameEngine() {
     }
     players.clear();
     playerOrder.clear();
-    delete currentGameMap;
 }
 
 void GameEngine::start() {
@@ -628,7 +631,6 @@ InlineLoggable createLogMessage(const std::string &message) {
     return InlineLoggable(message);
 }
 
-/***************************************************** MainGameLoop **************************************************/
 bool GameEngine::isGameOver() const {
     for (auto &player: players) {
         if (player->getTerritories().size() == currentGameMap->territoryList.size()) {
@@ -638,22 +640,25 @@ bool GameEngine::isGameOver() const {
     }
     return false;
 }
+
+/***************************************************** MainGameLoop **************************************************/
+
 void GameEngine::mainGameLoop() {
     while (true) {
-        if (isGameOver()) {
-            Player *winner = checkForWinner();
-            if (winner) {
-                cout << "why are you here";
-            }
-            break;
-        }
-        reinforcementPhase();
-        issueOrdersPhase();
-        executeOrdersPhase();
+        for (auto &player: players) {
+            reinforcementPhase();
+            issueOrdersPhase();
+            executeOrdersPhase();
 
-        removePlayersWithoutTerritories();
+            Player *winner = checkForWinner();
+            if (winner != nullptr) {
+                cout << "Player " << winner->getID() << " wins!" << endl;
+                break;
+            }
+        }
     }
 }
+
 
 void GameEngine::cleanupResources() {
     for (Player *player: players) {
@@ -668,17 +673,16 @@ void GameEngine::reinforcementPhase() {
     for (auto &player: players) {
         // set player's game phase status to the current "Reinforcement" phase
         player->setGamePhase("Reinforcement");
-
         // notify log of phase status change
         InlineLoggable logMessage = createLogMessage(
                 "\nPlayer " + to_string(player->getID()) + " is now in the [Reinforcement] phase of the game.");
         player->notify(&logMessage);
 
         // display current reinforcement pool of player
-        cout << "\nReinforcement Pool of Player " << player->getID() << ": " << player->getReinforcement() << " army units" << endl;
+        cout << "\nReinforcement Pool of Player " << player->getID() << ": " << player->getReinforcement() << endl;
 
         // calculate base reinforcement based on territories owned, with a minimum of 3 (rounded down)
-        int baseReinforcement = max(3, static_cast<int>(player->getTerritories().size() / 3));
+        int baseReinforcement = max(3, static_cast<int>(player->getTerritories().size()) / 3);
         player->setReinforcement(player->getReinforcement() + baseReinforcement);
 
         // if player owns continent, award control bonus value
@@ -688,7 +692,9 @@ void GameEngine::reinforcementPhase() {
         }
         printPlayerReinforcement(player);
     }
+    issueOrdersPhase();
 }
+
 void GameEngine::issueOrdersPhase() {
     // loop through all players in the game
     for (auto &player: players) {
@@ -717,12 +723,13 @@ void GameEngine::issueOrdersPhase() {
             } else if (userInput == "NO") {
                 continueIssuingOrders = false; // stop asking
             } else {
-                std::cout << "\nInvalid input! Please enter YES or NO." << endl;
+                cout << "\nInvalid input! Please enter YES or NO." << endl;
             }
         }
         // display order list of player
         cout << player->orderList << endl;
     }
+    executeOrdersPhase();
 }
 
 Player* GameEngine::checkForWinner() {
@@ -774,12 +781,12 @@ void executeAssistForPlayer(Player *player, const string &orderName, const strin
     // check if the ordersVector is not empty
     if (ordersVector != nullptr && !ordersVector->empty()) {
         for (int j = 0; j < ordersVector->size(); j++) {
-            // retrieve the current order from the vector
             Order *currentOrder = (*ordersVector)[j];
 
-            // check if the order matches the specified order name
             if (currentOrder != nullptr && currentOrder->getOrderName() == orderName) {
-                // execute the order
+                cout << "Player " << player->getID() << " is executing " << phase << " order: " << currentOrder->getOrderName() << endl;
+
+                // Execute the order
                 currentOrder->execute();
             }
         }
@@ -831,26 +838,7 @@ void GameEngine::executeOrdersPhase() {
 void GameEngine::addPlayer(Player *player) {
     players.push_back(player);
 }
-/*============================================================================================================*/
-                   //experimental mainGameLoop() functions that did't make it lol//
-/*============================================================================================================*/
-/*void mainGameLoop() {
-    GameEngine gameEngine;
 
-    while (true) {
-        gameEngine.reinforcementPhase();
-        gameEngine.issueOrdersPhase();
-        gameEngine.executeOrdersPhase();
-
-        Player* winner = gameEngine.checkForWinner();
-        if (winner != nullptr) {
-            cout << "Player " << winner->getID() << " wins!" << endl;
-            break;
-        }
-    }
+Deck *GameEngine::getDeck() {
+    return deck;
 }
-
-  void GameEngine::mainGameLoop() {
-      GameEngine gameEngine;
-      reinforcementPhase();
-  }*/

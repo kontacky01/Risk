@@ -352,7 +352,11 @@ void Hand::play(Card *card, Deck *returningDeck) {
         }
         cout << "\n" << OL;
         returningDeck->returnCard(*it);
-        hand.erase(it);
+      
+        swap(*it, hand.back());
+        hand.pop_back();
+
+        cout << "You played the " << "\"" << card->getType() << "\" card.\n";
     } else {
         cout << "Error: Card not found in hand!\n";
     }
