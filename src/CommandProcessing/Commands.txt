@@ -1,4 +1,5 @@
 loadmap
 validatemap
 addplayer
+executeorders
 quit

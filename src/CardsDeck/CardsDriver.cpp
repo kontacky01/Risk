@@ -100,7 +100,7 @@ void testCards() {
     cout << "...Creating a player's hand of cards...\n\n";
     Hand hand;
     for (int i = 0; i < 5; ++i) {
-       // newDeck.draw(hand);
+        newDeck.draw(hand);
     }
     hand.printHand();
     hand.getHandSize();
@@ -111,8 +111,8 @@ void testCards() {
     // testing play function
     cout << "\n...Player is choosing a card to play...\n\n";
     cout << "...Checking Orders List for created order...\n\n";
-   // hand.play(card1, &newDeck);
-   // hand.play(card3, &newDeck);
+    hand.play(card1, &newDeck);
+    hand.play(card3, &newDeck);
     cout << "\n";
     cout << "...Checking Your Hand for remaining cards...\n\n";
     hand.printHand();
@@ -124,7 +124,7 @@ void testCards() {
 
     cout << "\n...You drew a card from The Deck...\n\n";
 
-   // drawnCard = newDeck.draw(hand);
+    drawnCard = newDeck.draw(hand);
     cout << "You drew a \"" << drawnCard->getType() << "\" card.\n";
     cout << "\n...Checking remaining cards in The Deck...\n\n";
     newDeck.printDeck();

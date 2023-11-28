@@ -83,11 +83,11 @@ public:
 
     void subtractReinforcements(int r);
 
-    void setTerritories(const std::vector<Territory *> &newTerritories) {
+    void setTerritories(const vector<Territory *> &newTerritories) {
         territories = newTerritories;
     }
 
-    const std::vector<Territory *> &getTerritories() const {
+    const vector<Territory *> &getTerritories() const {
         return territories;
     }
 
@@ -148,6 +148,5 @@ public:
 
     vector<int> continentOwnershipComplete();
 };
-
 /************************************************************ PlayerDriver **************************************************************/
 void testPlayers();

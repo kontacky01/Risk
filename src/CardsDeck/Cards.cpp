@@ -195,7 +195,7 @@ void Deck::shuffleDeck() {
 * Method randomizes deck, draws a card from it, adds said card to hand through a temporary vector,
  * and removes card from deck of origin
 */
-Card *Deck::drawCards(Deck &transfer) {
+Card *Deck::draw(Deck &transfer) {
     shuffleDeck();
 
     if (deck.empty()) {
@@ -212,7 +212,7 @@ Card *Deck::drawCards(Deck &transfer) {
     return drawnCard;
 }
 
-Card *Deck::draw() {
+Card *Deck::drawACard() {
     if (deck.empty()) {
         cout << "Cannot draw card; The Deck is empty!\n";
         return nullptr;
@@ -325,35 +325,34 @@ void Hand::addCard(Card *newHandCard) {
  * Valid orders include: deploy, advance, bomb, blockade, airlift, and negotiate
  * Once a card is player, we create the order, remove the card from hand and return it back to the deck
 */
-void Hand::play(Card *card, Deck *returningDeck, OrdersList *OL) {
+void Hand::play(Card *card, Deck *returningDeck) {
+    auto *OL = new OrdersList();
+
     // Check that the card is actually in the hand before proceeding
     auto it = find_if(hand.begin(), hand.end(), [card](const Card *c) {
         return c->getType() == card->getType();
     });
 
     if (it != hand.end()) {
+        //cout << "You played the " << "\"" << card->getType() << "\" card.\n";
+
         // Determine the card type and create the appropriate order
-        Order *order = nullptr;
         if (card->getType() == "bomb") {
-            order = new Bomb();
+            OL->addOrder(new Bomb());
         } else if (card->getType() == "reinforcement") {
-            order = new Deploy();
+            OL->addOrder(new Deploy());
         } else if (card->getType() == "blockade") {
-            order = new Blockade();
+            OL->addOrder(new Blockade());
         } else if (card->getType() == "airlift") {
-            order = new Airlift();
+            OL->addOrder(new Airlift());
         } else if (card->getType() == "diplomacy") {
-            order = new Negotiate();
+            OL->addOrder(new Negotiate());
         } else {
             cout << "Invalid card type: " << card->getType() << "\n";
-            return;
         }
-        // Add the order to the player's OrdersList
-        OL->addOrder(order);
-
-        // Return the card to the deck and remove it from the player's hand
+        cout << "\n" << OL;
         returningDeck->returnCard(*it);
-
+      
         swap(*it, hand.back());
         hand.pop_back();
 

@@ -2,6 +2,7 @@
 #include "../OrdersList/Orders.h"
 #include "../Player/Player.h"
 #include "../CardsDeck/Cards.h"
+#include "../CommandProcessing/CommandProcessing.h"
 
 /************************************************ Subject ************************************************************/
 /**
@@ -59,6 +60,29 @@ void LogObserver::printToFileHelper(string log) {
 void testLoggingObserver() {
     // create the log observer
     LogObserver *logger = new LogObserver();
+
+    // test the save command
+    string c = "loadmap";
+    CommandProcessor * cp = new CommandProcessor();
+    cp->attach(logger);
+    Command* cmd = new Command(c);
+    cp->saveCommand(c);
+
+    // test command effect
+    cmd->attach(logger);
+    cmd->saveEffect("map loaded");
+
+    delete cmd;
+    cmd = NULL;
+
+    delete cp;
+    cp = NULL;
+
+    delete logger;
+    logger = NULL;
+
+
+/*
     // create  territory, state, hand, orderlist and player to test
     vector<Territory *> t;
     Territory *t6 = new Territory("Bulgaria", 6, 3, 0);
@@ -89,10 +113,7 @@ void testLoggingObserver() {
     p = NULL;
 
 
-    delete logger;
-    logger = NULL;
-
-
+*/
 }
 
 
