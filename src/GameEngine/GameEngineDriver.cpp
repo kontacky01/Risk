@@ -27,14 +27,14 @@ void initializeGame(GameEngine &gameEngine) {
     HumanPlayerStrategy* human = new HumanPlayerStrategy();
 
     // Create Player 1 and assign random territories (between 1 and 5)
-    Player *player1 = new Player({}, new Hand(), new OrdersList(), 1);
+    Player *player1 = new Player({}, new Hand(), new OrdersList(), 1, "player1");
     player1->setReinforcement(50);
     player1->setGameEngine(&gameEngine);
     player1->setDeck(deck);
     player1->setStrategy(human);
 
     // Create Player 2 and assign random territories (between 1 and 5)
-    Player *player2 = new Player({}, new Hand(), new OrdersList(), 2);
+    Player *player2 = new Player({}, new Hand(), new OrdersList(), 2, "player2");
     player2->setReinforcement(0);
     player2->setGameEngine(&gameEngine);
     player2->setDeck(deck);
@@ -113,7 +113,7 @@ int testMainGameLoop() {
 
 
 
-/*void testGameStates() {
+void testGameStates() {
     cout << "\n************************************\nTesting Game Driver!!! \n************************************\n\n";
     GameEngine engine;
     string command;
@@ -127,4 +127,4 @@ int testMainGameLoop() {
         }
         engine.executeCommand(command);
     }
-}*/
+}

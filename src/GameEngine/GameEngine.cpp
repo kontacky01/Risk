@@ -228,11 +228,25 @@ string GameEngine::stringToLog() {
 */
 void StartState::processCommand(GameEngine &engine, const string &command) {
     vector<Transition *> t = engine.getTransitions();
-    if (command == "loadmap") {
-        engine.setState(t[1]->getNextState());
-        
+    
+    // Find the position of the first space in the command
+    size_t spacePos = command.find(' ');
+    // Check if a space was found
+    if (spacePos != string::npos) {
+        // Extract the command and filename using substr
+        string cmd = command.substr(0, spacePos);
+        string filename = command.substr(spacePos + 1);
+
+        if (cmd == "loadmap") {
+            Map* gameMap = gameLoadMap("src/Map/MapFolder/" + filename);
+            engine.setGameMap(gameMap); // Set the loaded map in the engine
+            engine.setState(t[1]->getNextState());
+        } else {
+            cout << "Invalid command in Start State\n";
+            engine.displayAvailableCommands();
+        }
     } else {
-        cout << "Invalid command in Start State\n";
+        cout << "Invalid command format. Use 'loadmap filename'\n";
         engine.displayAvailableCommands();
     }
 }
@@ -263,13 +277,27 @@ void StartState::processCommand(GameEngine &engine, const string &command) {
 */
 void MaploadedState::processCommand(GameEngine &engine, const string &command) {
     vector<Transition *> t = engine.getTransitions();
-    if (command == "loadmap") {
-        engine.setState(t[1]->getNextState());
+   
+    // Find the position of the first space in the command
+    size_t spacePos = command.find(' ');
+    // Check if a space was found
+    if (spacePos != string::npos) {
+        // Extract the command and filename using substr
+        string cmd = command.substr(0, spacePos);
+        string filename = command.substr(spacePos + 1);
+        if (cmd == "loadmap") {
+            Map* gameMap = gameLoadMap("src/Map/MapFolder/" + filename);
+            engine.setGameMap(gameMap); // Set the loaded map in the engine
+            engine.setState(t[1]->getNextState());
+        } else {
+            cout << "Invalid command in Maploaded State\n";
+            engine.displayAvailableCommands();
+        }
     } else if (command == "validatemap") {
+        validateMap(*engine.gameMap());
         engine.setState(t[2]->getNextState());
     } else {
         cout << "Invalid command in Maploaded State\n";
-        engine.displayAvailableCommands();
     }
 }
 
@@ -298,15 +326,25 @@ void MaploadedState::processCommand(GameEngine &engine, const string &command) {
 /**
  * This functions processes the user's command if it is valid and updates the state of the game
 */
-    void MapvalidatedState::processCommand(GameEngine& engine, const string& command){
-        vector<Transition*> t = engine.getTransitions();
-        if (command == "addplayer") {
+void MapvalidatedState::processCommand(GameEngine& engine, const string& command){
+    vector<Transition*> t = engine.getTransitions();
+
+    // Find the position of the first space in the command
+    size_t spacePos = command.find(' ');
+    // Check if a space was found
+    if (spacePos != string::npos) {
+        // Extract the command and filename using substr
+        string cmd = command.substr(0, spacePos);
+        string playerName = command.substr(spacePos + 1);
+        if (cmd == "addplayer") {
+            cout << "\n---------> Test 3: Adding player <---------\n";
             engine.setState(t[4]->getNextState());
-        } else {
-            cout << "Invalid command in Mapvalidated State\n";
-            engine.displayAvailableCommands();
         }
+    } else {
+        cout << "Invalid command in Playersadded State. Use 'addplayer NAME'\n";
+        engine.displayAvailableCommands();
     }
+}
 
 /************************************************************ PlayersaddedState **************************************************************/
 /**
@@ -333,17 +371,29 @@ void MaploadedState::processCommand(GameEngine &engine, const string &command) {
 /**
  * This functions processes the user's command if it is valid and updates the state of the game
 */
-    void PlayersaddedState::processCommand(GameEngine& engine, const string& command){
-        vector<Transition*> t = engine.getTransitions();
-        if (command == "addplayer") {
+void PlayersaddedState::processCommand(GameEngine& engine, const string& command){
+    vector<Transition*> t = engine.getTransitions();
+ 
+    // Find the position of the first space in the command
+    size_t spacePos = command.find(' ');
+    // Check if a space was found
+    if (spacePos != string::npos) {
+        // Extract the command and filename using substr
+        string cmd = command.substr(0, spacePos);
+        string playerName = command.substr(spacePos + 1);
+        if (cmd == "addplayer") {
+            cout << "\n---------> Test 3: Adding player <---------\n";
             engine.setState(t[4]->getNextState());
-        } else if (command == "gamestart") {
-            engine.setState(t[5]->getNextState());
-        } else {
-            cout << "Invalid command in Playersadded State\n";
-            engine.displayAvailableCommands();
         }
+    } else if (command == "gamestart") {
+        engine.setState(t[5]->getNextState());
+        cout << "\n---------> Test 4: Gamestart <---------\n";
+            engine.setState(t[5]->getNextState());
+    } else {
+        cout << "Invalid command in Playersadded State.  Use 'addplayer NAME' or 'gamestart'\n";
+        engine.displayAvailableCommands();
     }
+}
 
 /************************************************************ AssignreinforcementState **************************************************************/
 /**
@@ -608,7 +658,7 @@ vector<Player *> GameEngine::getPlayers() {
 }
 
 int GameEngine::getPlayerNum() const {
-    return playerNum;
+    return players.size();
 }
 
 /************************************************* Helper functions **************************************************/
@@ -795,6 +845,7 @@ void executeAssistForPlayer(Player *player, const string &orderName, const strin
 
 
 void testStartupPhase() {
+    testGameStates();
     //testMainGameLoop();
 //    deleteMap(gameMap);
 };

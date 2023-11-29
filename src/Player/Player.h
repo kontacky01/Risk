@@ -1,7 +1,6 @@
 #pragma once
 
 #include <ctime>
-
 #include <iostream>
 #include <string>
 #include <vector>
@@ -40,6 +39,7 @@ class PlayerStrategy;
 class Player : public Subject, ILoggable {
 private:
     int id;
+    string name;
     vector<Territory *> attackList;
     vector<Territory *> defendList;
     Hand *hand;
@@ -59,7 +59,7 @@ public:
     /**
      * Constructor with with an argument list
      */
-    Player(vector<Territory *>, Hand *, OrdersList *, int id);
+    Player(vector<Territory *>, Hand *, OrdersList *, int id, string name);
 
     /**
      * Default Constructor
@@ -77,6 +77,10 @@ public:
     ~Player();
 
     int getID() const;
+
+    string getName() const;
+
+    void setName(string name);
 
     int getReinforcement() const;
 

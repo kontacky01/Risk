@@ -6,11 +6,12 @@ using namespace std;
 /**
  * Constructor with with an argument list
  */
-Player::Player(vector<Territory *> t, Hand *h, OrdersList *o, int id) {
+Player::Player(vector<Territory *> t, Hand *h, OrdersList *o, int id, string name) {
     territories = t;
     hand = h;
     orderList = o;
     this->id = id;
+    this->name = name;
     this->reinforcements = 0;
 
     // if seed is set to 1, the generator is reinitialized to its initial value
@@ -46,6 +47,9 @@ Player::Player(const Player &p) {
 
     // it's not a pointer, so we just increase the ID 1
     id = p.id + 1;
+    
+    //copy player name
+    name = p.name;
 }
 
 /**
@@ -74,6 +78,12 @@ Player::Player() {
 }
 
 int Player::getID() const { return this->id; }
+
+string Player::getName() const { return this->name; }
+
+void Player::setName(string name) {
+    this->name = name;
+}
 
 void Player::setGamePhase(string gamePhase) {
     this->gamePhase = gamePhase;

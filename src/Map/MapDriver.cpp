@@ -81,7 +81,7 @@ Map* gameLoadMap(string mapfile) {
 
     cout << "---------> Test 1: Load a map <---------\n\n";
     Map* map1 = loader->loadMap(mapfile);
-    map1->printMapSummary();
+    //map1->printMapSummary();
 
     delete loader;
     return map1;

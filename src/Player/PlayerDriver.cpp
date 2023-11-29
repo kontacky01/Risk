@@ -22,7 +22,7 @@ void testPlayers() {
     t.push_back(t6);
 
     // init a player
-    Player* p = new Player(t, h, o, 1);
+    Player* p = new Player(t, h, o, 1, "p");
 
     cout << "---------> Test 1: Testing player methods (attack/defend/issuesOrder) <---------\n\n";
     // show that Player contains method toDefend()
