@@ -111,8 +111,8 @@ void testCards() {
     // testing play function
     cout << "\n...Player is choosing a card to play...\n\n";
     cout << "...Checking Orders List for created order...\n\n";
-    hand.play(card1, &newDeck);
-    hand.play(card3, &newDeck);
+    //hand.play(card1, &newDeck);
+    //hand.play(card3, &newDeck);
     cout << "\n";
     cout << "...Checking Your Hand for remaining cards...\n\n";
     hand.printHand();

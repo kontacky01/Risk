@@ -38,7 +38,7 @@ void initializeGame(GameEngine &gameEngine) {
 
 
     for (int i = 0; i < 5; ++i) {
-        Card *drawnCard = deck->draw();
+        Card *drawnCard = deck->drawACard();
         player1->getHand()->addCard(drawnCard);
         player2->getHand()->addCard(drawnCard);
     }
