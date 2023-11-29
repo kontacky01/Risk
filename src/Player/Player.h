@@ -11,6 +11,7 @@
 #include <cctype>
 
 #include "../LoggingObserver/LoggingObserver.h"
+#include "../PlayerStrategies/PlayerStrategies.h"
 #include "../GameEngine/GameEngine.h"
 #include "../Map/Map.h"
 #include "../OrdersList/Orders.h"
@@ -34,16 +35,18 @@ class Order;
 
 class OrdersList;
 
+class PlayerStrategy;
+
 class Player : public Subject, ILoggable {
 private:
     int id;
-    int reinforcements;
     vector<Territory *> attackList;
     vector<Territory *> defendList;
     Hand *hand;
     Deck *deck;
     string gamePhase;
     GameEngine *gameEngine;
+    PlayerStrategy* strategy;
 
     /**
      * Helper method to print the list of territories to attack/defended
@@ -77,6 +80,8 @@ public:
 
     int getReinforcement() const;
 
+    int reinforcements;
+
     void setReinforcement(int r);
 
     void addReinforcement(int r);
@@ -102,6 +107,8 @@ public:
     void eraseTerritory(Territory *t);
 
     void setDeck(Deck *deck);
+
+    void setStrategy(PlayerStrategy* newStrategy);
 
     OrdersList *getOrdersList();
 
@@ -147,6 +154,8 @@ public:
     Deck *getDeck();
 
     vector<int> continentOwnershipComplete();
+
+    GameEngine *getGameEngine();
 };
 /************************************************************ PlayerDriver **************************************************************/
 void testPlayers();
