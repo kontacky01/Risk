@@ -5,6 +5,7 @@
 #include "OrdersList/Orders.h"
 #include "CardsDeck/Cards.h"
 #include "LoggingObserver/LoggingObserver.h"
+#include "PlayerStrategies/PlayerStrategies.h"
 
 int main()
 {

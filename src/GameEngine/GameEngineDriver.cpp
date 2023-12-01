@@ -3,7 +3,6 @@
 #include "../Map/Map.h"
 #include "../CardsDeck/Cards.h"
 #include "../OrdersList/Orders.h"
-#include <random>
 
 void initializeGame(GameEngine &gameEngine) {
     // Load the map

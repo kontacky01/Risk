@@ -10,6 +10,7 @@
 #include <sstream>
 #include <utility>
 #include <vector>
+#include <random>
 
 #include "../LoggingObserver/LoggingObserver.h"
 #include "../CardsDeck/Cards.h"
@@ -105,7 +106,7 @@ public:
     int getPlayerNum();
     int incrPlayerNum();
 
-    static vector<Player *> getPlayers();
+    vector<Player *> getPlayers();
 
     void start();
 
@@ -128,7 +129,7 @@ public:
     string stringToLog();
 
     void addPlayer(Player *player);
-
+    
     ::map<int, vector<Territory *>> playerTerritories;
 
     Deck *getDeck();

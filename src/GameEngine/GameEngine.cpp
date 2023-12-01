@@ -341,6 +341,10 @@ void MapvalidatedState::processCommand(GameEngine& engine, const string& command
             // Create a new player and add them to the game
             HumanPlayerStrategy* human = new HumanPlayerStrategy();
             Deck* deck = engine.getDeck();
+            deck->fillDeck(5);
+            deck->shuffleDeck();
+            cout << "\n";
+            deck->printDeck();
             Player* newPlayer = new Player({}, new Hand(), new OrdersList(), engine.incrPlayerNum(), playerName);
             newPlayer->setReinforcement(0);
             newPlayer->setGameEngine(&engine);
@@ -406,6 +410,7 @@ void PlayersaddedState::processCommand(GameEngine& engine, const string& command
             // Create a new player and add them to the game
             HumanPlayerStrategy* human = new HumanPlayerStrategy();
             Deck* deck = engine.getDeck();
+            deck->shuffleDeck();
             Player* newPlayer = new Player({}, new Hand(), new OrdersList(), engine.incrPlayerNum(), playerName);
             newPlayer->setReinforcement(0);
             newPlayer->setGameEngine(&engine);
@@ -423,7 +428,38 @@ void PlayersaddedState::processCommand(GameEngine& engine, const string& command
     } else if (command == "gamestart") {
         engine.setState(t[5]->getNextState());
         cout << "\n---------> Test 4: Gamestart <---------\n";
-            engine.setState(t[5]->getNextState());
+        vector<Territory *> allTerritories = engine.gameMap()->getTerritories();
+    
+        // Shuffle the territories randomly
+        shuffle(allTerritories.begin(), allTerritories.end(), std::mt19937(std::random_device()()));
+
+        // Assign territories to players
+        size_t numPlayers = engine.getPlayers().size();
+        for (size_t i = 0; i < allTerritories.size(); ++i) {
+            size_t playerIndex = i % numPlayers;
+            if (engine.getPlayers()[playerIndex]->getTerritories().size() < 5) {
+                Territory* territory = allTerritories[i];
+                engine.getPlayers()[playerIndex]->addTerritory(territory);
+                territory->setOwnerId(engine.getPlayers()[playerIndex]->getID());
+                territory->continentName = engine.gameMap()->getContinentById(territory->getContinentId())->getName();
+            }
+        }
+
+        // Give 50 initial army units to each player
+        for (auto& player : engine.getPlayers()) {
+            player->setReinforcement(50);
+        }
+
+        // Let each player draw 2 initial cards from the deck
+        for (int i = 0; i < 2; ++i) {
+            Card* drawnCard = engine.getDeck()->drawACard();
+            for (auto& player : engine.getPlayers()) {
+                player->getHand()->addCard(drawnCard);
+            }
+        }
+
+        // Transition to the next state
+        engine.setState(t[5]->getNextState());
     } else {
         cout << "Invalid command in Playersadded State.  Use 'addplayer NAME' or 'gamestart'\n";
         engine.displayAvailableCommands();
@@ -688,9 +724,10 @@ void GameEngine::setPlayers(vector<Player *> p) {
 }
 
 vector<Player *> GameEngine::getPlayers() {
-    return {};
-    //return players;
+    //return {};
+    return players;
 }
+
 int GameEngine::getPlayerNum() {
     return playerNum;
 }
@@ -927,6 +964,7 @@ void GameEngine::executeOrdersPhase() {
 
 void GameEngine::addPlayer(Player *player) {
     players.push_back(player);
+    //setPlayers({player});
 }
 
 Deck *GameEngine::getDeck() {
