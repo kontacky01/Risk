@@ -338,7 +338,22 @@ void MapvalidatedState::processCommand(GameEngine& engine, const string& command
         string playerName = command.substr(spacePos + 1);
         if (cmd == "addplayer") {
             cout << "\n---------> Test 3: Adding player <---------\n";
+            // Create a new player and add them to the game
+            HumanPlayerStrategy* human = new HumanPlayerStrategy();
+            Deck* deck = engine.getDeck();
+            Player* newPlayer = new Player({}, new Hand(), new OrdersList(), engine.incrPlayerNum(), playerName);
+            newPlayer->setReinforcement(0);
+            newPlayer->setGameEngine(&engine);
+            newPlayer->setDeck(deck);
+            newPlayer->setStrategy(human);
+
+            engine.addPlayer(newPlayer);
+
+            // Transition to the next state
             engine.setState(t[4]->getNextState());
+        } else {
+            cout << "Invalid command in Playersadded State.  Use 'addplayer NAME' or 'gamestart'\n";
+            engine.displayAvailableCommands();
         }
     } else {
         cout << "Invalid command in Playersadded State. Use 'addplayer NAME'\n";
@@ -382,8 +397,28 @@ void PlayersaddedState::processCommand(GameEngine& engine, const string& command
         string cmd = command.substr(0, spacePos);
         string playerName = command.substr(spacePos + 1);
         if (cmd == "addplayer") {
+            if (engine.getPlayerNum() > 5) {
+                cout << "Maximum number of players (6) has been reached.\n";
+                cout << "The valid Command in this state is: 6)gamestart\n";
+                return;
+            }
             cout << "\n---------> Test 3: Adding player <---------\n";
+            // Create a new player and add them to the game
+            HumanPlayerStrategy* human = new HumanPlayerStrategy();
+            Deck* deck = engine.getDeck();
+            Player* newPlayer = new Player({}, new Hand(), new OrdersList(), engine.incrPlayerNum(), playerName);
+            newPlayer->setReinforcement(0);
+            newPlayer->setGameEngine(&engine);
+            newPlayer->setDeck(deck);
+            newPlayer->setStrategy(human);
+
+            engine.addPlayer(newPlayer);
+
+            // Transition to the next state
             engine.setState(t[4]->getNextState());
+        } else {
+            cout << "Invalid command in Playersadded State.  Use 'addplayer NAME' or 'gamestart'\n";
+            engine.displayAvailableCommands();
         }
     } else if (command == "gamestart") {
         engine.setState(t[5]->getNextState());
@@ -656,9 +691,13 @@ vector<Player *> GameEngine::getPlayers() {
     return {};
     //return players;
 }
+int GameEngine::getPlayerNum() {
+    return playerNum;
+}
 
-int GameEngine::getPlayerNum() const {
-    return players.size();
+int GameEngine::incrPlayerNum() {
+    //return playerNum++; // id starting from 0
+    return ++playerNum; // id starting from 1
 }
 
 /************************************************* Helper functions **************************************************/

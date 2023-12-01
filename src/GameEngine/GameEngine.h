@@ -23,13 +23,9 @@ using namespace std;
 /********************************************************** Game Engine ***********************************************************/
 // Forward declarations
 class State;
-
 class Transition;
-
 class Player;
-
 class Map;
-
 class Deck;
 
 class GameEngine : public Subject, public ILoggable {
@@ -106,7 +102,8 @@ public:
 
     bool isGameOver() const;
 
-    int getPlayerNum() const;
+    int getPlayerNum();
+    int incrPlayerNum();
 
     static vector<Player *> getPlayers();
 
