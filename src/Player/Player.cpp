@@ -251,8 +251,8 @@ void Player::addTerritoryToList(Territory *territory, const string &listType) {
 /**
  * Take in an order and add it into the OrderList
  */
-void Player::issueOrder() {
-    strategy->issueOrder(this);
+void Player::issueOrder(string orderName) {
+    strategy->issueOrder(this, orderName);
 }
 
 /**
@@ -290,6 +290,10 @@ OrdersList *Player::issuesOrder(Order *o) {
 
 void Player::setStrategy(PlayerStrategy *newStrategy) {
     strategy = newStrategy;
+}
+
+string Player::getStrategyType() const {
+    return strategy->getStrategyType();
 }
 
 Deck *Player::getDeck() {

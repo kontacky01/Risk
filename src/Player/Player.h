@@ -110,6 +110,8 @@ public:
 
     void setStrategy(PlayerStrategy* newStrategy);
 
+    string getStrategyType() const;
+
     OrdersList *getOrdersList();
 
     void setGamePhase(string gamePhase);
@@ -138,7 +140,7 @@ public:
     /**
      * Take in an order and add it into the OrderList
      */
-    void issueOrder();
+    void issueOrder(string orderName);
 
     OrdersList *issuesOrder(Order *o);
 

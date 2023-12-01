@@ -14,63 +14,65 @@ public:
 
     virtual vector<Territory *> toDefend(Player *player) = 0;
 
-    virtual void issueOrder(Player *player) = 0;
+    virtual void issueOrder(Player *player, string orderName) = 0;
 
-    virtual string getStrategy() = 0;
+    virtual string getStrategyType() = 0;
 };
 
 
 class HumanPlayerStrategy : public PlayerStrategy {
 public:
-    vector<Territory *> toAttack(Player *player);
+    vector<Territory *> toAttack(Player *player) override;
 
-    vector<Territory *> toDefend(Player *player);
+    vector<Territory *> toDefend(Player *player) override;
 
-    void issueOrder(Player *player);
+    void issueOrder(Player *player, string orderName) override;
 
-    string getStrategy();
+    string getStrategyType() override;
 };
 
 class AggressivePlayerStrategy : public PlayerStrategy {
 public:
-    vector<Territory *> toAttack(Player *player);
+    vector<Territory *> toAttack(Player *player) override;
 
-    vector<Territory *> toDefend(Player *player);
+    vector<Territory *> toDefend(Player *player) override;
 
-    void issueOrder(Player *player);
+    void issueOrder(Player *player, string orderName) override;
 
-    string getStrategy();
+    string getStrategyType() override;
 };
 
 class BenevolentPlayerStrategy : public PlayerStrategy {
 public:
-    vector<Territory *> toAttack(Player *player);
+    vector<Territory *> toAttack(Player *player) override;
 
-    vector<Territory *> toDefend(Player *player);
+    vector<Territory *> toDefend(Player *player) override;
 
-    void issueOrder(Player *player);
+    void issueOrder(Player *player, string orderName) override;
 
-    string getStrategy();
+    string getStrategyType() override;
 };
 
 class NeutralPlayerStrategy : public PlayerStrategy {
 public:
-    vector<Territory *> toAttack(Player *player);
+    vector<Territory *> toAttack(Player *player) override;
 
-    vector<Territory *> toDefend(Player *player);
+    vector<Territory *> toDefend(Player *player) override;
 
-    void issueOrder(Player *player);
+    void issueOrder(Player *player, string orderName) override;
 
-    string getStrategy();
+    string getStrategyType() override;
 };
 
 class CheaterPlayerStrategy : public PlayerStrategy {
 public:
-    vector<Territory *> toAttack(Player *player);
+    vector<Territory *> toAttack(Player *player) override;
 
-    vector<Territory *> toDefend(Player *player);
+    vector<Territory *> toDefend(Player *player) override;
 
-    void issueOrder(Player *player);
+    void issueOrder(Player *player, string orderName) override;
 
-    string getStrategy();
+    string getStrategyType() override;
 };
+
+int testPlayerStrategies();

@@ -122,7 +122,7 @@ public:
 
     Player *checkForWinner();
 
-    void removePlayersWithoutTerritories();
+    bool removePlayersWithoutTerritories();
 
     void setPlayers(vector<Player *> p);
 
@@ -406,7 +406,7 @@ public:
  */
     Transition(const Transition& other);
 /**
- * overide Stream insertion operator
+ * override Stream insertion operator
  */
     friend ostream& operator<<(ostream& out, Transition& t);
 
