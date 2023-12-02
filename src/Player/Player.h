@@ -158,6 +158,7 @@ public:
     vector<int> continentOwnershipComplete();
 
     GameEngine *getGameEngine();
+    void changeNeutralPlayerToAggressive();
 };
 /************************************************************ PlayerDriver **************************************************************/
 void testPlayers();
