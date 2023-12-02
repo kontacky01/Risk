@@ -299,3 +299,13 @@ string Player::getStrategyType() const {
 Deck *Player::getDeck() {
     return this->deck;
 }
+/************************************************** Player Strategies code ****************************************************/
+
+void Player::changeNeutralPlayerToAggressive(){
+    //if reinforcement < 50 which is how many army units each player gets by default
+    //then Neutral player has been attacked so player becomes aggressive
+    if(dynamic_cast<NeutralPlayerStrategy*>(this->strategy) != nullptr && this->getReinforcement() < 50){
+        this->setStrategy(new AggressivePlayerStrategy());
+        cout << "\nNeutral Player has now become Aggressive Player.\n";
+    }
+}
