@@ -181,7 +181,7 @@ void testOrdersLists() {
     cout << "Created execute orders.\n\n";
 
     cout << "...Creating player with t adjeceny list, Hand, and order list..\n";
-    Player* p = new Player(tOL, hOL, pOL, 1);
+    Player* p = new Player(tOL, hOL, pOL, 1, "p");
     cout << "Created player.\n\n";
 
     cout << "...Printing Players orders..\n";
@@ -323,7 +323,7 @@ void testOrderExecution() {
 
 
     cout << "...Creating player 1 with t adjeceny list, Hand, and order list..\n";
-    Player* p1 = new Player(t, h, pOL, 1); // 1 is id
+    Player* p1 = new Player(t, h, pOL, 1, "p1"); // 1 is id
     cout << "Created player.\n\n";
 
     cout << p1;
@@ -549,7 +549,7 @@ void testOrderExecution() {
     Territory* t4sweden = map1->getTerritory("Southern Sweden");
 
     cout << "...Create Neutral player #999...\n\n";
-    Player* pNeutral = new Player(t, h, pOL, 999);
+    Player* pNeutral = new Player(t, h, pOL, 999, "pNeutral");
 
     cout << "...Create Blockade orders ...\n";
     cout << "...Creating GOOD Blockade, player will double Denmark and assign to NEUTRAL player ...\n";

@@ -3,7 +3,6 @@
 #include "../Map/Map.h"
 #include "../CardsDeck/Cards.h"
 #include "../OrdersList/Orders.h"
-#include <random>
 
 void initializeGame(GameEngine &gameEngine) {
     // Load the map
@@ -24,21 +23,25 @@ void initializeGame(GameEngine &gameEngine) {
     cout << "\n";
     deck->printDeck();
 
+    HumanPlayerStrategy* human = new HumanPlayerStrategy();
+
     // Create Player 1 and assign random territories (between 1 and 5)
-    Player *player1 = new Player({}, new Hand(), new OrdersList(), 1);
+    Player *player1 = new Player({}, new Hand(), new OrdersList(), 1, "player1");
     player1->setReinforcement(50);
     player1->setGameEngine(&gameEngine);
     player1->setDeck(deck);
+    player1->setStrategy(human);
 
     // Create Player 2 and assign random territories (between 1 and 5)
-    Player *player2 = new Player({}, new Hand(), new OrdersList(), 2);
+    Player *player2 = new Player({}, new Hand(), new OrdersList(), 2, "player2");
     player2->setReinforcement(0);
     player2->setGameEngine(&gameEngine);
     player2->setDeck(deck);
+    player2->setStrategy(human);
 
 
     for (int i = 0; i < 5; ++i) {
-        Card *drawnCard = deck->draw();
+        Card *drawnCard = deck->drawACard();
         player1->getHand()->addCard(drawnCard);
         player2->getHand()->addCard(drawnCard);
     }
@@ -109,7 +112,7 @@ int testMainGameLoop() {
 
 
 
-/*void testGameStates() {
+void testGameStates() {
     cout << "\n************************************\nTesting Game Driver!!! \n************************************\n\n";
     GameEngine engine;
     string command;
@@ -123,4 +126,4 @@ int testMainGameLoop() {
         }
         engine.executeCommand(command);
     }
-}*/
+}

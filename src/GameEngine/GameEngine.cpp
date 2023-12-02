@@ -228,11 +228,25 @@ string GameEngine::stringToLog() {
 */
 void StartState::processCommand(GameEngine &engine, const string &command) {
     vector<Transition *> t = engine.getTransitions();
-    if (command == "loadmap") {
-        engine.setState(t[1]->getNextState());
-        
+    
+    // Find the position of the first space in the command
+    size_t spacePos = command.find(' ');
+    // Check if a space was found
+    if (spacePos != string::npos) {
+        // Extract the command and filename using substr
+        string cmd = command.substr(0, spacePos);
+        string filename = command.substr(spacePos + 1);
+
+        if (cmd == "loadmap") {
+            Map* gameMap = gameLoadMap("src/Map/MapFolder/" + filename);
+            engine.setGameMap(gameMap); // Set the loaded map in the engine
+            engine.setState(t[1]->getNextState());
+        } else {
+            cout << "Invalid command in Start State\n";
+            engine.displayAvailableCommands();
+        }
     } else {
-        cout << "Invalid command in Start State\n";
+        cout << "Invalid command format. Use 'loadmap filename'\n";
         engine.displayAvailableCommands();
     }
 }
@@ -263,13 +277,27 @@ void StartState::processCommand(GameEngine &engine, const string &command) {
 */
 void MaploadedState::processCommand(GameEngine &engine, const string &command) {
     vector<Transition *> t = engine.getTransitions();
-    if (command == "loadmap") {
-        engine.setState(t[1]->getNextState());
+   
+    // Find the position of the first space in the command
+    size_t spacePos = command.find(' ');
+    // Check if a space was found
+    if (spacePos != string::npos) {
+        // Extract the command and filename using substr
+        string cmd = command.substr(0, spacePos);
+        string filename = command.substr(spacePos + 1);
+        if (cmd == "loadmap") {
+            Map* gameMap = gameLoadMap("src/Map/MapFolder/" + filename);
+            engine.setGameMap(gameMap); // Set the loaded map in the engine
+            engine.setState(t[1]->getNextState());
+        } else {
+            cout << "Invalid command in Maploaded State\n";
+            engine.displayAvailableCommands();
+        }
     } else if (command == "validatemap") {
+        validateMap(*engine.gameMap());
         engine.setState(t[2]->getNextState());
     } else {
         cout << "Invalid command in Maploaded State\n";
-        engine.displayAvailableCommands();
     }
 }
 
@@ -298,15 +326,44 @@ void MaploadedState::processCommand(GameEngine &engine, const string &command) {
 /**
  * This functions processes the user's command if it is valid and updates the state of the game
 */
-    void MapvalidatedState::processCommand(GameEngine& engine, const string& command){
-        vector<Transition*> t = engine.getTransitions();
-        if (command == "addplayer") {
+void MapvalidatedState::processCommand(GameEngine& engine, const string& command){
+    vector<Transition*> t = engine.getTransitions();
+
+    // Find the position of the first space in the command
+    size_t spacePos = command.find(' ');
+    // Check if a space was found
+    if (spacePos != string::npos) {
+        // Extract the command and filename using substr
+        string cmd = command.substr(0, spacePos);
+        string playerName = command.substr(spacePos + 1);
+        if (cmd == "addplayer") {
+            cout << "\n---------> Test 3: Adding player <---------\n";
+            // Create a new player and add them to the game
+            HumanPlayerStrategy* human = new HumanPlayerStrategy();
+            Deck* deck = engine.getDeck();
+            deck->fillDeck(5);
+            deck->shuffleDeck();
+            cout << "\n";
+            deck->printDeck();
+            Player* newPlayer = new Player({}, new Hand(), new OrdersList(), engine.incrPlayerNum(), playerName);
+            newPlayer->setReinforcement(0);
+            newPlayer->setGameEngine(&engine);
+            newPlayer->setDeck(deck);
+            newPlayer->setStrategy(human);
+
+            engine.addPlayer(newPlayer);
+
+            // Transition to the next state
             engine.setState(t[4]->getNextState());
         } else {
-            cout << "Invalid command in Mapvalidated State\n";
+            cout << "Invalid command in Playersadded State.  Use 'addplayer NAME' or 'gamestart'\n";
             engine.displayAvailableCommands();
         }
+    } else {
+        cout << "Invalid command in Playersadded State. Use 'addplayer NAME'\n";
+        engine.displayAvailableCommands();
     }
+}
 
 /************************************************************ PlayersaddedState **************************************************************/
 /**
@@ -333,17 +390,81 @@ void MaploadedState::processCommand(GameEngine &engine, const string &command) {
 /**
  * This functions processes the user's command if it is valid and updates the state of the game
 */
-    void PlayersaddedState::processCommand(GameEngine& engine, const string& command){
-        vector<Transition*> t = engine.getTransitions();
-        if (command == "addplayer") {
+void PlayersaddedState::processCommand(GameEngine& engine, const string& command){
+    vector<Transition*> t = engine.getTransitions();
+ 
+    // Find the position of the first space in the command
+    size_t spacePos = command.find(' ');
+    // Check if a space was found
+    if (spacePos != string::npos) {
+        // Extract the command and filename using substr
+        string cmd = command.substr(0, spacePos);
+        string playerName = command.substr(spacePos + 1);
+        if (cmd == "addplayer") {
+            if (engine.getPlayerNum() > 5) {
+                cout << "Maximum number of players (6) has been reached.\n";
+                cout << "The valid Command in this state is: 6)gamestart\n";
+                return;
+            }
+            cout << "\n---------> Test 3: Adding player <---------\n";
+            // Create a new player and add them to the game
+            HumanPlayerStrategy* human = new HumanPlayerStrategy();
+            Deck* deck = engine.getDeck();
+            deck->shuffleDeck();
+            Player* newPlayer = new Player({}, new Hand(), new OrdersList(), engine.incrPlayerNum(), playerName);
+            newPlayer->setReinforcement(0);
+            newPlayer->setGameEngine(&engine);
+            newPlayer->setDeck(deck);
+            newPlayer->setStrategy(human);
+
+            engine.addPlayer(newPlayer);
+
+            // Transition to the next state
             engine.setState(t[4]->getNextState());
-        } else if (command == "gamestart") {
-            engine.setState(t[5]->getNextState());
         } else {
-            cout << "Invalid command in Playersadded State\n";
+            cout << "Invalid command in Playersadded State.  Use 'addplayer NAME' or 'gamestart'\n";
             engine.displayAvailableCommands();
         }
+    } else if (command == "gamestart") {
+        engine.setState(t[5]->getNextState());
+        cout << "\n---------> Test 4: Gamestart <---------\n";
+        vector<Territory *> allTerritories = engine.gameMap()->getTerritories();
+    
+        // Shuffle the territories randomly
+        shuffle(allTerritories.begin(), allTerritories.end(), std::mt19937(std::random_device()()));
+
+        // Assign territories to players
+        size_t numPlayers = engine.getPlayers().size();
+        for (size_t i = 0; i < allTerritories.size(); ++i) {
+            size_t playerIndex = i % numPlayers;
+            if (engine.getPlayers()[playerIndex]->getTerritories().size() < 5) {
+                Territory* territory = allTerritories[i];
+                engine.getPlayers()[playerIndex]->addTerritory(territory);
+                territory->setOwnerId(engine.getPlayers()[playerIndex]->getID());
+                territory->continentName = engine.gameMap()->getContinentById(territory->getContinentId())->getName();
+            }
+        }
+
+        // Give 50 initial army units to each player
+        for (auto& player : engine.getPlayers()) {
+            player->setReinforcement(50);
+        }
+
+        // Let each player draw 2 initial cards from the deck
+        for (int i = 0; i < 2; ++i) {
+            Card* drawnCard = engine.getDeck()->drawACard();
+            for (auto& player : engine.getPlayers()) {
+                player->getHand()->addCard(drawnCard);
+            }
+        }
+
+        // Transition to the next state
+        engine.setState(t[5]->getNextState());
+    } else {
+        cout << "Invalid command in Playersadded State.  Use 'addplayer NAME' or 'gamestart'\n";
+        engine.displayAvailableCommands();
     }
+}
 
 /************************************************************ AssignreinforcementState **************************************************************/
 /**
@@ -603,12 +724,17 @@ void GameEngine::setPlayers(vector<Player *> p) {
 }
 
 vector<Player *> GameEngine::getPlayers() {
-    return {};
-    //return players;
+    //return {};
+    return players;
 }
 
-int GameEngine::getPlayerNum() const {
+int GameEngine::getPlayerNum() {
     return playerNum;
+}
+
+int GameEngine::incrPlayerNum() {
+    //return playerNum++; // id starting from 0
+    return ++playerNum; // id starting from 1
 }
 
 /************************************************* Helper functions **************************************************/
@@ -795,6 +921,7 @@ void executeAssistForPlayer(Player *player, const string &orderName, const strin
 
 
 void testStartupPhase() {
+    testGameStates();
     //testMainGameLoop();
 //    deleteMap(gameMap);
 };
@@ -837,6 +964,7 @@ void GameEngine::executeOrdersPhase() {
 
 void GameEngine::addPlayer(Player *player) {
     players.push_back(player);
+    //setPlayers({player});
 }
 
 Deck *GameEngine::getDeck() {

@@ -10,6 +10,7 @@
 #include <sstream>
 #include <utility>
 #include <vector>
+#include <random>
 
 #include "../LoggingObserver/LoggingObserver.h"
 #include "../CardsDeck/Cards.h"
@@ -23,13 +24,9 @@ using namespace std;
 /********************************************************** Game Engine ***********************************************************/
 // Forward declarations
 class State;
-
 class Transition;
-
 class Player;
-
 class Map;
-
 class Deck;
 
 class GameEngine : public Subject, public ILoggable {
@@ -106,9 +103,10 @@ public:
 
     bool isGameOver() const;
 
-    int getPlayerNum() const;
+    int getPlayerNum();
+    int incrPlayerNum();
 
-    static vector<Player *> getPlayers();
+    vector<Player *> getPlayers();
 
     void start();
 
@@ -131,7 +129,7 @@ public:
     string stringToLog();
 
     void addPlayer(Player *player);
-
+    
     ::map<int, vector<Territory *>> playerTerritories;
 
     Deck *getDeck();
@@ -426,6 +424,6 @@ void testGameStates();
 
 void initializeGame(GameEngine &engine);
 
-void testMainGameLoop();
+int testMainGameLoop();
 
 void testStartupPhase();
