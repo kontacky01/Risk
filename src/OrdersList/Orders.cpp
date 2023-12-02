@@ -175,6 +175,7 @@ string Deploy::stringToLog() {
 void Deploy::execute() {
     if (validate() == 1){
         cout << "Executing (Deploy) order #" << getOrderID() << " ...\n";
+        this->executeForThisSpecificOrder();
     } else cout << "Can NOT execute (Deploy) order #" << getOrderID() << " ...\n";
 };
 
@@ -266,6 +267,7 @@ Advance *Advance::clone() const {
 void Advance::execute() {
     if (getValid() == 1){
         cout << "Executing (Advance) order #" << getOrderID() << " ...\n";
+        this->executeForThisSpecificOrder();
     } else cout << "Can NOT execute (Advance) order #" << getOrderID() << " ...\n";
 }
 
@@ -428,6 +430,7 @@ Bomb *Bomb::clone() const {
 void Bomb::execute() {
     if (getValid() == 1){
         cout << "Executing (Bomb) order #" << getOrderID() << " ...\n";
+        this->executeForThisSpecificOrder();
     } else cout << "Can NOT execute (Bomb) order #" << getOrderID() << " ...\n";
 }
 
@@ -533,6 +536,7 @@ Blockade *Blockade::clone() const {
 void Blockade::execute() {
     if (getValid() == 1){
         cout << "Executing (Blockade) order #" << getOrderID() << " ...\n";
+        this->executeForThisSpecificOrder();
     } else cout << "Can NOT execute (Blockade) order #" << getOrderID() << " ...\n";
 };
 
@@ -607,6 +611,7 @@ Airlift *Airlift::clone() const {
 void Airlift::execute() {
     if (getValid() == 1){
         cout << "Executing (Airlift) order #" << getOrderID() << " ...\n";
+        this->executeForThisSpecificOrder();
     } else cout << "Can NOT execute (Airlift) order #" << getOrderID() << " ...\n";
 };
 
@@ -682,6 +687,7 @@ Negotiate *Negotiate::clone() const {
 void Negotiate::execute() {
     if (getValid() == 1){
         cout << "Executing (Negotiate) order #" << getOrderID() << " ...\n";
+        this->executeForThisSpecificOrder();
     } else cout << "Can NOT execute (Negotiate) order #" << getOrderID() << " ...\n";
 }
 

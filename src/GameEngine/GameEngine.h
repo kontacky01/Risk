@@ -426,6 +426,6 @@ void testGameStates();
 
 void initializeGame(GameEngine &engine);
 
-int testMainGameLoop();
+void testMainGameLoop();
 
 void testStartupPhase();

@@ -92,9 +92,9 @@ public:
         territories = newTerritories;
     }
 
-    const vector<Territory *> &getTerritories() const {
-        return territories;
-    }
+    // const vector<Territory *> &getTerritories() const {
+    //     return territories;
+    // }
 
     vector<Territory *> getTerritories();
 
@@ -108,6 +108,8 @@ public:
 
     void setDeck(Deck *deck);
 
+    PlayerStrategy* getStrategy();
+    
     void setStrategy(PlayerStrategy* newStrategy);
 
     OrdersList *getOrdersList();
@@ -156,6 +158,8 @@ public:
     vector<int> continentOwnershipComplete();
 
     GameEngine *getGameEngine();
+
+    void changeNeutralPlayerToAggressive();
 };
 /************************************************************ PlayerDriver **************************************************************/
 void testPlayers();

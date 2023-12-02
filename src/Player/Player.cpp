@@ -12,6 +12,7 @@ Player::Player(vector<Territory *> t, Hand *h, OrdersList *o, int id) {
     orderList = o;
     this->id = id;
     this->reinforcements = 0;
+    this->strategy = new HumanPlayerStrategy();
 
     // if seed is set to 1, the generator is reinitialized to its initial value
     // and produces the same values as before any call to rand or srand
@@ -150,11 +151,15 @@ vector<Territory *> Player::getTerritories() { return this->territories; }
 void Player::addTerritory(Territory *t) {
     t->setOwnerId(this->id);
     this->territories.push_back(t);
+    this->defendList.push_back(t);
 }
 
 void Player::removeTerritory(Territory *t) {
     auto it = find(territories.begin(), territories.end(), t);
     territories.erase(it);
+
+    auto it2 = find(defendList.begin(), defendList.end(), t);
+    defendList.erase(it2);
 }
 
 /**
@@ -288,10 +293,24 @@ OrdersList *Player::issuesOrder(Order *o) {
     return orderList;
 }
 
+PlayerStrategy* Player::getStrategy(){
+    return this->strategy;
+}
+
 void Player::setStrategy(PlayerStrategy *newStrategy) {
-    strategy = newStrategy;
+    this->strategy = newStrategy;
 }
 
 Deck *Player::getDeck() {
     return this->deck;
+}
+/************************************************** Player Strategies code ****************************************************/
+
+void Player::changeNeutralPlayerToAggressive(){
+    //if reinforcement < 50 which is how many army units each player gets by default
+    //then Neutral player has been attacked so player becomes aggressive
+    if(dynamic_cast<NeutralPlayerStrategy*>(this->strategy) != nullptr && this->getReinforcement() < 50){
+        this->setStrategy(new AggressivePlayerStrategy());
+        cout << "\nNeutral Player has now become Aggressive Player.\n";
+    }
 }

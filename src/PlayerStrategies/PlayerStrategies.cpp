@@ -2,6 +2,7 @@
 
 using namespace std;
 
+//================================ human player ================================
 string HumanPlayerStrategy::getStrategy() {
     return "human";
 }
@@ -20,161 +21,416 @@ void HumanPlayerStrategy::issueOrder(Player *player) {
 
     int armyUnits;
     string orderName;
-    cout << "Enter an order (bomb, reinforcement, blockade, airlift, diplomacy, deploy, advance): ";
+
+    cout << "\nEnter an order (bomb, blockade, airlift, deploy, advance, negotiate): ";
     cin >> orderName;
     transform(orderName.begin(), orderName.end(), orderName.begin(),
               [](unsigned char c) { return tolower(c); });
+    cout << "\n~~~~~~ You have issued an order to: [" << orderName << "] !\n";
 
-    if (player->getReinforcement() > 0 && orderName == "deploy") {
-        Order *deployOrder = new Deploy(); // create a deploy order
-        cout << "\n~~~~~~ You have issued an order to: [" << orderName << "] !\n";
-
+    if (orderName == "deploy") {
         string territoryName;
-        // ask for the territory ID
+        Deploy *deployOrder;
+    
         cout << "\nEnter the territory you wish to deploy to: ";
         cin >> territoryName;
 
-        // ask for the number of units
         cout << "\nEnter the number of army units you wish to deploy: ";
         cin >> armyUnits;
 
-        // Check if player has enough reinforcement units to deploy
-        if (armyUnits > player->getReinforcement()) {
-            cout << "Invalid: You cannot deploy more units than you have available." << endl;
-            cout << "You have " << player->getReinforcement() << " units available." << endl;
-            return; // Return early if the player does not have enough units
+        Territory *targetTerritory = player->getGameEngine()->gameMap()->getTerritory(territoryName);
+        
+        if (targetTerritory) {
+            deployOrder = new Deploy(player,targetTerritory,armyUnits);
+            player->orderList->addOrder(deployOrder);
+            deployOrder->execute();
         }
-
-        // check if the territory is owned by the player
-        Territory *targetTerritory = nullptr;
-        //for (auto & territory : currentTerritoryList) {
-        for (auto &territory: player->territories) {
-            if (territory->getName() == territoryName) {
-                targetTerritory = territory;
-                break;
-            }
+        else {
+            cout << "\nInvalid: Target Territory '" << territoryName << "' not found in current game map.\n";
         }
-        // check if the territory was found
-        if (!targetTerritory) {
-            cout << "\nInvalid: Territory '" << territoryName << "' not found.\n";
-            delete deployOrder;
-            return;
-        }
-        // now check if the player owns the territory
-        if (targetTerritory->getOwnerId() == player->getID()) {
-            // allocate reinforcements to the territory
-            targetTerritory->setArmyCount(targetTerritory->getArmyCount() + armyUnits);
-            // add the territory to the defend list
-            player->addTerritoryToList(targetTerritory, "defend");
-            // add the "deploy" order to the player's orders list
-            player->orderList->addOrder(deployOrder); // add order to list
-            player->reinforcements -= armyUnits;
-            cout << "\n" << targetTerritory->getName() << " now has " << targetTerritory->getArmyCount()
-                 << " army units!\n";
-            cout << player->orderList;
-        } else {
-            cout << "\nInvalid: You do not own " << territoryName << ".\n";
-            delete deployOrder;
-            return;
-        }
-    } else if (player->getReinforcement() == 0 && orderName == "deploy") {
-        cout << "\nInvalid: You have deployed all your army units.\n";
-
-    } else if (player->getReinforcement() > 0 && orderName == "advance") {
-        cout << "\nInvalid: You still have " << player->getReinforcement() << " army units to deploy!\n";
-
-    } else if (player->getReinforcement() == 0 && orderName == "advance") {
-        Order *advanceOrder = new Advance(); // create an advance order
-        cout << "\n~~~~~~ You have issued an order to: [" << orderName << "] !\n";
-
+        //if(deployOrder) {delete deployOrder;deployOrder = NULL;}
+    }
+    if (orderName == "advance") {
         string sourceTerritoryName, targetTerritoryName;
+        Advance *advanceOrder;
+
         cout << "\nEnter the territory you wish to move army units FROM: ";
         cin >> sourceTerritoryName;
+
         cout << "\nEnter the territory you wish to move army units TO: ";
         cin >> targetTerritoryName;
+
         cout << "\nEnter the amount of army units you wish to advance TO " << targetTerritoryName << ": ";
         cin >> armyUnits;
 
         Territory *sourceTerritory = player->getGameEngine()->gameMap()->getTerritory(sourceTerritoryName);
-        for (auto &territory: player->territories) {
-            if (territory->getName() == sourceTerritoryName) {
-                sourceTerritory = territory;
-                break;
-            }
-        }
-        if (!sourceTerritory) {
-            cout << "\nInvalid: Source territory not found or does not exist.\n";
-            delete advanceOrder;
-            return;
-        }
-        if (sourceTerritory->getArmyCount() < armyUnits) {
-            cout << "Invalid: Source territory does not have enough army units. It only has "
-                 << sourceTerritory->getArmyCount() << " units.\n";
-            delete advanceOrder;
-            return;
-        }
         Territory *targetTerritory = player->getGameEngine()->gameMap()->getTerritory(targetTerritoryName);
-        for (auto &territory: player->territories) {
-            if (territory->getName() == targetTerritoryName) {
-                targetTerritory = territory;
-                break;
-            }
-        }
-        if (!targetTerritory) {
-            cout << "\nInvalid: Target territory not found or does not exist.\n";
-            delete advanceOrder; // clean up allocated memory
-            return;
-        }
-        if (targetTerritory->getOwnerId() == player->getID()) { // player is trying to DEFEND
-            player->addTerritoryToList(targetTerritory, "defend"); // add to defend list
-            sourceTerritory->subFromArmy(armyUnits); // subtract from source
-            targetTerritory->addToArmyCount(armyUnits); // add to target
-            player->orderList->addOrder(advanceOrder); // add order to list
-            cout << "\n" << targetTerritory->getName() << " now has " << targetTerritory->getArmyCount()
-                 << " army units!";
-            cout << "\n" << sourceTerritory->getName() << " now has " << sourceTerritory->getArmyCount()
-                 << " army units!\n";
-        } //else
-        if (targetTerritory->getOwnerId() != player->getID()) {
-            // player is trying to ATTACK, check if target territory is adjacent
-            if (find(sourceTerritory->getAdjacencyList().begin(),
-                     sourceTerritory->getAdjacencyList().end(),
-                     targetTerritory) != sourceTerritory->getAdjacencyList().end()) {
-                // Target is neighboring
-                player->addTerritoryToList(targetTerritory, "attack"); // add to attack list
-                sourceTerritory->subFromArmy(armyUnits); // subtract from source
-                player->orderList->addOrder(advanceOrder); // add order to list
-            } else {
-                cout << "\nInvalid: Territory " << targetTerritoryName << " is not adjacent and cannot be attacked!\n";
-                delete advanceOrder; // clean up allocated memory
-            }
-        }
-    } else if (player->getReinforcement() > 0 && (orderName == "airlift" || orderName == "blockade" ||
-                                                orderName == "bomb" || orderName == "diplomacy" ||
-                                                orderName == "negotiate")) {
-        cout << "\nInvalid: You still have " << player->getReinforcement() << " army units to deploy!\n";
 
-    } else if (player->getReinforcement() == 0 && (orderName == "airlift" || orderName == "blockade" ||
-                                                 orderName == "bomb" || orderName == "diplomacy" ||
-                                                 orderName == "negotiate")) {
-        bool hasCard = false; // check if the player has the card in their hand
+        if (sourceTerritory && targetTerritory) {
+            advanceOrder = new Advance(player,sourceTerritory,targetTerritory,armyUnits);
+            player->orderList->addOrder(advanceOrder);
+            advanceOrder->execute();
+        }
+        else {
+            cout << "\nInvalid Source or Target Territories: '" << sourceTerritory << " or " << targetTerritory << "' not found in current game map.\n";
+        }
+        //if(advanceOrder){delete advanceOrder;advanceOrder = NULL;}
+    }
+    if(orderName == "airlift" || orderName == "blockade" || orderName == "bomb" ||
+         orderName == "diplomacy" || orderName == "negotiate"){
+            bool hasCard = false;
+        // check if the player has the card in their hand
         for (auto &card : player->getHand()->hand) {
             if (card->getType() == orderName) {
+                hasCard = true;
                 cout << "\n~~~~~~ You have issued an order to: [" << card->getType() << "] !\n";
                 player->playCard(card, player->getDeck(), player->orderList);
-                hasCard = true;
+
+                if(orderName == "bomb"){
+                    string territoryName;
+                    Bomb *bombOrder;
+                
+                    cout << "\nEnter the territory you wish to bomb: ";
+                    cin >> territoryName;
+
+                    Territory *targetTerritory = player->getGameEngine()->gameMap()->getTerritory(territoryName);
+                    
+                    if (targetTerritory) {
+                        bombOrder = new Bomb(player,targetTerritory);
+                        player->orderList->addOrder(bombOrder);
+                        bombOrder->execute();
+                    }
+                    else {
+                        cout << "\nInvalid: Target Territory '" << territoryName << "' not found in current game map.\n";
+                    }
+                    //if(bombOrder){delete bombOrder; bombOrder = NULL;}
+                }
+                if(orderName == "blockade"){
+                    string territoryName;
+                    Blockade *blockadeOrder;
+                    Player *anyNeutralPlayerInGame;
+
+                    vector<Player *> gamePlayers = player->getGameEngine()->getPlayers();
+                    for (auto &otherplayer : gamePlayers) {
+                        if(dynamic_cast<NeutralPlayerStrategy*>(player->getStrategy()) != nullptr){
+                            anyNeutralPlayerInGame = otherplayer;
+
+                            cout << "\nEnter the territory you wish to blockade: ";
+                            cin >> territoryName;
+
+                            Territory *targetTerritory = player->getGameEngine()->gameMap()->getTerritory(territoryName);
+                            
+                            if (targetTerritory) {
+                                blockadeOrder = new Blockade(player,anyNeutralPlayerInGame,targetTerritory);
+                                player->orderList->addOrder(blockadeOrder);
+                                blockadeOrder->execute();
+                            }
+                            else {
+                                cout << "\nInvalid: Target Territory '" << territoryName << "' not found in current game map.\n";
+                            }
+                            break;
+                        }
+                        else{
+                            cout << "\nThe current game tournament has no Neutral Player!\n";
+                        }
+                    }
+                    //if(anyNeutralPlayerInGame){delete anyNeutralPlayerInGame;; anyNeutralPlayerInGame = NULL;}
+                    //if(blockadeOrder){delete blockadeOrder; blockadeOrder = NULL;}
+                }
+                if(orderName == "airlift"){
+                    string sourceTerritoryName, targetTerritoryName;
+                    Airlift *airliftOrder;
+
+                    cout << "\nEnter the territory you wish to move army units FROM: ";
+                    cin >> sourceTerritoryName;
+
+                    cout << "\nEnter the territory you wish to move army units TO: ";
+                    cin >> targetTerritoryName;
+
+                    cout << "\nEnter the amount of army units you wish to advance TO " << targetTerritoryName << ": ";
+                    cin >> armyUnits;
+
+                    Territory *sourceTerritory = player->getGameEngine()->gameMap()->getTerritory(sourceTerritoryName);
+                    Territory *targetTerritory = player->getGameEngine()->gameMap()->getTerritory(targetTerritoryName);
+
+                    if (sourceTerritory && targetTerritory) {
+                        airliftOrder = new Airlift(player,sourceTerritory,targetTerritory,armyUnits);
+                        player->orderList->addOrder(airliftOrder);
+                        airliftOrder->execute();
+                    }
+                    else {
+                        cout << "\nInvalid Source or Target Territories: '" << sourceTerritory << " or " << targetTerritory << "' not found in current game map.\n";
+                        return;
+                    }
+                    //if(airliftOrder){delete airliftOrder; airliftOrder = NULL;}
+                }
+                if(orderName == "negotiate"){
+                    int id;
+                    Player *playerToNegotiate;
+                    Negotiate *negotiateOrder;
+                    cout << "\nEnter the player(ID) you wish to negotiate with: ";
+                    cin >> id;
+
+                    vector<Player *> gamePlayers = player->getGameEngine()->getPlayers();
+                    for (auto &otherplayer : gamePlayers) {
+                            if(otherplayer->getID() == id){
+                                playerToNegotiate = otherplayer;
+                                negotiateOrder = new Negotiate(player,playerToNegotiate);
+                                player->orderList->addOrder(negotiateOrder);
+                                negotiateOrder->execute();
+                                break;
+                            }
+                            else{
+                                cout << "\nThere is no such player in the current game tournament!\n";
+                            }
+                    }
+                    //if(playerToNegotiate){delete playerToNegotiate; playerToNegotiate = NULL;}
+                    //if(negotiateOrder){delete negotiateOrder; negotiateOrder = NULL;}
+
+                }
                 cout << player->orderList;
                 player->getHand()->printDeck();
                 player->getDeck()->printDeck();
                 break;
             }
         }
-        if (!hasCard) {
-            cout << "\nYou do not have a [" << orderName << "] card in your hand!\n";
+        if(!hasCard){
+            cout << "\nPlayer does not have a valid card to issue the order " << orderName <<"\n";
         }
-    } else {
-        cout << "\nInvalid: There is no such card.\n";
     }
-    toDefend(player);
-    toAttack(player);
+}
+
+//================================ Aggressive player ================================
+string AggressivePlayerStrategy::getStrategy() {
+    return "Aggressive";
+}
+
+vector<Territory *> AggressivePlayerStrategy::toDefend(Player *player) {
+    return player->toDefend();
+}
+
+vector<Territory *> AggressivePlayerStrategy::toAttack(Player *player) {
+    return player->toAttack();
+}
+
+void AggressivePlayerStrategy::issueOrder(Player *player) {
+
+}
+//================================ benevolent player ================================
+string BenevolentPlayerStrategy::getStrategy() {
+    return "Benevolent";
+}
+
+vector<Territory *> BenevolentPlayerStrategy::toDefend(Player *player) {
+    return player->toDefend();
+}
+
+vector<Territory *> BenevolentPlayerStrategy::toAttack(Player *player) {
+    return player->toAttack();
+}
+
+void BenevolentPlayerStrategy::issueOrder(Player *player) {
+
+    //cards: "bomb", "blockade", "airlift", "diplomacy" -- "reinforcement" (not associated with any order)
+    //orders: "bomb", "deploy", "advance", "blockade", "airlift", "negotiate"
+
+    //since benevolent player can only deploy/advance on its weakest contries
+    //that means we check and deal with countires in toDefend() and accept all orders except bomb
+    //and in advance we only advance in on territories in toDefend() not toAttack()
+
+    int armyUnits;
+    string orderName;
+
+    cout << "\nEnter an order (blockade, deploy, advance, negotiate): ";
+    cin >> orderName;
+    transform(orderName.begin(), orderName.end(), orderName.begin(),
+              [](unsigned char c) { return tolower(c); });
+    cout << "\n~~~~~~ You have issued an order to: [" << orderName << "] !\n";
+
+    if (orderName == "deploy") {
+        string territoryName;
+        Deploy *deployOrder;
+    
+        toDefend(player);
+        cout << "\nEnter the territory you wish to deploy to from your weakest countries to defend: ";
+        cin >> territoryName;
+
+        cout << "\nEnter the number of army units you wish to deploy: ";
+        cin >> armyUnits;
+
+        vector<Territory *> weakestToDefend = toDefend(player);
+
+        Territory *targetTerritory = nullptr;
+        for (auto &territory: weakestToDefend) {
+            if (territory->getName() == territoryName) {
+                targetTerritory = territory;
+                deployOrder = new Deploy(player,targetTerritory,armyUnits);
+                player->orderList->addOrder(deployOrder);
+                deployOrder->execute();
+                break;
+            }
+        }
+        if (!targetTerritory) {
+            cout << "\nInvalid: Target Territory '" << territoryName << "' not found in your weakest countries to defend.\n";
+        }
+        //if(deployOrder) {delete deployOrder;deployOrder = NULL;}
+    }
+    if (orderName == "advance") {
+        string sourceTerritoryName, targetTerritoryName;
+        Advance *advanceOrder;
+
+        cout << "\nEnter the territory you wish to move army units FROM: ";
+        cin >> sourceTerritoryName;
+
+        cout << "\nEnter the territory you wish to move army units TO: ";
+        cin >> targetTerritoryName;
+
+        cout << "\nEnter the amount of army units you wish to advance TO " << targetTerritoryName << ": ";
+        cin >> armyUnits;
+
+        Territory *sourceTerritory = player->getGameEngine()->gameMap()->getTerritory(sourceTerritoryName);
+        vector<Territory *> weakestToDefend = toDefend(player);
+
+        Territory *targetTerritory = player->getGameEngine()->gameMap()->getTerritory(targetTerritoryName);
+        for (auto &territory: weakestToDefend) {
+            if (territory->getName() == targetTerritoryName) {
+                targetTerritory = territory;
+                advanceOrder = new Advance(player,sourceTerritory,targetTerritory,armyUnits);
+                player->orderList->addOrder(advanceOrder);
+                advanceOrder->execute();
+                break;
+            }
+        }
+        if (!targetTerritory) {
+            cout << "\nInvalid: Target Territory '" << targetTerritoryName << "' not found in your weakest countries to defend.";
+            cout << "\nPlayer is a Benevolent Player and cannot Attack!\n";
+        }
+        //if(advanceOrder){delete advanceOrder;advanceOrder = NULL;}
+    }
+    if(orderName == "airlift" || orderName == "blockade" || orderName == "bomb" ||
+         orderName == "diplomacy" || orderName == "negotiate"){
+            bool hasCard = false;
+        // check if the player has the card in their hand
+        for (auto &card : player->getHand()->hand) {
+            if (card->getType() == orderName) {
+                hasCard = true;
+                cout << "\n~~~~~~ You have issued an order to: [" << card->getType() << "] !\n";
+                player->playCard(card, player->getDeck(), player->orderList);
+
+                if(orderName == "bomb"){
+                    cout << "\nPlayer is a Benevolent Player and cannot Attack!\n";
+                }
+                if(orderName == "blockade"){
+                    string territoryName;
+                    Blockade *blockadeOrder;
+                    Player *anyNeutralPlayerInGame;
+
+                    vector<Player *> gamePlayers = player->getGameEngine()->getPlayers();
+                    for (auto &otherplayer : gamePlayers) {
+                        if(dynamic_cast<NeutralPlayerStrategy*>(player->getStrategy()) != nullptr){
+                            anyNeutralPlayerInGame = otherplayer;
+
+                            cout << "\nEnter the territory you wish to blockade: ";
+                            cin >> territoryName;
+
+                            Territory *targetTerritory = player->getGameEngine()->gameMap()->getTerritory(territoryName);
+                            
+                            if (targetTerritory) {
+                                blockadeOrder = new Blockade(player,anyNeutralPlayerInGame,targetTerritory);
+                                player->orderList->addOrder(blockadeOrder);
+                                blockadeOrder->execute();
+                            }
+                            else {
+                                cout << "\nInvalid: Target Territory '" << territoryName << "' not found in current game map.\n";
+                            }
+                            break;
+                        }
+                        else{
+                            cout << "\nThe current game tournament has no Neutral Player!\n";
+                        }
+                    }
+                    //if(anyNeutralPlayerInGame){delete anyNeutralPlayerInGame;; anyNeutralPlayerInGame = NULL;}
+                    //if(blockadeOrder){delete blockadeOrder; blockadeOrder = NULL;}
+                }
+                if(orderName == "airlift"){
+                    string sourceTerritoryName, targetTerritoryName;
+                    Airlift *airliftOrder;
+
+                    cout << "\nEnter the territory you wish to move army units FROM: ";
+                    cin >> sourceTerritoryName;
+
+                    cout << "\nEnter the territory you wish to move army units TO: ";
+                    cin >> targetTerritoryName;
+
+                    cout << "\nEnter the amount of army units you wish to advance TO " << targetTerritoryName << ": ";
+                    cin >> armyUnits;
+
+                    Territory *sourceTerritory = player->getGameEngine()->gameMap()->getTerritory(sourceTerritoryName);
+                    Territory *targetTerritory = player->getGameEngine()->gameMap()->getTerritory(targetTerritoryName);
+
+                    if (sourceTerritory && targetTerritory) {
+                        airliftOrder = new Airlift(player,sourceTerritory,targetTerritory,armyUnits);
+                        player->orderList->addOrder(airliftOrder);
+                        airliftOrder->execute();
+                    }
+                    else {
+                        cout << "\nInvalid Source or Target Territories: '" << sourceTerritory << " or " << targetTerritory << "' not found in current game map.\n";
+                        return;
+                    }
+                    //if(airliftOrder){delete airliftOrder; airliftOrder = NULL;}
+                }
+                if(orderName == "negotiate"){
+                    int id;
+                    Player *playerToNegotiate;
+                    Negotiate *negotiateOrder;
+                    cout << "\nEnter the player(ID) you wish to negotiate with: ";
+                    cin >> id;
+
+                    vector<Player *> gamePlayers = player->getGameEngine()->getPlayers();
+                    for (auto &otherplayer : gamePlayers) {
+                            if(otherplayer->getID() == id){
+                                playerToNegotiate = otherplayer;
+                                negotiateOrder = new Negotiate(player,playerToNegotiate);
+                                player->orderList->addOrder(negotiateOrder);
+                                negotiateOrder->execute();
+                                break;
+                            }
+                            else{
+                                cout << "\nThere is no such player in the current game tournament!\n";
+                            }
+                    }
+                    //if(playerToNegotiate){delete playerToNegotiate; playerToNegotiate = NULL;}
+                    //if(negotiateOrder){delete negotiateOrder; negotiateOrder = NULL;}
+
+                }
+                cout << player->orderList;
+                player->getHand()->printDeck();
+                player->getDeck()->printDeck();
+                break;
+            }
+        }
+        if(!hasCard){
+            cout << "\nPlayer does not have a valid card to issue the order " << orderName <<"\n";
+        }
+    }
+}
+//================================ neutral player ================================
+string NeutralPlayerStrategy::getStrategy() {
+    return "Neutral";
+}
+
+vector<Territory *> NeutralPlayerStrategy::toDefend(Player *player) {
+    return player->toDefend();
+}
+
+vector<Territory *> NeutralPlayerStrategy::toAttack(Player *player) {
+    return player->toAttack();
+}
+
+void NeutralPlayerStrategy::issueOrder(Player *player) {
+    //cards: "bomb", "blockade", "airlift", "diplomacy" -- "reinforcement" (not associated with any order)
+    //orders: "bomb", "deploy", "advance", "blockade", "airlift", "negotiate"
+
+    cout << "\nPlayer is NEUTRAL and cannot issue orders!\n";
+
 }

@@ -332,32 +332,24 @@ void Hand::play(Card *card, Deck *returningDeck, OrdersList *OL) {
     });
 
     if (it != hand.end()) {
-        // Determine the card type and create the appropriate order
-        Order *order = nullptr;
-        if (card->getType() == "bomb") {
-            order = new Bomb();
-        } else if (card->getType() == "reinforcement") {
-            order = new Deploy();
-        } else if (card->getType() == "blockade") {
-            order = new Blockade();
-        } else if (card->getType() == "airlift") {
-            order = new Airlift();
-        } else if (card->getType() == "diplomacy") {
-            order = new Negotiate();
+        // Determine the card type
+        if (card->getType() == "bomb" || card->getType() == "reinforcement" ||
+             card->getType() == "blockade" || card->getType() == "airlift" ||
+              card->getType() == "diplomacy") {
+            // Return the card to the deck and remove it from the player's hand
+            returningDeck->returnCard(*it);
+
+            swap(*it, hand.back());
+            hand.pop_back();
+
+            cout << "You played the " << "\"" << card->getType() << "\" card.\n";
         } else {
             cout << "Invalid card type: " << card->getType() << "\n";
             return;
         }
         // Add the order to the player's OrdersList
-        OL->addOrder(order);
-
-        // Return the card to the deck and remove it from the player's hand
-        returningDeck->returnCard(*it);
-
-        swap(*it, hand.back());
-        hand.pop_back();
-
-        cout << "You played the " << "\"" << card->getType() << "\" card.\n";
+        //OL->addOrder(order); i commented this out because we can't just add an order that was not initialized with parameters
+        //the valid initialization and adding to the player's orderlist will be done in issueorder()
     } else {
         cout << "Error: Card not found in hand!\n";
     }

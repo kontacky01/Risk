@@ -7,13 +7,13 @@
 
 void initializeGame(GameEngine &gameEngine) {
     // Load the map
-    MapLoader mapLoader;
-    Map *currentGameMap = mapLoader.loadMap("../src/Map/MapFolder/World.map");
-
-    if (currentGameMap == nullptr) {
-        cout << "Failed to load the map." << endl;
-        return;
-    }
+    MapLoader *mapLoader = new MapLoader();
+    cout << "---------> Load a valid map <---------\n\n";
+    Map *currentGameMap = mapLoader->loadMap("C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/Map/MapFolder/World.map");
+    //currentGameMap->printMapSummary();
+   // mapLoader->printContinentsAndBonuses();
+    currentGameMap->validate();
+    gameEngine.setGameMap(currentGameMap);
 
     // Obtain a list of all territories from the loaded map
     vector<Territory *> allTerritories = currentGameMap->getTerritories();
@@ -99,7 +99,7 @@ void initializeGame(GameEngine &gameEngine) {
 }
 
 
-int testMainGameLoop() {
+void testMainGameLoop() {
     auto *gameEngine = new GameEngine;
 
     initializeGame(*gameEngine);
@@ -108,7 +108,7 @@ int testMainGameLoop() {
 
     delete gameEngine;
 
-    return 0;
+    //return 0;
 }
 
 

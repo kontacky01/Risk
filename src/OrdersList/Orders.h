@@ -329,8 +329,11 @@ public:
 
     vector<Order *> *OL;
 
+    vector<Order *> getOrders();
+
 private:
     friend ostream &operator<<(ostream &out, OrdersList *ol); // override Stream insertion operator
+    vector<Order *> ordersList;
 
 };
 

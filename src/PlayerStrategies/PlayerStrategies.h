@@ -1,8 +1,10 @@
 #pragma once
 
 #include "../GameEngine/GameEngine.h"
+#include "../CardsDeck/Cards.h"
 #include "../OrdersList/Orders.h"
 #include "../Map/Map.h"
+#include "../Player/Player.h"
 
 class Player;
 
@@ -64,13 +66,15 @@ public:
     string getStrategy();
 };
 
-class CheaterPlayerStrategy : public PlayerStrategy {
-public:
-    vector<Territory *> toAttack(Player *player);
+// class CheaterPlayerStrategy : public PlayerStrategy {
+// public:
+//     vector<Territory *> toAttack(Player *player);
 
-    vector<Territory *> toDefend(Player *player);
+//     vector<Territory *> toDefend(Player *player);
 
-    void issueOrder(Player *player);
+//     void issueOrder(Player *player);
 
-    string getStrategy();
-};
+//     string getStrategy();
+// };
+/************************************************************ PlayerStrategiesDriver **************************************************************/
+void testPlayerStrategies();
