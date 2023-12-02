@@ -7,13 +7,13 @@
 
 void initializeGame(GameEngine &gameEngine) {
     // Load the map
-    MapLoader mapLoader;
-    Map *currentGameMap = mapLoader.loadMap("../src/Map/MapFolder/World.map");
-
-    if (currentGameMap == nullptr) {
-        cout << "Failed to load the map." << endl;
-        return;
-    }
+    MapLoader *mapLoader = new MapLoader();
+    cout << "---------> Load a valid map <---------\n\n";
+    Map *currentGameMap = mapLoader->loadMap("C:/Users/konta/OneDrive/Desktop/COMP 345/Risk/src/Map/MapFolder/World.map");
+    //currentGameMap->printMapSummary();
+   // mapLoader->printContinentsAndBonuses();
+    currentGameMap->validate();
+    gameEngine.setGameMap(currentGameMap);
 
     // Obtain a list of all territories from the loaded map
     vector<Territory *> allTerritories = currentGameMap->getTerritories();
@@ -24,21 +24,25 @@ void initializeGame(GameEngine &gameEngine) {
     cout << "\n";
     deck->printDeck();
 
+    HumanPlayerStrategy* human = new HumanPlayerStrategy();
+
     // Create Player 1 and assign random territories (between 1 and 5)
     Player *player1 = new Player({}, new Hand(), new OrdersList(), 1);
     player1->setReinforcement(50);
     player1->setGameEngine(&gameEngine);
     player1->setDeck(deck);
+    player1->setStrategy(human);
 
     // Create Player 2 and assign random territories (between 1 and 5)
     Player *player2 = new Player({}, new Hand(), new OrdersList(), 2);
     player2->setReinforcement(0);
     player2->setGameEngine(&gameEngine);
     player2->setDeck(deck);
+    player2->setStrategy(human);
 
 
     for (int i = 0; i < 5; ++i) {
-        Card *drawnCard = deck->draw();
+        Card *drawnCard = deck->drawACard();
         player1->getHand()->addCard(drawnCard);
         player2->getHand()->addCard(drawnCard);
     }
@@ -95,7 +99,7 @@ void initializeGame(GameEngine &gameEngine) {
 }
 
 
-int testMainGameLoop() {
+void testMainGameLoop() {
     auto *gameEngine = new GameEngine;
 
     initializeGame(*gameEngine);
@@ -104,7 +108,7 @@ int testMainGameLoop() {
 
     delete gameEngine;
 
-    return 0;
+    //return 0;
 }
 
 

@@ -2,6 +2,7 @@
 
 #include <utility>
 #include <memory>
+#include <vector>
 #include <algorithm>
 
 
@@ -648,7 +649,7 @@ void GameEngine::mainGameLoop() {
         for (auto &player: players) {
             reinforcementPhase();
             issueOrdersPhase();
-            executeOrdersPhase();
+            //executeOrdersPhase();
 
             Player *winner = checkForWinner();
             if (winner != nullptr) {
@@ -692,7 +693,6 @@ void GameEngine::reinforcementPhase() {
         }
         printPlayerReinforcement(player);
     }
-    issueOrdersPhase();
 }
 
 void GameEngine::issueOrdersPhase() {
@@ -729,7 +729,6 @@ void GameEngine::issueOrdersPhase() {
         // display order list of player
         cout << player->orderList << endl;
     }
-    executeOrdersPhase();
 }
 
 Player* GameEngine::checkForWinner() {
@@ -800,16 +799,21 @@ void testStartupPhase() {
 };
 
 void GameEngine::executeOrdersPhase() {
+    cout << "EXECUTE ORDERS PHASE REACHED";
     while (true) {
         // loop through each player
-        for (auto currentPlayer : players) {
+        vector<Player *> gamePlayers = getPlayers();
+        for (auto &player : gamePlayers) {
             // Your existing code for executing orders here...
+            OrdersList* playerOrderList = player->getOrdersList();
+
+            playerOrderList->executeAll();
 
             // check if the player owns all territories on any continent
             for (auto &continent : gameMap()->continentList) {
                 bool ownsAllTerritories = true;
                 for (auto &territory : continent->territoriesInContinents) {
-                    if (territory->getOwnerId() != currentPlayer->getID()) {
+                    if (territory->getOwnerId() != player->getID()) {
                         ownsAllTerritories = false;
                         break;
                     }
@@ -817,21 +821,12 @@ void GameEngine::executeOrdersPhase() {
                 if (ownsAllTerritories) {
                     // award control bonus for owning all territories in the continent
                     int controlBonus = continent->getControlBonusValue();
-                    currentPlayer->setReinforcement(controlBonus);
+                    player->setReinforcement(controlBonus);
                 }
             }
         }
-
-        // Check for game end condition
-        Player* winner = checkForWinner();
-        if (winner != nullptr) {
-            cout << "Player " << winner->getID() << " wins!" << endl;
-            exit(0);
-        }
-
         // Remove players without territories
         removePlayersWithoutTerritories();
-        reinforcementPhase();
     }
 }
 

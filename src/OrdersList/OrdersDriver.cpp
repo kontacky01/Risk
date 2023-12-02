@@ -1,273 +1,5 @@
 #include "Orders.h"
 
-void testOrdersLists() {
-    cout << "\n************************************\n"
-        << "Time to test Orders and OrdersList!! \n"
-        << "************************************\n\n";
-
-    cout << "\n\n---------> Test 1: Create Orders and OrdersList <---------\n\n\n";
-
-    cout << "...Creating orders of every type... \n";
-    Order* o1 = new Order();
-
-//   ---------------------------natasha trying things------------------------------------
-//i was getting errors executing individual order
-// then i realised it is because of null pointers like no player no territory pointing a valid objects
-//so i am creating a player and a territory to check things and everything runs fine
-    Player* natasha = new Player();
-    Player* neutralplayer = new Player();
-    Territory* trialterritory = new Territory();
-
-    Deploy* d1 = new Deploy(natasha, trialterritory, 5);
-    Advance* a1 = new Advance(natasha, trialterritory, trialterritory, 5);
-    Bomb* b1 = new Bomb(natasha, trialterritory);
-    Blockade* blk1 = new Blockade(natasha, neutralplayer, trialterritory);
-    Airlift* air1 = new Airlift(natasha, trialterritory, trialterritory, 5);
-    Negotiate* n1 = new Negotiate(natasha, neutralplayer);
-    cout << "Orders of type: Order, Deploy, Advance, Bomb, Blockade, Airlift and Negotiate have been created. \n\n";
-
-    cout << "...Creating an OrdersList... \n";
-    OrdersList *OL = new OrdersList();
-    cout << "Ordrslist has been created \n\n";
-
-    cout << "...Adding Orders to OrdersList....\n";
-    OL->addOrder(o1);
-    OL->addOrder(d1);
-    OL->addOrder(a1);
-    OL->addOrder(b1);
-    OL->addOrder(blk1);
-    OL->addOrder(air1);
-    OL->addOrder(n1);
-    cout << "Orders have been added to OrdersList \n\n";
-
-    cout << "...Printing Orders List with ostream:....\n\n";
-    cout << OL;
-
-
-
-    cout << "\n\n---------> Test 2: Create Copies of Each Order <---------\n\n\n";
-
-    cout << "...Creating copies of each Order... \n";
-    Order* o1Copy = new Order(o1);
-    Deploy* d1Copy = new Deploy(d1);
-    Deploy* d1Copy2 = d1;
-    Advance* a1Copy = new Advance(a1);
-    Bomb* b1Copy = new Bomb(b1);
-    Blockade* blk1Copy = new Blockade(blk1);
-    Airlift* air1Copy = new Airlift(air1);
-    Negotiate* n1Copy = new Negotiate(n1);
-    cout << "Copies of each Order have been created. \n\n";
-
-    OrdersList *OLCopy = new OrdersList();
-
-    cout << "...Adding copies of Orders in a new OrdersList:...\n";
-    OLCopy->addOrder(o1Copy);
-    OLCopy->addOrder(d1Copy);
-    OLCopy->addOrder(a1Copy);
-    OLCopy->addOrder(b1Copy);
-    OLCopy->addOrder(blk1Copy);
-    OLCopy->addOrder(air1Copy);
-    OLCopy->addOrder(n1Copy);
-    cout << "Copies of Orders added.\n\n";
-
-    cout << "...Printing Copy OrdersList...\n";
-    cout << OLCopy;
-
-
-
-    cout << "\n\n---------> Test 3: Validate <---------\n\n\n";
-
-    cout << "...Setting order (parent class) to valid ...\n";
-    o1->setValid(true);
-    cout << "Order is now valid\n\n";
-
-    cout << "...Setting deploy to valid ...\n";
-    d1->setValid(true);
-    cout << "Deploy is now valid\n\n";
-
-    cout << "...Setting blockade to valid ...\n";
-    blk1->setValid(true);
-    cout << "blockade is now valid\n\n";
-
-    cout << "...Printing OrdersList with new valid Orders ...\n\n";
-    cout << OL;
-
-
-    cout << "\n\n---------> Test 4: Execute <---------\n\n\n";
-
-    cout << "...Exectuing orders:... \n";
-    cout << "Note: - only valid Orders can be executed\n";
-    cout << "      - All orders are in proper state\n\n";
-
-    cout << "...Executing order(parent class)...\n";
-    o1->execute();
-    cout << "\n";
-    cout << "...Executing Deploy ...\n";
-    d1->execute();
-    d1->executeForThisSpecificOrder();
-    cout << "\n";
-    cout << "...Executing Advance ...\n";
-    a1->execute();
-    a1->executeForThisSpecificOrder();
-    cout << "\n";
-    cout << "...Executing Bomb ...\n";
-    b1->execute();
-    b1->executeForThisSpecificOrder();
-    cout << "\n";
-    cout << "...Executing Blockaid ...\n";
-    blk1->execute();
-    blk1->executeForThisSpecificOrder();
-    cout << "\n";
-    cout << "...Executing Airlift ...\n";
-    air1->execute();
-    air1->executeForThisSpecificOrder();
-    cout << "\n";
-    cout << "..Executing Negotiate ...\n";
-    n1->execute();
-    n1->executeForThisSpecificOrder();
-    cout << "\n\n";
-
-
-    cout << "\n\n---------> Test 5: Remove Orders <---------\n\n\n";
-
-    cout << "Removing orders 5, 6 and 7 from Orderslist \n";
-    if (OL->remove(5)) cout << "Removed order #5 \n"; else cout << "Did NOT remove order #5\n";
-    if (OL->remove(6)) cout << "Removed order #6 \n"; else cout << "Did NOT remove order #6\n";
-    if (OL->remove(7)) cout << "Removed order #7 \n"; else cout << "Did NOT remove order #7\n";
-    if (OL->remove(9)) cout << "Removed order #9 \n"; else cout << "Did NOT remove order #9\n";
-    cout << OL;
-
-
-
-    cout << "\n\n---------> Test 6: Move Orders <---------\n\n\n";
-
-    cout << '\n' << "Testing Move() that are out of bounds or don't exist\n";
-    if (OL->move(0, 4)) cout << "Moving order #4 to position 0\n"; else cout << "Can NOT move order #4 to position 0\n";
-    if (OL->move(-2, 4)) cout << "Moving order #4 to position -2\n"; else cout << "Can NOT move order #4 to position -2\n";
-    if (OL->move(10, 4)) cout << "Moving order #4 to position 10\n"; else cout << "Can NOT move order #4 to position 10\n";
-
-    cout << '\n' << "Moving orders\n";
-    if (OL->move(1, 4)) cout << "Moving order #4 to position 1\n"; else cout << "Can NOT move order #4 to position 1\n";
-    cout << OL << '\n';
-    if (OL->move(4, 1)) cout << "Moving order #1 to position 4\n"; else cout << "Can NOT move order #4 to position 3\n";
-    cout << OL << '\n';
-    if (OL->move(2, 3)) cout << "Moving order #2 to position 3\n"; else cout << "Can NOT move order #4 to position 3\n";
-    cout << OL;
-   
-    cout << "\n\n---------> Test 7: Execute Player Orders <---------\n\n\n";
-   
-    vector<Territory*> tOL;
-    Hand* hOL = new Hand();
-    OrdersList *pOL = new OrdersList();
-    
-    //Initializing Territory adjeceny list
-    Territory* t1OL = new Territory("UK", 1, 2, 0);
-    Territory* t2OL = new Territory("USA", 2, 3, 0);
-    tOL.push_back(t1OL);
-    tOL.push_back(t2OL);
-
-    //Create player orders
-    Order* pOr1 = new Order();
-    Deploy* pD1 = new Deploy();
-    Advance* pA1 = new Advance();
-    Bomb* pB1 = new Bomb();
-
-    //Add player order to orders list
-    pOL->addOrder(pOr1);
-    pOL->addOrder(pD1);
-    pOL->addOrder(pA1);
-    pOL->addOrder(pB1);
-
-    cout << "Created execute orders.\n\n";
-
-    cout << "...Creating player with t adjeceny list, Hand, and order list..\n";
-    Player* p = new Player(tOL, hOL, pOL, 1);
-    cout << "Created player.\n\n";
-
-    cout << "...Printing Players orders..\n";
-    cout << "-------------------------------\n";
-    cout << p->getOrdersList();
-
-    cout << "...Setting players 2nd and 4th orders to valid..\n";
-    p->getOrdersList()->getOL()->at(1)->setValid(true);
-    p->getOrdersList()->getOL()->at(3)->setValid(true);
-    cout << "Players 2nd and 4th orders are valid.\n\n";
-
-
-    cout << "If Player is inside execute  orders state and will be able to execute!\n\n";
-    cout << "...Executing players orders...\n";
-    cout << "-------------------------------\n";
-    p->getOrdersList()->executeAll();
-
-
-    cout << "\n\n---------> Test 8: Deep Copy Constructor <---------\n\n\n";
-
-    cout << "...Creating OrdersList";
-    cout << "...Creating orders of every type... \n";
-    Order* o2 = new Order();
-    Deploy* d2 = new Deploy();
-    Advance* a2 = new Advance();
-    Bomb* b2 = new Bomb();
-    cout << "Orders of type: Order, Deploy, Advance, Bomb"; 
-    cout << "...Creating an OrdersList... \n";
-    OrdersList* OL2 = new OrdersList();
-    cout << "Ordrslist has been created \n\n";
-
-    cout << "...Adding Orders to OrdersList....\n";
-    OL2->addOrder(o2);
-    OL2->addOrder(d2);
-    OL2->addOrder(a2);
-    OL2->addOrder(b2);
-    cout << "Orders have been added to OrdersList \n\n";
-
-    cout << "...Printing Orders List with ostream:....\n\n";
-    cout << OL2;
-
-    cout <<"...Creating copy of order list...\n";
-    OrdersList* OL2Copy = new OrdersList(OL2);
-
-    cout << "...Printing COPY Orders List with ostream:....\n\n";
-    cout << OL2Copy;
-
-    cout << "...comparing order pointer addresses ...\n";
-    cout << "...address from ORIGINAl list ...\n";
-    for (auto it2 = OL2->getOL()->begin(); it2 != OL2->getOL()->end(); it2++)
-    {
-        cout << &*it2 << "\n";
-    }
-    cout << "...address from COPY list ...\n";
-    for (auto it2 = OL2Copy->getOL()->begin(); it2 != OL2Copy->getOL()->end(); it2++)
-    {
-        cout << &*it2 <<"\n";
-    }
-
-
-
-    cout << "\n\n---------> Test 9: Deleting Pointers <---------\n\n\n";
-
-    cout << "...Test 8: Deleting pointers..\n";
-    delete OL;
-    OL = NULL;
-    delete OLCopy;
-    OLCopy = NULL;
-    delete t1OL;
-    t1OL = NULL;
-    delete t2OL;
-    t2OL = NULL;
-    // delete hOL --> hand deletion is managed by the player as it belongs to it;
-    hOL = NULL;
-    delete p;
-    p = NULL;
-    delete OL2;
-    OL2 = NULL;
-    delete OL2Copy;
-    OL2Copy = NULL;
-
-    cout << "Pointers deleted.\n\n";
-};
-
-
-
 /************************************************************ Test Driver 2 **************************************************************/
 
 void testOrderExecution() {
@@ -748,3 +480,269 @@ void testOrderExecution() {
     // p2 = NULL;
 
 }
+/************************************************************ Test Driver 1 **************************************************************/
+/*void testOrdersLists() {
+    cout << "\n************************************\n"
+        << "Time to test Orders and OrdersList!! \n"
+        << "************************************\n\n";
+
+    cout << "\n\n---------> Test 1: Create Orders and OrdersList <---------\n\n\n";
+
+    cout << "...Creating orders of every type... \n";
+    Order* o1 = new Order();
+
+//   ---------------------------natasha trying things------------------------------------
+//i was getting errors executing individual order
+// then i realised it is because of null pointers like no player no territory pointing a valid objects
+//so i am creating a player and a territory to check things and everything runs fine
+    Player* natasha = new Player();
+    Player* neutralplayer = new Player();
+    Territory* trialterritory = new Territory();
+
+    Deploy* d1 = new Deploy(natasha, trialterritory, 5);
+    Advance* a1 = new Advance(natasha, trialterritory, trialterritory, 5);
+    Bomb* b1 = new Bomb(natasha, trialterritory);
+    Blockade* blk1 = new Blockade(natasha, neutralplayer, trialterritory);
+    Airlift* air1 = new Airlift(natasha, trialterritory, trialterritory, 5);
+    Negotiate* n1 = new Negotiate(natasha, neutralplayer);
+    cout << "Orders of type: Order, Deploy, Advance, Bomb, Blockade, Airlift and Negotiate have been created. \n\n";
+
+    cout << "...Creating an OrdersList... \n";
+    OrdersList *OL = new OrdersList();
+    cout << "Ordrslist has been created \n\n";
+
+    cout << "...Adding Orders to OrdersList....\n";
+    OL->addOrder(o1);
+    OL->addOrder(d1);
+    OL->addOrder(a1);
+    OL->addOrder(b1);
+    OL->addOrder(blk1);
+    OL->addOrder(air1);
+    OL->addOrder(n1);
+    cout << "Orders have been added to OrdersList \n\n";
+
+    cout << "...Printing Orders List with ostream:....\n\n";
+    cout << OL;
+
+
+
+    cout << "\n\n---------> Test 2: Create Copies of Each Order <---------\n\n\n";
+
+    cout << "...Creating copies of each Order... \n";
+    Order* o1Copy = new Order(o1);
+    Deploy* d1Copy = new Deploy(d1);
+    Deploy* d1Copy2 = d1;
+    Advance* a1Copy = new Advance(a1);
+    Bomb* b1Copy = new Bomb(b1);
+    Blockade* blk1Copy = new Blockade(blk1);
+    Airlift* air1Copy = new Airlift(air1);
+    Negotiate* n1Copy = new Negotiate(n1);
+    cout << "Copies of each Order have been created. \n\n";
+
+    OrdersList *OLCopy = new OrdersList();
+
+    cout << "...Adding copies of Orders in a new OrdersList:...\n";
+    OLCopy->addOrder(o1Copy);
+    OLCopy->addOrder(d1Copy);
+    OLCopy->addOrder(a1Copy);
+    OLCopy->addOrder(b1Copy);
+    OLCopy->addOrder(blk1Copy);
+    OLCopy->addOrder(air1Copy);
+    OLCopy->addOrder(n1Copy);
+    cout << "Copies of Orders added.\n\n";
+
+    cout << "...Printing Copy OrdersList...\n";
+    cout << OLCopy;
+
+
+
+    cout << "\n\n---------> Test 3: Validate <---------\n\n\n";
+
+    cout << "...Setting order (parent class) to valid ...\n";
+    o1->setValid(true);
+    cout << "Order is now valid\n\n";
+
+    cout << "...Setting deploy to valid ...\n";
+    d1->setValid(true);
+    cout << "Deploy is now valid\n\n";
+
+    cout << "...Setting blockade to valid ...\n";
+    blk1->setValid(true);
+    cout << "blockade is now valid\n\n";
+
+    cout << "...Printing OrdersList with new valid Orders ...\n\n";
+    cout << OL;
+
+
+    cout << "\n\n---------> Test 4: Execute <---------\n\n\n";
+
+    cout << "...Exectuing orders:... \n";
+    cout << "Note: - only valid Orders can be executed\n";
+    cout << "      - All orders are in proper state\n\n";
+
+    cout << "...Executing order(parent class)...\n";
+    o1->execute();
+    cout << "\n";
+    cout << "...Executing Deploy ...\n";
+    d1->execute();
+    d1->executeForThisSpecificOrder();
+    cout << "\n";
+    cout << "...Executing Advance ...\n";
+    a1->execute();
+    a1->executeForThisSpecificOrder();
+    cout << "\n";
+    cout << "...Executing Bomb ...\n";
+    b1->execute();
+    b1->executeForThisSpecificOrder();
+    cout << "\n";
+    cout << "...Executing Blockaid ...\n";
+    blk1->execute();
+    blk1->executeForThisSpecificOrder();
+    cout << "\n";
+    cout << "...Executing Airlift ...\n";
+    air1->execute();
+    air1->executeForThisSpecificOrder();
+    cout << "\n";
+    cout << "..Executing Negotiate ...\n";
+    n1->execute();
+    n1->executeForThisSpecificOrder();
+    cout << "\n\n";
+
+
+    cout << "\n\n---------> Test 5: Remove Orders <---------\n\n\n";
+
+    cout << "Removing orders 5, 6 and 7 from Orderslist \n";
+    if (OL->remove(5)) cout << "Removed order #5 \n"; else cout << "Did NOT remove order #5\n";
+    if (OL->remove(6)) cout << "Removed order #6 \n"; else cout << "Did NOT remove order #6\n";
+    if (OL->remove(7)) cout << "Removed order #7 \n"; else cout << "Did NOT remove order #7\n";
+    if (OL->remove(9)) cout << "Removed order #9 \n"; else cout << "Did NOT remove order #9\n";
+    cout << OL;
+
+
+
+    cout << "\n\n---------> Test 6: Move Orders <---------\n\n\n";
+
+    cout << '\n' << "Testing Move() that are out of bounds or don't exist\n";
+    if (OL->move(0, 4)) cout << "Moving order #4 to position 0\n"; else cout << "Can NOT move order #4 to position 0\n";
+    if (OL->move(-2, 4)) cout << "Moving order #4 to position -2\n"; else cout << "Can NOT move order #4 to position -2\n";
+    if (OL->move(10, 4)) cout << "Moving order #4 to position 10\n"; else cout << "Can NOT move order #4 to position 10\n";
+
+    cout << '\n' << "Moving orders\n";
+    if (OL->move(1, 4)) cout << "Moving order #4 to position 1\n"; else cout << "Can NOT move order #4 to position 1\n";
+    cout << OL << '\n';
+    if (OL->move(4, 1)) cout << "Moving order #1 to position 4\n"; else cout << "Can NOT move order #4 to position 3\n";
+    cout << OL << '\n';
+    if (OL->move(2, 3)) cout << "Moving order #2 to position 3\n"; else cout << "Can NOT move order #4 to position 3\n";
+    cout << OL;
+   
+    cout << "\n\n---------> Test 7: Execute Player Orders <---------\n\n\n";
+   
+    vector<Territory*> tOL;
+    Hand* hOL = new Hand();
+    OrdersList *pOL = new OrdersList();
+    
+    //Initializing Territory adjeceny list
+    Territory* t1OL = new Territory("UK", 1, 2, 0);
+    Territory* t2OL = new Territory("USA", 2, 3, 0);
+    tOL.push_back(t1OL);
+    tOL.push_back(t2OL);
+
+    //Create player orders
+    Order* pOr1 = new Order();
+    Deploy* pD1 = new Deploy();
+    Advance* pA1 = new Advance();
+    Bomb* pB1 = new Bomb();
+
+    //Add player order to orders list
+    pOL->addOrder(pOr1);
+    pOL->addOrder(pD1);
+    pOL->addOrder(pA1);
+    pOL->addOrder(pB1);
+
+    cout << "Created execute orders.\n\n";
+
+    cout << "...Creating player with t adjeceny list, Hand, and order list..\n";
+    Player* p = new Player(tOL, hOL, pOL, 1);
+    cout << "Created player.\n\n";
+
+    cout << "...Printing Players orders..\n";
+    cout << "-------------------------------\n";
+    cout << p->getOrdersList();
+
+    cout << "...Setting players 2nd and 4th orders to valid..\n";
+    p->getOrdersList()->getOL()->at(1)->setValid(true);
+    p->getOrdersList()->getOL()->at(3)->setValid(true);
+    cout << "Players 2nd and 4th orders are valid.\n\n";
+
+
+    cout << "If Player is inside execute  orders state and will be able to execute!\n\n";
+    cout << "...Executing players orders...\n";
+    cout << "-------------------------------\n";
+    p->getOrdersList()->executeAll();
+
+
+    cout << "\n\n---------> Test 8: Deep Copy Constructor <---------\n\n\n";
+
+    cout << "...Creating OrdersList";
+    cout << "...Creating orders of every type... \n";
+    Order* o2 = new Order();
+    Deploy* d2 = new Deploy();
+    Advance* a2 = new Advance();
+    Bomb* b2 = new Bomb();
+    cout << "Orders of type: Order, Deploy, Advance, Bomb"; 
+    cout << "...Creating an OrdersList... \n";
+    OrdersList* OL2 = new OrdersList();
+    cout << "Ordrslist has been created \n\n";
+
+    cout << "...Adding Orders to OrdersList....\n";
+    OL2->addOrder(o2);
+    OL2->addOrder(d2);
+    OL2->addOrder(a2);
+    OL2->addOrder(b2);
+    cout << "Orders have been added to OrdersList \n\n";
+
+    cout << "...Printing Orders List with ostream:....\n\n";
+    cout << OL2;
+
+    cout <<"...Creating copy of order list...\n";
+    OrdersList* OL2Copy = new OrdersList(OL2);
+
+    cout << "...Printing COPY Orders List with ostream:....\n\n";
+    cout << OL2Copy;
+
+    cout << "...comparing order pointer addresses ...\n";
+    cout << "...address from ORIGINAl list ...\n";
+    for (auto it2 = OL2->getOL()->begin(); it2 != OL2->getOL()->end(); it2++)
+    {
+        cout << &*it2 << "\n";
+    }
+    cout << "...address from COPY list ...\n";
+    for (auto it2 = OL2Copy->getOL()->begin(); it2 != OL2Copy->getOL()->end(); it2++)
+    {
+        cout << &*it2 <<"\n";
+    }
+
+
+
+    cout << "\n\n---------> Test 9: Deleting Pointers <---------\n\n\n";
+
+    cout << "...Test 8: Deleting pointers..\n";
+    delete OL;
+    OL = NULL;
+    delete OLCopy;
+    OLCopy = NULL;
+    delete t1OL;
+    t1OL = NULL;
+    delete t2OL;
+    t2OL = NULL;
+    // delete hOL --> hand deletion is managed by the player as it belongs to it;
+    hOL = NULL;
+    delete p;
+    p = NULL;
+    delete OL2;
+    OL2 = NULL;
+    delete OL2Copy;
+    OL2Copy = NULL;
+
+    cout << "Pointers deleted.\n\n";
+};*/
