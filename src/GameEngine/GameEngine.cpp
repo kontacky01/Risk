@@ -964,9 +964,49 @@ void GameEngine::executeOrdersPhase() {
 
 void GameEngine::addPlayer(Player *player) {
     players.push_back(player);
-    //setPlayers({player});
 }
 
 Deck *GameEngine::getDeck() {
     return deck;
+}
+
+void runTournament(const std::string& maps, const std::string& playerStrategies, int numGames, int maxTurns) {
+    // Logic to execute the tournament
+    // ...
+    std::vector<std::vector<std::string>> tournamentResults;
+    // Log results
+   std::cout << "Running tournament with parameters:\n"
+              << "Maps: " << maps << "\n"
+              << "Player Strategies: " << playerStrategies << "\n"
+              << "Number of Games: " << numGames << "\n"
+              << "Max Turns: " << maxTurns << "\n"
+              << "Results:\n";
+
+    // Example results vector
+    tournamentResults = {
+        {"winner", "winner", "winner", "winner"},
+        {"winner", "Draw", "winner", "winner"},
+        {"winner", "winner", "winner", "Draw"}
+    };
+
+    if (tournamentResults.empty() || tournamentResults[0].empty()) {
+        std::cout << "No results to display.\n";
+        return;
+    }
+
+    // Print column headers "Game N"
+    std::cout << "             |";
+    for (size_t i = 0; i < tournamentResults[0].size(); ++i) {
+        std::cout << " Game " << (i + 1) << " |";
+    }
+    std::cout << "\n";
+
+    // Print rows "Map M" and results
+    for (size_t i = 0; i < tournamentResults.size(); ++i) {
+        std::cout << " Map " << (i + 1) << " | ";
+        for (size_t j = 0; j < tournamentResults[i].size(); ++j) {
+            std::cout << tournamentResults[i][j] << " | ";
+        }
+        std::cout << "\n";
+    }
 }

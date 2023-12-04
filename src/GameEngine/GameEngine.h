@@ -427,3 +427,6 @@ void initializeGame(GameEngine &engine);
 int testMainGameLoop();
 
 void testStartupPhase();
+
+void testTournament();
+void runTournament(const std::string& maps, const std::string& playerStrategies, int numGames, int maxTurns);
